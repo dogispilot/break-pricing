@@ -186,6 +186,16 @@
       text-align: center;
       z-index: 10;
     }
+    /* New styles for summary card elements */
+    .summary-box .amount {
+      font-size: 2rem;      /* Bigger size */
+      font-weight: bold;    /* Bolder */
+      margin-bottom: 0.25em; /* Space between amount and label */
+    }
+    .summary-box .label {
+      font-size: 1rem;      /* Smaller size */
+      font-weight: 400;     /* Less bold */
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -287,15 +297,18 @@
     <!-- Summary Boxes (below the pie chart) -->
     <div class="summary-container">
       <div id="totalProfitBox" class="summary-box">
-        Total Profit: $0.00
+        <div class="amount">$0.00</div>
+        <div class="label">Total Profit</div>
         <div class="toast">Profit is how much money a breaker will make.</div>
       </div>
       <div id="whatnotsCutBox" class="summary-box">
-        Whatnot's Cut: $0.00
+        <div class="amount">$0.00</div>
+        <div class="label">Whatnot's Cut</div>
         <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
       </div>
       <div id="costOfBusinessBox" class="summary-box">
-        Cost of Business: $0.00
+        <div class="amount">$0.00</div>
+        <div class="label">Cost of Business</div>
         <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
       </div>
     </div>
@@ -502,9 +515,9 @@
       const totalCostOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
       
       // Update summary boxes.
-      document.getElementById('totalProfitBox').childNodes[0].nodeValue = "Total Profit: $" + totalProfit.toFixed(2);
-      document.getElementById('whatnotsCutBox').childNodes[0].nodeValue = "Whatnot's Cut: $" + totalWhatnotsCut.toFixed(2);
-      document.getElementById('costOfBusinessBox').childNodes[0].nodeValue = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
+      document.querySelector('#totalProfitBox .amount').textContent = "$" + totalProfit.toFixed(2);
+      document.querySelector('#whatnotsCutBox .amount').textContent = "$" + totalWhatnotsCut.toFixed(2);
+      document.querySelector('#costOfBusinessBox .amount').textContent = "$" + totalCostOfBusiness.toFixed(2);
       
       // Build and update the results table.
       let resultsHtml = '<table id="resultsTable">';
