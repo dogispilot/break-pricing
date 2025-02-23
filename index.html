@@ -5,6 +5,8 @@
   <title>Hockey Break Price Calculator</title>
   <!-- Import Google Font -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+  <!-- Include Chart.js for the pie chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -42,7 +44,7 @@
       color: #e0e0e0;
       margin-top: 0;
     }
-    /* Container for the three summary boxes */
+    /* Summary boxes styling */
     .summary-container {
       display: flex;
       justify-content: space-between;
@@ -59,7 +61,6 @@
       position: relative;
       cursor: pointer;
     }
-    /* Dark theme styles for summary boxes */
     #totalProfitBox {
       background-color: #2e7d32;
       border: 1px solid #1b5e20;
@@ -71,7 +72,6 @@
       border: 1px solid #9e8700;
       color: #1e1e1e;
     }
-    /* Toast tooltip styling */
     .toast {
       margin-top: 8px;
       padding: 8px;
@@ -87,11 +87,23 @@
       text-align: center;
       z-index: 10;
     }
-    form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+    /* New form layout styles */
+    form#calcForm {
       margin-bottom: 25px;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .form-row .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    .small-input-row .form-group input,
+    .small-input-row .form-group select {
+      max-width: 100px;
     }
     .form-group {
       display: flex;
@@ -120,7 +132,6 @@
       outline: none;
     }
     .form-actions {
-      grid-column: 1 / -1;
       text-align: center;
     }
     .form-actions button {
@@ -137,7 +148,7 @@
     .form-actions button:hover {
       background-color: #0056b3;
     }
-    /* New styles for the lookup button */
+    /* Lookup button styles */
     .lookup-button {
       padding: 12px 20px;
       font-size: 1rem;
@@ -198,7 +209,7 @@
       <h1>Hockey Break Price Calculator</h1>
     </div>
     
-    <!-- Summary boxes container with embedded toast tooltips -->
+    <!-- Summary boxes -->
     <div class="summary-container">
       <div id="totalProfitBox" class="summary-box">
         Total Profit: $0.00
@@ -216,49 +227,63 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <div class="form-group">
-        <label for="yearSelect">Select Year:</label>
-        <select id="yearSelect" required>
-          <option value="">--Select a Year--</option>
-        </select>
+      <!-- Row 1: Year and Set -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="yearSelect">Select Year:</label>
+          <select id="yearSelect" required>
+            <option value="">--Select a Year--</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="setSelect">Select Set:</label>
+          <select id="setSelect" required>
+            <option value="">--Select a Set--</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="setSelect">Select Set:</label>
-        <select id="setSelect" required>
-          <option value="">--Select a Set--</option>
-        </select>
+      <!-- Row 2: Cost of a Case and Lookup Button -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="casePrice">Cost of a Case ($):</label>
+          <input type="number" id="casePrice" step="0.01" required placeholder="Enter price" value="2900">
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button type="button" class="lookup-button" onclick="openSetSearch()">
+            <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
+            Look up Case Price
+          </button>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="casePrice">Cost of a Case ($):</label>
-        <input type="number" id="casePrice" step="0.01" required placeholder="Enter price" value="2900">
-      </div>
-      <div class="form-group">
-        <label>&nbsp;</label>
-        <button type="button" class="lookup-button" onclick="openSetSearch()">
-          <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
-          Look up Case Price
-        </button>
-      </div>
-      <div class="form-group">
-        <label for="markup">Markup (%)</label>
-        <input type="text" id="markup" required placeholder="Enter markup" value="30">
-      </div>
-      <div class="form-group">
-        <label for="userDiscount">User Discount (%)</label>
-        <input type="text" id="userDiscount" required placeholder="Enter discount" value="0">
-      </div>
-      <div class="form-group">
-        <label for="blendedTax">Blended Tax (%)</label>
-        <input type="text" id="blendedTax" required placeholder="Enter tax" value="9">
-      </div>
-      <div class="form-group">
-        <label for="supplies">Supplies per Order ($):</label>
-        <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1">
+      <!-- Row 3: Grouped smaller inputs -->
+      <div class="form-row small-input-row">
+        <div class="form-group">
+          <label for="markup">Markup (%)</label>
+          <input type="text" id="markup" required placeholder="Enter markup" value="30">
+        </div>
+        <div class="form-group">
+          <label for="userDiscount">User Discount (%)</label>
+          <input type="text" id="userDiscount" required placeholder="Enter discount" value="0">
+        </div>
+        <div class="form-group">
+          <label for="blendedTax">Blended Tax (%)</label>
+          <input type="text" id="blendedTax" required placeholder="Enter tax" value="9">
+        </div>
+        <div class="form-group">
+          <label for="supplies">Supplies per Order ($):</label>
+          <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1">
+        </div>
       </div>
       <div class="form-actions">
         <button type="submit">Calculate</button>
       </div>
     </form>
+
+    <!-- Pie Chart for Distribution -->
+    <div id="chartContainer" style="margin-bottom: 25px; height: 300px;">
+      <canvas id="pieChart"></canvas>
+    </div>
 
     <h2>Team Prices</h2>
     <div id="results"></div>
@@ -267,6 +292,9 @@
   <script>
     // Global variable to hold our set data (an array of set objects)
     let setData = [];
+
+    // Global variable for the pie chart instance
+    let pieChart;
 
     // Utility function to parse percentage inputs.
     function parsePercentage(value) {
@@ -382,7 +410,7 @@
       window.open(url, "_blank");
     }
 
-    // Function to calculate and render profits
+    // Function to calculate and render profits along with updating the pie chart.
     function calculateProfit() {
       const selectedYear = document.getElementById('yearSelect').value;
       const selectedSetName = document.getElementById('setSelect').value;
@@ -440,6 +468,8 @@
       const totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
       const totalWhatnotsCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
       const totalCostOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
+      // Compute total transaction fees (excluding supplies) for the pie chart.
+      const totalTransactionFees = rows.reduce((sum, row) => sum + row.transactionFees, 0);
       
       // Update summary boxes
       document.getElementById('totalProfitBox').childNodes[0].nodeValue = "Total Profit: $" + totalProfit.toFixed(2);
@@ -464,6 +494,32 @@
       
       // Store the rows data on the table element for sorting
       document.getElementById('resultsTable').rowsData = rows;
+      
+      // Update or create the pie chart with the distribution data
+      const chartData = [totalProfit, totalWhatnotsCut, totalTransactionFees];
+      if (pieChart) {
+        pieChart.data.datasets[0].data = chartData;
+        pieChart.update();
+      } else {
+        const ctx = document.getElementById('pieChart').getContext('2d');
+        pieChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['Profit', "Whatnot's Cut", 'Transaction Fees'],
+            datasets: [{
+              data: chartData,
+              backgroundColor: ['#2e7d32', '#bfa600', '#007bff']
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'bottom' }
+            }
+          }
+        });
+      }
     }
 
     // Global variable to track currently sorted column (-1 means none)
