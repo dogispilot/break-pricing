@@ -61,13 +61,13 @@
     }
     /* Dark theme styles for summary boxes */
     #totalProfitBox {
-      background-color: #2e7d32; /* dark green */
+      background-color: #2e7d32;
       border: 1px solid #1b5e20;
       color: #e0e0e0;
     }
     #whatnotsCutBox,
     #costOfBusinessBox {
-      background-color: #bfa600; /* dark pastel yellow */
+      background-color: #bfa600;
       border: 1px solid #9e8700;
       color: #1e1e1e;
     }
@@ -92,10 +92,6 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       margin-bottom: 25px;
-    }
-    /* Add extra space below JSON config input */
-    .json-input {
-      margin-bottom: 20px;
     }
     .form-group {
       display: flex;
@@ -218,12 +214,6 @@
       </div>
     </div>
 
-    <!-- JSON File Upload -->
-    <div class="form-group json-input">
-      <label for="jsonFile">Upload JSON Data File:</label>
-      <input type="file" id="jsonFile" accept=".json">
-    </div>
-
     <!-- Calculation Form -->
     <form id="calcForm">
       <div class="form-group">
@@ -275,6 +265,9 @@
   </div>
 
   <script>
+    // Global variable to hold our set data (an array of set objects)
+    let setData = [];
+
     // Utility function to parse percentage inputs.
     function parsePercentage(value) {
       value = value.toString().replace('%','').trim();
@@ -283,54 +276,6 @@
       if (num > 1) return num / 100;
       return num;
     }
-
-    // Global variable to hold our set data (an array of set objects)
-    let setData = [];
-
-    // Global variable to track currently sorted column (-1 means none)
-    let currentSortedColumn = -1;
-
-    // Global function to render table rows from an array of row objects.
-    function renderRows(arr) {
-      let html = '';
-      arr.forEach(row => {
-        html += '<tr>';
-        html += '<td>' + (row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : '') + row.team + '</td>';
-        html += '<td>' + row.count + '</td>';
-        html += '<td>$' + row.cost.toFixed(2) + '</td>';
-        html += '<td>$' + row.price.toFixed(2) + '</td>';
-        html += '<td>$' + row.whatnotFees.toFixed(2) + '</td>';
-        html += '<td>$' + row.transactionFees.toFixed(2) + '</td>';
-        html += '<td>$' + row.profit.toFixed(2) + '</td>';
-        html += '</tr>';
-      });
-      return html;
-    }
-
-    // Object to track sort directions for each column
-    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
-
-    // Listen for JSON file upload and populate the selectors.
-    document.getElementById('jsonFile').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const jsonData = JSON.parse(e.target.result);
-          if (!jsonData.sets) {
-            alert('Invalid JSON format: missing "sets" property.');
-            return;
-          }
-          setData = jsonData.sets; // setData is now an array of set objects
-          populateYearSelector();
-        } catch (error) {
-          console.error('Error parsing JSON:', error);
-          alert('Error parsing JSON file.');
-        }
-      };
-      reader.readAsText(file);
-    });
 
     // Populate the year selector with unique years.
     function populateYearSelector() {
@@ -361,6 +306,32 @@
         setSelect.appendChild(option);
       });
     }
+
+    // Automatically load config.json on page load using a relative URL.
+    window.addEventListener('load', function() {
+      console.log('Fetching config from: config.json');
+      fetch("config.json")
+        .then(response => {
+          console.log('Response:', response);
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(jsonData => {
+          console.log('Loaded JSON:', jsonData);
+          if (!jsonData.sets) {
+            alert('Invalid JSON format: missing "sets" property.');
+            return;
+          }
+          setData = jsonData.sets;
+          populateYearSelector();
+        })
+        .catch(error => {
+          console.error('Error loading JSON:', error);
+          alert('Error loading JSON file: ' + error.message);
+        });
+    });
 
     // Mapping of team names to logo URLs
     const teamLogos = {
@@ -495,11 +466,27 @@
       document.getElementById('resultsTable').rowsData = rows;
     }
 
-    // Attach the calculateProfit function to the form submission event
-    document.getElementById('calcForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      calculateProfit();
-    });
+    // Global variable to track currently sorted column (-1 means none)
+    let currentSortedColumn = -1;
+    // Object to track sort directions for each column
+    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
+
+    // Global function to render table rows from an array of row objects.
+    function renderRows(arr) {
+      let html = '';
+      arr.forEach(row => {
+        html += '<tr>';
+        html += '<td>' + (row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : '') + row.team + '</td>';
+        html += '<td>' + row.count + '</td>';
+        html += '<td>$' + row.cost.toFixed(2) + '</td>';
+        html += '<td>$' + row.price.toFixed(2) + '</td>';
+        html += '<td>$' + row.whatnotFees.toFixed(2) + '</td>';
+        html += '<td>$' + row.transactionFees.toFixed(2) + '</td>';
+        html += '<td>$' + row.profit.toFixed(2) + '</td>';
+        html += '</tr>';
+      });
+      return html;
+    }
 
     // Sort table function
     function sortTable(columnIndex) {
@@ -558,6 +545,13 @@
         toast.style.display = (toast.style.display === 'block') ? 'none' : 'block';
       });
     });
+
+    // Attach the calculateProfit function to the form submission event
+    document.getElementById('calcForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      calculateProfit();
+    });
   </script>
 </body>
 </html>
+
