@@ -409,14 +409,22 @@
       "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
     };
 
-    // Function to open the dacardworld search using the selected set name.
+    // Modified function: Open dacardworld search query with year prefix.
     function openSetSearch() {
       const selectedSet = document.getElementById('setSelect').value;
+      const selectedYear = document.getElementById('yearSelect').value;
       if (!selectedSet) {
         alert('Please select a set first.');
         return;
       }
-      const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(selectedSet + " case");
+      if (!selectedYear) {
+        alert('Please select a set year first.');
+        return;
+      }
+      // Extract the first part of the year (e.g., "2024" from "2024-25")
+      const yearPrefix = selectedYear.split('-')[0];
+      const query = yearPrefix + " " + selectedSet + " case";
+      const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
