@@ -416,7 +416,21 @@
         alert('Please select a set first.');
         return;
       }
-      const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(selectedSet + " hobby case");
+      const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(selectedSet + " case");
+      window.open(url, "_blank");
+    }
+
+    // New function: When a team name is clicked, open an eBay search.
+    function openTeamSearch(teamName) {
+      const setYear = document.getElementById('yearSelect').value;
+      const setName = document.getElementById('setSelect').value;
+      if (!setYear || !setName) {
+        alert('Please select both a set year and a set first.');
+        return;
+      }
+      // Build the search query string.
+      const query = encodeURIComponent(setYear + " " + setName + " " + teamName);
+      const url = "https://www.ebay.com/sch/i.html?_nkw=" + query;
       window.open(url, "_blank");
     }
 
@@ -552,7 +566,8 @@
       let html = '';
       arr.forEach(row => {
         html += '<tr>';
-        html += '<td>' + (row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : '') + row.team + '</td>';
+        // The team cell is now an anchor that calls openTeamSearch with the team name.
+        html += '<td><a href="#" onclick="openTeamSearch(\'' + row.team + '\')" style="color: inherit; text-decoration: none;">' + (row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : '') + row.team + '</a></td>';
         html += '<td>' + row.count + '</td>';
         html += '<td>$' + row.cost.toFixed(2) + '</td>';
         html += '<td>$' + row.price.toFixed(2) + '</td>';
