@@ -89,10 +89,6 @@
       box-shadow: 0 0 5px rgba(0,123,255,0.5);
       outline: none;
     }
-    /* Remove the max-width for the cost input so it aligns with other inputs */
-    .case-price-input {
-      /* max-width removed */
-    }
     /* Remove spinner arrows from number inputs */
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {
@@ -269,6 +265,17 @@
       margin-right: 8px;
       border-radius: 50%;
     }
+    /* Mobile-friendly adjustments */
+    @media (max-width: 600px) {
+      .form-row .form-group {
+        min-width: 100%;
+      }
+      .form-group input,
+      .form-group select {
+        font-size: 1.1rem;
+        padding: 14px 18px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -378,11 +385,11 @@
       return num;
     }
 
-    // Populate the year selector with unique years.
+    // Populate the year selector with unique years in descending order.
     function populateYearSelector() {
       const yearSelect = document.getElementById('yearSelect');
       yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
-      const years = [...new Set(setData.map(set => set.year))].sort();
+      const years = [...new Set(setData.map(set => set.year))].sort((a, b) => Number(b) - Number(a));
       years.forEach(year => {
         const option = document.createElement('option');
         option.value = year;
