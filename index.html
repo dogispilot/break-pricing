@@ -89,9 +89,18 @@
       box-shadow: 0 0 5px rgba(0,123,255,0.5);
       outline: none;
     }
-    /* New rule to reduce the width of the case price input */
+    /* Remove the max-width for the cost input so it aligns with other inputs */
     .case-price-input {
-      max-width: 150px;
+      /* max-width removed */
+    }
+    /* Remove spinner arrows from number inputs */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
     }
     /* Container for the input and lookup button */
     .input-button-group {
@@ -112,6 +121,9 @@
       cursor: pointer;
       transition: background 0.3s;
       margin-right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .form-actions button:hover {
       background-color: #0056b3;
@@ -208,13 +220,13 @@
     }
     /* New styles for summary card elements */
     .summary-box .amount {
-      font-size: 2rem;      /* Bigger size */
-      font-weight: bold;    /* Bolder */
-      margin-bottom: 0.25em; /* Space between amount and label */
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 0.25em;
     }
     .summary-box .label {
-      font-size: 1rem;      /* Smaller size */
-      font-weight: 400;     /* Less bold */
+      font-size: 1rem;
+      font-weight: 400;
     }
     /* New CSS class for link icons in the team cell */
     .link-icon {
@@ -316,7 +328,10 @@
         </div>
       </div>
       <div class="form-actions">
-        <button type="submit">🧮 Calculate</button>
+        <button type="submit">
+          <img src="/resources/calculator.png" alt="Calculator Icon" style="width:24px;height:24px;">
+          Calculate
+        </button>
       </div>
     </form>
 
@@ -619,13 +634,9 @@
       arr.forEach(row => {
         html += '<tr>';
         html += '<td><a href="#" onclick="openTeamSearch(\'' + row.team + '\')" style="color: inherit; text-decoration: none;">';
-        // Team logo if available.
         html += (row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : '');
-        // Team name.
         html += row.team;
-        // Add the share icon first.
         html += '<img src="resources/share_white.png" alt="Share" class="link-icon">';
-        // Add the eBay logo icon with a slightly larger size.
         html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
         html += '</a></td>';
         html += '<td>' + row.count + '</td>';
