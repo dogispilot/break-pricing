@@ -93,6 +93,12 @@
     .case-price-input {
       max-width: 150px;
     }
+    /* Container for the input and lookup button */
+    .input-button-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .form-actions {
       text-align: center;
     }
@@ -124,10 +130,19 @@
       align-items: center;
       gap: 8px;
     }
+    /* Smaller version for the lookup button */
+    .lookup-button.small {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
     .lookup-button img {
       width: 24px;
       height: 24px;
       border-radius: 50%;
+    }
+    .lookup-button.small img {
+      width: 20px;
+      height: 20px;
     }
     .lookup-button:hover {
       transform: scale(1.05);
@@ -268,18 +283,17 @@
           </select>
         </div>
       </div>
-      <!-- Row 2: Cost of a Case and Lookup Button -->
+      <!-- Row 2: Cost of a Case with Lookup Button -->
       <div class="form-row">
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($):</label>
-          <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="2900">
-        </div>
-        <div class="form-group">
-          <label>&nbsp;</label>
-          <button type="button" class="lookup-button" onclick="openSetSearch()">
-            <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
-            Look up Case Price
-          </button>
+          <div class="input-button-group">
+            <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="2900">
+            <button type="button" class="lookup-button small" onclick="openSetSearch()">
+              <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
+              Look up Price
+            </button>
+          </div>
         </div>
       </div>
       <!-- Row 3: Grouped smaller inputs -->
