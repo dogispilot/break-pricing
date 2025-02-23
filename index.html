@@ -203,6 +203,11 @@
       margin-left: 4px;
       vertical-align: middle;
     }
+    /* New CSS class for a slightly larger eBay icon */
+    .ebay-icon {
+      width: 20px;
+      height: 20px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -599,10 +604,10 @@
         html += (row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : '');
         // Team name.
         html += row.team;
-        // Add the eBay logo icon.
-        html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon">';
-        // Add the share icon.
+        // Add the share icon first.
         html += '<img src="resources/share_white.png" alt="Share" class="link-icon">';
+        // Add the eBay logo icon with a slightly larger size.
+        html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
         html += '</a></td>';
         html += '<td>' + row.count + '</td>';
         html += '<td>$' + row.cost.toFixed(2) + '</td>';
