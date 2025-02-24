@@ -836,44 +836,7 @@
         "Tampa Bay Lightning": 709
       }
     },
-    {
-      "year": "2023-24",
-      "name": "Upper Deck Ultimate",
-      "cards": {
-        "Calgary Flames": 20821,
-        "Nashville Predators": 19055,
-        "Arizona Coyotes": 18770,
-        "New York Islanders": 17810,
-        "Chicago Blackhawks": 16340,
-        "Detroit Red Wings": 16266,
-        "St. Louis Blues": 16027,
-        "Montreal Canadiens": 15763,
-        "Toronto Maple Leafs": 15096,
-        "Ottawa Senators": 15074,
-        "Vancouver Canucks": 14982,
-        "Buffalo Sabres": 14872,
-        "Philadelphia Flyers": 14489,
-        "Columbus Blue Jackets": 13977,
-        "Anaheim Ducks": 11702,
-        "Dallas Stars": 10540,
-        "New Jersey Devils": 10288,
-        "Boston Bruins": 10263,
-        "Washington Capitals": 10096,
-        "San Jose Sharks": 9201,
-        "New York Rangers": 9069,
-        "Edmonton Oilers": 7737,
-        "Pittsburgh Penguins": 7279,
-        "Vegas Golden Knights": 6226,
-        "Seattle Kraken": 6144,
-        "Minnesota Wild": 5519,
-        "Los Angeles Kings": 5456,
-        "Colorado Avalanche": 5313,
-        "Carolina Hurricanes": 4927,
-        "Florida Panthers": 4774,
-        "Winnipeg Jets": 862,
-        "Tampa Bay Lightning": 709
-      }
-    },
+    
     {
       "year": "2022-23",
       "name": "Upper Deck Ice Hockey",
