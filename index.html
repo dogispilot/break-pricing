@@ -17,9 +17,9 @@
       margin: 0;
       padding: 20px;
     }
-    /* About link styling */
+    /* About link styling now relative to container */
     .about-link {
-      position: fixed;
+      position: absolute;
       top: 20px;
       right: 20px;
       color: #e0e0e0;
@@ -32,6 +32,7 @@
       text-decoration: underline;
     }
     .container {
+      position: relative;
       max-width: 900px;
       margin: 0 auto;
       background: #1e1e1e;
@@ -297,8 +298,8 @@
   </style>
 </head>
 <body>
-  <a href="about.html" class="about-link">About</a>
   <div class="container">
+    <a href="about.html" class="about-link">About</a>
     <div class="header">
       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Upper_Deck_Logo.svg/400px-Upper_Deck_Logo.svg.png" alt="Upper Deck Logo">
       <h1>Hockey Break Price Calculator</h1>
