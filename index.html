@@ -128,6 +128,27 @@
     .form-actions button:hover {
       background-color: #0056b3;
     }
+    /* New styling based on the Upper Deck logo */
+    .calculate-btn {
+      width: 300px; /* make the button much wider */
+      padding: 16px 30px;
+      background: linear-gradient(135deg, #FF0000, #B22222);
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      color: #ffffff;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      font-family: 'Bebas Neue', cursive;
+      transition: background 0.3s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calculate-btn:hover {
+      background: linear-gradient(135deg, #B22222, #FF0000);
+      transform: scale(1.05);
+    }
     /* Lookup button styles */
     .lookup-button {
       padding: 12px 20px;
@@ -335,7 +356,7 @@
         </div>
       </div>
       <div class="form-actions">
-        <button type="submit">
+        <button type="submit" class="calculate-btn">
           <img src="/resources/calculator.png" alt="Calculator Icon" style="width:24px;height:24px;">
           Calculate
         </button>
