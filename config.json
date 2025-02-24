@@ -192,7 +192,7 @@
     },
         {
       "year": "2023-24",
-      "name": "Upper Deck Ice Hockey",
+      "name": "Upper Deck Ice",
       "cards": {
         "Columbus Blue Jackets": 27876,
         "Calgary Flames": 23084,
@@ -1154,6 +1154,44 @@
         "Los Angeles Kings": 3483,
         "Winnipeg Jets": 3247,
         "Arizona Coyotes": 2894
+      }
+    },
+    {
+      "year": "2022-23",
+      "name": "Upper Deck Ice",
+      "cards": {
+        "Columbus Blue Jackets": 23139,
+        "Philadelphia Flyers": 22728,
+        "Arizona Coyotes": 18996,
+        "Montreal Canadiens": 17512,
+        "Anaheim Ducks": 16906,
+        "Toronto Maple Leafs": 16545,
+        "Ottawa Senators": 16485,
+        "Winnipeg Jets": 14280,
+        "Los Angeles Kings": 14275,
+        "Buffalo Sabres": 13367,
+        "Minnesota Wild": 13349,
+        "Pittsburgh Penguins": 12519,
+        "Chicago Blackhawks": 12316,
+        "Dallas Stars": 10729,
+        "Detroit Red Wings": 10676,
+        "Vegas Golden Knights": 10654,
+        "San Jose Sharks": 10304,
+        "New York Islanders": 8151,
+        "Seattle Kraken": 7584,
+        "Edmonton Oilers": 7378,
+        "Tampa Bay Lightning": 7351,
+        "Colorado Avalanche": 6968,
+        "Vancouver Canucks": 6903,
+        "Boston Bruins": 6621,
+        "St. Louis Blues": 6201,
+        "New Jersey Devils": 6126,
+        "Carolina Hurricanes": 4616,
+        "New York Rangers": 4420,
+        "Calgary Flames": 3344,
+        "Washington Capitals": 3223,
+        "Nashville Predators": 2899,
+        "Florida Panthers": 683
       }
     },
     {
