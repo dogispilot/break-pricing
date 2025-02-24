@@ -7,6 +7,8 @@
   <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <!-- New font: Montserrat for the button -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <!-- Include Chart.js for the pie chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -132,25 +134,26 @@
     .form-actions button:hover {
       background-color: #0056b3;
     }
-    /* New styling based on the Upper Deck logo colors */
+    /* New styling based on the Upper Deck logo colors with extra blue */
     .calculate-btn {
       width: 300px; /* make the button much wider */
       padding: 16px 30px;
-      background: linear-gradient(135deg, #FED111, #F37427);
+      background: linear-gradient(135deg, #005396 0%, #005396 60%, #FED111 80%, #F37427 100%);
       border: 2px solid #005396;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       color: #ffffff;
       font-size: 1.3rem;
       text-transform: uppercase;
-      font-family: 'Bebas Neue', cursive;
+      font-family: 'Montserrat', sans-serif;
       transition: background 0.3s, transform 0.2s;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
     }
     .calculate-btn:hover {
-      background: linear-gradient(135deg, #F37427, #FED111);
+      background: linear-gradient(135deg, #F37427 0%, #FED111 20%, #005396 100%);
       transform: scale(1.05);
     }
     /* Lookup button styles */
