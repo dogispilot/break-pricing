@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <title>Hockey Break Price Calculator</title>
   <link rel="icon" type="image/png" href="/resources/calculator.png">
-  <!-- Import Google Font -->
+  <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <!-- Include Chart.js for the pie chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -116,10 +117,13 @@
       color: #fff;
       cursor: pointer;
       transition: background 0.3s;
-      margin-right: 10px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
+      /* Using Bebas Neue for a bold, cool look */
+      font-family: 'Bebas Neue', cursive;
+      font-weight: bold;
+      text-transform: uppercase;
     }
     .form-actions button:hover {
       background-color: #0056b3;
@@ -138,7 +142,6 @@
       align-items: center;
       gap: 8px;
     }
-    /* Smaller version for the lookup button */
     .lookup-button.small {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -164,7 +167,7 @@
       padding: 15px;
       border-radius: 8px;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
-      display: none; /* Hidden by default */
+      display: none;
     }
     /* Summary boxes styling (below the pie chart) */
     .summary-container {
@@ -214,7 +217,6 @@
       text-align: center;
       z-index: 10;
     }
-    /* New styles for summary card elements */
     .summary-box .amount {
       font-size: 2rem;
       font-weight: bold;
@@ -224,14 +226,12 @@
       font-size: 1rem;
       font-weight: 400;
     }
-    /* New CSS class for link icons in the team cell */
     .link-icon {
       width: 16px;
       height: 16px;
       margin-left: 4px;
       vertical-align: middle;
     }
-    /* New CSS class for a slightly larger eBay icon */
     .ebay-icon {
       width: 20px;
       height: 20px;
@@ -386,7 +386,7 @@
     }
 
     // Populate the year selector with unique years in descending order.
-    // This function extracts the starting year from each option (e.g., "2025" from "2025-25") for sorting.
+    // Extracts the starting year from each year string (e.g., "2025" from "2025-25")
     function populateYearSelector() {
       const yearSelect = document.getElementById('yearSelect');
       yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
