@@ -46,6 +46,10 @@
       color: #e0e0e0;
       margin-top: 0;
     }
+    /* Hide the team pricing header by default */
+    #teamPricesHeader {
+      display: none;
+    }
     /* Form layout styling */
     form#calcForm {
       margin-bottom: 25px;
@@ -368,26 +372,8 @@
       <canvas id="pieChart"></canvas>
     </div>
 
-    <!-- Summary Boxes (below the pie chart) -->
-    <div class="summary-container">
-      <div id="totalProfitBox" class="summary-box">
-        <div class="amount">$0.00</div>
-        <div class="label">Total Profit</div>
-        <div class="toast">Profit is how much money a breaker will make.</div>
-      </div>
-      <div id="whatnotsCutBox" class="summary-box">
-        <div class="amount">$0.00</div>
-        <div class="label">Whatnot's Cut</div>
-        <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
-      </div>
-      <div id="costOfBusinessBox" class="summary-box">
-        <div class="amount">$0.00</div>
-        <div class="label">Cost of Business</div>
-        <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
-      </div>
-    </div>
-
-    <h2>Suggested Team Prices</h2>
+    <!-- Suggested Team Prices header -->
+    <h2 id="teamPricesHeader">Suggested Team Prices</h2>
     <div id="results"></div>
   </div>
 
@@ -613,6 +599,14 @@
       const tbodyHtml = renderRows(rows);
       resultsHtml += tbodyHtml + '</tbody></table>';
       document.getElementById('results').innerHTML = resultsHtml;
+      
+      // Toggle the header: if there are rows, show the header; otherwise hide it.
+      const teamPricesHeader = document.getElementById('teamPricesHeader');
+      if (rows.length > 0) {
+        teamPricesHeader.style.display = "block";
+      } else {
+        teamPricesHeader.style.display = "none";
+      }
       
       // Store the rows data on the table element for sorting.
       document.getElementById('resultsTable').rowsData = rows;
