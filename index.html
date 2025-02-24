@@ -388,7 +388,8 @@
       </div>
     </div>
 
-    <h2>Suggested Team Prices</h2>
+    <!-- The header is hidden by default and will be shown if team data exists -->
+    <h2 id="teamPricesHeader" style="display: none;">Suggested Team Prices</h2>
     <div id="results"></div>
   </div>
 
@@ -614,6 +615,13 @@
       const tbodyHtml = renderRows(rows);
       resultsHtml += tbodyHtml + '</tbody></table>';
       document.getElementById('results').innerHTML = resultsHtml;
+      
+      // Show/hide the team prices header depending on whether there are team rows.
+      if (rows.length > 0) {
+        document.getElementById('teamPricesHeader').style.display = 'block';
+      } else {
+        document.getElementById('teamPricesHeader').style.display = 'none';
+      }
       
       // Store the rows data on the table element for sorting.
       document.getElementById('resultsTable').rowsData = rows;
