@@ -1442,6 +1442,40 @@
         "San Jose Sharks": 1939
       }
     },
+        {
+      "year": "2021-22",
+      "name": "Upper Deck Ice",
+      "cards": {
+        "San Jose Sharks": 29181,
+        "Philadelphia Flyers": 23821,
+        "New Jersey Devils": 23229,
+        "Los Angeles Kings": 23172,
+        "Tampa Bay Lightning": 22928,
+        "Ottawa Senators": 21165,
+        "Anaheim Ducks": 20913,
+        "Nashville Predators": 19423,
+        "Buffalo Sabres": 19323,
+        "Vegas Golden Knights": 18812,
+        "Florida Panthers": 18547,
+        "Detroit Red Wings": 17182,
+        "New York Rangers": 17131,
+        "Colorado Avalanche": 15133,
+        "Montreal Canadiens": 14929,
+        "Arizona Coyotes": 14243,
+        "Boston Bruins": 13723,
+        "Carolina Hurricanes": 13352,
+        "Columbus Blue Jackets": 13245,
+        "Washington Capitals": 12841,
+        "St. Louis Blues": 12565,
+        "Chicago Blackhawks": 12509,
+        "Winnipeg Jets": 11695,
+        "Minnesota Wild": 11179,
+        "Vancouver Canucks": 10888,
+        "Calgary Flames": 10494,
+        "San Jose Sharks (2)": 9567,
+        "San Jose Sharks (duplicate?)": 8238
+      }
+    },
     {
       "year": "2022-23",
       "name": "Upper Deck Series 1",
