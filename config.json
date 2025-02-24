@@ -608,44 +608,7 @@
         "Seattle Kraken": 292
       }
     },
-    {
-      "year": "2024-25",
-      "name": "Upper Deck MVP",
-      "cards": {
-        "New York Rangers": 1796,
-        "Calgary Flames": 1762,
-        "Nashville Predators": 1566,
-        "Detroit Red Wings": 1498,
-        "Dallas Stars": 1498,
-        "Tampa Bay Lightning": 1498,
-        "Chicago Blackhawks": 1498,
-        "Edmonton Oilers": 1430,
-        "Philadelphia Flyers": 1430,
-        "Montreal Canadiens": 1396,
-        "Colorado Avalanche": 1362,
-        "Pittsburgh Penguins": 1234,
-        "St. Louis Blues": 1234,
-        "Ottawa Senators": 1200,
-        "Toronto Maple Leafs": 1200,
-        "New York Islanders": 1166,
-        "Carolina Hurricanes": 1166,
-        "Los Angeles Kings": 1166,
-        "Columbus Blue Jackets": 1166,
-        "Washington Capitals": 1132,
-        "Anaheim Ducks": 1132,
-        "Buffalo Sabres": 1132,
-        "Minnesota Wild": 1098,
-        "Florida Panthers": 1098,
-        "Seattle Kraken": 902,
-        "Boston Bruins": 868,
-        "Vancouver Canucks": 868,
-        "New Jersey Devils": 834,
-        "San Jose Sharks": 834,
-        "Winnipeg Jets": 766,
-        "Arizona Coyotes": 766,
-        "Vegas Golden Knights": 604
-      }
-    },
+    
     {
       "year": "2023-24",
       "name": "Upper Deck Series 2",
