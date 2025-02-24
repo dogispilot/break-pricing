@@ -386,10 +386,15 @@
     }
 
     // Populate the year selector with unique years in descending order.
+    // This function extracts the starting year from each option (e.g., "2025" from "2025-25") for sorting.
     function populateYearSelector() {
       const yearSelect = document.getElementById('yearSelect');
       yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
-      const years = [...new Set(setData.map(set => set.year))].sort((a, b) => Number(b) - Number(a));
+      const years = [...new Set(setData.map(set => set.year))].sort((a, b) => {
+        const yearA = parseInt(a.split('-')[0], 10);
+        const yearB = parseInt(b.split('-')[0], 10);
+        return yearB - yearA;
+      });
       years.forEach(year => {
         const option = document.createElement('option');
         option.value = year;
@@ -494,7 +499,7 @@
       window.open(url, "_blank");
     }
 
-    // New function: When a team name is clicked, open an eBay search.
+    // New function: When a team name is clicked, open an eBay search with additional parameters.
     function openTeamSearch(teamName) {
       const setYear = document.getElementById('yearSelect').value;
       const setName = document.getElementById('setSelect').value;
