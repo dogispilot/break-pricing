@@ -46,21 +46,6 @@
       color: #e0e0e0;
       margin-top: 0;
     }
-    /* Export button styles */
-    .export-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .export-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 5px;
-    }
-    .export-button img {
-      width: 30px;
-      height: 30px;
-    }
     /* Form layout styling */
     form#calcForm {
       margin-bottom: 25px;
@@ -124,27 +109,24 @@
       text-align: center;
     }
     .form-actions button {
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
       padding: 16px 30px;
       font-size: 1.3rem;
       border: none;
       border-radius: 4px;
-      /* Gradient colors matching the Upper Deck logo */
-      background: linear-gradient(45deg, #C8102E, #F75353);
+      background-color: #007bff;
       color: #fff;
       cursor: pointer;
       transition: background 0.3s;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      /* Using Bebas Neue for a bold, cool look */
       font-family: 'Bebas Neue', cursive;
       font-weight: bold;
       text-transform: uppercase;
     }
     .form-actions button:hover {
-      background: linear-gradient(45deg, #B00E25, #F04343);
+      background-color: #0056b3;
     }
     /* Lookup button styles */
     .lookup-button {
@@ -365,15 +347,26 @@
       <canvas id="pieChart"></canvas>
     </div>
 
-    <!-- Suggested Team Prices and Export Button -->
-    <div class="export-container">
-      <h2>Suggested Team Prices</h2>
-      <button class="export-button" onclick="exportCSV()" title="Export as CSV">
-        <img src="/resources/download.png" alt="Download CSV">
-      </button>
+    <!-- Summary Boxes (below the pie chart) -->
+    <div class="summary-container">
+      <div id="totalProfitBox" class="summary-box">
+        <div class="amount">$0.00</div>
+        <div class="label">Total Profit</div>
+        <div class="toast">Profit is how much money a breaker will make.</div>
+      </div>
+      <div id="whatnotsCutBox" class="summary-box">
+        <div class="amount">$0.00</div>
+        <div class="label">Whatnot's Cut</div>
+        <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
+      </div>
+      <div id="costOfBusinessBox" class="summary-box">
+        <div class="amount">$0.00</div>
+        <div class="label">Cost of Business</div>
+        <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
+      </div>
     </div>
 
-    <!-- Results Table -->
+    <h2>Team Prices</h2>
     <div id="results"></div>
   </div>
 
@@ -642,6 +635,11 @@
       }
     }
 
+    // Global variable to track currently sorted column (-1 means none).
+    let currentSortedColumn = -1;
+    // Object to track sort directions for each column.
+    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
+
     // Function to render table rows from an array of row objects.
     function renderRows(arr) {
       let html = '';
@@ -665,8 +663,6 @@
     }
 
     // Sort table function.
-    let currentSortedColumn = -1;
-    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
     function sortTable(columnIndex) {
       const table = document.getElementById('resultsTable');
       if (!table || !table.rowsData) return;
@@ -676,9 +672,10 @@
         sortDirections[columnIndex] = 1;
         currentSortedColumn = columnIndex;
       } else {
-        sortDirections[columnIndex] *= -1;
+        sortDirections[columnIndex] = sortDirections[columnIndex] * -1;
       }
       const direction = sortDirections[columnIndex];
+
       rows.sort((a, b) => {
         let aVal, bVal;
         if (columnIndex === 0) {
@@ -703,51 +700,15 @@
           aVal = Number(a.profit);
           bVal = Number(b.profit);
         }
+        
         if (aVal < bVal) return -1 * direction;
         if (aVal > bVal) return 1 * direction;
         return 0;
       });
+      
       const tbody = table.tBodies[0];
       tbody.innerHTML = renderRows(rows);
       table.rowsData = rows;
-    }
-
-    // Function to export the results table to CSV.
-    function exportCSV() {
-      const table = document.getElementById('resultsTable');
-      if (!table) {
-        alert("No data available to export.");
-        return;
-      }
-      let csv = "";
-      // Get header row
-      const headers = table.querySelectorAll("thead th");
-      let headerArr = [];
-      headers.forEach(th => {
-        headerArr.push('"' + th.textContent.trim() + '"');
-      });
-      csv += headerArr.join(",") + "\n";
-      // Get data rows
-      const rows = table.querySelectorAll("tbody tr");
-      rows.forEach(tr => {
-        const cells = tr.querySelectorAll("td");
-        let rowArr = [];
-        cells.forEach(td => {
-          let text = td.textContent.trim();
-          rowArr.push('"' + text + '"');
-        });
-        csv += rowArr.join(",") + "\n";
-      });
-      // Create a Blob with the CSV data and trigger a download.
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", "team_prices.csv");
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
     }
 
     // Toggle toast tooltips when summary boxes are clicked.
@@ -759,6 +720,7 @@
       });
     });
 
+    // Attach the calculateProfit function to the form submission event.
     document.getElementById('calcForm').addEventListener('submit', function(e) {
       e.preventDefault();
       calculateProfit();
