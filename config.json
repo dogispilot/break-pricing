@@ -1080,7 +1080,44 @@
         "Ottawa Senators": 1521
       }
     },
-
+{
+      "year": "2023-24",
+      "name": "Upper Deck Extended Series",
+      "cards": {
+        "Buffalo Sabres": 11525,
+        "Anaheim Ducks": 9773,
+        "Ottawa Senators": 9040,
+        "Detroit Red Wings": 8086,
+        "Toronto Maple Leafs": 7269,
+        "Calgary Flames": 7187,
+        "Florida Panthers": 7131,
+        "Chicago Blackhawks": 7110,
+        "Nashville Predators": 6934,
+        "Arizona Coyotes": 6869,
+        "Montreal Canadiens": 6670,
+        "Boston Bruins": 6597,
+        "New Jersey Devils": 6454,
+        "Columbus Blue Jackets": 5943,
+        "Dallas Stars": 5478,
+        "Colorado Avalanche": 5352,
+        "Philadelphia Flyers": 5205,
+        "New York Rangers": 5102,
+        "Pittsburgh Penguins": 5054,
+        "Minnesota Wild": 4767,
+        "Los Angeles Kings": 4621,
+        "Vancouver Canucks": 4282,
+        "Carolina Hurricanes": 4264,
+        "Seattle Kraken": 4002,
+        "Edmonton Oilers": 3698,
+        "Winnipeg Jets": 3602,
+        "San Jose Sharks": 3500,
+        "Vegas Golden Knights": 3220,
+        "New York Islanders": 3214,
+        "Tampa Bay Lightning": 3128,
+        "Washington Capitals": 2738,
+        "St. Louis Blues": 2352
+      }
+    },
     {
       "year": "2022-23",
       "name": "Upper Deck Series 1",
