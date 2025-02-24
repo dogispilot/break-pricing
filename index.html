@@ -25,7 +25,7 @@
       color: #e0e0e0;
       text-decoration: none;
       font-size: 1rem;
-      font-family: 'Bebas Neue', cursive; /* Updated to Bebas Neue */
+      font-family: 'Bebas Neue', cursive;
       z-index: 1000;
     }
     .about-link:hover {
@@ -128,22 +128,22 @@
     }
     /* Updated Calculate Button Styling */
     .calculate-btn {
-      width: 500px; /* much wider */
+      width: 500px;
       padding: 16px 30px;
       background: linear-gradient(135deg, #FED111, #F37427);
-      border: 5px solid #005396; /* thicker border */
+      border: 5px solid #005396;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       color: #ffffff;
       font-size: 1.3rem;
       text-transform: uppercase;
-      font-family: 'Bebas Neue', cursive; /* remains as originally set */
+      font-family: 'Bebas Neue', cursive;
       transition: background 0.3s, transform 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin: 0 auto; /* centers the button */
+      margin: 0 auto;
     }
     .calculate-btn:hover {
       background: linear-gradient(135deg, #F37427, #FED111);
@@ -398,6 +398,8 @@
     let setData = [];
     // Global variable for the pie chart instance
     let pieChart;
+    // Global variable for table data to support sorting.
+    let tableData = [];
 
     // Utility function to parse percentage inputs.
     function parsePercentage(value) {
@@ -409,7 +411,6 @@
     }
 
     // Populate the year selector with unique years in descending order.
-    // Extracts the starting year from each year string (e.g., "2025" from "2025-25")
     function populateYearSelector() {
       const yearSelect = document.getElementById('yearSelect');
       yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
@@ -442,7 +443,7 @@
       });
     }
 
-    // Automatically load config.json on page load.
+    // Load config.json on page load.
     window.addEventListener('load', function() {
       fetch("config.json")
         .then(response => {
@@ -503,7 +504,7 @@
       "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
     };
 
-    // Modified function: Open dacardworld search query with year prefix.
+    // Open dacardworld search query with year prefix.
     function openSetSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -515,14 +516,13 @@
         alert('Please select a set year first.');
         return;
       }
-      // Extract the first part of the year (e.g., "2024" from "2024-25")
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hobby case";
       const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
-    // New function: When a team name is clicked, open an eBay search with additional parameters.
+    // When a team name is clicked, open an eBay search with additional parameters.
     function openTeamSearch(teamName) {
       const setYear = document.getElementById('yearSelect').value;
       const setName = document.getElementById('setSelect').value;
@@ -530,11 +530,14 @@
         alert('Please select both a set year and a set first.');
         return;
       }
-      // Build the search query string.
       const query = encodeURIComponent(setYear + " " + setName + " " + teamName);
       const url = "https://www.ebay.com/sch/i.html?_nkw=" + query + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
       window.open(url, "_blank");
     }
+
+    // Global variables to track current sort state.
+    let currentSortedColumn = -1;
+    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
 
     // Function to calculate and render profits along with updating the pie chart.
     function calculateProfit() {
@@ -551,23 +554,18 @@
         return;
       }
       
-      // Find the set object that matches the selected year and set name.
       const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
       if (!setObj) {
         alert('Selected set data not found.');
         return;
       }
       
-      // Use "cards" property if available; otherwise, use "most_numbered_cards".
       const teamData = setObj.cards || setObj.most_numbered_cards;
-      
-      // Calculate total number of cards.
       let totalCards = 0;
       for (let team in teamData) {
         totalCards += teamData[team];
       }
       
-      // Build rows with recalculated profit for each team.
       let rows = [];
       for (let team in teamData) {
         const count = teamData[team];
@@ -590,17 +588,14 @@
         });
       }
       
-      // Compute totals for the summary boxes.
       const totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
       const totalWhatnotsCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
       const totalCostOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
       
-      // Update summary boxes.
       document.querySelector('#totalProfitBox .amount').textContent = "$" + totalProfit.toFixed(2);
       document.querySelector('#whatnotsCutBox .amount').textContent = "$" + totalWhatnotsCut.toFixed(2);
       document.querySelector('#costOfBusinessBox .amount').textContent = "$" + totalCostOfBusiness.toFixed(2);
       
-      // Build and update the results table.
       let resultsHtml = '<table id="resultsTable">';
       resultsHtml += '<thead><tr>';
       resultsHtml += '<th data-sort="text" onclick="sortTable(0)">Team</th>';
@@ -616,27 +611,24 @@
       resultsHtml += tbodyHtml + '</tbody></table>';
       document.getElementById('results').innerHTML = resultsHtml;
       
-      // Show/hide the team prices header depending on whether there are team rows.
+      // Show/hide the header based on whether there are team rows.
       if (rows.length > 0) {
         document.getElementById('teamPricesHeader').style.display = 'block';
       } else {
         document.getElementById('teamPricesHeader').style.display = 'none';
       }
       
-      // Store the rows data on the table element for sorting.
-      document.getElementById('resultsTable').rowsData = rows;
+      // Store the current table data globally.
+      tableData = rows;
       
-      // Prepare the chart data.
       const chartData = [totalProfit, totalWhatnotsCut, totalCostOfBusiness];
       const chartContainer = document.getElementById('chartContainer');
-      // Hide chart container if all values are zero.
       if (chartData.every(val => val === 0)) {
         chartContainer.style.display = 'none';
       } else {
         chartContainer.style.display = 'block';
       }
       
-      // Update or create the pie chart with distribution data.
       if (pieChart) {
         pieChart.data.datasets[0].data = chartData;
         pieChart.update();
@@ -665,12 +657,7 @@
       }
     }
 
-    // Global variable to track currently sorted column (-1 means none).
-    let currentSortedColumn = -1;
-    // Object to track sort directions for each column.
-    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
-
-    // Function to render table rows from an array of row objects.
+    // Function to render table rows.
     function renderRows(arr) {
       let html = '';
       arr.forEach(row => {
@@ -692,21 +679,19 @@
       return html;
     }
 
-    // Sort table function.
+    // Sort table using the global tableData.
     function sortTable(columnIndex) {
-      const table = document.getElementById('resultsTable');
-      if (!table || !table.rowsData) return;
-      let rows = table.rowsData;
+      if (!tableData) return;
       
       if (currentSortedColumn !== columnIndex) {
         sortDirections[columnIndex] = 1;
         currentSortedColumn = columnIndex;
       } else {
-        sortDirections[columnIndex] = sortDirections[columnIndex] * -1;
+        sortDirections[columnIndex] *= -1;
       }
       const direction = sortDirections[columnIndex];
 
-      rows.sort((a, b) => {
+      tableData.sort((a, b) => {
         let aVal, bVal;
         if (columnIndex === 0) {
           aVal = a.team.toLowerCase();
@@ -736,12 +721,11 @@
         return 0;
       });
       
-      const tbody = table.tBodies[0];
-      tbody.innerHTML = renderRows(rows);
-      table.rowsData = rows;
+      const tbody = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+      tbody.innerHTML = renderRows(tableData);
     }
 
-    // Toggle toast tooltips when summary boxes are clicked.
+    // Toggle toast tooltips for summary boxes.
     const summaryBoxes = document.querySelectorAll('.summary-box');
     summaryBoxes.forEach(box => {
       box.addEventListener('click', function() {
@@ -750,7 +734,6 @@
       });
     });
 
-    // Attach the calculateProfit function to the form submission event.
     document.getElementById('calcForm').addEventListener('submit', function(e) {
       e.preventDefault();
       calculateProfit();
