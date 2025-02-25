@@ -368,7 +368,8 @@
           </select>
         </div>
         <div class="form-group no-label">
-          <button type="button" class="lookup-button small" onclick="window.open('https://hockeychecklists.com/', '_blank')">
+          <!-- Updated HockeyChecklists button -->
+          <button type="button" class="lookup-button small" onclick="openHockeyChecklistsSearch()">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
           </button>
@@ -644,6 +645,24 @@
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet;
       const url = "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    }
+    
+    // New function for HockeyChecklists using the provided base URL.
+    function openHockeyChecklistsSearch() {
+      const selectedSet = document.getElementById('setSelect').value;
+      const selectedYear = document.getElementById('yearSelect').value;
+      if (!selectedSet) {
+        alert('Please select a set first.');
+        return;
+      }
+      if (!selectedYear) {
+        alert('Please select a set year first.');
+        return;
+      }
+      const yearPrefix = selectedYear.split('-')[0];
+      const query = yearPrefix + " " + selectedSet;
+      const url = "https://hockeychecklists.com/checklist?ser=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
