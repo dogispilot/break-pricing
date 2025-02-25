@@ -504,6 +504,10 @@
     // Global variable for table data to support sorting.
     let tableData = [];
 
+    // Global variables to track current sort state.
+    let currentSortedColumn = -1;
+    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1 };
+
     // Utility function to parse percentage inputs.
     function parsePercentage(value) {
       value = value.toString().replace('%','').trim();
@@ -750,10 +754,6 @@
       window.open(url, "_blank");
     }
 
-    // Global variables to track current sort state.
-    let currentSortedColumn = -1;
-    const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1 };
-
     // Function to calculate and render profits along with updating the pie chart.
     function calculateProfit() {
       const selectedYear = document.getElementById('yearSelect').value;
@@ -790,11 +790,14 @@
         const whatnotFees = cost * 0.08;
         const transactionFees = ((price * (1 + blendedTax)) * 0.029) + 0.30;
         const profit = price - cost - whatnotFees - transactionFees - supplies;
+        // Calculate the distribution percentage rounded to one decimal place
+        const distribution = ((count / totalCards) * 100).toFixed(1) + '%';
         
         rows.push({
           team: team,
           logo: teamLogos[team] || '',
           count: count,
+          distribution: distribution,
           cost: cost,
           price: price,
           whatnotFees: whatnotFees,
@@ -815,11 +818,12 @@
       resultsHtml += '<thead><tr>';
       resultsHtml += '<th data-sort="text" onclick="sortTable(0)">Team</th>';
       resultsHtml += '<th data-sort="number" onclick="sortTable(1)">Numbered Cards</th>';
-      resultsHtml += '<th data-sort="number" onclick="sortTable(2)">Cost</th>';
-      resultsHtml += '<th data-sort="number" onclick="sortTable(3)">Price</th>';
-      resultsHtml += '<th data-sort="number" onclick="sortTable(4)">Whatnot Fees</th>';
-      resultsHtml += '<th data-sort="number" onclick="sortTable(5)">Transaction Fees</th>';
-      resultsHtml += '<th data-sort="number" onclick="sortTable(6)">Profit</th>';
+      resultsHtml += '<th data-sort="number" onclick="sortTable(2)">Distribution</th>';
+      resultsHtml += '<th data-sort="number" onclick="sortTable(3)">Cost</th>';
+      resultsHtml += '<th data-sort="number" onclick="sortTable(4)">Price</th>';
+      resultsHtml += '<th data-sort="number" onclick="sortTable(5)">Whatnot Fees</th>';
+      resultsHtml += '<th data-sort="number" onclick="sortTable(6)">Transaction Fees</th>';
+      resultsHtml += '<th data-sort="number" onclick="sortTable(7)">Profit</th>';
       resultsHtml += '</tr></thead><tbody>';
       
       const tbodyHtml = renderRows(rows);
@@ -884,6 +888,7 @@
         html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
         html += '</a></td>';
         html += '<td>' + row.count + '</td>';
+        html += '<td>' + row.distribution + '</td>';
         html += '<td>$' + row.cost.toFixed(2) + '</td>';
         html += '<td>$' + row.price.toFixed(2) + '</td>';
         html += '<td>$' + row.whatnotFees.toFixed(2) + '</td>';
@@ -915,18 +920,21 @@
           aVal = Number(a.count);
           bVal = Number(b.count);
         } else if (columnIndex === 2) {
+          aVal = parseFloat(a.distribution);
+          bVal = parseFloat(b.distribution);
+        } else if (columnIndex === 3) {
           aVal = Number(a.cost);
           bVal = Number(b.cost);
-        } else if (columnIndex === 3) {
+        } else if (columnIndex === 4) {
           aVal = Number(a.price);
           bVal = Number(b.price);
-        } else if (columnIndex === 4) {
+        } else if (columnIndex === 5) {
           aVal = Number(a.whatnotFees);
           bVal = Number(b.whatnotFees);
-        } else if (columnIndex === 5) {
+        } else if (columnIndex === 6) {
           aVal = Number(a.transactionFees);
           bVal = Number(b.transactionFees);
-        } else if (columnIndex === 6) {
+        } else if (columnIndex === 7) {
           aVal = Number(a.profit);
           bVal = Number(b.profit);
         }
