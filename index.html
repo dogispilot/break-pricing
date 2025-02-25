@@ -114,7 +114,7 @@
     input[type=number] {
       -moz-appearance: textfield;
     }
-    /* Container for the input and lookup button */
+    /* Container for the input and lookup buttons */
     .input-button-group {
       display: flex;
       align-items: center;
@@ -178,6 +178,15 @@
       height: 20px;
     }
     .lookup-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    /* Steel City button styling */
+    .steelcity-button {
+      background: linear-gradient(45deg, #FFD700, #FFC107);
+      color: #000;
+    }
+    .steelcity-button:hover {
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
@@ -330,7 +339,7 @@
           </select>
         </div>
       </div>
-      <!-- Row 2: Cost of a Case with Lookup Button -->
+      <!-- Row 2: Cost of a Case with Lookup Buttons -->
       <div class="form-row">
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
@@ -339,6 +348,10 @@
             <button type="button" class="lookup-button small" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
               Look up Price
+            </button>
+            <button type="button" class="lookup-button small steelcity-button" onclick="openSteelCitySearch()">
+              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+              Search Steel City
             </button>
           </div>
         </div>
@@ -542,6 +555,24 @@
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hobby case";
       const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    }
+
+    // Open Steel City search query using the same query but different URL.
+    function openSteelCitySearch() {
+      const selectedSet = document.getElementById('setSelect').value;
+      const selectedYear = document.getElementById('yearSelect').value;
+      if (!selectedSet) {
+        alert('Please select a set first.');
+        return;
+      }
+      if (!selectedYear) {
+        alert('Please select a set year first.');
+        return;
+      }
+      const yearPrefix = selectedYear.split('-')[0];
+      const query = yearPrefix + " " + selectedSet + " hobby case";
+      const url = "https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
