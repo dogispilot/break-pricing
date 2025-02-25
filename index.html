@@ -212,19 +212,21 @@
       display: flex;
       gap: 20px;
       margin-bottom: 25px;
+      align-items: stretch;
     }
-    /* Pie chart container styling remains mostly the same */
+    /* Pie chart container styling updated to be wider (flex: 2) */
     #chartContainer {
-      flex: 1;
+      flex: 2;
       height: 300px;
       background: #2c2c2c;
       padding: 15px;
       border-radius: 8px;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
     }
-    /* Updated summary container to stack boxes vertically matching the pie chart height */
+    /* Summary container now has a fixed maximum width to make the boxes narrower */
     .summary-container {
       flex: 1;
+      max-width: 300px;
       display: flex;
       flex-direction: column;
       height: 300px;
