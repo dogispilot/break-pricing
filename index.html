@@ -339,6 +339,29 @@
         font-size: 1.2rem;
       }
     }
+    
+    /* Glow effects for buttons on hover using provided colors */
+    .glow-outofthebox:hover {
+      box-shadow: 0 0 8px #F70000, 0 0 16px #F70000;
+    }
+    .glow-blowout:hover {
+      box-shadow: 0 0 8px #9A0E20, 0 0 16px #9A0E20;
+    }
+    .glow-tcdb:hover {
+      box-shadow: 0 0 8px #C84C19, 0 0 16px #C84C19;
+    }
+    .glow-daveadams:hover {
+      box-shadow: 0 0 8px #27465A, 0 0 16px #27465A;
+    }
+    .glow-steelcity:hover {
+      box-shadow: 0 0 8px #E2D61E, 0 0 16px #E2D61E;
+    }
+    .glow-midwestcards:hover {
+      box-shadow: 0 0 8px #E8B144, 0 0 16px #E8B144;
+    }
+    .glow-hockeychecklists:hover {
+      box-shadow: 0 0 8px #021E9B, 0 0 16px #021E9B;
+    }
   </style>
   <!-- Include Chart.js for the pie chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -368,14 +391,15 @@
           </select>
         </div>
         <div class="form-group no-label">
-          <!-- Updated HockeyChecklists button -->
-          <button type="button" class="lookup-button small" onclick="openHockeyChecklistsSearch()">
+          <!-- Updated HockeyChecklists button with glow class -->
+          <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
           </button>
         </div>
         <div class="form-group no-label">
-          <button type="button" class="lookup-button small" onclick="openTcdbSearch()">
+          <!-- Updated TCDB button with glow class -->
+          <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()">
             <img src="resources/tcdb.jpg" alt="TCDB Logo">
             TCDB
           </button>
@@ -386,24 +410,29 @@
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
           <div class="input-button-group">
+            <!-- Updated Dave & Adams button with glow class -->
             <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
-            <button type="button" class="lookup-button small" onclick="openSetSearch()">
+            <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
               Dave & Adams
             </button>
-            <button type="button" class="lookup-button small steelcity-button" onclick="openSteelCitySearch()">
+            <!-- Updated Steel City button with glow class -->
+            <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
               <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
               Steel City
             </button>
-            <button type="button" class="lookup-button small" onclick="openMidwestCardsSearch()">
+            <!-- Updated Midwest Cards button with glow class -->
+            <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
               <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
               Midwest Cards
             </button>
-            <button type="button" class="lookup-button small" onclick="openBlowoutCardsSearch()">
+            <!-- Updated Blowout Cards button with glow class -->
+            <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
               <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo">
               Blowout Cards
             </button>
-            <button type="button" class="lookup-button small" onclick="openOotbSearch()">
+            <!-- Updated Out of the Box button with glow class -->
+            <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
               <img src="resources/ootb.png" alt="Out of the Box Logo">
               Out of the Box
             </button>
