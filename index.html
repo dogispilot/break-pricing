@@ -392,14 +392,14 @@
           </select>
         </div>
         <div class="form-group no-label">
-          <!-- Updated TCDB button with glow class and reduced padding -->
-          <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 12px 10px;">
+          <!-- Updated TCDB button with reduced padding and centered content -->
+          <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; justify-content: center;">
             <img src="resources/tcdb.jpg" alt="TCDB Logo">
             TCDB
           </button>
         </div>
         <div class="form-group no-label">
-          <!-- Updated HockeyChecklists button with glow class -->
+          <!-- HockeyChecklists.com button remains using lookup-button small to match TCDB's height -->
           <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
@@ -411,8 +411,8 @@
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
           <div class="input-button-group">
-            <!-- Updated Dave & Adams button with glow class -->
-            <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
+            <!-- Updated default price from 420.69 to 1999.99 -->
+            <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99">
             <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
               Dave & Adams
