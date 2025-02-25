@@ -435,12 +435,14 @@
     }
 
     // Populate the set selector based on the selected year.
+    // Updated to sort the sets alphabetically.
     function populateSetSelector() {
       const selectedYear = document.getElementById('yearSelect').value;
       const setSelect = document.getElementById('setSelect');
       setSelect.innerHTML = '<option value="">--Select a Set--</option>';
       if (!selectedYear) return;
       const filteredSets = setData.filter(set => set.year === selectedYear);
+      filteredSets.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetical sort
       filteredSets.forEach(set => {
         const option = document.createElement('option');
         option.value = set.name;
