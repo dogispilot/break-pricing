@@ -2,14 +2,13 @@
 <html>
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BTYVB6WX8N"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BTYVB6WX8N');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BTYVB6WX8N"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BTYVB6WX8N');
+  </script>
   <meta charset="UTF-8">
   <title>BreakPricing.com</title>
   <link rel="icon" type="image/png" href="/resources/calculator.png">
@@ -20,6 +19,12 @@
     @font-face {
       font-family: 'BreakPricingFont';
       src: url('fonts/breakpricingfont.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'BreakPricingFontBold';
+      src: url('fonts/breakpricingfont_bold.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
@@ -68,11 +73,16 @@
       color: #e0e0e0;
       margin: 0;
       font-size: 2rem;
+      font-family: 'BreakPricingFontBold', sans-serif;
     }
     h2 {
       text-align: center;
       color: #e0e0e0;
       margin-top: 0;
+    }
+    /* Apply bold font to the "Suggested Team Prices" header */
+    #teamPricesHeader {
+      font-family: 'BreakPricingFontBold', sans-serif;
     }
     /* Form layout styling */
     form#calcForm {
@@ -268,6 +278,7 @@
       font-size: 2rem;
       font-weight: bold;
       margin-bottom: 0.25em;
+      font-family: 'BreakPricingFontBold', sans-serif;
     }
     .summary-box .label {
       font-size: 1rem;
