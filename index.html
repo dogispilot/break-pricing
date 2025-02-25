@@ -202,7 +202,7 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    /* New Key Chase Players Section styles */
+    /* Updated Key Chase Players Section styles */
     #keyPlayersSection {
       margin-top: 30px;
       padding: 15px;
@@ -215,10 +215,11 @@
       font-family: 'BreakPricingFontBold', sans-serif;
     }
     .key-player-tiles-container {
-      display: flex;
-      flex-wrap: wrap;
+      /* Changed from flex to grid to force two rows */
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 15px;
-      justify-content: center;
+      justify-items: center;
     }
     .key-player-tile {
       background: #1e1e1e;
@@ -226,7 +227,8 @@
       border-radius: 8px;
       display: flex;
       align-items: center;
-      width: 280px;
+      /* Remove fixed width so tile fits grid cell */
+      width: 100%;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .key-player-tile img.team-logo {
