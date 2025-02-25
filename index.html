@@ -155,16 +155,16 @@
       background: linear-gradient(135deg, #F37427, #FED111);
       transform: scale(1.05);
     }
-    /* Lookup button styles updated to use BreakPricingFont */
+    /* Lookup button styles updated for a hollow look */
     .lookup-button {
       padding: 12px 20px;
       font-size: 1rem;
-      border: none;
+      border: 1px solid #888; /* grey border */
       border-radius: 6px;
-      background: linear-gradient(45deg, #007bff, #00d4ff);
-      color: #fff;
+      background: transparent; /* hollow style */
+      color: #fff; /* white text */
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -187,10 +187,11 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    /* Steel City button styling */
+    /* Steel City button styling updated for hollow look */
     .steelcity-button {
-      background: linear-gradient(45deg, #FFD700, #FFC107);
-      color: #000;
+      background: transparent;
+      border: 1px solid #888;
+      color: #fff;
     }
     .steelcity-button:hover {
       transform: scale(1.05);
