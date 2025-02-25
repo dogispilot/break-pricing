@@ -11,7 +11,7 @@
   gtag('config', 'G-WV01JWWQJ4');
 </script>
   <meta charset="UTF-8">
-  <title>BreakPricing.com</title>
+  <title>SkunkSniper.com</title>
   <link rel="icon" type="image/png" href="/resources/calculator.png">
   <!-- Import Google Fonts (Roboto remains if needed) -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
@@ -756,8 +756,16 @@
     
     // New function to open an eBay search for the team.
     function openTeamSearch(teamName) {
-      const query = teamName + " hockey cards";
-      const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query);
+      const selectedYear = document.getElementById('yearSelect').value;
+      const selectedSet = document.getElementById('setSelect').value;
+      if (!selectedYear || !selectedSet) {
+        alert('Please select both a year and a set.');
+        return;
+      }
+      // Use only the first year if it is in a range (e.g. "2022-23")
+      const firstYear = selectedYear.split('-')[0];
+      const query = firstYear + " " + selectedSet + " " + teamName;
+      const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
       window.open(url, "_blank");
     }
 
