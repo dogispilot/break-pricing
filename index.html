@@ -451,6 +451,19 @@
       });
     }
 
+    // Update the "Cost of a Case" field when a set is selected.
+    function updateCasePrice() {
+      const selectedYear = document.getElementById('yearSelect').value;
+      const selectedSet = document.getElementById('setSelect').value;
+      if (!selectedYear || !selectedSet) return;
+      const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
+      if (setObj && setObj.price) {
+        // Remove "$" and commas, then convert to a float.
+        const priceValue = parseFloat(setObj.price.replace(/[$,]/g, ''));
+        document.getElementById('casePrice').value = priceValue;
+      }
+    }
+
     // Load config.json on page load.
     window.addEventListener('load', function() {
       fetch("config.json")
@@ -467,6 +480,8 @@
           }
           setData = jsonData.sets;
           populateYearSelector();
+          // Attach change event listener to update the case price when a set is selected.
+          document.getElementById('setSelect').addEventListener('change', updateCasePrice);
         })
         .catch(error => {
           console.error('Error loading JSON:', error);
@@ -527,19 +542,6 @@
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hobby case";
       const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query);
-      window.open(url, "_blank");
-    }
-
-    // When a team name is clicked, open an eBay search with additional parameters.
-    function openTeamSearch(teamName) {
-      const setYear = document.getElementById('yearSelect').value;
-      const setName = document.getElementById('setSelect').value;
-      if (!setYear || !setName) {
-        alert('Please select both a set year and a set first.');
-        return;
-      }
-      const query = encodeURIComponent(setYear + " " + setName + " " + teamName);
-      const url = "https://www.ebay.com/sch/i.html?_nkw=" + query + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
       window.open(url, "_blank");
     }
 
