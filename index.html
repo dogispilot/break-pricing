@@ -204,7 +204,8 @@
       .key-player-tiles-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        row-gap: 10px;
+        /* Reduced row-gap to move second row up */
+        row-gap: 5px;
         column-gap: 30px;
         justify-items: center;
       }
@@ -634,6 +635,7 @@
       <div id="results"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       // Global variables
       let setData = [];
@@ -698,6 +700,16 @@
               ctx.restore();
             }
           });
+        }
+      };
+
+      // New custom plugin to add margin between the pie chart and the legend.
+      const legendMargin = {
+        id: 'legendMargin',
+        beforeInit(chart) {
+          chart.legend.afterFit = function() {
+            this.height += 20; // add 20px margin below the legend
+          };
         }
       };
 
@@ -1251,9 +1263,8 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 layout: {
-                  padding: {
-                    bottom: 30
-                  }
+                  // We remove extra padding here so the legend margin plugin can take effect.
+                  padding: { bottom: 0 }
                 },
                 plugins: {
                   legend: {
@@ -1271,7 +1282,7 @@
                   }
                 }
               },
-              plugins: [extrudePlugin]
+              plugins: [extrudePlugin, legendMargin]
             });
           }
         }
