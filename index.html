@@ -81,16 +81,15 @@
         color: #e0e0e0;
         margin-top: 0;
       }
-      /* New style for sub-header copy */
+      /* New style for sub-header copy with reduced top margin */
       .sub-header {
         font-size: 0.9rem;
         text-align: center;
-        margin-top: 5px;
+        margin-top: 2px;
         color: #bbb;
       }
       #teamPricesHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
-        /* Added extra margin-top for spacing below the pie chart */
         margin-top: 30px;
       }
       form#calcForm {
@@ -229,7 +228,7 @@
       .key-player-tiles-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 30px; /* Increased gap */
+        gap: 30px;
         justify-items: center;
       }
       .key-player-tile {
@@ -647,8 +646,8 @@
 
       <!-- Distribution Section -->
       <h2 id="teamPricesHeader" style="display: none; margin-top: 30px;">Card Distribution by Team</h2>
-      <!-- New small copy below the header -->
-      <p class="sub-header">Highlighted teams have key rookies.</p>
+      <!-- New small copy below the header with an id for toggling -->
+      <p id="teamSubHeader" class="sub-header" style="display: none;">Highlighted teams have key rookies.</p>
       <div id="results"></div>
     </div>
 
@@ -809,7 +808,7 @@
           nameLink.href = player.profile_link;
           nameLink.target = "_blank";
           nameLink.style.textDecoration = "none";
-          nameLink.style.color = "inherit"; // ensures it inherits text color
+          nameLink.style.color = "inherit";
           nameLink.textContent = player.player;
           nameLine.appendChild(nameLink);
           infoDiv.appendChild(nameLine);
@@ -1156,11 +1155,11 @@
         document.getElementById("results").innerHTML = resultsHtml;
 
         if (rows.length > 0) {
-          document.getElementById("teamPricesHeader").style.display =
-            "block";
+          document.getElementById("teamPricesHeader").style.display = "block";
+          document.getElementById("teamSubHeader").style.display = "block";
         } else {
-          document.getElementById("teamPricesHeader").style.display =
-            "none";
+          document.getElementById("teamPricesHeader").style.display = "none";
+          document.getElementById("teamSubHeader").style.display = "none";
         }
 
         tableData = rows;
