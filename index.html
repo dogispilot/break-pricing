@@ -653,6 +653,53 @@
         return num;
       }
 
+      // Helper function to darken a hex color by a given percentage.
+      function darkenColor(color, percent) {
+        // assume color in format "#RRGGBB"
+        let num = parseInt(color.slice(1), 16);
+        let r = Math.max((num >> 16) - Math.round((num >> 16) * (percent/100)), 0);
+        let g = Math.max(((num >> 8) & 0x00FF) - Math.round((((num >> 8) & 0x00FF) * (percent/100))), 0);
+        let b = Math.max((num & 0x0000FF) - Math.round((num & 0x0000FF) * (percent/100)), 0);
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+      }
+
+      // Custom plugin to simulate 3D extrusion of pie slices.
+      const extrudePlugin = {
+        id: 'extrudePlugin',
+        beforeDatasetDraw(chart, args, options) {
+          const ctx = chart.ctx;
+          const datasetIndex = args.index;
+          const meta = chart.getDatasetMeta(datasetIndex);
+          const extrudeHeight = options.extrudeHeight || 10;
+          meta.data.forEach((arc, index) => {
+            // Get properties of the arc.
+            const { x, y, outerRadius, innerRadius, startAngle, endAngle } = arc.getProps(
+              ['x', 'y', 'outerRadius', 'innerRadius', 'startAngle', 'endAngle'],
+              true
+            );
+            // Draw multiple layers offset downward to simulate height.
+            for (let i = extrudeHeight; i > 0; i--) {
+              ctx.save();
+              ctx.translate(0, i);
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.arc(x, y, outerRadius, startAngle, endAngle);
+              if (innerRadius > 0) {
+                ctx.arc(x, y, innerRadius, endAngle, startAngle, true);
+              } else {
+                ctx.lineTo(x, y);
+              }
+              ctx.closePath();
+              // Use a darkened version of the slice's background color.
+              let baseColor = chart.data.datasets[datasetIndex].backgroundColor[index];
+              ctx.fillStyle = darkenColor(baseColor, 20);
+              ctx.fill();
+              ctx.restore();
+            }
+          });
+        }
+      };
+
       // Populate the year selector with unique years in descending order.
       function populateYearSelector() {
         const yearSelect = document.getElementById("yearSelect");
@@ -713,8 +760,7 @@
         }
       }
 
-      // New function: Opens an eBay search for the given player name
-      // using the set year and set name.
+      // New function: Opens an eBay search for the given player name using the set year and set name.
       function openPlayerEbaySearch(playerName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1176,22 +1222,6 @@
             pieChart.data.datasets[0].data = chartData;
             pieChart.update();
           } else {
-            // Custom plugin for drop shadow effect
-            const shadowPlugin = {
-              id: 'shadowPlugin',
-              beforeDatasetDraw(chart, args, options) {
-                const ctx = chart.ctx;
-                ctx.save();
-                ctx.shadowColor = options.shadowColor || 'rgba(0, 0, 0, 0.7)';
-                ctx.shadowBlur = options.shadowBlur || 10;
-                ctx.shadowOffsetX = options.shadowOffsetX || 5;
-                ctx.shadowOffsetY = options.shadowOffsetY || 5;
-              },
-              afterDatasetDraw(chart, args, options) {
-                chart.ctx.restore();
-              }
-            };
-
             const ctx = pieChartCanvas.getContext("2d");
             pieChart = new Chart(ctx, {
               type: "pie",
@@ -1209,6 +1239,8 @@
                       "#bfa600",
                       "#007bff",
                     ],
+                    // Pull slices apart
+                    offset: 10,
                     borderWidth: 0,
                     borderColor: "transparent"
                   },
@@ -1220,17 +1252,10 @@
                 plugins: {
                   legend: {
                     position: "bottom",
-                    labels: {
-                      font: { family: "BreakPricingFont" },
-                      color: "#e0e0e0"
-                    },
+                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" },
                   },
-                  // Configure the shadow plugin options
-                  shadowPlugin: {
-                    shadowColor: 'rgba(0, 0, 0, 0.7)',
-                    shadowBlur: 10,
-                    shadowOffsetX: 5,
-                    shadowOffsetY: 5,
+                  extrudePlugin: {
+                    extrudeHeight: 10
                   }
                 },
                 elements: {
@@ -1240,7 +1265,7 @@
                   }
                 }
               },
-              plugins: [shadowPlugin]
+              plugins: [extrudePlugin]
             });
           }
         }
