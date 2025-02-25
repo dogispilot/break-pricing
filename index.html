@@ -152,14 +152,14 @@
     .form-actions button {
       cursor: pointer;
     }
-    /* Updated Calculate Button Styling - now hollow with a gradient border */
+    /* Updated Calculate Button Styling - now hollow with a gradient border and rounded corners */
     .calculate-btn {
       width: 500px;
       padding: 16px 30px;
       background: transparent;
       border: 5px solid;
       border-image: linear-gradient(135deg, #FFDE0C, #005396, #F37427) 1;
-      border-radius: 8px;
+      border-radius: 20px;
       color: #ffffff;
       font-size: 1.3rem;
       text-transform: uppercase;
@@ -377,7 +377,7 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <!-- Row 1: Year, Set, HockeyChecklists.com Button, and TCDB Button -->
+      <!-- Row 1: Year, Set, TCDB Button, and HockeyChecklists.com Button -->
       <div class="form-row">
         <div class="form-group">
           <label for="yearSelect">Select Year</label>
@@ -392,17 +392,17 @@
           </select>
         </div>
         <div class="form-group no-label">
+          <!-- Updated TCDB button with glow class and reduced padding -->
+          <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 12px 10px;">
+            <img src="resources/tcdb.jpg" alt="TCDB Logo">
+            TCDB
+          </button>
+        </div>
+        <div class="form-group no-label">
           <!-- Updated HockeyChecklists button with glow class -->
           <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
-          </button>
-        </div>
-        <div class="form-group no-label">
-          <!-- Updated TCDB button with glow class -->
-          <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()">
-            <img src="resources/tcdb.jpg" alt="TCDB Logo">
-            TCDB
           </button>
         </div>
       </div>
