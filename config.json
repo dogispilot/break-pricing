@@ -3,6 +3,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck Allure",
+      "price": "$2,599.95",
       "cards": {
         "Edmonton Oilers": 8463,
         "Montreal Canadiens": 7082,
@@ -38,9 +39,10 @@
         "San Jose Sharks": 2782
       }
     },
-{
+    {
       "year": "2023-24",
       "name": "Upper Deck Artifacts",
+      "price": "$2,599.95",
       "cards": {
         "New York Rangers": 23550,
         "Detroit Red Wings": 19463,
@@ -79,6 +81,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck Black Diamond",
+      "price": "$3,449.95",
       "cards": {
         "Calgary Flames": 12283,
         "Montreal Canadiens": 10795,
@@ -114,9 +117,10 @@
         "Winnipeg Jets": 1459
       }
     },
-{
+    {
       "year": "2023-24",
       "name": "Upper Deck Credentials",
+      "price": "$2,299.95",
       "cards": {
         "Columbus Blue Jackets": 29180,
         "Calgary Flames": 25485,
@@ -152,9 +156,10 @@
         "Carolina Hurricanes": 2835
       }
     },
-     {
+    {
       "year": "2023-24",
       "name": "Upper Deck Engrained",
+      "price": "$2,699.95",
       "cards": {
         "Chicago Blackhawks": 7762,
         "Columbus Blue Jackets": 7200,
@@ -190,9 +195,10 @@
         "Winnipeg Jets": 1059
       }
     },
-        {
+    {
       "year": "2023-24",
       "name": "Upper Deck Ice",
+      "price": "$1,509.95",
       "cards": {
         "Columbus Blue Jackets": 27876,
         "Calgary Flames": 23084,
@@ -231,6 +237,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck MVP",
+      "price": "$699.95",
       "cards": {
         "New York Rangers": 1796,
         "Calgary Flames": 1762,
@@ -266,10 +273,10 @@
         "Vegas Golden Knights": 604
       }
     },
-
     {
       "year": "2022-23",
       "name": "Upper Deck Allure",
+      "price": "$1399.95",
       "cards": {
         "Columbus Blue Jackets": 6773,
         "Buffalo Sabres": 6346,
@@ -308,6 +315,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Artifacts",
+      "price": "$1824.95",
       "cards": {
         "Anaheim Ducks": 23158,
         "Los Angeles Kings": 22443,
@@ -346,6 +354,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Black Diamond",
+      "price": "$2,099.95",
       "cards": {
         "Montreal Canadiens": 12959,
         "Seattle Kraken": 11394,
@@ -384,6 +393,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Credentials",
+      "price": "$1599.95",
       "cards": {
         "Columbus Blue Jackets": 31151,
         "Toronto Maple Leafs": 23706,
@@ -421,6 +431,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Extended Series",
+      "price": "$659.95",
       "cards": {
         "Columbus Blue Jackets": 6848,
         "Minnesota Wild": 6618,
@@ -459,6 +470,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck Clear Cut",
+      "price": "$2,899.95",
       "cards": {
         "Buffalo Sabres": 1216,
         "Boston Bruins": 1171,
@@ -497,6 +509,7 @@
     {
       "year": "2024-25",
       "name": "Upper Deck Allure",
+      "price": "$2,049.95",
       "cards": {
         "Minnesota Wild": 5708,
         "Vegas Golden Knights": 4554,
@@ -535,6 +548,7 @@
     {
       "year": "2024-25",
       "name": "Upper Deck Artifacts",
+      "price": "$2,539.95",
       "cards": {
         "New Jersey Devils": 18216,
         "New York Rangers": 16990,
@@ -573,6 +587,7 @@
     {
       "year": "2024-25",
       "name": "Upper Deck Black Diamond",
+      "price": "$2,899.95",
       "cards": {
         "San Jose Sharks": 9961,
         "Minnesota Wild": 9618,
@@ -608,10 +623,10 @@
         "Seattle Kraken": 292
       }
     },
-    
     {
       "year": "2023-24",
       "name": "Upper Deck Series 2",
+      "price": "$2,599.95",
       "cards": {
         "Edmonton Oilers": 17522,
         "Toronto Maple Leafs": 9528,
@@ -650,6 +665,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck SP Authentic",
+      "price": "$4,124.95",
       "cards": {
         "Chicago Blackhawks": 21222,
         "Calgary Flames": 20863,
@@ -688,6 +704,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck SP Game Used",
+      "price": "$3,869.95",
       "cards": {
         "Columbus Blue Jackets": 10539,
         "Calgary Flames": 10450,
@@ -726,6 +743,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck SPx",
+      "price": "$2,399.95",
       "cards": {
         "Anaheim Ducks": 27962,
         "Buffalo Sabres": 25584,
@@ -763,6 +781,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck Synergy",
+      "price": "$1,199.95",
       "cards": {
         "Calgary Flames": 54924,
         "Nashville Predators": 46418,
@@ -801,6 +820,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck Trilogy",
+      "price": "$2,599.95",
       "cards": {
         "Calgary Flames": 20821,
         "Nashville Predators": 19055,
@@ -836,13 +856,10 @@
         "Tampa Bay Lightning": 709
       }
     },
-    
-
-   
-    
-      {
+    {
       "year": "2024-25",
       "name": "Upper Deck MVP",
+      "price": "$1,179.95",
       "cards": {
         "Vegas Golden Knights": 1117,
         "Dallas Stars": 1039,
@@ -881,6 +898,7 @@
     {
       "year": "2024-25",
       "name": "Upper Deck Series 1",
+      "price": "$1,249.95",
       "cards": {
         "Anaheim Ducks": 10738,
         "New York Rangers": 8901,
@@ -919,6 +937,7 @@
     {
       "year": "2024-25",
       "name": "Upper Deck Synergy",
+      "price": "$1,549.95",
       "cards": {
         "Dallas Stars": 13476,
         "New York Rangers": 13199,
@@ -954,9 +973,10 @@
         "Ottawa Senators": 1521
       }
     },
-{
+    {
       "year": "2023-24",
       "name": "Upper Deck Extended Series",
+      "price": "$1,299.95",
       "cards": {
         "Buffalo Sabres": 11525,
         "Anaheim Ducks": 9773,
@@ -995,6 +1015,7 @@
     {
       "year": "2023-24",
       "name": "Upper Deck Series 1",
+      "price": "$1,189.95",
       "cards": {
         "Ottawa Senators": 9608,
         "Boston Bruins": 8255,
@@ -1033,6 +1054,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Ice",
+      "price": "$1,549.95",
       "cards": {
         "Columbus Blue Jackets": 23139,
         "Philadelphia Flyers": 22728,
@@ -1068,9 +1090,10 @@
         "Florida Panthers": 683
       }
     },
-      {
+    {
       "year": "2022-23",
       "name": "Upper Deck Series 2",
+      "price": "$2,599.95",
       "cards": {
         "Arizona Coyotes": 8715,
         "Columbus Blue Jackets": 8034,
@@ -1109,6 +1132,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck SP Authentic",
+      "price": "$4,124.95",
       "cards": {
         "Philadelphia Flyers": 22121,
         "Columbus Blue Jackets": 21483,
@@ -1147,6 +1171,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck SP Game Used",
+      "price": "$3,869.95",
       "cards": {
         "Columbus Blue Jackets": 15858,
         "Anaheim Ducks": 15035,
@@ -1179,6 +1204,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck SPx",
+      "price": "$2,399.95",
       "cards": {
         "Montreal Canadiens": 29628,
         "Columbus Blue Jackets": 25843,
@@ -1217,6 +1243,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Stature",
+      "price": "$2,799.95",
       "cards": {
         "Philadelphia Flyers": 13144,
         "Arizona Coyotes": 12963,
@@ -1252,9 +1279,10 @@
         "Florida Panthers": 3332
       }
     },
-      {
+    {
       "year": "2022-23",
       "name": "Upper Deck Synergy",
+      "price": "$1,199.95",
       "cards": {
         "Anaheim Ducks": 42588,
         "Buffalo Sabres": 38547,
@@ -1293,6 +1321,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck The Cup",
+      "price": "$5,399.95",
       "cards": {
         "Montreal Canadiens": 7154,
         "Columbus Blue Jackets": 6740,
@@ -1331,6 +1360,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Trilogy",
+      "price": "$2,599.95",
       "cards": {
         "Arizona Coyotes": 32002,
         "Philadelphia Flyers": 29045,
@@ -1369,6 +1399,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Ultimate Collection",
+      "price": "$2,599.95",
       "cards": {
         "Philadelphia Flyers": 12223,
         "Columbus Blue Jackets": 11601,
@@ -1404,9 +1435,10 @@
         "Washington Capitals": 1465
       }
     },
-       {
+    {
       "year": "2021-22",
       "name": "Upper Deck Allure",
+      "price": "$1,299.95",
       "cards": {
         "Ottawa Senators": 6192,
         "New York Rangers": 6160,
@@ -1442,9 +1474,10 @@
         "San Jose Sharks": 1939
       }
     },
-        {
+    {
       "year": "2021-22",
       "name": "Upper Deck Ice",
+      "price": "$1,449.95",
       "cards": {
         "San Jose Sharks": 29181,
         "Philadelphia Flyers": 23821,
@@ -1479,6 +1512,7 @@
     {
       "year": "2021-22",
       "name": "Upper Deck Credentials",
+      "price": "$819.95",
       "cards": {
         "San Jose Sharks": 29616,
         "Chicago Blackhawks": 24501,
@@ -1517,6 +1551,7 @@
     {
       "year": "2021-22",
       "name": "Upper Deck Premier",
+      "price": "$3,399.95",
       "cards": {
         "Anaheim Ducks": 8120,
         "Florida Panthers": 7660,
@@ -1554,273 +1589,8 @@
     },
     {
       "year": "2021-22",
-      "name": "Upper Deck SP Game Used",
-      "cards": {
-        "Anaheim Ducks": 13337,
-        "New York Rangers": 12166,
-        "Buffalo Sabres": 11635,
-        "Philadelphia Flyers": 10737,
-        "Boston Bruins": 10614,
-        "Detroit Red Wings": 10516,
-        "Los Angeles Kings": 10476,
-        "Florida Panthers": 9531,
-        "Colorado Avalanche": 9352,
-        "San Jose Sharks": 9167,
-        "Ottawa Senators": 8926,
-        "Tampa Bay Lightning": 8759,
-        "Vegas Golden Knights": 8703,
-        "Montreal Canadiens": 8161,
-        "Nashville Predators": 8043,
-        "New Jersey Devils": 7371,
-        "Minnesota Wild": 7057,
-        "Vancouver Canucks": 6494,
-        "St. Louis Blues": 6410,
-        "Washington Capitals": 5858,
-        "Chicago Blackhawks": 5834,
-        "Winnipeg Jets": 5580,
-        "Arizona Coyotes": 5374,
-        "Pittsburgh Penguins": 4575,
-        "Carolina Hurricanes": 4541,
-        "Dallas Stars": 3932,
-        "Seattle Kraken": 3717,
-        "Edmonton Oilers": 3330,
-        "New York Islanders": 3304,
-        "Columbus Blue Jackets": 3025,
-        "Calgary Flames": 3017,
-        "Toronto Maple Leafs": 2439
-      }
-    },
-       {
-      "year": "2021-22",
-      "name": "Upper Deck SPx",
-      "cards": {
-        "Ottawa Senators": 14325,
-        "Buffalo Sabres": 13994,
-        "New York Rangers": 13075,
-        "Anaheim Ducks": 12033,
-        "Florida Panthers": 11091,
-        "Tampa Bay Lightning": 10574,
-        "Detroit Red Wings": 10447,
-        "Philadelphia Flyers": 10315,
-        "Colorado Avalanche": 10026,
-        "Chicago Blackhawks": 9724,
-        "Boston Bruins": 9254,
-        "Los Angeles Kings": 8862,
-        "Montreal Canadiens": 8231,
-        "New Jersey Devils": 7464,
-        "Vegas Golden Knights": 6874,
-        "Arizona Coyotes": 6324,
-        "San Jose Sharks": 6304,
-        "Minnesota Wild": 5387,
-        "Nashville Predators": 5260,
-        "Vancouver Canucks": 5222,
-        "Winnipeg Jets": 5107,
-        "Carolina Hurricanes": 5024,
-        "Pittsburgh Penguins": 4943,
-        "Seattle Kraken": 4698,
-        "Calgary Flames": 4157,
-        "St. Louis Blues": 3516,
-        "Dallas Stars": 3022,
-        "Washington Capitals": 2983,
-        "Edmonton Oilers": 2638,
-        "Columbus Blue Jackets": 2539,
-        "Toronto Maple Leafs": 2314,
-        "New York Islanders": 1681
-      }
-    },
-     {
-      "year": "2021-22",
-      "name": "Upper Deck Stature",
-      "cards": {
-        "Ottawa Senators": 11563,
-        "Buffalo Sabres": 10381,
-        "Tampa Bay Lightning": 9581,
-        "San Jose Sharks": 9443,
-        "Anaheim Ducks": 9279,
-        "New Jersey Devils": 8415,
-        "Boston Bruins": 8116,
-        "Pittsburgh Penguins": 8102,
-        "Minnesota Wild": 8098,
-        "Colorado Avalanche": 7983,
-        "Los Angeles Kings": 7876,
-        "Detroit Red Wings": 7767,
-        "Arizona Coyotes": 7729,
-        "Washington Capitals": 7571,
-        "Nashville Predators": 7411,
-        "Vegas Golden Knights": 7294,
-        "New York Rangers": 7133,
-        "Philadelphia Flyers": 6667,
-        "New York Islanders": 6523,
-        "Chicago Blackhawks": 6375,
-        "Florida Panthers": 5927,
-        "Dallas Stars": 5804,
-        "St. Louis Blues": 5551,
-        "Carolina Hurricanes": 5387,
-        "Columbus Blue Jackets": 5202,
-        "Calgary Flames": 5159,
-        "Vancouver Canucks": 4942,
-        "Montreal Canadiens": 4867,
-        "Toronto Maple Leafs": 4370,
-        "Winnipeg Jets": 4071,
-        "Seattle Kraken": 2797,
-        "Edmonton Oilers": 2747
-      }
-    },
-     {
-      "year": "2021-22",
-      "name": "Upper Deck Synergy",
-      "cards": {
-        "Detroit Red Wings": 36354,
-        "Anaheim Ducks": 34377,
-        "Florida Panthers": 33769,
-        "Boston Bruins": 29895,
-        "New Jersey Devils": 28806,
-        "Los Angeles Kings": 28725,
-        "Colorado Avalanche": 26718,
-        "San Jose Sharks": 26216,
-        "Tampa Bay Lightning": 25310,
-        "Vancouver Canucks": 25196,
-        "Montreal Canadiens": 22367,
-        "Dallas Stars": 22059,
-        "Washington Capitals": 21563,
-        "Buffalo Sabres": 20355,
-        "Winnipeg Jets": 20236,
-        "Carolina Hurricanes": 18316,
-        "St. Louis Blues": 17984,
-        "Philadelphia Flyers": 17684,
-        "New York Rangers": 14802,
-        "Columbus Blue Jackets": 13590,
-        "Chicago Blackhawks": 12673,
-        "Calgary Flames": 11561,
-        "Nashville Predators": 11208,
-        "Ottawa Senators": 11112,
-        "Minnesota Wild": 10891,
-        "Arizona Coyotes": 10704,
-        "Seattle Kraken": 9615,
-        "Edmonton Oilers": 9488,
-        "Toronto Maple Leafs": 7937,
-        "Pittsburgh Penguins": 7271,
-        "Vegas Golden Knights": 5347,
-        "New York Islanders": 5339
-      }
-    },
-{
-      "year": "2021-22",
-      "name": "Upper Deck The Cup",
-      "cards": {
-        "Anaheim Ducks": 5789,
-        "Florida Panthers": 5425,
-        "Ottawa Senators": 5365,
-        "Detroit Red Wings": 5265,
-        "Los Angeles Kings": 4907,
-        "Colorado Avalanche": 4868,
-        "Vegas Golden Knights": 4838,
-        "San Jose Sharks": 4592,
-        "New Jersey Devils": 4493,
-        "Tampa Bay Lightning": 4474,
-        "New York Rangers": 4473,
-        "Washington Capitals": 4457,
-        "Buffalo Sabres": 4189,
-        "Boston Bruins": 4100,
-        "Nashville Predators": 4099,
-        "Montreal Canadiens": 4054,
-        "Minnesota Wild": 3844,
-        "Carolina Hurricanes": 3842,
-        "Philadelphia Flyers": 3821,
-        "Winnipeg Jets": 3815,
-        "Toronto Maple Leafs": 3762,
-        "St. Louis Blues": 3481,
-        "Vancouver Canucks": 3466,
-        "Chicago Blackhawks": 3279,
-        "Pittsburgh Penguins": 3166,
-        "Dallas Stars": 3065,
-        "Calgary Flames": 2885,
-        "Edmonton Oilers": 2840,
-        "Arizona Coyotes": 2830,
-        "Columbus Blue Jackets": 2452,
-        "New York Islanders": 2302,
-        "Seattle Kraken": 2029
-      }
-    },
-     {
-      "year": "2021-22",
-      "name": "Upper Deck Ultimate Collection",
-      "cards": {
-        "Ottawa Senators": 9944,
-        "Vegas Golden Knights": 7982,
-        "Buffalo Sabres": 7964,
-        "Anaheim Ducks": 7716,
-        "San Jose Sharks": 7137,
-        "Los Angeles Kings": 6939,
-        "New York Rangers": 6733,
-        "Tampa Bay Lightning": 6605,
-        "Washington Capitals": 6600,
-        "Minnesota Wild": 6528,
-        "Florida Panthers": 6524,
-        "Colorado Avalanche": 6469,
-        "New Jersey Devils": 6358,
-        "Boston Bruins": 6050,
-        "Nashville Predators": 5811,
-        "Philadelphia Flyers": 5770,
-        "Carolina Hurricanes": 5562,
-        "Arizona Coyotes": 5555,
-        "Dallas Stars": 5107,
-        "Pittsburgh Penguins": 4725,
-        "Detroit Red Wings": 4454,
-        "Montreal Canadiens": 4260,
-        "Chicago Blackhawks": 4195,
-        "St. Louis Blues": 3916,
-        "Columbus Blue Jackets": 3564,
-        "Calgary Flames": 3426,
-        "Vancouver Canucks": 3370,
-        "Seattle Kraken": 3327,
-        "New York Islanders": 3224,
-        "Winnipeg Jets": 3003,
-        "Toronto Maple Leafs": 2375,
-        "Edmonton Oilers": 2322
-      }
-    },
-     {
-      "year": "2020-21",
-      "name": "Upper Deck SP Signature Edition Legends",
-      "cards": {
-        "Detroit Red Wings": 2649,
-        "Montreal Canadiens": 2358,
-        "Toronto Maple Leafs": 2300,
-        "Chicago Blackhawks": 1873,
-        "Philadelphia Flyers": 1333,
-        "New York Islanders": 1297,
-        "Edmonton Oilers": 1287,
-        "Calgary Flames": 1232,
-        "Vancouver Canucks": 1223,
-        "Los Angeles Kings": 1172,
-        "Colorado Avalanche": 1131,
-        "Pittsburgh Penguins": 1124,
-        "Boston Bruins": 1028,
-        "St. Louis Blues": 1024,
-        "New York Rangers": 957,
-        "Washington Capitals": 920,
-        "Winnipeg Jets": 824,
-        "Carolina Hurricanes": 804,
-        "New Jersey Devils": 704,
-        "Buffalo Sabres": 532,
-        "Tampa Bay Lightning": 454,
-        "Arizona Coyotes": 430,
-        "Dallas Stars": 342,
-        "Anaheim Ducks": 236,
-        "Ottawa Senators": 228,
-        "San Jose Sharks": 184,
-        "Florida Panthers": 100,
-        "Minnesota Wild": 20,
-        "Columbus Blue Jackets": 20,
-        "Nashville Predators": 20,
-        "Seattle Kraken": 0,
-        "Vegas Golden Knights": 0
-      }
-    },
-{
-      "year": "2021-22",
       "name": "Upper Deck SP Authentic",
+      "price": "$2,149.95",
       "cards": {
         "Buffalo Sabres": 15131,
         "Ottawa Senators": 14520,
@@ -1856,47 +1626,276 @@
         "Edmonton Oilers": 1686
       }
     },
-     {
-      "year": "2022-23",
-      "name": "Upper Deck Premier",
+    {
+      "year": "2021-22",
+      "name": "Upper Deck SP Game Used",
+      "price": "$2,995.00",
       "cards": {
-        "Anaheim Ducks": 7314,
-        "Montreal Canadiens": 9490,
-        "Columbus Blue Jackets": 7868,
-        "Los Angeles Kings": 7353,
-        "Arizona Coyotes": 7318,
-        "Colorado Avalanche": 6596,
-        "Minnesota Wild": 6473,
-        "Detroit Red Wings": 6260,
-        "Dallas Stars": 6114,
-        "Ottawa Senators": 6103,
-        "Toronto Maple Leafs": 5837,
-        "Philadelphia Flyers": 5480,
-        "Edmonton Oilers": 5454,
-        "Buffalo Sabres": 5304,
-        "Tampa Bay Lightning": 5199,
-        "Boston Bruins": 5087,
-        "Pittsburgh Penguins": 4695,
-        "Seattle Kraken": 4628,
-        "New York Rangers": 4519,
-        "Vancouver Canucks": 4446,
-        "Vegas Golden Knights": 4410,
-        "New Jersey Devils": 4338,
-        "Nashville Predators": 4286,
-        "Chicago Blackhawks": 4061,
-        "Carolina Hurricanes": 3796,
-        "New York Islanders": 3517,
-        "Winnipeg Jets": 3497,
-        "San Jose Sharks": 3489,
-        "St. Louis Blues": 3089,
-        "Florida Panthers": 2693,
-        "Calgary Flames": 2667,
-        "Washington Capitals": 2339
+        "Anaheim Ducks": 13337,
+        "New York Rangers": 12166,
+        "Buffalo Sabres": 11635,
+        "Philadelphia Flyers": 10737,
+        "Boston Bruins": 10614,
+        "Detroit Red Wings": 10516,
+        "Los Angeles Kings": 10476,
+        "Florida Panthers": 9531,
+        "Colorado Avalanche": 9352,
+        "San Jose Sharks": 9167,
+        "Ottawa Senators": 8926,
+        "Tampa Bay Lightning": 8759,
+        "Vegas Golden Knights": 8703,
+        "Montreal Canadiens": 8161,
+        "Nashville Predators": 8043,
+        "New Jersey Devils": 7371,
+        "Minnesota Wild": 7057,
+        "Vancouver Canucks": 6494,
+        "St. Louis Blues": 6410,
+        "Washington Capitals": 5858,
+        "Edmonton Oilers": 3330,
+        "New York Islanders": 3304,
+        "Columbus Blue Jackets": 3025,
+        "Calgary Flames": 3017,
+        "Toronto Maple Leafs": 2439
+      }
+    },
+    {
+      "year": "2021-22",
+      "name": "Upper Deck SPx",
+      "price": "$1,749.95",
+      "cards": {
+        "Ottawa Senators": 14325,
+        "Buffalo Sabres": 13994,
+        "New York Rangers": 13075,
+        "Anaheim Ducks": 12033,
+        "Florida Panthers": 11091,
+        "Tampa Bay Lightning": 10574,
+        "Detroit Red Wings": 10447,
+        "Philadelphia Flyers": 10315,
+        "Colorado Avalanche": 10026,
+        "Chicago Blackhawks": 9724,
+        "Boston Bruins": 9254,
+        "Los Angeles Kings": 8862,
+        "Montreal Canadiens": 8231,
+        "New Jersey Devils": 7464,
+        "Vegas Golden Knights": 6874,
+        "Arizona Coyotes": 6324,
+        "San Jose Sharks": 6304,
+        "Minnesota Wild": 5387,
+        "Nashville Predators": 5260,
+        "Vancouver Canucks": 5222,
+        "Winnipeg Jets": 5107,
+        "Carolina Hurricanes": 5024,
+        "Pittsburgh Penguins": 4943,
+        "Seattle Kraken": 4698,
+        "Calgary Flames": 4157,
+        "St. Louis Blues": 3516,
+        "Dallas Stars": 3022,
+        "Washington Capitals": 2983,
+        "Edmonton Oilers": 2638,
+        "Columbus Blue Jackets": 2539,
+        "Toronto Maple Leafs": 2314,
+        "New York Islanders": 1681
+      }
+    },
+    {
+      "year": "2021-22",
+      "name": "Upper Deck Stature",
+      "price": "$3,119.95",
+      "cards": {
+        "Ottawa Senators": 11563,
+        "Buffalo Sabres": 10381,
+        "Tampa Bay Lightning": 9581,
+        "San Jose Sharks": 9443,
+        "Anaheim Ducks": 9279,
+        "New Jersey Devils": 8415,
+        "Boston Bruins": 8116,
+        "Pittsburgh Penguins": 8102,
+        "Minnesota Wild": 8098,
+        "Colorado Avalanche": 7983,
+        "Los Angeles Kings": 7876,
+        "Detroit Red Wings": 7767,
+        "Arizona Coyotes": 7729,
+        "Washington Capitals": 7571,
+        "Nashville Predators": 7411,
+        "Vegas Golden Knights": 7294,
+        "New York Rangers": 7133,
+        "Philadelphia Flyers": 6667,
+        "New York Islanders": 6523,
+        "Chicago Blackhawks": 6375,
+        "Florida Panthers": 5927,
+        "Dallas Stars": 5804,
+        "St. Louis Blues": 5551,
+        "Carolina Hurricanes": 5387,
+        "Columbus Blue Jackets": 5202,
+        "Calgary Flames": 5159,
+        "Vancouver Canucks": 4942,
+        "Montreal Canadiens": 4867,
+        "Toronto Maple Leafs": 4370,
+        "Winnipeg Jets": 4071,
+        "Seattle Kraken": 2797,
+        "Edmonton Oilers": 2747
+      }
+    },
+    {
+      "year": "2021-22",
+      "name": "Upper Deck Synergy",
+      "price": "$949.95",
+      "cards": {
+        "Detroit Red Wings": 36354,
+        "Anaheim Ducks": 34377,
+        "Florida Panthers": 33769,
+        "Boston Bruins": 29895,
+        "New Jersey Devils": 28806,
+        "Los Angeles Kings": 28725,
+        "Colorado Avalanche": 26718,
+        "San Jose Sharks": 26216,
+        "Tampa Bay Lightning": 25310,
+        "Vancouver Canucks": 25196,
+        "Montreal Canadiens": 22367,
+        "Dallas Stars": 22059,
+        "Washington Capitals": 21563,
+        "Buffalo Sabres": 20355,
+        "Winnipeg Jets": 20236,
+        "Carolina Hurricanes": 18316,
+        "St. Louis Blues": 17984,
+        "Philadelphia Flyers": 17684,
+        "New York Rangers": 14802,
+        "Columbus Blue Jackets": 13590,
+        "Chicago Blackhawks": 12673,
+        "Calgary Flames": 11561,
+        "Nashville Predators": 11208,
+        "Ottawa Senators": 11112,
+        "Minnesota Wild": 10891,
+        "Arizona Coyotes": 10704,
+        "Seattle Kraken": 9615,
+        "Edmonton Oilers": 9488,
+        "Toronto Maple Leafs": 7937,
+        "Pittsburgh Penguins": 7271,
+        "Vegas Golden Knights": 5347,
+        "New York Islanders": 5339
+      }
+    },
+    {
+      "year": "2021-22",
+      "name": "Upper Deck The Cup",
+      "price": "$5,199.95",
+      "cards": {
+        "Anaheim Ducks": 5789,
+        "Florida Panthers": 5425,
+        "Ottawa Senators": 5365,
+        "Detroit Red Wings": 5265,
+        "Los Angeles Kings": 4907,
+        "Colorado Avalanche": 4868,
+        "Vegas Golden Knights": 4838,
+        "San Jose Sharks": 4592,
+        "New Jersey Devils": 4493,
+        "Tampa Bay Lightning": 4474,
+        "New York Rangers": 4473,
+        "Washington Capitals": 4457,
+        "Buffalo Sabres": 4189,
+        "Boston Bruins": 4100,
+        "Nashville Predators": 4099,
+        "Montreal Canadiens": 4054,
+        "Minnesota Wild": 3844,
+        "Carolina Hurricanes": 3842,
+        "Philadelphia Flyers": 3821,
+        "Winnipeg Jets": 3815,
+        "Toronto Maple Leafs": 3762,
+        "St. Louis Blues": 3481,
+        "Vancouver Canucks": 3466,
+        "Chicago Blackhawks": 3279,
+        "Pittsburgh Penguins": 3166,
+        "Dallas Stars": 3065,
+        "Calgary Flames": 2885,
+        "Edmonton Oilers": 2840,
+        "Arizona Coyotes": 2830,
+        "Columbus Blue Jackets": 2452,
+        "New York Islanders": 2302,
+        "Seattle Kraken": 2029
+      }
+    },
+    {
+      "year": "2021-22",
+      "name": "Upper Deck Ultimate",
+      "price": "$3,599.95",
+      "cards": {
+        "Ottawa Senators": 9944,
+        "Vegas Golden Knights": 7982,
+        "Buffalo Sabres": 7964,
+        "Anaheim Ducks": 7716,
+        "San Jose Sharks": 7137,
+        "Los Angeles Kings": 6939,
+        "New York Rangers": 6733,
+        "Tampa Bay Lightning": 6605,
+        "Washington Capitals": 6600,
+        "Minnesota Wild": 6528,
+        "Florida Panthers": 6524,
+        "Colorado Avalanche": 6469,
+        "New Jersey Devils": 6358,
+        "Boston Bruins": 6050,
+        "Nashville Predators": 5811,
+        "Philadelphia Flyers": 5770,
+        "Carolina Hurricanes": 5562,
+        "Arizona Coyotes": 5555,
+        "Dallas Stars": 5107,
+        "Pittsburgh Penguins": 4725,
+        "Detroit Red Wings": 4454,
+        "Montreal Canadiens": 4260,
+        "Chicago Blackhawks": 4195,
+        "St. Louis Blues": 3916,
+        "Columbus Blue Jackets": 3564,
+        "Calgary Flames": 3426,
+        "Vancouver Canucks": 3370,
+        "Seattle Kraken": 3327,
+        "New York Islanders": 3224,
+        "Winnipeg Jets": 3003,
+        "Toronto Maple Leafs": 2375,
+        "Edmonton Oilers": 2322
+      }
+    },
+    {
+      "year": "2020-21",
+      "name": "Upper Deck SP Signature Edition Legends",
+      "price": "$9499.95",
+      "cards": {
+        "Detroit Red Wings": 2649,
+        "Montreal Canadiens": 2358,
+        "Toronto Maple Leafs": 2300,
+        "Chicago Blackhawks": 1873,
+        "Philadelphia Flyers": 1333,
+        "New York Islanders": 1297,
+        "Edmonton Oilers": 1287,
+        "Calgary Flames": 1232,
+        "Vancouver Canucks": 1223,
+        "Los Angeles Kings": 1172,
+        "Colorado Avalanche": 1131,
+        "Pittsburgh Penguins": 1124,
+        "Boston Bruins": 1028,
+        "St. Louis Blues": 1024,
+        "New York Rangers": 957,
+        "Washington Capitals": 920,
+        "Winnipeg Jets": 824,
+        "Carolina Hurricanes": 804,
+        "New Jersey Devils": 704,
+        "Buffalo Sabres": 532,
+        "Tampa Bay Lightning": 454,
+        "Arizona Coyotes": 430,
+        "Dallas Stars": 342,
+        "Anaheim Ducks": 236,
+        "Ottawa Senators": 228,
+        "San Jose Sharks": 184,
+        "Florida Panthers": 100,
+        "Minnesota Wild": 20,
+        "Columbus Blue Jackets": 20,
+        "Nashville Predators": 20,
+        "Seattle Kraken": 0,
+        "Vegas Golden Knights": 0
       }
     },
     {
       "year": "2020-21",
       "name": "Upper Deck The Cup",
+      "price": "$4,999.95",
       "cards": {
         "Chicago Blackhawks": 7750,
         "San Jose Sharks": 5653,
@@ -1935,6 +1934,7 @@
     {
       "year": "2022-23",
       "name": "Upper Deck Series 1",
+      "price": "$649.95",
       "cards": {
         "Minnesota Wild": 5596,
         "Carolina Hurricanes": 3740,
@@ -1968,6 +1968,45 @@
         "Vegas Golden Knights": 1388,
         "San Jose Sharks": 1085,
         "New York Islanders": 1051
+      }
+    },
+    {
+      "year": "2021-22",
+      "name": "Upper Deck Series 1",
+      "price": "$649.95",
+      "cards": {
+        "Ottawa Senators": 9608,
+        "Boston Bruins": 8255,
+        "Nashville Predators": 7952,
+        "Calgary Flames": 7897,
+        "Toronto Maple Leafs": 6785,
+        "Edmonton Oilers": 6556,
+        "Vancouver Canucks": 6124,
+        "Columbus Blue Jackets": 6024,
+        "Chicago Blackhawks": 5954,
+        "New York Islanders": 5892,
+        "San Jose Sharks": 5887,
+        "Minnesota Wild": 5886,
+        "Philadelphia Flyers": 5867,
+        "Buffalo Sabres": 5821,
+        "New Jersey Devils": 5676,
+        "Washington Capitals": 5509,
+        "Florida Panthers": 5415,
+        "Tampa Bay Lightning": 5398,
+        "New York Rangers": 5277,
+        "Vegas Golden Knights": 5111,
+        "St. Louis Blues": 5057,
+        "Carolina Hurricanes": 4875,
+        "Dallas Stars": 4862,
+        "Seattle Kraken": 4861,
+        "Pittsburgh Penguins": 4733,
+        "Montreal Canadiens": 4405,
+        "Detroit Red Wings": 4060,
+        "Colorado Avalanche": 3919,
+        "Anaheim Ducks": 3691,
+        "Los Angeles Kings": 3483,
+        "Winnipeg Jets": 3247,
+        "Arizona Coyotes": 2894
       }
     }
   ]
