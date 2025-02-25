@@ -777,7 +777,7 @@
           teamLogo.alt = player.team + " logo";
           tile.appendChild(teamLogo);
 
-          // Player image wrapped in a link to the profile
+          // Player image wrapped in a link to the profile (unchanged)
           const profileLink = document.createElement("a");
           profileLink.href = player.profile_link;
           profileLink.target = "_blank";
@@ -788,42 +788,50 @@
           profileLink.appendChild(playerImg);
           tile.appendChild(profileLink);
 
-          // Info container with player name
+          // Info container with three lines: name, notes, and eBay link.
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
-          const nameEl = document.createElement("strong");
-          nameEl.textContent = player.player;
-          infoDiv.appendChild(nameEl);
-
-          // Add eBay/share icons next to player name
-          const iconLink = document.createElement("a");
-          iconLink.href = "javascript:void(0)";
-          iconLink.onclick = function () {
+          
+          // First line: Name as a link to the profile
+          const nameLine = document.createElement("div");
+          const nameLink = document.createElement("a");
+          nameLink.href = player.profile_link;
+          nameLink.target = "_blank";
+          nameLink.style.textDecoration = "none";
+          nameLink.style.color = "inherit"; // ensures it inherits text color
+          nameLink.textContent = player.player;
+          nameLine.appendChild(nameLink);
+          infoDiv.appendChild(nameLine);
+          
+          // Second line: Player notes
+          const notesLine = document.createElement("div");
+          notesLine.className = "key-player-notes";
+          notesLine.textContent = player.notes || "";
+          infoDiv.appendChild(notesLine);
+          
+          // Third line: eBay link with share and eBay icons
+          const ebayLine = document.createElement("div");
+          const ebayLink = document.createElement("a");
+          ebayLink.href = "javascript:void(0)";
+          ebayLink.onclick = function () {
             openPlayerEbaySearch(player.player);
           };
-          iconLink.style.marginLeft = "10px";
           const shareImg = document.createElement("img");
           shareImg.src = "resources/share_white.png";
           shareImg.alt = "Share";
           shareImg.className = "link-icon";
+          ebayLink.appendChild(shareImg);
+          
           const ebayImg = document.createElement("img");
           ebayImg.src =
             "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
           ebayImg.alt = "eBay";
           ebayImg.className = "link-icon ebay-icon";
-          iconLink.appendChild(shareImg);
-          iconLink.appendChild(ebayImg);
-          infoDiv.appendChild(iconLink);
-
-          // Append notes if available
-          if (player.notes) {
-            const notesEl = document.createElement("div");
-            notesEl.className = "key-player-notes";
-            notesEl.textContent = player.notes;
-            infoDiv.appendChild(notesEl);
-          }
+          ebayLink.appendChild(ebayImg);
+          ebayLine.appendChild(ebayLink);
+          infoDiv.appendChild(ebayLine);
+          
           tile.appendChild(infoDiv);
-
           tilesContainer.appendChild(tile);
         });
       }
