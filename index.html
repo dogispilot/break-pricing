@@ -1017,6 +1017,18 @@
       function calculateProfit() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSetName = document.getElementById("setSelect").value;
+        const chartContainer = document.getElementById("chartContainer");
+        const pieChartCanvas = document.getElementById("pieChart");
+        const pieChartMessage = document.getElementById("pieChartMessage");
+
+        // If no year or set is selected, show the message and return.
+        if (!selectedYear || !selectedSetName) {
+          chartContainer.style.display = "block";
+          pieChartCanvas.style.display = "none";
+          pieChartMessage.style.display = "flex";
+          return;
+        }
+
         const casePrice = parseFloat(
           document.getElementById("casePrice").value
         );
@@ -1034,8 +1046,6 @@
         );
 
         if (
-          !selectedYear ||
-          !selectedSetName ||
           isNaN(casePrice) ||
           isNaN(markup) ||
           isNaN(userDiscount) ||
@@ -1151,9 +1161,6 @@
           totalWhatnotsCut,
           totalCostOfBusiness,
         ];
-        const chartContainer = document.getElementById("chartContainer");
-        const pieChartCanvas = document.getElementById("pieChart");
-        const pieChartMessage = document.getElementById("pieChartMessage");
 
         // Always display the chart container
         chartContainer.style.display = "block";
