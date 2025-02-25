@@ -368,7 +368,7 @@
           </select>
         </div>
         <div class="form-group no-label">
-          <button type="button" class="lookup-button small" onclick="openHockeyChecklistsSearch()">
+          <button type="button" class="lookup-button small" onclick="window.open('https://hockeychecklists.com/', '_blank')">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
           </button>
@@ -530,23 +530,68 @@
       }
     }
 
-    // New function for HockeyChecklists search using the same query logic as TCDB.
-    function openHockeyChecklistsSearch() {
-      const selectedSet = document.getElementById('setSelect').value;
-      const selectedYear = document.getElementById('yearSelect').value;
-      if (!selectedSet) {
-        alert('Please select a set first.');
-        return;
-      }
-      if (!selectedYear) {
-        alert('Please select a set year first.');
-        return;
-      }
-      const yearPrefix = selectedYear.split('-')[0];
-      const query = yearPrefix + " " + selectedSet;
-      const url = "https://hockeychecklists.com/checklist?ser=" + encodeURIComponent(query);
-      window.open(url, "_blank");
-    }
+    // Load config.json on page load.
+    window.addEventListener('load', function() {
+      fetch("config.json")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(jsonData => {
+          if (!jsonData.sets) {
+            alert('Invalid JSON format: missing "sets" property.');
+            return;
+          }
+          setData = jsonData.sets;
+          populateYearSelector();
+          // Attach change event listener to update the case price when a set is selected.
+          document.getElementById('setSelect').addEventListener('change', updateCasePrice);
+        })
+        .catch(error => {
+          console.error('Error loading JSON:', error);
+          alert('Error loading JSON file: ' + error.message);
+        });
+    });
+
+    // Mapping of team names to logo URLs.
+    const teamLogos = {
+      "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+      "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
+      "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
+      "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+      "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+      "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+      "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+      "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+      "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+      "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+      "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+      "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+      "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+      "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
+      "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+      "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+      "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+      "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+      "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+      "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+      "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+      "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+      "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+      "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+      "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+      "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+      "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
+      "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+      "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+      "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
+      "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+      "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+      "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
+      "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+    };
 
     // Open dacardworld search query with year prefix.
     function openSetSearch() {
