@@ -335,7 +335,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="setSelect">Select Set</label>
+          <label for="setSelect">Select a Set</label>
           <select id="setSelect" required>
             <option value="">--Select a Set--</option>
           </select>
@@ -602,7 +602,7 @@
       window.open(url, "_blank");
     }
 
-    // Open TCDB search query using the same logic.
+    // Open TCDB search query using updated logic (removed "hobby case").
     function openTcdbSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -615,7 +615,7 @@
         return;
       }
       const yearPrefix = selectedYear.split('-')[0];
-      const query = yearPrefix + " " + selectedSet + " hobby case";
+      const query = yearPrefix + " " + selectedSet;  // Removed "hobby case"
       const url = "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
