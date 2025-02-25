@@ -375,9 +375,9 @@
               <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo">
               Blowout Cards
             </button>
-            <button type="button" class="lookup-button small" onclick="openMintinkSearch()">
-              <img src="resources/mintink.png" alt="Mintink Logo">
-              Mintink
+            <button type="button" class="lookup-button small" onclick="openOotbSearch()">
+              <img src="resources/ootb.png" alt="Out of the Box Logo">
+              Out of the Box
             </button>
           </div>
         </div>
@@ -615,7 +615,7 @@
         return;
       }
       const yearPrefix = selectedYear.split('-')[0];
-      const query = yearPrefix + " " + selectedSet;  // Removed "hobby case"
+      const query = yearPrefix + " " + selectedSet;
       const url = "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
@@ -656,8 +656,8 @@
       window.open(url, "_blank");
     }
 
-    // Open Mintink search query using the same query logic.
-    function openMintinkSearch() {
+    // Open Out of the Box search query (replacing Mintink).
+    function openOotbSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
       if (!selectedSet) {
@@ -670,7 +670,7 @@
       }
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hobby case";
-      const url = "https://www.mintink.ca/search?q=" + encodeURIComponent(query);
+      const url = "https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
