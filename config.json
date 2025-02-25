@@ -1780,6 +1780,44 @@
         "Edmonton Oilers": 2322
       }
     },
+     {
+      "year": "2020-21",
+      "name": "Upper Deck SP Signature Edition Legends",
+      "cards": {
+        "Detroit Red Wings": 2649,
+        "Montreal Canadiens": 2358,
+        "Toronto Maple Leafs": 2300,
+        "Chicago Blackhawks": 1873,
+        "Philadelphia Flyers": 1333,
+        "New York Islanders": 1297,
+        "Edmonton Oilers": 1287,
+        "Calgary Flames": 1232,
+        "Vancouver Canucks": 1223,
+        "Los Angeles Kings": 1172,
+        "Colorado Avalanche": 1131,
+        "Pittsburgh Penguins": 1124,
+        "Boston Bruins": 1028,
+        "St. Louis Blues": 1024,
+        "New York Rangers": 957,
+        "Washington Capitals": 920,
+        "Winnipeg Jets": 824,
+        "Carolina Hurricanes": 804,
+        "New Jersey Devils": 704,
+        "Buffalo Sabres": 532,
+        "Tampa Bay Lightning": 454,
+        "Arizona Coyotes": 430,
+        "Dallas Stars": 342,
+        "Anaheim Ducks": 236,
+        "Ottawa Senators": 228,
+        "San Jose Sharks": 184,
+        "Florida Panthers": 100,
+        "Minnesota Wild": 20,
+        "Columbus Blue Jackets": 20,
+        "Nashville Predators": 20,
+        "Seattle Kraken": 0,
+        "Vegas Golden Knights": 0
+      }
+    }
     {
       "year": "2022-23",
       "name": "Upper Deck Series 1",
