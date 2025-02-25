@@ -259,6 +259,21 @@
         padding: 15px;
         border-radius: 8px;
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+        position: relative;
+      }
+      /* New message overlay for the pie chart */
+      #pieChartMessage {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #e0e0e0;
+        font-size: 1.2rem;
       }
       .summary-container {
         flex: 1;
@@ -583,6 +598,9 @@
       <div class="chart-summary-container">
         <div id="chartContainer">
           <canvas id="pieChart"></canvas>
+          <div id="pieChartMessage">
+            Please select a year and set to get started sniping.
+          </div>
         </div>
         <div class="summary-container">
           <div id="totalProfitBox" class="summary-box">
@@ -1134,49 +1152,55 @@
           totalCostOfBusiness,
         ];
         const chartContainer = document.getElementById("chartContainer");
-        if (chartData.every((val) => val === 0)) {
-          chartContainer.style.display = "none";
-        } else {
-          chartContainer.style.display = "block";
-        }
+        const pieChartCanvas = document.getElementById("pieChart");
+        const pieChartMessage = document.getElementById("pieChartMessage");
 
-        if (pieChart) {
-          pieChart.data.datasets[0].data = chartData;
-          pieChart.update();
+        // Always display the chart container
+        chartContainer.style.display = "block";
+        if (chartData.every((val) => val === 0)) {
+          // Hide canvas and show message when there's no data.
+          pieChartCanvas.style.display = "none";
+          pieChartMessage.style.display = "flex";
         } else {
-          const ctx = document
-            .getElementById("pieChart")
-            .getContext("2d");
-          pieChart = new Chart(ctx, {
-            type: "pie",
-            data: {
-              labels: [
-                "Breaker's Profit",
-                "Whatnot's Cut",
-                "Cost of Business",
-              ],
-              datasets: [
-                {
-                  data: chartData,
-                  backgroundColor: [
-                    "#2e7d32",
-                    "#bfa600",
-                    "#007bff",
-                  ],
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: "bottom",
-                  labels: { color: "#e0e0e0" },
+          // Show canvas, hide message, and update/create chart.
+          pieChartCanvas.style.display = "block";
+          pieChartMessage.style.display = "none";
+          if (pieChart) {
+            pieChart.data.datasets[0].data = chartData;
+            pieChart.update();
+          } else {
+            const ctx = pieChartCanvas.getContext("2d");
+            pieChart = new Chart(ctx, {
+              type: "pie",
+              data: {
+                labels: [
+                  "Breaker's Profit",
+                  "Whatnot's Cut",
+                  "Cost of Business",
+                ],
+                datasets: [
+                  {
+                    data: chartData,
+                    backgroundColor: [
+                      "#2e7d32",
+                      "#bfa600",
+                      "#007bff",
+                    ],
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                    labels: { color: "#e0e0e0" },
+                  },
                 },
               },
-            },
-          });
+            });
+          }
         }
       }
 
