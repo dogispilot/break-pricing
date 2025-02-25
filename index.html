@@ -1334,6 +1334,8 @@
               input.addEventListener("input", calculateProfit);
               input.addEventListener("change", calculateProfit);
             });
+            // Call calculateProfit once on load to display the initial message.
+            calculateProfit();
           })
           .catch((error) => {
             console.error("Error loading JSON:", error);
