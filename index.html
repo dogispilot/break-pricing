@@ -74,14 +74,16 @@
     .form-row .form-group {
       flex: 1;
       min-width: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Added for button form-groups without a label */
+    .form-group.no-label {
+      margin-top: 1.5em;
     }
     .small-input-row .form-group input,
     .small-input-row .form-group select {
       max-width: 100px;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
     }
     .form-group label {
       margin-bottom: 6px;
@@ -324,7 +326,7 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <!-- Row 1: Year, Set, Lookup Checklist Button, and TCDB Button -->
+      <!-- Row 1: Year, Set, HockeyChecklists.com Button, and TCDB Button -->
       <div class="form-row">
         <div class="form-group">
           <label for="yearSelect">Select Year</label>
@@ -338,15 +340,15 @@
             <option value="">--Select a Set--</option>
           </select>
         </div>
-        <div class="form-group">
+        <div class="form-group no-label">
           <button type="button" class="lookup-button small" onclick="window.open('https://hockeychecklists.com/', '_blank')">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
-            Lookup Checklist
+            HockeyChecklists.com
           </button>
         </div>
-        <div class="form-group">
+        <div class="form-group no-label">
           <button type="button" class="lookup-button small" onclick="window.open('https://www.tcdb.com', '_blank')">
-            <img src="resources/tcdb.jpg" alt="TCDB Logo">
+            <img src="https://www.tcdb.com/Images/TCDbLogo.gif" alt="TCDB Logo">
             TCDB
           </button>
         </div>
