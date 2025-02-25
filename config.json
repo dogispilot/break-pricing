@@ -1817,7 +1817,45 @@
         "Seattle Kraken": 0,
         "Vegas Golden Knights": 0
       }
-    }
+    },
+{
+      "year": "2021-22",
+      "name": "Upper Deck SP Authentic",
+      "cards": {
+        "Buffalo Sabres": 15131,
+        "Ottawa Senators": 14520,
+        "Tampa Bay Lightning": 12757,
+        "Anaheim Ducks": 12517,
+        "San Jose Sharks": 11991,
+        "Nashville Predators": 11500,
+        "New Jersey Devils": 11146,
+        "Los Angeles Kings": 10891,
+        "Florida Panthers": 10737,
+        "Washington Capitals": 10307,
+        "Vegas Golden Knights": 10286,
+        "Colorado Avalanche": 9884,
+        "Detroit Red Wings": 9152,
+        "Minnesota Wild": 9090,
+        "Philadelphia Flyers": 9070,
+        "New York Rangers": 8011,
+        "Boston Bruins": 7745,
+        "Arizona Coyotes": 7711,
+        "Columbus Blue Jackets": 7289,
+        "St. Louis Blues": 7270,
+        "Pittsburgh Penguins": 7025,
+        "Dallas Stars": 6948,
+        "Carolina Hurricanes": 6644,
+        "Montreal Canadiens": 6004,
+        "Chicago Blackhawks": 5107,
+        "New York Islanders": 5003,
+        "Seattle Kraken": 4752,
+        "Calgary Flames": 4486,
+        "Winnipeg Jets": 4244,
+        "Vancouver Canucks": 3895,
+        "Toronto Maple Leafs": 3025,
+        "Edmonton Oilers": 1686
+      }
+    },
     {
       "year": "2022-23",
       "name": "Upper Deck Series 1",
