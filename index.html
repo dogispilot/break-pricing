@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PL5RQPB0MT"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PL5RQPB0MT');
-</script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PL5RQPB0MT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PL5RQPB0MT');
+  </script>
   <meta charset="UTF-8">
   <title>SkunkSniper.com</title>
   <link rel="icon" type="image/png" href="/resources/calculator.png">
   <!-- Import Google Fonts (Roboto remains if needed) -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
-  <!-- Removed Bebas Neue link since we are using local BreakPricingFont -->
   <style>
     @font-face {
       font-family: 'BreakPricingFont';
@@ -143,9 +141,6 @@
     .form-actions {
       text-align: center;
     }
-    .form-actions button {
-      cursor: pointer;
-    }
     .calculate-btn {
       width: 500px;
       padding: 16px 30px;
@@ -207,14 +202,12 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    /* New container to hold the pie chart and summary boxes side-by-side */
     .chart-summary-container {
       display: flex;
       gap: 20px;
       margin-bottom: 25px;
       align-items: stretch;
     }
-    /* Pie chart container styling updated to be wider (flex: 2) */
     #chartContainer {
       flex: 2;
       height: 300px;
@@ -223,7 +216,6 @@
       border-radius: 8px;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
     }
-    /* Summary container now has a fixed maximum width to make the boxes narrower */
     .summary-container {
       flex: 1;
       max-width: 300px;
@@ -243,7 +235,6 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
-    /* Existing summary box styles */
     #totalProfitBox {
       background-color: transparent;
       border: 4px solid #2e7d32;
@@ -323,6 +314,57 @@
       margin-right: 8px;
       border-radius: 50%;
     }
+    /* Styles for Key Chase Players section */
+    #keyPlayersSection {
+      margin-top: 30px;
+      padding: 15px;
+      background: #2c2c2c;
+      border-radius: 8px;
+    }
+    #keyPlayersSection h2 {
+      margin-top: 0;
+      text-align: center;
+      font-family: 'BreakPricingFontBold', sans-serif;
+    }
+    .key-player-tiles-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+    .key-player-tile {
+      background: #1e1e1e;
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      width: 280px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .key-player-tile img.team-logo {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+    .key-player-tile img.player-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .key-player-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .key-player-info strong {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+    .key-player-notes {
+      font-size: 0.9rem;
+      color: #bbb;
+    }
     @media (max-width: 600px) {
       .form-row .form-group {
         min-width: 100%;
@@ -376,7 +418,7 @@
   <div class="container">
     <a href="about.html" class="about-link">About</a>
     <div class="header">
-      <img src=resources/skunk.png>
+      <img src="resources/skunk.png" alt="SkunkSniper Logo">
       <h1>SkunkSniper.com</h1>
     </div>
 
@@ -459,7 +501,7 @@
       </div>
       <div class="form-actions">
         <button type="submit" class="calculate-btn">
-          <img src="/resources/calculator.png" alt="Calculator Icon" style="width:24px;height:24px;">
+          <img src="resources/calculator.png" alt="Calculator Icon" style="width:24px;height:24px;">
           Calculate
         </button>
       </div>
@@ -467,12 +509,9 @@
 
     <!-- New container for pie chart and summary boxes -->
     <div class="chart-summary-container">
-      <!-- Pie Chart for Distribution -->
       <div id="chartContainer">
         <canvas id="pieChart"></canvas>
       </div>
-
-      <!-- Summary Boxes stacked vertically -->
       <div class="summary-container">
         <div id="totalProfitBox" class="summary-box">
           <div class="amount">$0.00</div>
@@ -492,20 +531,23 @@
       </div>
     </div>
 
-    <!-- The header is hidden by default and will be shown if team data exists -->
+    <!-- Existing Suggested Team Prices Section -->
     <h2 id="teamPricesHeader" style="display: none;">Suggested Team Prices</h2>
     <div id="results"></div>
+
+    <!-- New Key Chase Players Section -->
+    <div id="keyPlayersSection" style="display:none;">
+      <h2>Key Chase Players</h2>
+      <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
+    </div>
   </div>
 
   <script>
-    // Global variable to hold our set data (an array of set objects)
+    // Global variables
     let setData = [];
-    // Global variable for the pie chart instance
+    let keyPlayersData = [];
     let pieChart;
-    // Global variable for table data to support sorting.
     let tableData = [];
-
-    // Global variables to track current sort state.
     let currentSortedColumn = -1;
     const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1 };
 
@@ -533,7 +575,10 @@
         option.textContent = year;
         yearSelect.appendChild(option);
       });
-      yearSelect.addEventListener('change', populateSetSelector);
+      yearSelect.addEventListener('change', function() {
+        populateSetSelector();
+        updateKeyPlayersSection();
+      });
     }
 
     // Populate the set selector based on the selected year.
@@ -564,29 +609,56 @@
       }
     }
 
-    // Load config.json on page load.
-    window.addEventListener('load', function() {
-      fetch("config.json")
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.json();
-        })
-        .then(jsonData => {
-          if (!jsonData.sets) {
-            alert('Invalid JSON format: missing "sets" property.');
-            return;
-          }
-          setData = jsonData.sets;
-          populateYearSelector();
-          document.getElementById('setSelect').addEventListener('change', updateCasePrice);
-        })
-        .catch(error => {
-          console.error('Error loading JSON:', error);
-          alert('Error loading JSON file: ' + error.message);
-        });
-    });
+    // Update Key Chase Players Section based on selected year.
+    function updateKeyPlayersSection() {
+      const selectedYear = document.getElementById('yearSelect').value;
+      const keySection = document.getElementById('keyPlayersSection');
+      const tilesContainer = document.getElementById('keyPlayerTiles');
+      // Clear previous tiles
+      tilesContainer.innerHTML = '';
+      if (!selectedYear) {
+        keySection.style.display = 'none';
+        return;
+      }
+      // Filter players whose setYear matches the selected year or is "All"
+      const filteredPlayers = keyPlayersData.filter(player => player.setYear === selectedYear || player.setYear === "All");
+      if (filteredPlayers.length === 0) {
+        keySection.style.display = 'none';
+        return;
+      }
+      keySection.style.display = 'block';
+      // Create a tile for each key player
+      filteredPlayers.forEach(player => {
+        const tile = document.createElement('div');
+        tile.className = 'key-player-tile';
+        // Team logo image – using your teamLogos mapping
+        const teamLogo = document.createElement('img');
+        teamLogo.className = 'team-logo';
+        teamLogo.src = teamLogos[player.team] || '';
+        teamLogo.alt = player.team + ' logo';
+        tile.appendChild(teamLogo);
+        // Player image
+        const playerImg = document.createElement('img');
+        playerImg.className = 'player-img';
+        playerImg.src = player.image;
+        playerImg.alt = player.player;
+        tile.appendChild(playerImg);
+        // Info container
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'key-player-info';
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = player.player;
+        infoDiv.appendChild(nameEl);
+        if (player.notes) {
+          const notesEl = document.createElement('div');
+          notesEl.className = 'key-player-notes';
+          notesEl.textContent = player.notes;
+          infoDiv.appendChild(notesEl);
+        }
+        tile.appendChild(infoDiv);
+        tilesContainer.appendChild(tile);
+      });
+    }
 
     // Mapping of team names to logo URLs.
     const teamLogos = {
@@ -757,7 +829,7 @@
       const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
       window.open(url, "_blank");
     }
-
+    
     function calculateProfit() {
       const selectedYear = document.getElementById('yearSelect').value;
       const selectedSetName = document.getElementById('setSelect').value;
@@ -957,6 +1029,31 @@
     document.getElementById('calcForm').addEventListener('submit', function(e) {
       e.preventDefault();
       calculateProfit();
+    });
+
+    // Load config.json on page load.
+    window.addEventListener('load', function() {
+      fetch("config.json")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(jsonData => {
+          if (!jsonData.sets) {
+            alert('Invalid JSON format: missing "sets" property.');
+            return;
+          }
+          setData = jsonData.sets;
+          keyPlayersData = jsonData["Key Players"] || [];
+          populateYearSelector();
+          document.getElementById('setSelect').addEventListener('change', updateCasePrice);
+        })
+        .catch(error => {
+          console.error('Error loading JSON:', error);
+          alert('Error loading JSON file: ' + error.message);
+        });
     });
   </script>
 </body>
