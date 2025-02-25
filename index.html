@@ -94,12 +94,18 @@
       gap: 20px;
       margin-bottom: 20px;
     }
-    .form-row .form-group {
-      flex: 1;
-      min-width: 200px;
+    /* Each form-group now gets its own max-width for better control */
+    .form-group {
       display: flex;
       flex-direction: column;
     }
+    /* First row: three columns */
+    .first-row .form-group:nth-child(1) { max-width: 150px; }
+    .first-row .form-group:nth-child(2) { max-width: 250px; }
+    .first-row .form-group:nth-child(3) { max-width: 300px; }
+    /* Second row: two columns */
+    .second-row .form-group:nth-child(1) { max-width: 250px; }
+    .second-row .form-group:nth-child(2) { max-width: 450px; }
     /* Grouping inputs and lookup buttons vertically */
     .input-button-group {
       display: flex;
@@ -107,7 +113,7 @@
       gap: 10px;
       margin-top: 6px;
     }
-    /* Fixed height for TCDB and HockeyChecklists buttons only */
+    /* Fixed height for checklist lookup buttons */
     .lookup-button.fixed-height {
       padding: 12px 15px;
     }
@@ -176,7 +182,7 @@
     .calculate-btn:hover {
       transform: scale(1.05);
     }
-    /* Lookup button styles for checklist search (fixed-height) */
+    /* Lookup button styles for recent prices remain unchanged */
     .lookup-button {
       padding: 12px 20px;
       font-size: 1rem;
@@ -371,19 +377,21 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <!-- Row 1: Year and Set with Checklist Lookup -->
-      <div class="form-row">
+      <!-- First Row: Select Year, Select a Set, and Search for Checklist -->
+      <div class="form-row first-row">
         <div class="form-group">
           <label for="yearSelect">Select Year</label>
-          <select id="yearSelect" required style="min-width: 200px;">
+          <select id="yearSelect" required>
             <option value="">--Select a Year--</option>
           </select>
         </div>
         <div class="form-group">
           <label for="setSelect">Select a Set</label>
-          <select id="setSelect" required style="min-width: 200px;">
+          <select id="setSelect" required>
             <option value="">--Select Set--</option>
           </select>
+        </div>
+        <div class="form-group">
           <label class="lookup-label">Search for Checklist</label>
           <div class="input-button-group">
             <button type="button" class="lookup-button fixed-height glow-tcdb" onclick="openTcdbSearch()">
@@ -397,11 +405,13 @@
           </div>
         </div>
       </div>
-      <!-- Row 2: Cost of a Case with Price Lookup -->
-      <div class="form-row">
+      <!-- Second Row: Cost of a Case and Search for Recent Prices -->
+      <div class="form-row second-row">
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
           <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
+        </div>
+        <div class="form-group">
           <label class="lookup-label">Search for Recent Prices</label>
           <div class="input-button-group">
             <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
@@ -427,7 +437,7 @@
           </div>
         </div>
       </div>
-      <!-- Row 3: Grouped smaller inputs -->
+      <!-- Third Row: Grouped smaller inputs -->
       <div class="form-row small-input-row">
         <div class="form-group">
           <label for="markup">Markup (%)</label>
