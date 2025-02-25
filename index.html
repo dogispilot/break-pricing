@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WV01JWWQJ4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WV01JWWQJ4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-WV01JWWQJ4');
-</script>
+    gtag('config', 'G-WV01JWWQJ4');
+  </script>
   <meta charset="UTF-8">
   <title>BreakPricing.com</title>
   <link rel="icon" type="image/png" href="/resources/calculator.png">
@@ -101,9 +101,12 @@
       display: flex;
       flex-direction: column;
     }
-    /* Added for button form-groups without a label */
+    /* Updated for button form-groups without a label to vertically center buttons */
     .form-group.no-label {
-      margin-top: 1.5em;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .small-input-row .form-group input,
     .small-input-row .form-group select {
@@ -152,18 +155,18 @@
     .form-actions button {
       cursor: pointer;
     }
-    /* Updated Calculate Button Styling - now hollow with a gradient border */
+    /* Updated Calculate Button Styling - now hollow with a gradient border, bold font, and more rounded corners */
     .calculate-btn {
       width: 500px;
       padding: 16px 30px;
       background: transparent;
       border: 5px solid;
       border-image: linear-gradient(135deg, #FFDE0C, #005396, #F37427) 1;
-      border-radius: 8px;
+      border-radius: 12px;
       color: #ffffff;
       font-size: 1.3rem;
       text-transform: uppercase;
-      font-family: 'BreakPricingFont', sans-serif;
+      font-family: 'BreakPricingFontBold', sans-serif;
       transition: transform 0.2s, border 0.3s;
       display: flex;
       align-items: center;
@@ -377,7 +380,7 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <!-- Row 1: Year, Set, HockeyChecklists.com Button, and TCDB Button -->
+      <!-- Row 1: Year, Set, TCDB Button, and HockeyChecklists.com Button -->
       <div class="form-row">
         <div class="form-group">
           <label for="yearSelect">Select Year</label>
@@ -392,17 +395,17 @@
           </select>
         </div>
         <div class="form-group no-label">
+          <!-- Updated TCDB button with glow class; removed "small" for a better size -->
+          <button type="button" class="lookup-button glow-tcdb" onclick="openTcdbSearch()">
+            <img src="resources/tcdb.jpg" alt="TCDB Logo">
+            TCDB
+          </button>
+        </div>
+        <div class="form-group no-label">
           <!-- Updated HockeyChecklists button with glow class -->
           <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
-          </button>
-        </div>
-        <div class="form-group no-label">
-          <!-- Updated TCDB button with glow class -->
-          <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()">
-            <img src="resources/tcdb.jpg" alt="TCDB Logo">
-            TCDB
           </button>
         </div>
       </div>
@@ -411,28 +414,23 @@
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
           <div class="input-button-group">
-            <!-- Updated Dave & Adams button with glow class -->
             <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
             <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
               Dave & Adams
             </button>
-            <!-- Updated Steel City button with glow class -->
             <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
               <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
               Steel City
             </button>
-            <!-- Updated Midwest Cards button with glow class -->
             <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
               <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
               Midwest Cards
             </button>
-            <!-- Updated Blowout Cards button with glow class -->
             <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
               <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo">
               Blowout Cards
             </button>
-            <!-- Updated Out of the Box button with glow class -->
             <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
               <img src="resources/ootb.png" alt="Out of the Box Logo">
               Out of the Box
