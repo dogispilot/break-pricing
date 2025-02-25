@@ -81,16 +81,8 @@
         color: #e0e0e0;
         margin-top: 0;
       }
-      /* New style for sub-header copy with reduced top margin */
-      .sub-header {
-        font-size: 0.9rem;
-        text-align: center;
-        margin-top: 2px;
-        color: #bbb;
-      }
       #teamPricesHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
-        margin-top: 30px;
       }
       form#calcForm {
         margin-bottom: 25px;
@@ -148,30 +140,6 @@
         display: flex;
         align-items: center;
         gap: 10px;
-      }
-      .form-actions {
-        text-align: center;
-      }
-      .calculate-btn {
-        width: 500px;
-        padding: 16px 30px;
-        background: transparent;
-        border: 5px solid;
-        border-image: linear-gradient(135deg, #ffde0c, #005396, #f37427) 1;
-        border-radius: 20px;
-        color: #ffffff;
-        font-size: 1.3rem;
-        text-transform: uppercase;
-        font-family: 'BreakPricingFont', sans-serif;
-        transition: transform 0.2s, border 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        margin: 0 auto;
-      }
-      .calculate-btn:hover {
-        transform: scale(1.05);
       }
       .lookup-button {
         padding: 12px 20px;
@@ -392,11 +360,6 @@
           font-size: 1.1rem;
           padding: 14px 18px;
         }
-        .calculate-btn {
-          width: 100%;
-          padding: 12px 20px;
-          font-size: 1.2rem;
-        }
         .chart-summary-container {
           flex-direction: column;
         }
@@ -596,19 +559,10 @@
             />
           </div>
         </div>
-        <div class="form-actions">
-          <button type="submit" class="calculate-btn">
-            <img
-              src="resources/calculator.png"
-              alt="Calculator Icon"
-              style="width:24px;height:24px;"
-            />
-            Calculate
-          </button>
-        </div>
+        <!-- The Calculate button has been removed since calculations are auto-triggered -->
       </form>
 
-      <!-- New Key Rookies Section (updated title and spacing) placed above the pie chart -->
+      <!-- New Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
         <h2>Key Rookies</h2>
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
@@ -645,9 +599,7 @@
       </div>
 
       <!-- Distribution Section -->
-      <h2 id="teamPricesHeader" style="display: none; margin-top: 30px;">Card Distribution by Team</h2>
-      <!-- New small copy below the header with an id for toggling -->
-      <p id="teamSubHeader" class="sub-header" style="display: none;">Highlighted teams have key rookies.</p>
+      <h2 id="teamPricesHeader" style="display: none;">Card Distribution by Team</h2>
       <div id="results"></div>
     </div>
 
@@ -692,6 +644,7 @@
         yearSelect.addEventListener("change", function () {
           populateSetSelector();
           updateKeyPlayersSection();
+          calculateProfit();
         });
       }
 
@@ -787,7 +740,7 @@
           teamLogo.alt = player.team + " logo";
           tile.appendChild(teamLogo);
 
-          // Player image wrapped in a link to the profile (unchanged)
+          // Player image wrapped in a link to the profile
           const profileLink = document.createElement("a");
           profileLink.href = player.profile_link;
           profileLink.target = "_blank";
@@ -798,11 +751,10 @@
           profileLink.appendChild(playerImg);
           tile.appendChild(profileLink);
 
-          // Info container with three lines: name, notes, and eBay link.
+          // Info container with name, notes, and eBay link.
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
           
-          // First line: Name as a link to the profile
           const nameLine = document.createElement("div");
           const nameLink = document.createElement("a");
           nameLink.href = player.profile_link;
@@ -813,13 +765,11 @@
           nameLine.appendChild(nameLink);
           infoDiv.appendChild(nameLine);
           
-          // Second line: Player notes
           const notesLine = document.createElement("div");
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
           
-          // Third line: eBay link with share and eBay icons
           const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
@@ -1062,7 +1012,6 @@
           isNaN(blendedTax) ||
           isNaN(supplies)
         ) {
-          alert("Please fill in all fields with valid numbers.");
           return;
         }
 
@@ -1070,7 +1019,6 @@
           (set) => set.year === selectedYear && set.name === selectedSetName
         );
         if (!setObj) {
-          alert("Selected set data not found.");
           return;
         }
 
@@ -1155,11 +1103,11 @@
         document.getElementById("results").innerHTML = resultsHtml;
 
         if (rows.length > 0) {
-          document.getElementById("teamPricesHeader").style.display = "block";
-          document.getElementById("teamSubHeader").style.display = "block";
+          document.getElementById("teamPricesHeader").style.display =
+            "block";
         } else {
-          document.getElementById("teamPricesHeader").style.display = "none";
-          document.getElementById("teamSubHeader").style.display = "none";
+          document.getElementById("teamPricesHeader").style.display =
+            "none";
         }
 
         tableData = rows;
@@ -1219,7 +1167,6 @@
       function renderRows(arr) {
         let html = "";
         arr.forEach((row) => {
-          // Highlight row if team is in highlightTeams
           let highlightClass = highlightTeams.has(row.team)
             ? "highlight"
             : "";
@@ -1308,14 +1255,8 @@
         });
       });
 
-      document
-        .getElementById("calcForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          calculateProfit();
-        });
-
-      // Load config.json on page load.
+      // Remove the submit event listener since we recalc on input/change
+      // Add event listeners to auto-trigger calculation on any input or select change.
       window.addEventListener("load", function () {
         fetch("config.json")
           .then((response) => {
@@ -1336,7 +1277,16 @@
             populateYearSelector();
             document
               .getElementById("setSelect")
-              .addEventListener("change", updateCasePrice);
+              .addEventListener("change", function() {
+                updateCasePrice();
+                calculateProfit();
+              });
+            // Add auto-calc listeners to all form inputs and selects.
+            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
+            calcInputs.forEach((input) => {
+              input.addEventListener("input", calculateProfit);
+              input.addEventListener("change", calculateProfit);
+            });
           })
           .catch((error) => {
             console.error("Error loading JSON:", error);
