@@ -204,7 +204,8 @@
       .key-player-tiles-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
+        row-gap: 10px;
+        column-gap: 30px;
         justify-items: center;
       }
       .key-player-tile {
@@ -1239,8 +1240,8 @@
                       "#bfa600",
                       "#007bff",
                     ],
-                    // Pull slices apart
-                    offset: 10,
+                    // Increase offset to pull slices further apart
+                    offset: 20,
                     borderWidth: 0,
                     borderColor: "transparent"
                   },
@@ -1249,10 +1250,15 @@
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: {
+                  padding: {
+                    bottom: 30
+                  }
+                },
                 plugins: {
                   legend: {
                     position: "bottom",
-                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" },
+                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" }
                   },
                   extrudePlugin: {
                     extrudeHeight: 10
