@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WV01JWWQJ4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WV01JWWQJ4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-WV01JWWQJ4');
-</script>
+    gtag('config', 'G-WV01JWWQJ4');
+  </script>
   <meta charset="UTF-8">
   <title>SkunkSniper.com</title>
   <link rel="icon" type="image/png" href="/resources/calculator.png">
@@ -36,7 +36,6 @@
       margin: 0;
       padding: 20px;
     }
-    /* About link styling now relative to container */
     .about-link {
       position: absolute;
       top: 20px;
@@ -81,11 +80,9 @@
       color: #e0e0e0;
       margin-top: 0;
     }
-    /* Apply bold font to the "Suggested Team Prices" header */
     #teamPricesHeader {
       font-family: 'BreakPricingFontBold', sans-serif;
     }
-    /* Form layout styling */
     form#calcForm {
       margin-bottom: 25px;
     }
@@ -101,7 +98,6 @@
       display: flex;
       flex-direction: column;
     }
-    /* Added for button form-groups without a label */
     .form-group.no-label {
       margin-top: 1.5em;
     }
@@ -131,7 +127,6 @@
       box-shadow: 0 0 5px rgba(0,123,255,0.5);
       outline: none;
     }
-    /* Remove spinner arrows from number inputs */
     input[type=number]::-webkit-outer-spin-button,
     input[type=number]::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -140,7 +135,6 @@
     input[type=number] {
       -moz-appearance: textfield;
     }
-    /* Container for the input and lookup buttons */
     .input-button-group {
       display: flex;
       align-items: center;
@@ -152,7 +146,6 @@
     .form-actions button {
       cursor: pointer;
     }
-    /* Updated Calculate Button Styling - now hollow with a gradient border and rounded corners */
     .calculate-btn {
       width: 500px;
       padding: 16px 30px;
@@ -174,14 +167,13 @@
     .calculate-btn:hover {
       transform: scale(1.05);
     }
-    /* Lookup button styles updated for a hollow look */
     .lookup-button {
       padding: 12px 20px;
       font-size: 1rem;
-      border: 1px solid #888; /* grey border */
+      border: 1px solid #888;
       border-radius: 6px;
-      background: transparent; /* hollow style */
-      color: #fff; /* white text */
+      background: transparent;
+      color: #fff;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       display: flex;
@@ -206,7 +198,6 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    /* Steel City button styling updated for hollow look */
     .steelcity-button {
       background: transparent;
       border: 1px solid #888;
@@ -216,25 +207,31 @@
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-    /* Pie chart container */
-    #chartContainer {
+    /* New container to hold the pie chart and summary boxes side-by-side */
+    .chart-summary-container {
+      display: flex;
+      gap: 20px;
       margin-bottom: 25px;
+    }
+    /* Pie chart container styling remains mostly the same */
+    #chartContainer {
+      flex: 1;
       height: 300px;
       background: #2c2c2c;
       padding: 15px;
       border-radius: 8px;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
-      display: none;
     }
-    /* Summary boxes styling (below the pie chart) */
+    /* Updated summary container to stack boxes vertically matching the pie chart height */
     .summary-container {
+      flex: 1;
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 25px;
+      flex-direction: column;
+      height: 300px;
     }
     .summary-container .summary-box {
       flex: 1;
-      margin: 0 10px;
+      margin: 5px 0;
       padding: 15px;
       border-radius: 8px;
       text-align: center;
@@ -244,7 +241,7 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
-    /* Updated styling for summary box buttons */
+    /* Existing summary box styles */
     #totalProfitBox {
       background-color: transparent;
       border: 4px solid #2e7d32;
@@ -324,7 +321,6 @@
       margin-right: 8px;
       border-radius: 50%;
     }
-    /* Mobile-friendly adjustments */
     @media (max-width: 600px) {
       .form-row .form-group {
         min-width: 100%;
@@ -339,9 +335,17 @@
         padding: 12px 20px;
         font-size: 1.2rem;
       }
+      .chart-summary-container {
+        flex-direction: column;
+      }
+      #chartContainer, .summary-container {
+        width: 100%;
+        height: auto;
+      }
+      .summary-container .summary-box {
+        margin: 10px 0;
+      }
     }
-    
-    /* Glow effects for buttons on hover using provided colors */
     .glow-outofthebox:hover {
       box-shadow: 0 0 8px #F70000, 0 0 16px #F70000;
     }
@@ -364,7 +368,6 @@
       box-shadow: 0 0 8px #021E9B, 0 0 16px #021E9B;
     }
   </style>
-  <!-- Include Chart.js for the pie chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -392,14 +395,12 @@
           </select>
         </div>
         <div class="form-group no-label">
-          <!-- Updated TCDB button with reduced padding and centered content -->
           <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; justify-content: center;">
             <img src="resources/tcdb.jpg" alt="TCDB Logo">
             TCDB
           </button>
         </div>
         <div class="form-group no-label">
-          <!-- Updated HockeyChecklists.com button with centered content -->
           <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()" style="justify-content: center;">
             <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
             HockeyChecklists.com
@@ -411,28 +412,23 @@
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
           <div class="input-button-group">
-            <!-- Updated default price from 420.69 to 1999.99 -->
             <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99">
             <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
               Dave & Adams
             </button>
-            <!-- Updated Steel City button with glow class -->
             <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
               <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
               Steel City
             </button>
-            <!-- Updated Midwest Cards button with glow class -->
             <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
               <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
               Midwest Cards
             </button>
-            <!-- Updated Blowout Cards button with glow class -->
             <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
               <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo">
               Blowout Cards
             </button>
-            <!-- Updated Out of the Box button with glow class -->
             <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
               <img src="resources/ootb.png" alt="Out of the Box Logo">
               Out of the Box
@@ -467,27 +463,30 @@
       </div>
     </form>
 
-    <!-- Pie Chart for Distribution -->
-    <div id="chartContainer">
-      <canvas id="pieChart"></canvas>
-    </div>
+    <!-- New container for pie chart and summary boxes -->
+    <div class="chart-summary-container">
+      <!-- Pie Chart for Distribution -->
+      <div id="chartContainer">
+        <canvas id="pieChart"></canvas>
+      </div>
 
-    <!-- Summary Boxes (below the pie chart) -->
-    <div class="summary-container">
-      <div id="totalProfitBox" class="summary-box">
-        <div class="amount">$0.00</div>
-        <div class="label">Breaker's Profit</div>
-        <div class="toast">Profit is how much money a breaker will make.</div>
-      </div>
-      <div id="whatnotsCutBox" class="summary-box">
-        <div class="amount">$0.00</div>
-        <div class="label">Whatnot's Cut</div>
-        <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
-      </div>
-      <div id="costOfBusinessBox" class="summary-box">
-        <div class="amount">$0.00</div>
-        <div class="label">Cost of Business</div>
-        <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
+      <!-- Summary Boxes stacked vertically -->
+      <div class="summary-container">
+        <div id="totalProfitBox" class="summary-box">
+          <div class="amount">$0.00</div>
+          <div class="label">Breaker's Profit</div>
+          <div class="toast">Profit is how much money a breaker will make.</div>
+        </div>
+        <div id="whatnotsCutBox" class="summary-box">
+          <div class="amount">$0.00</div>
+          <div class="label">Whatnot's Cut</div>
+          <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
+        </div>
+        <div id="costOfBusinessBox" class="summary-box">
+          <div class="amount">$0.00</div>
+          <div class="label">Cost of Business</div>
+          <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
+        </div>
       </div>
     </div>
 
@@ -536,14 +535,13 @@
     }
 
     // Populate the set selector based on the selected year.
-    // Updated to sort the sets alphabetically.
     function populateSetSelector() {
       const selectedYear = document.getElementById('yearSelect').value;
       const setSelect = document.getElementById('setSelect');
       setSelect.innerHTML = '<option value="">--Select a Set--</option>';
       if (!selectedYear) return;
       const filteredSets = setData.filter(set => set.year === selectedYear);
-      filteredSets.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetical sort
+      filteredSets.sort((a, b) => a.name.localeCompare(b.name));
       filteredSets.forEach(set => {
         const option = document.createElement('option');
         option.value = set.name;
@@ -559,7 +557,6 @@
       if (!selectedYear || !selectedSet) return;
       const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
       if (setObj && setObj.price) {
-        // Remove "$" and commas, then convert to a float.
         const priceValue = parseFloat(setObj.price.replace(/[$,]/g, ''));
         document.getElementById('casePrice').value = priceValue;
       }
@@ -581,7 +578,6 @@
           }
           setData = jsonData.sets;
           populateYearSelector();
-          // Attach change event listener to update the case price when a set is selected.
           document.getElementById('setSelect').addEventListener('change', updateCasePrice);
         })
         .catch(error => {
@@ -628,7 +624,6 @@
       "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
     };
 
-    // Open dacardworld search query with year prefix.
     function openSetSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -646,7 +641,6 @@
       window.open(url, "_blank");
     }
 
-    // Open Steel City search query using the same query logic.
     function openSteelCitySearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -664,7 +658,6 @@
       window.open(url, "_blank");
     }
 
-    // Open TCDB search query using updated logic (removed "hobby case").
     function openTcdbSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -682,7 +675,6 @@
       window.open(url, "_blank");
     }
     
-    // New function for HockeyChecklists using the provided base URL.
     function openHockeyChecklistsSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -700,7 +692,6 @@
       window.open(url, "_blank");
     }
 
-    // Open Midwest Cards search query using the same query logic.
     function openMidwestCardsSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -718,7 +709,6 @@
       window.open(url, "_blank");
     }
 
-    // Open Blowout Cards search query using the same query logic.
     function openBlowoutCardsSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -736,7 +726,6 @@
       window.open(url, "_blank");
     }
 
-    // Open Out of the Box search query (replacing Mintink).
     function openOotbSearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -754,7 +743,6 @@
       window.open(url, "_blank");
     }
     
-    // New function to open an eBay search for the team.
     function openTeamSearch(teamName) {
       const selectedYear = document.getElementById('yearSelect').value;
       const selectedSet = document.getElementById('setSelect').value;
@@ -762,14 +750,12 @@
         alert('Please select both a year and a set.');
         return;
       }
-      // Use only the first year if it is in a range (e.g. "2022-23")
       const firstYear = selectedYear.split('-')[0];
       const query = firstYear + " " + selectedSet + " " + teamName;
       const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
       window.open(url, "_blank");
     }
 
-    // Function to calculate and render profits along with updating the pie chart.
     function calculateProfit() {
       const selectedYear = document.getElementById('yearSelect').value;
       const selectedSetName = document.getElementById('setSelect').value;
@@ -805,7 +791,6 @@
         const whatnotFees = cost * 0.08;
         const transactionFees = ((price * (1 + blendedTax)) * 0.029) + 0.30;
         const profit = price - cost - whatnotFees - transactionFees - supplies;
-        // Calculate the distribution percentage rounded to one decimal place
         const distribution = ((count / totalCards) * 100).toFixed(1) + '%';
         
         rows.push({
@@ -845,14 +830,12 @@
       resultsHtml += tbodyHtml + '</tbody></table>';
       document.getElementById('results').innerHTML = resultsHtml;
       
-      // Show/hide the header based on whether there are team rows.
       if (rows.length > 0) {
         document.getElementById('teamPricesHeader').style.display = 'block';
       } else {
         document.getElementById('teamPricesHeader').style.display = 'none';
       }
       
-      // Store the current table data globally.
       tableData = rows;
       
       const chartData = [totalProfit, totalWhatnotsCut, totalCostOfBusiness];
@@ -891,7 +874,6 @@
       }
     }
 
-    // Function to render table rows.
     function renderRows(arr) {
       let html = '';
       arr.forEach(row => {
@@ -914,7 +896,6 @@
       return html;
     }
 
-    // Sort table using the global tableData.
     function sortTable(columnIndex) {
       if (!tableData) return;
       
@@ -963,7 +944,6 @@
       tbody.innerHTML = renderRows(tableData);
     }
 
-    // Toggle toast tooltips for summary boxes.
     const summaryBoxes = document.querySelectorAll('.summary-box');
     summaryBoxes.forEach(box => {
       box.addEventListener('click', function() {
