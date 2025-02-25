@@ -347,11 +347,19 @@
             <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
             <button type="button" class="lookup-button small" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
-              Search Dave & Adams
+              Look up Price
             </button>
             <button type="button" class="lookup-button small steelcity-button" onclick="openSteelCitySearch()">
               <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
               Search Steel City
+            </button>
+            <button type="button" class="lookup-button small" onclick="openMidwestCardsSearch()">
+              <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+              Search Midwest Cards
+            </button>
+            <button type="button" class="lookup-button small" onclick="openBlowoutCardsSearch()">
+              <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo">
+              Search Blowout Cards
             </button>
           </div>
         </div>
@@ -558,7 +566,7 @@
       window.open(url, "_blank");
     }
 
-    // Open Steel City search query using the same query but different URL.
+    // Open Steel City search query using the same query logic.
     function openSteelCitySearch() {
       const selectedSet = document.getElementById('setSelect').value;
       const selectedYear = document.getElementById('yearSelect').value;
@@ -573,6 +581,42 @@
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hobby case";
       const url = "https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    }
+
+    // Open Midwest Cards search query using the same query logic.
+    function openMidwestCardsSearch() {
+      const selectedSet = document.getElementById('setSelect').value;
+      const selectedYear = document.getElementById('yearSelect').value;
+      if (!selectedSet) {
+        alert('Please select a set first.');
+        return;
+      }
+      if (!selectedYear) {
+        alert('Please select a set year first.');
+        return;
+      }
+      const yearPrefix = selectedYear.split('-')[0];
+      const query = yearPrefix + " " + selectedSet + " hobby case";
+      const url = "https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    }
+
+    // Open Blowout Cards search query using the same query logic.
+    function openBlowoutCardsSearch() {
+      const selectedSet = document.getElementById('setSelect').value;
+      const selectedYear = document.getElementById('yearSelect').value;
+      if (!selectedSet) {
+        alert('Please select a set first.');
+        return;
+      }
+      if (!selectedYear) {
+        alert('Please select a set year first.');
+        return;
+      }
+      const yearPrefix = selectedYear.split('-')[0];
+      const query = yearPrefix + " " + selectedSet + " hobby case";
+      const url = "https://www.blowoutcards.com/catalogsearch/result/?q=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
