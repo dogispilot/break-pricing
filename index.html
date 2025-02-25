@@ -7,7 +7,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-WV01JWWQJ4');
   </script>
   <meta charset="UTF-8">
@@ -101,16 +100,15 @@
       display: flex;
       flex-direction: column;
     }
-    /* Updated for button form-groups without a label to vertically center buttons */
-    .form-group.no-label {
-      margin-top: 0;
+    /* When grouping inputs with buttons, center them vertically */
+    .input-button-group {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
     }
-    .small-input-row .form-group input,
-    .small-input-row .form-group select {
-      max-width: 100px;
+    /* New fixed-height style for lookup buttons matching input padding */
+    .lookup-button.fixed-height {
+      padding: 12px 15px;
     }
     .form-group label {
       margin-bottom: 6px;
@@ -142,12 +140,6 @@
     }
     input[type=number] {
       -moz-appearance: textfield;
-    }
-    /* Container for the input and lookup buttons */
-    .input-button-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .form-actions {
       text-align: center;
@@ -181,10 +173,10 @@
     .lookup-button {
       padding: 12px 20px;
       font-size: 1rem;
-      border: 1px solid #888; /* grey border */
+      border: 1px solid #888;
       border-radius: 6px;
-      background: transparent; /* hollow style */
-      color: #fff; /* white text */
+      background: transparent;
+      color: #fff;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       display: flex;
@@ -192,18 +184,10 @@
       gap: 8px;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    .lookup-button.small {
-      padding: 8px 12px;
-      font-size: 0.9rem;
-    }
     .lookup-button img {
       width: 24px;
       height: 24px;
       border-radius: 50%;
-    }
-    .lookup-button.small img {
-      width: 20px;
-      height: 20px;
     }
     .lookup-button:hover {
       transform: scale(1.05);
@@ -380,7 +364,7 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <!-- Row 1: Year, Set, TCDB Button, and HockeyChecklists.com Button -->
+      <!-- Row 1: Year and Set (with lookup buttons inline next to the Set select) -->
       <div class="form-row">
         <div class="form-group">
           <label for="yearSelect">Select Year</label>
@@ -390,23 +374,19 @@
         </div>
         <div class="form-group">
           <label for="setSelect">Select a Set</label>
-          <select id="setSelect" required>
-            <option value="">--Select Set--</option>
-          </select>
-        </div>
-        <div class="form-group no-label">
-          <!-- Updated TCDB button with glow class; removed "small" for a better size -->
-          <button type="button" class="lookup-button glow-tcdb" onclick="openTcdbSearch()">
-            <img src="resources/tcdb.jpg" alt="TCDB Logo">
-            TCDB
-          </button>
-        </div>
-        <div class="form-group no-label">
-          <!-- Updated HockeyChecklists button with glow class -->
-          <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
-            <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
-            HockeyChecklists.com
-          </button>
+          <div class="input-button-group">
+            <select id="setSelect" required style="min-width: 250px;">
+              <option value="">--Select Set--</option>
+            </select>
+            <button type="button" class="lookup-button fixed-height glow-tcdb" onclick="openTcdbSearch()">
+              <img src="resources/tcdb.jpg" alt="TCDB Logo">
+              TCDB
+            </button>
+            <button type="button" class="lookup-button fixed-height glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
+              <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon">
+              HockeyChecklists.com
+            </button>
+          </div>
         </div>
       </div>
       <!-- Row 2: Cost of a Case with Lookup Buttons -->
@@ -534,7 +514,7 @@
     function populateSetSelector() {
       const selectedYear = document.getElementById('yearSelect').value;
       const setSelect = document.getElementById('setSelect');
-      setSelect.innerHTML = '<option value="">--Select a Set--</option>';
+      setSelect.innerHTML = '<option value="">--Select Set--</option>';
       if (!selectedYear) return;
       const filteredSets = setData.filter(set => set.year === selectedYear);
       filteredSets.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetical sort
