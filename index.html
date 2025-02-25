@@ -84,6 +84,12 @@
       #teamPricesHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
       }
+      .small-copy {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #bbb;
+        margin-top: 0.5rem;
+      }
       form#calcForm {
         margin-bottom: 25px;
       }
@@ -600,6 +606,7 @@
 
       <!-- Distribution Section -->
       <h2 id="teamPricesHeader" style="display: none;">Card Distribution by Team</h2>
+      <p class="small-copy" id="distributionCopy" style="display: none;">Teams with key rookies for the selected year are highlighted.</p>
       <div id="results"></div>
     </div>
 
@@ -1105,8 +1112,12 @@
         if (rows.length > 0) {
           document.getElementById("teamPricesHeader").style.display =
             "block";
+          document.getElementById("distributionCopy").style.display =
+            "block";
         } else {
           document.getElementById("teamPricesHeader").style.display =
+            "none";
+          document.getElementById("distributionCopy").style.display =
             "none";
         }
 
