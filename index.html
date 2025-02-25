@@ -696,7 +696,7 @@
       }
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet;
-      const url = "https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query);
+      const url = "https://hockeychecklists.com/checklist?ser=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
@@ -751,6 +751,13 @@
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       const url = "https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    }
+    
+    // New function to open an eBay search for the team.
+    function openTeamSearch(teamName) {
+      const query = teamName + " hockey cards";
+      const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
