@@ -351,6 +351,7 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
+      object-fit: cover;
       margin-right: 10px;
     }
     .key-player-info {
@@ -535,7 +536,7 @@
     <h2 id="teamPricesHeader" style="display: none;">Suggested Team Prices</h2>
     <div id="results"></div>
 
-    <!-- New Key Chase Players Section -->
+    <!-- New Key Chase Players Section (Only Rookies) -->
     <div id="keyPlayersSection" style="display:none;">
       <h2>Key Chase Players</h2>
       <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
@@ -609,7 +610,7 @@
       }
     }
 
-    // Update Key Chase Players Section based on selected year.
+    // Update Key Chase Players Section based on selected year, including only Rookies.
     function updateKeyPlayersSection() {
       const selectedYear = document.getElementById('yearSelect').value;
       const keySection = document.getElementById('keyPlayersSection');
@@ -620,8 +621,11 @@
         keySection.style.display = 'none';
         return;
       }
-      // Filter players whose setYear matches the selected year or is "All"
-      const filteredPlayers = keyPlayersData.filter(player => player.setYear === selectedYear || player.setYear === "All");
+      // Filter players whose setYear matches the selected year or is "All", and only include rookies.
+      let filteredPlayers = keyPlayersData.filter(player => 
+        (player.setYear === selectedYear || player.setYear === "All") && 
+        player.type.toLowerCase() === "rookie"
+      );
       if (filteredPlayers.length === 0) {
         keySection.style.display = 'none';
         return;
