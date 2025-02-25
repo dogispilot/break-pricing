@@ -9,9 +9,9 @@
       gtag('js', new Date());
       gtag('config', 'G-PL5RQPB0MT');
     </script>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>SkunkSniper.com</title>
-    <link rel="icon" type="image/png" href="/resources/calculator.png">
+    <link rel="icon" type="image/png" href="/resources/calculator.png" />
     <!-- Import Google Fonts (Roboto remains if needed) -->
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap"
@@ -128,12 +128,12 @@
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         outline: none;
       }
-      input[type='number']::-webkit-outer-spin-button,
-      input[type='number']::-webkit-inner-spin-button {
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
       }
-      input[type='number'] {
+      input[type="number"] {
         -moz-appearance: textfield;
       }
       .input-button-group {
@@ -220,7 +220,7 @@
       .key-player-tiles-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        gap: 30px; /* Increased gap */
         justify-items: center;
       }
       .key-player-tile {
@@ -690,7 +690,7 @@
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
         setSelect.innerHTML =
-          '<option value="">--Select a Set--</option>';
+          '<option value="">--Select Set--</option>';
         if (!selectedYear) return;
         const filteredSets = setData.filter(
           (set) => set.year === selectedYear
@@ -720,7 +720,8 @@
         }
       }
 
-      // New function: Opens an eBay search for the given player name.
+      // New function: Opens an eBay search for the given player name
+      // using the set year and set name.
       function openPlayerEbaySearch(playerName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -728,7 +729,8 @@
           alert("Please select both a year and a set.");
           return;
         }
-        const query = playerName;
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " " + playerName;
         const url =
           "https://www.ebay.com/sch/i.html?_nkw=" +
           encodeURIComponent(query) +
@@ -786,12 +788,34 @@
           profileLink.appendChild(playerImg);
           tile.appendChild(profileLink);
 
-          // Info container
+          // Info container with player name
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
           const nameEl = document.createElement("strong");
           nameEl.textContent = player.player;
           infoDiv.appendChild(nameEl);
+
+          // Add eBay/share icons next to player name
+          const iconLink = document.createElement("a");
+          iconLink.href = "javascript:void(0)";
+          iconLink.onclick = function () {
+            openPlayerEbaySearch(player.player);
+          };
+          iconLink.style.marginLeft = "10px";
+          const shareImg = document.createElement("img");
+          shareImg.src = "resources/share_white.png";
+          shareImg.alt = "Share";
+          shareImg.className = "link-icon";
+          const ebayImg = document.createElement("img");
+          ebayImg.src =
+            "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
+          ebayImg.alt = "eBay";
+          ebayImg.className = "link-icon ebay-icon";
+          iconLink.appendChild(shareImg);
+          iconLink.appendChild(ebayImg);
+          infoDiv.appendChild(iconLink);
+
+          // Append notes if available
           if (player.notes) {
             const notesEl = document.createElement("div");
             notesEl.className = "key-player-notes";
@@ -800,94 +824,46 @@
           }
           tile.appendChild(infoDiv);
 
-          // Add eBay search link using player's name
-          const ebayLink = document.createElement("a");
-          ebayLink.href = "javascript:void(0)";
-          ebayLink.onclick = function () {
-            openPlayerEbaySearch(player.player);
-          };
-          const ebayImg = document.createElement("img");
-          ebayImg.src =
-            "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
-          ebayImg.alt = "eBay";
-          ebayImg.className = "link-icon ebay-icon";
-          ebayLink.appendChild(ebayImg);
-          tile.appendChild(ebayLink);
-
           tilesContainer.appendChild(tile);
         });
       }
 
       // Mapping of team names to logo URLs.
       const teamLogos = {
-        "Anaheim Ducks":
-          "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
-        "Arizona Coyotes":
-          "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
-        "Boston Bruins":
-          "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
-        "Buffalo Sabres":
-          "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
-        "Calgary Flames":
-          "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
-        "Carolina Hurricanes":
-          "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
-        "Chicago Blackhawks":
-          "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
-        "Colorado Avalanche":
-          "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
-        "Columbus Blue Jackets":
-          "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
-        "Dallas Stars":
-          "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
-        "Detroit Red Wings":
-          "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
-        "Edmonton Oilers":
-          "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
-        "Florida Panthers":
-          "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
-        "Los Angeles Kings":
-          "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
-        "Minnesota Wild":
-          "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
-        "Montréal Canadiens":
-          "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
-        "Montreal Canadiens":
-          "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
-        "Nashville Predators":
-          "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
-        "New Jersey Devils":
-          "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
-        "New York Islanders":
-          "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
-        "New York Rangers":
-          "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
-        "Ottawa Senators":
-          "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
-        "Philadelphia Flyers":
-          "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
-        "Pittsburgh Penguins":
-          "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
-        "San Jose Sharks":
-          "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
-        "Seattle Kraken":
-          "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
-        "St. Louis Blues":
-          "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
-        "Tampa Bay Lightning":
-          "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
-        "Toronto Maple Leafs":
-          "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
-        "Utah Hockey Club":
-          "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
-        "Vancouver Canucks":
-          "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
-        "Vegas Golden Knights":
-          "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
-        "Washington Capitals":
-          "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
-        "Winnipeg Jets":
-          "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+        "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+        "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
+        "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
+        "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+        "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+        "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+        "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+        "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+        "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+        "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+        "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+        "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+        "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+        "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
+        "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+        "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+        "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+        "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+        "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+        "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+        "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+        "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+        "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+        "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+        "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
+        "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+        "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+        "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
+        "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+        "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+        "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
+        "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
       };
 
       function openSetSearch() {
@@ -902,8 +878,7 @@
           return;
         }
         const yearPrefix = selectedYear.split("-")[0];
-        const query =
-          yearPrefix + " " + selectedSet + " hockey hobby case";
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
         const url =
           "https://www.dacardworld.com/search/?Search=" +
           encodeURIComponent(query);
@@ -922,8 +897,7 @@
           return;
         }
         const yearPrefix = selectedYear.split("-")[0];
-        const query =
-          yearPrefix + " " + selectedSet + " hockey hobby case";
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
         const url =
           "https://www.steelcitycollectibles.com/search?q=" +
           encodeURIComponent(query);
@@ -948,7 +922,7 @@
           encodeURIComponent(query);
         window.open(url, "_blank");
       }
-
+      
       function openHockeyChecklistsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
@@ -980,8 +954,7 @@
           return;
         }
         const yearPrefix = selectedYear.split("-")[0];
-        const query =
-          yearPrefix + " " + selectedSet + " hockey hobby case";
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
         const url =
           "https://www.midwestcards.com/search/?search_query=" +
           encodeURIComponent(query);
@@ -1000,8 +973,7 @@
           return;
         }
         const yearPrefix = selectedYear.split("-")[0];
-        const query =
-          yearPrefix + " " + selectedSet + " hockey hobby case";
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
         const url =
           "https://www.blowoutcards.com/catalogsearch/result/?q=" +
           encodeURIComponent(query);
@@ -1020,14 +992,13 @@
           return;
         }
         const yearPrefix = selectedYear.split("-")[0];
-        const query =
-          yearPrefix + " " + selectedSet + " hockey hobby case";
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
         const url =
           "https://www.outoftheboxcards.com/?s=" +
           encodeURIComponent(query);
         window.open(url, "_blank");
       }
-
+      
       function openTeamSearch(teamName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1044,7 +1015,7 @@
           "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
         window.open(url, "_blank");
       }
-
+      
       function calculateProfit() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSetName = document.getElementById("setSelect").value;
