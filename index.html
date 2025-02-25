@@ -132,19 +132,19 @@
     .form-actions button {
       cursor: pointer;
     }
-    /* Updated Calculate Button Styling */
+    /* Updated Calculate Button Styling - now hollow with a gradient border */
     .calculate-btn {
       width: 500px;
       padding: 16px 30px;
-      background: linear-gradient(135deg, #FED111, #F37427);
-      border: 5px solid #005396;
+      background: transparent;
+      border: 5px solid;
+      border-image: linear-gradient(135deg, #FFDE0C, #005396, #F37427) 1;
       border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       color: #ffffff;
       font-size: 1.3rem;
       text-transform: uppercase;
       font-family: 'BreakPricingFont', sans-serif;
-      transition: background 0.3s, transform 0.2s;
+      transition: transform 0.2s, border 0.3s;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -152,7 +152,6 @@
       margin: 0 auto;
     }
     .calculate-btn:hover {
-      background: linear-gradient(135deg, #F37427, #FED111);
       transform: scale(1.05);
     }
     /* Lookup button styles updated for a hollow look */
@@ -345,7 +344,7 @@
         <div class="form-group">
           <label for="setSelect">Select a Set</label>
           <select id="setSelect" required>
-            <option value="">--Select a Set--</option>
+            <option value="">--Select Set--</option>
           </select>
         </div>
         <div class="form-group no-label">
