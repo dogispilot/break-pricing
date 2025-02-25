@@ -1176,6 +1176,22 @@
             pieChart.data.datasets[0].data = chartData;
             pieChart.update();
           } else {
+            // Custom plugin for drop shadow effect
+            const shadowPlugin = {
+              id: 'shadowPlugin',
+              beforeDatasetDraw(chart, args, options) {
+                const ctx = chart.ctx;
+                ctx.save();
+                ctx.shadowColor = options.shadowColor || 'rgba(0, 0, 0, 0.7)';
+                ctx.shadowBlur = options.shadowBlur || 10;
+                ctx.shadowOffsetX = options.shadowOffsetX || 5;
+                ctx.shadowOffsetY = options.shadowOffsetY || 5;
+              },
+              afterDatasetDraw(chart, args, options) {
+                chart.ctx.restore();
+              }
+            };
+
             const ctx = pieChartCanvas.getContext("2d");
             pieChart = new Chart(ctx, {
               type: "pie",
@@ -1193,6 +1209,8 @@
                       "#bfa600",
                       "#007bff",
                     ],
+                    borderWidth: 0,
+                    borderColor: "transparent"
                   },
                 ],
               },
@@ -1202,10 +1220,27 @@
                 plugins: {
                   legend: {
                     position: "bottom",
-                    labels: { color: "#e0e0e0" },
+                    labels: {
+                      font: { family: "BreakPricingFont" },
+                      color: "#e0e0e0"
+                    },
                   },
+                  // Configure the shadow plugin options
+                  shadowPlugin: {
+                    shadowColor: 'rgba(0, 0, 0, 0.7)',
+                    shadowBlur: 10,
+                    shadowOffsetX: 5,
+                    shadowOffsetY: 5,
+                  }
                 },
+                elements: {
+                  arc: {
+                    borderWidth: 0,
+                    borderColor: "transparent"
+                  }
+                }
               },
+              plugins: [shadowPlugin]
             });
           }
         }
