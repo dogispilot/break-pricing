@@ -347,8 +347,8 @@
           </button>
         </div>
         <div class="form-group no-label">
-          <button type="button" class="lookup-button small" onclick="window.open('https://www.tcdb.com', '_blank')">
-            <img src="https://www.tcdb.com/Images/TCDbLogo.gif" alt="TCDB Logo">
+          <button type="button" class="lookup-button small" onclick="openTcdbSearch()">
+            <img src="resources/tcdb.jpg" alt="TCDB Logo">
             TCDB
           </button>
         </div>
@@ -599,6 +599,24 @@
       const yearPrefix = selectedYear.split('-')[0];
       const query = yearPrefix + " " + selectedSet + " hobby case";
       const url = "https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query);
+      window.open(url, "_blank");
+    }
+
+    // Open TCDB search query using the same logic.
+    function openTcdbSearch() {
+      const selectedSet = document.getElementById('setSelect').value;
+      const selectedYear = document.getElementById('yearSelect').value;
+      if (!selectedSet) {
+        alert('Please select a set first.');
+        return;
+      }
+      if (!selectedYear) {
+        alert('Please select a set year first.');
+        return;
+      }
+      const yearPrefix = selectedYear.split('-')[0];
+      const query = yearPrefix + " " + selectedSet + " hobby case";
+      const url = "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query);
       window.open(url, "_blank");
     }
 
