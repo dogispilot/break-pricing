@@ -100,15 +100,22 @@
       display: flex;
       flex-direction: column;
     }
-    /* When grouping inputs with buttons, center them vertically */
+    /* Grouping inputs and lookup buttons vertically */
     .input-button-group {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-top: 6px;
     }
-    /* New fixed-height style for lookup buttons matching input padding */
+    /* Fixed height for TCDB and HockeyChecklists buttons only */
     .lookup-button.fixed-height {
       padding: 12px 15px;
+    }
+    .lookup-label {
+      margin-top: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e0e0e0;
     }
     .form-group label {
       margin-bottom: 6px;
@@ -169,7 +176,7 @@
     .calculate-btn:hover {
       transform: scale(1.05);
     }
-    /* Lookup button styles updated for a hollow look */
+    /* Lookup button styles for checklist search (fixed-height) */
     .lookup-button {
       padding: 12px 20px;
       font-size: 1rem;
@@ -364,20 +371,21 @@
 
     <!-- Calculation Form -->
     <form id="calcForm">
-      <!-- Row 1: Year and Set (with lookup buttons inline next to the Set select) -->
+      <!-- Row 1: Year and Set with Checklist Lookup -->
       <div class="form-row">
         <div class="form-group">
           <label for="yearSelect">Select Year</label>
-          <select id="yearSelect" required>
+          <select id="yearSelect" required style="min-width: 200px;">
             <option value="">--Select a Year--</option>
           </select>
         </div>
         <div class="form-group">
           <label for="setSelect">Select a Set</label>
+          <select id="setSelect" required style="min-width: 200px;">
+            <option value="">--Select Set--</option>
+          </select>
+          <label class="lookup-label">Search for Checklist</label>
           <div class="input-button-group">
-            <select id="setSelect" required style="min-width: 250px;">
-              <option value="">--Select Set--</option>
-            </select>
             <button type="button" class="lookup-button fixed-height glow-tcdb" onclick="openTcdbSearch()">
               <img src="resources/tcdb.jpg" alt="TCDB Logo">
               TCDB
@@ -389,12 +397,13 @@
           </div>
         </div>
       </div>
-      <!-- Row 2: Cost of a Case with Lookup Buttons -->
+      <!-- Row 2: Cost of a Case with Price Lookup -->
       <div class="form-row">
         <div class="form-group">
           <label for="casePrice">Cost of a Case ($)</label>
+          <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
+          <label class="lookup-label">Search for Recent Prices</label>
           <div class="input-button-group">
-            <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="420.69">
             <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
               <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon">
               Dave & Adams
