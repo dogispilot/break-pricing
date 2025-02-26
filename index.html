@@ -655,36 +655,19 @@
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
       }
 
-      const extrudePlugin = {
-        id: "extrudePlugin",
+      // New drop-shadow plugin for a subtle 3D effect
+      const dropShadowPlugin = {
+        id: "dropShadowPlugin",
         beforeDatasetDraw(chart, args, options) {
           const ctx = chart.ctx;
-          const datasetIndex = args.index;
-          const meta = chart.getDatasetMeta(datasetIndex);
-          const extrudeHeight = options.extrudeHeight || 25;
-          meta.data.forEach((arc, index) => {
-            const { x, y, outerRadius, innerRadius, startAngle, endAngle } = arc.getProps(
-              ["x", "y", "outerRadius", "innerRadius", "startAngle", "endAngle"],
-              true
-            );
-            for (let i = extrudeHeight; i > 0; i--) {
-              ctx.save();
-              ctx.translate(0, i);
-              ctx.beginPath();
-              ctx.moveTo(x, y);
-              ctx.arc(x, y, outerRadius, startAngle, endAngle);
-              if (innerRadius > 0) {
-                ctx.arc(x, y, innerRadius, endAngle, startAngle, true);
-              } else {
-                ctx.lineTo(x, y);
-              }
-              ctx.closePath();
-              let baseColor = chart.data.datasets[datasetIndex].backgroundColor[index];
-              ctx.fillStyle = darkenColor(baseColor, 20);
-              ctx.fill();
-              ctx.restore();
-            }
-          });
+          ctx.save();
+          ctx.shadowColor = options.shadowColor || "rgba(0, 0, 0, 0.5)";
+          ctx.shadowBlur = options.shadowBlur || 10;
+          ctx.shadowOffsetX = options.shadowOffsetX || 0;
+          ctx.shadowOffsetY = options.shadowOffsetY || 10;
+        },
+        afterDatasetDraw(chart, args, options) {
+          chart.ctx.restore();
         }
       };
 
@@ -1199,9 +1182,12 @@
                       color: "#e0e0e0"
                     }
                   },
-                  /* extrudeHeight set to 25 for a bigger 3D effect */
-                  extrudePlugin: {
-                    extrudeHeight: 25
+                  /* New drop shadow configuration */
+                  dropShadowPlugin: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 10,
+                    shadowColor: "rgba(0, 0, 0, 0.5)"
                   }
                 },
                 elements: {
@@ -1211,7 +1197,7 @@
                   }
                 }
               },
-              plugins: [extrudePlugin, legendMargin]
+              plugins: [dropShadowPlugin, legendMargin]
             });
           }
         }
