@@ -319,12 +319,9 @@
         border-radius: 4px;
         font-size: 0.85rem;
         display: none;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        text-align: center;
-        z-index: 10;
+        position: relative;
+        width: 100%;
+        text-align: left;
       }
       .summary-box .amount {
         font-size: 2rem;
@@ -481,7 +478,12 @@
         <!-- Row 2: Cost of a Case with Lookup Buttons -->
         <div class="form-row">
           <div class="form-group">
-            <label for="casePrice">Cost of a Case ($)</label>
+            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
+              Cost of a Case ($)
+            </label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
+            </div>
             <div class="input-button-group">
               <input
                 type="number"
@@ -557,7 +559,12 @@
         <div id="breakPricingOptionsMenu" style="display: none;">
           <div class="form-row small-input-row">
             <div class="form-group">
-              <label for="markup">Markup (%)</label>
+              <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
+                Markup (%)
+              </label>
+              <div class="toast input-tooltip" style="display:none;">
+                This is the markup a breaker will apply on top of the case cost. Most breaks require a 30% markup to make it worth the breaker's time.
+              </div>
               <input
                 type="text"
                 id="markup"
@@ -567,7 +574,12 @@
               />
             </div>
             <div class="form-group">
-              <label for="userDiscount">User Discount (%)</label>
+              <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
+                User Discount (%)
+              </label>
+              <div class="toast input-tooltip" style="display:none;">
+                This is the expected total discount a breaker might expect to give when accepting offers. This is blended for all teams.
+              </div>
               <input
                 type="text"
                 id="userDiscount"
@@ -577,7 +589,12 @@
               />
             </div>
             <div class="form-group">
-              <label for="blendedTax">Blended Tax (%)</label>
+              <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
+                Blended Tax (%)
+              </label>
+              <div class="toast input-tooltip" style="display:none;">
+                This is an estimated tax rate that changes by location. Transaction fees include tax. 5.1% is the average tax rate in the US.
+              </div>
               <input
                 type="text"
                 id="blendedTax"
@@ -587,7 +604,12 @@
               />
             </div>
             <div class="form-group">
-              <label for="supplies">Supplies per Order ($)</label>
+              <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
+                Supplies per Order ($)
+              </label>
+              <div class="toast input-tooltip" style="display:none;">
+                This is the expected average cost of supplies per order, per break. This includes things like penny sleeves, top loaders, and mailing supplies.
+              </div>
               <input
                 type="number"
                 id="supplies"
@@ -657,6 +679,14 @@
           menu.style.display = "block";
         } else {
           menu.style.display = "none";
+        }
+      }
+
+      // Toggle function for input tooltips
+      function toggleInputTooltip(labelElement) {
+        var tooltip = labelElement.nextElementSibling;
+        if (tooltip && tooltip.classList.contains('input-tooltip')) {
+          tooltip.style.display = (tooltip.style.display === 'block') ? 'none' : 'block';
         }
       }
 
