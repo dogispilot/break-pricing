@@ -379,6 +379,11 @@
         margin-right: 8px;
         border-radius: 50%;
       }
+      /* New rule: force team names (first column) to stay on one line */
+      #resultsTable th:first-child,
+      #resultsTable td:first-child {
+        white-space: nowrap;
+      }
       @media (max-width: 600px) {
         .form-row .form-group {
           min-width: 100%;
@@ -1185,8 +1190,8 @@
                   {
                     data: chartData,
                     backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
-                    /* Reduced offset for closer slices */
-                    offset: 10,
+                    /* Increased offset for more space between slices */
+                    offset: 30,
                     borderWidth: 0,
                     borderColor: "transparent"
                   }
@@ -1206,7 +1211,6 @@
                       color: "#e0e0e0"
                     }
                   },
-                  /* New drop shadow configuration */
                   dropShadowPlugin: {
                     shadowBlur: 10,
                     shadowOffsetX: 0,
