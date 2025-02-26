@@ -542,48 +542,56 @@
             </div>
           </div>
         </div>
-        <!-- Row 3: Grouped smaller inputs -->
-        <div class="form-row small-input-row">
+        <!-- Break Pricing Options Link -->
+        <div class="form-row">
           <div class="form-group">
-            <label for="markup">Markup (%)</label>
-            <input
-              type="text"
-              id="markup"
-              required
-              placeholder="Enter markup"
-              value="30%"
-            />
+            <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" style="color: #007bff; text-decoration: underline; font-family: 'BreakPricingFont', sans-serif;">Break Pricing Options</a>
           </div>
-          <div class="form-group">
-            <label for="userDiscount">User Discount (%)</label>
-            <input
-              type="text"
-              id="userDiscount"
-              required
-              placeholder="Enter discount"
-              value="0%"
-            />
-          </div>
-          <div class="form-group">
-            <label for="blendedTax">Blended Tax (%)</label>
-            <input
-              type="text"
-              id="blendedTax"
-              required
-              placeholder="Enter tax"
-              value="5.1%"
-            />
-          </div>
-          <div class="form-group">
-            <label for="supplies">Supplies per Order ($)</label>
-            <input
-              type="number"
-              id="supplies"
-              step="0.01"
-              required
-              placeholder="Enter supplies cost"
-              value="1"
-            />
+        </div>
+        <!-- Break Pricing Options Hidden Menu -->
+        <div id="breakPricingOptionsMenu" style="display: none;">
+          <div class="form-row small-input-row">
+            <div class="form-group">
+              <label for="markup">Markup (%)</label>
+              <input
+                type="text"
+                id="markup"
+                required
+                placeholder="Enter markup"
+                value="30%"
+              />
+            </div>
+            <div class="form-group">
+              <label for="userDiscount">User Discount (%)</label>
+              <input
+                type="text"
+                id="userDiscount"
+                required
+                placeholder="Enter discount"
+                value="0%"
+              />
+            </div>
+            <div class="form-group">
+              <label for="blendedTax">Blended Tax (%)</label>
+              <input
+                type="text"
+                id="blendedTax"
+                required
+                placeholder="Enter tax"
+                value="5.1%"
+              />
+            </div>
+            <div class="form-group">
+              <label for="supplies">Supplies per Order ($)</label>
+              <input
+                type="number"
+                id="supplies"
+                step="0.01"
+                required
+                placeholder="Enter supplies cost"
+                value="1"
+              />
+            </div>
           </div>
         </div>
       </form>
@@ -638,6 +646,15 @@
     <!-- Include Chart.js at the end so we can use it -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      function toggleBreakPricingOptions() {
+        var menu = document.getElementById("breakPricingOptionsMenu");
+        if (menu.style.display === "none" || menu.style.display === "") {
+          menu.style.display = "block";
+        } else {
+          menu.style.display = "none";
+        }
+      }
+
       let setData = [];
       let keyPlayersData = [];
       let pieChart;
