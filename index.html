@@ -83,7 +83,6 @@
       }
       #teamPricesHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
-        /* Added extra top margin to create space from the chart area */
         margin-top: 40px;
       }
       .small-copy {
@@ -189,7 +188,6 @@
         transform: scale(1.05);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
-      /* Updated Key Rookies Section styles */
       #keyPlayersSection {
         margin-top: 30px;
         padding: 15px;
@@ -204,7 +202,6 @@
       .key-player-tiles-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        /* Reduced row-gap to move second row up */
         row-gap: 5px;
         column-gap: 30px;
         justify-items: center;
@@ -244,14 +241,11 @@
         font-size: 0.9rem;
         color: #bbb;
       }
-      /* Chart and pricing table styles */
       .chart-summary-container {
         display: flex;
         gap: 20px;
         margin-top: 30px;
-        /* Added bottom margin to create space before the distribution header */
         margin-bottom: 30px;
-        /* Change alignment so both children (chart and boxes) start at the top */
         align-items: flex-start;
       }
       #chartContainer {
@@ -263,7 +257,6 @@
         box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
         position: relative;
       }
-      /* New message overlay for the pie chart */
       #pieChartMessage {
         display: none;
         position: absolute;
@@ -422,7 +415,6 @@
         box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
       }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="container">
@@ -587,16 +579,15 @@
             />
           </div>
         </div>
-        <!-- The Calculate button has been removed since calculations are auto-triggered -->
       </form>
 
-      <!-- New Key Rookies Section -->
+      <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
         <h2>Key Rookies</h2>
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
 
-      <!-- New container for pie chart and summary boxes -->
+      <!-- Chart and summary boxes -->
       <div class="chart-summary-container">
         <div id="chartContainer">
           <canvas id="pieChart"></canvas>
@@ -631,23 +622,23 @@
 
       <!-- Distribution Section -->
       <h2 id="teamPricesHeader" style="display: none;">Card Distribution by Team</h2>
-      <p class="small-copy" id="distributionCopy" style="display: none;">Teams with key rookies for the selected year are highlighted.</p>
+      <p class="small-copy" id="distributionCopy" style="display: none;">
+        Teams with key rookies for the selected year are highlighted.
+      </p>
       <div id="results"></div>
     </div>
 
+    <!-- Include Chart.js at the end so we can use it -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Global variables
       let setData = [];
       let keyPlayersData = [];
       let pieChart;
       let tableData = [];
       let currentSortedColumn = -1;
-      // Set to track teams that have a chase player (rookie) shown
       let highlightTeams = new Set();
       const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1 };
 
-      // Utility function to parse percentage inputs.
       function parsePercentage(value) {
         value = value.toString().replace("%", "").trim();
         let num = parseFloat(value);
@@ -656,31 +647,26 @@
         return num;
       }
 
-      // Helper function to darken a hex color by a given percentage.
       function darkenColor(color, percent) {
-        // assume color in format "#RRGGBB"
         let num = parseInt(color.slice(1), 16);
         let r = Math.max((num >> 16) - Math.round((num >> 16) * (percent/100)), 0);
-        let g = Math.max(((num >> 8) & 0x00FF) - Math.round((((num >> 8) & 0x00FF) * (percent/100))), 0);
-        let b = Math.max((num & 0x0000FF) - Math.round((num & 0x0000FF) * (percent/100)), 0);
+        let g = Math.max(((num >> 8) & 0xff) - Math.round((((num >> 8) & 0xff) * (percent/100))), 0);
+        let b = Math.max((num & 0xff) - Math.round((num & 0xff) * (percent/100)), 0);
         return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
       }
 
-      // Custom plugin to simulate 3D extrusion of pie slices.
       const extrudePlugin = {
-        id: 'extrudePlugin',
+        id: "extrudePlugin",
         beforeDatasetDraw(chart, args, options) {
           const ctx = chart.ctx;
           const datasetIndex = args.index;
           const meta = chart.getDatasetMeta(datasetIndex);
-          const extrudeHeight = options.extrudeHeight || 10;
+          const extrudeHeight = options.extrudeHeight || 25;
           meta.data.forEach((arc, index) => {
-            // Get properties of the arc.
             const { x, y, outerRadius, innerRadius, startAngle, endAngle } = arc.getProps(
-              ['x', 'y', 'outerRadius', 'innerRadius', 'startAngle', 'endAngle'],
+              ["x", "y", "outerRadius", "innerRadius", "startAngle", "endAngle"],
               true
             );
-            // Draw multiple layers offset downward to simulate height.
             for (let i = extrudeHeight; i > 0; i--) {
               ctx.save();
               ctx.translate(0, i);
@@ -693,7 +679,6 @@
                 ctx.lineTo(x, y);
               }
               ctx.closePath();
-              // Use a darkened version of the slice's background color.
               let baseColor = chart.data.datasets[datasetIndex].backgroundColor[index];
               ctx.fillStyle = darkenColor(baseColor, 20);
               ctx.fill();
@@ -703,24 +688,19 @@
         }
       };
 
-      // New custom plugin to add margin between the pie chart and the legend.
       const legendMargin = {
-        id: 'legendMargin',
+        id: "legendMargin",
         beforeInit(chart) {
-          chart.legend.afterFit = function() {
-            this.height += 20; // add 20px margin below the legend
+          chart.legend.afterFit = function () {
+            this.height += 20;
           };
         }
       };
 
-      // Populate the year selector with unique years in descending order.
       function populateYearSelector() {
         const yearSelect = document.getElementById("yearSelect");
-        yearSelect.innerHTML =
-          '<option value="">--Select a Year--</option>';
-        const years = [
-          ...new Set(setData.map((set) => set.year)),
-        ].sort((a, b) => {
+        yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
+        const years = [...new Set(setData.map((set) => set.year))].sort((a, b) => {
           const yearA = parseInt(a.split("-")[0], 10);
           const yearB = parseInt(b.split("-")[0], 10);
           return yearB - yearA;
@@ -738,16 +718,12 @@
         });
       }
 
-      // Populate the set selector based on the selected year.
       function populateSetSelector() {
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
-        setSelect.innerHTML =
-          '<option value="">--Select Set--</option>';
+        setSelect.innerHTML = '<option value="">--Select Set--</option>';
         if (!selectedYear) return;
-        const filteredSets = setData.filter(
-          (set) => set.year === selectedYear
-        );
+        const filteredSets = setData.filter((set) => set.year === selectedYear);
         filteredSets.sort((a, b) => a.name.localeCompare(b.name));
         filteredSets.forEach((set) => {
           const option = document.createElement("option");
@@ -757,23 +733,17 @@
         });
       }
 
-      // Update the "Cost of a Case" field when a set is selected.
       function updateCasePrice() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
         if (!selectedYear || !selectedSet) return;
-        const setObj = setData.find(
-          (set) => set.year === selectedYear && set.name === selectedSet
-        );
+        const setObj = setData.find((set) => set.year === selectedYear && set.name === selectedSet);
         if (setObj && setObj.price) {
-          const priceValue = parseFloat(
-            setObj.price.replace(/[$,]/g, "")
-          );
+          const priceValue = parseFloat(setObj.price.replace(/[$,]/g, ""));
           document.getElementById("casePrice").value = priceValue;
         }
       }
 
-      // New function: Opens an eBay search for the given player name using the set year and set name.
       function openPlayerEbaySearch(playerName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -790,19 +760,16 @@
         window.open(url, "_blank");
       }
 
-      // Update Key Rookies Section based on selected year, including only rookies.
       function updateKeyPlayersSection() {
         const selectedYear = document.getElementById("yearSelect").value;
         const keySection = document.getElementById("keyPlayersSection");
         const tilesContainer = document.getElementById("keyPlayerTiles");
-        // Clear previous tiles and reset highlightTeams
         tilesContainer.innerHTML = "";
         highlightTeams.clear();
         if (!selectedYear) {
           keySection.style.display = "none";
           return;
         }
-        // Filter players whose setYear matches the selected year or is "All", and only include rookies.
         const filteredPlayers = keyPlayersData.filter(
           (player) =>
             (player.setYear === selectedYear || player.setYear === "All") &&
@@ -813,23 +780,19 @@
           return;
         }
         keySection.style.display = "block";
-        // Populate highlightTeams set from filtered players
         filteredPlayers.forEach((player) => {
           highlightTeams.add(player.team);
         });
-        // Create a tile for each key player
         filteredPlayers.forEach((player) => {
           const tile = document.createElement("div");
           tile.className = "key-player-tile";
 
-          // Team logo image – using your teamLogos mapping
           const teamLogo = document.createElement("img");
           teamLogo.className = "team-logo";
           teamLogo.src = teamLogos[player.team] || "";
           teamLogo.alt = player.team + " logo";
           tile.appendChild(teamLogo);
 
-          // Player image wrapped in a link to the profile
           const profileLink = document.createElement("a");
           profileLink.href = player.profile_link;
           profileLink.target = "_blank";
@@ -840,10 +803,9 @@
           profileLink.appendChild(playerImg);
           tile.appendChild(profileLink);
 
-          // Info container with name, notes, and eBay link.
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
-          
+
           const nameLine = document.createElement("div");
           const nameLink = document.createElement("a");
           nameLink.href = player.profile_link;
@@ -853,12 +815,12 @@
           nameLink.textContent = player.player;
           nameLine.appendChild(nameLink);
           infoDiv.appendChild(nameLine);
-          
+
           const notesLine = document.createElement("div");
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
-          
+
           const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
@@ -870,7 +832,7 @@
           shareImg.alt = "Share";
           shareImg.className = "link-icon";
           ebayLink.appendChild(shareImg);
-          
+
           const ebayImg = document.createElement("img");
           ebayImg.src =
             "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
@@ -879,13 +841,12 @@
           ebayLink.appendChild(ebayImg);
           ebayLine.appendChild(ebayLink);
           infoDiv.appendChild(ebayLine);
-          
+
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
         });
       }
 
-      // Mapping of team names to logo URLs.
       const teamLogos = {
         "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
         "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
@@ -979,7 +940,7 @@
           encodeURIComponent(query);
         window.open(url, "_blank");
       }
-      
+
       function openHockeyChecklistsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
@@ -1055,7 +1016,7 @@
           encodeURIComponent(query);
         window.open(url, "_blank");
       }
-      
+
       function openTeamSearch(teamName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1064,15 +1025,14 @@
           return;
         }
         const firstYear = selectedYear.split("-")[0];
-        const query =
-          firstYear + " " + selectedSet + " " + teamName;
+        const query = firstYear + " " + selectedSet + " " + teamName;
         const url =
           "https://www.ebay.com/sch/i.html?_nkw=" +
           encodeURIComponent(query) +
           "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
         window.open(url, "_blank");
       }
-      
+
       function calculateProfit() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSetName = document.getElementById("setSelect").value;
@@ -1080,7 +1040,6 @@
         const pieChartCanvas = document.getElementById("pieChart");
         const pieChartMessage = document.getElementById("pieChartMessage");
 
-        // If no year or set is selected, show the message and return.
         if (!selectedYear || !selectedSetName) {
           chartContainer.style.display = "block";
           pieChartCanvas.style.display = "none";
@@ -1088,21 +1047,15 @@
           return;
         }
 
-        const casePrice = parseFloat(
-          document.getElementById("casePrice").value
-        );
-        const markup = parsePercentage(
-          document.getElementById("markup").value
-        );
+        const casePrice = parseFloat(document.getElementById("casePrice").value);
+        const markup = parsePercentage(document.getElementById("markup").value);
         const userDiscount = parsePercentage(
           document.getElementById("userDiscount").value
         );
         const blendedTax = parsePercentage(
           document.getElementById("blendedTax").value
         );
-        const supplies = parseFloat(
-          document.getElementById("supplies").value
-        );
+        const supplies = parseFloat(document.getElementById("supplies").value);
 
         if (
           isNaN(casePrice) ||
@@ -1117,9 +1070,7 @@
         const setObj = setData.find(
           (set) => set.year === selectedYear && set.name === selectedSetName
         );
-        if (!setObj) {
-          return;
-        }
+        if (!setObj) return;
 
         const teamData = setObj.cards || setObj.most_numbered_cards;
         let totalCards = 0;
@@ -1134,11 +1085,10 @@
           const rawPrice = cost * (1 + markup);
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
-          const transactionFees =
-            (price * (1 + blendedTax)) * 0.029 + 0.30;
-          const profit = price - cost - whatnotFees - transactionFees - supplies;
-          const distribution =
-            ((count / totalCards) * 100).toFixed(1) + "%";
+          const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
+          const profit =
+            price - cost - whatnotFees - transactionFees - supplies;
+          const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
 
           rows.push({
             team: team,
@@ -1149,33 +1099,25 @@
             price: price,
             whatnotFees: whatnotFees,
             transactionFees: transactionFees,
-            profit: profit,
+            profit: profit
           });
         }
 
-        const totalProfit = rows.reduce(
-          (sum, row) => sum + row.profit,
-          0
-        );
+        const totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
         const totalWhatnotsCut = rows.reduce(
           (sum, row) => sum + row.whatnotFees,
           0
         );
         const totalCostOfBusiness =
-          rows.reduce(
-            (sum, row) => sum + row.transactionFees,
-            0
-          ) + rows.length * supplies;
+          rows.reduce((sum, row) => sum + row.transactionFees, 0) +
+          rows.length * supplies;
 
-        document.querySelector(
-          "#totalProfitBox .amount"
-        ).textContent = "$" + totalProfit.toFixed(2);
-        document.querySelector(
-          "#whatnotsCutBox .amount"
-        ).textContent = "$" + totalWhatnotsCut.toFixed(2);
-        document.querySelector(
-          "#costOfBusinessBox .amount"
-        ).textContent = "$" + totalCostOfBusiness.toFixed(2);
+        document.querySelector("#totalProfitBox .amount").textContent =
+          "$" + totalProfit.toFixed(2);
+        document.querySelector("#whatnotsCutBox .amount").textContent =
+          "$" + totalWhatnotsCut.toFixed(2);
+        document.querySelector("#costOfBusinessBox .amount").textContent =
+          "$" + totalCostOfBusiness.toFixed(2);
 
         let resultsHtml = '<table id="resultsTable">';
         resultsHtml += "<thead><tr>";
@@ -1202,33 +1144,21 @@
         document.getElementById("results").innerHTML = resultsHtml;
 
         if (rows.length > 0) {
-          document.getElementById("teamPricesHeader").style.display =
-            "block";
-          document.getElementById("distributionCopy").style.display =
-            "block";
+          document.getElementById("teamPricesHeader").style.display = "block";
+          document.getElementById("distributionCopy").style.display = "block";
         } else {
-          document.getElementById("teamPricesHeader").style.display =
-            "none";
-          document.getElementById("distributionCopy").style.display =
-            "none";
+          document.getElementById("teamPricesHeader").style.display = "none";
+          document.getElementById("distributionCopy").style.display = "none";
         }
 
         tableData = rows;
 
-        const chartData = [
-          totalProfit,
-          totalWhatnotsCut,
-          totalCostOfBusiness,
-        ];
-
-        // Always display the chart container
+        const chartData = [totalProfit, totalWhatnotsCut, totalCostOfBusiness];
         chartContainer.style.display = "block";
         if (chartData.every((val) => val === 0)) {
-          // Hide canvas and show message when there's no data.
           pieChartCanvas.style.display = "none";
           pieChartMessage.style.display = "flex";
         } else {
-          // Show canvas, hide message, and update/create chart.
           pieChartCanvas.style.display = "block";
           pieChartMessage.style.display = "none";
           if (pieChart) {
@@ -1242,37 +1172,36 @@
                 labels: [
                   "Breaker's Profit",
                   "Whatnot's Cut",
-                  "Cost of Business",
+                  "Cost of Business"
                 ],
                 datasets: [
                   {
                     data: chartData,
-                    backgroundColor: [
-                      "#2e7d32",
-                      "#bfa600",
-                      "#007bff",
-                    ],
-                    // Increase offset to pull slices further apart
-                    offset: 20,
+                    backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
+                    /* offset set to 50 for an extremely exploded pie */
+                    offset: 50,
                     borderWidth: 0,
                     borderColor: "transparent"
-                  },
-                ],
+                  }
+                ]
               },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 layout: {
-                  // We remove extra padding here so the legend margin plugin can take effect.
                   padding: { bottom: 0 }
                 },
                 plugins: {
                   legend: {
                     position: "bottom",
-                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" }
+                    labels: {
+                      font: { family: "BreakPricingFont" },
+                      color: "#e0e0e0"
+                    }
                   },
+                  /* extrudeHeight set to 25 for a bigger 3D effect */
                   extrudePlugin: {
-                    extrudeHeight: 10
+                    extrudeHeight: 25
                   }
                 },
                 elements: {
@@ -1291,14 +1220,9 @@
       function renderRows(arr) {
         let html = "";
         arr.forEach((row) => {
-          let highlightClass = highlightTeams.has(row.team)
-            ? "highlight"
-            : "";
+          let highlightClass = highlightTeams.has(row.team) ? "highlight" : "";
           html += `<tr class="${highlightClass}">`;
-          html +=
-            '<td><a href="#" onclick="openTeamSearch(\'' +
-            row.team +
-            '\')" style="color: inherit; text-decoration: none;">';
+          html += `<td><a href="#" onclick="openTeamSearch('${row.team}')" style="color: inherit; text-decoration: none;">`;
           html += row.logo
             ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">`
             : "";
@@ -1308,13 +1232,13 @@
           html +=
             '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
           html += "</a></td>";
-          html += "<td>" + row.count + "</td>";
-          html += "<td>" + row.distribution + "</td>";
-          html += "<td>$" + row.cost.toFixed(2) + "</td>";
-          html += "<td>$" + row.price.toFixed(2) + "</td>";
-          html += "<td>$" + row.whatnotFees.toFixed(2) + "</td>";
-          html += "<td>$" + row.transactionFees.toFixed(2) + "</td>";
-          html += "<td>$" + row.profit.toFixed(2) + "</td>";
+          html += `<td>${row.count}</td>`;
+          html += `<td>${row.distribution}</td>`;
+          html += `<td>$${row.cost.toFixed(2)}</td>`;
+          html += `<td>$${row.price.toFixed(2)}</td>`;
+          html += `<td>$${row.whatnotFees.toFixed(2)}</td>`;
+          html += `<td>$${row.transactionFees.toFixed(2)}</td>`;
+          html += `<td>$${row.profit.toFixed(2)}</td>`;
           html += "</tr>";
         });
         return html;
@@ -1379,15 +1303,11 @@
         });
       });
 
-      // Remove the submit event listener since we recalc on input/change
-      // Add event listeners to auto-trigger calculation on any input or select change.
       window.addEventListener("load", function () {
         fetch("config.json")
           .then((response) => {
             if (!response.ok) {
-              throw new Error(
-                "Network response was not ok: " + response.statusText
-              );
+              throw new Error("Network response was not ok: " + response.statusText);
             }
             return response.json();
           })
@@ -1399,19 +1319,15 @@
             setData = jsonData.sets;
             keyPlayersData = jsonData["Key Players"] || [];
             populateYearSelector();
-            document
-              .getElementById("setSelect")
-              .addEventListener("change", function() {
-                updateCasePrice();
-                calculateProfit();
-              });
-            // Add auto-calc listeners to all form inputs and selects.
+            document.getElementById("setSelect").addEventListener("change", function () {
+              updateCasePrice();
+              calculateProfit();
+            });
             const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
             calcInputs.forEach((input) => {
               input.addEventListener("input", calculateProfit);
               input.addEventListener("change", calculateProfit);
             });
-            // Call calculateProfit once on load to display the initial message.
             calculateProfit();
           })
           .catch((error) => {
