@@ -81,6 +81,14 @@
         color: #e0e0e0;
         margin-top: 0;
       }
+      /* New rule: reduce space below the "Key Rookies" title */
+      #keyPlayersSection h2 {
+        margin-bottom: 0.5rem;
+      }
+      /* New rule: bring the distribution copy closer to its header */
+      #distributionCopy {
+        margin-top: 0;
+      }
       #teamPricesHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
         margin-top: 40px;
@@ -195,7 +203,6 @@
         border-radius: 8px;
       }
       #keyPlayersSection h2 {
-        margin-top: 0;
         text-align: center;
         font-family: 'BreakPricingFontBold', sans-serif;
       }
@@ -1109,17 +1116,17 @@
         resultsHtml +=
           '<th data-sort="number" onclick="sortTable(1)">Numbered Cards</th>';
         resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(2)">Distribution</th>';
+          '<th data-sort="number" onclick="sortTable(2)">Card Distribution</th>';
         resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(3)">Cost</th>';
+          '<th data-sort="number" onclick="sortTable(3)">Distributed Cost</th>';
         resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(4)">Price</th>';
+          '<th data-sort="number" onclick="sortTable(4)">Distributed Price</th>';
         resultsHtml +=
           '<th data-sort="number" onclick="sortTable(5)">Whatnot Fees</th>';
         resultsHtml +=
           '<th data-sort="number" onclick="sortTable(6)">Transaction Fees</th>';
         resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(7)">Profit</th>';
+          '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
         resultsHtml += "</tr></thead><tbody>";
 
         const tbodyHtml = renderRows(rows);
@@ -1161,8 +1168,8 @@
                   {
                     data: chartData,
                     backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
-                    /* offset set to 50 for an extremely exploded pie */
-                    offset: 50,
+                    /* Reduced offset for closer slices */
+                    offset: 10,
                     borderWidth: 0,
                     borderColor: "transparent"
                   }
