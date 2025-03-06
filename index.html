@@ -635,6 +635,7 @@
     <!-- Include Chart.js at the end so we can use it -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      // Toggle the break pricing options menu
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         if (menu.style.display === "none" || menu.style.display === "") {
@@ -658,6 +659,8 @@
       let tableData = [];
       let currentSortedColumn = -1;
       const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1 };
+      // Re-add highlightTeams to support key rookies display
+      let highlightTeams = new Set();
 
       function parsePercentage(value) {
         value = value.toString().replace("%", "").trim();
@@ -748,8 +751,6 @@
       }
 
       // Updated: Update set details information.
-      // The newBoxes-container now includes a rookie percentage detail box (placed to the left of Boxes per case),
-      // and all detail boxes are rendered above the release date.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -765,31 +766,24 @@
         }
         let html = "";
         
-        // New detail boxes container (all boxes appear above the release date)
+        // New detail boxes container
         html += '<div class="newBoxes-container">';
-        // Rookie Percentage box (new detail box added to the left)
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.rookie_percentage || "N/A") + '</div><div class="detail-label">Rookie Percentage</div></div>';
-        // Boxes per case
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.boxes_per_case || "N/A") + '</div><div class="detail-label">Boxes per case</div></div>';
-        // Packs per box
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.packs_per_box || "N/A") + '</div><div class="detail-label">Packs per box</div></div>';
-        // Cards per pack
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.cards_per_pack || "N/A") + '</div><div class="detail-label">Cards per pack</div></div>';
-        // Cards per box: packs_per_box * cards_per_pack
         let cardsPerBox = "N/A";
         if (setObj.packs_per_box && setObj.cards_per_pack) {
           cardsPerBox = setObj.packs_per_box * setObj.cards_per_pack;
         }
         html += '<div class="detail-box"><div class="detail-value">' + cardsPerBox + '</div><div class="detail-label">Cards per box</div></div>';
-        // Cards per case: packs_per_box * cards_per_pack * boxes_per_case
         let cardsPerCase = "N/A";
         if (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) {
           cardsPerCase = setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case;
         }
         html += '<div class="detail-box"><div class="detail-value">' + cardsPerCase + '</div><div class="detail-label">Cards per case</div></div>';
-        html += '</div>'; // close newBoxes-container
+        html += '</div>';
         
-        // Basic info (placed below the detail boxes)
         html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
         html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
         html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
@@ -1070,6 +1064,7 @@
         window.open(url, "_blank");
       }
 
+      // Modified openTeamSearch to be used by table links
       function openTeamSearch(teamName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1173,7 +1168,7 @@
 
         const tbodyHtml = rows.map(row => {
           return `<tr>
-            <td>${row.team}</td>
+            <td><a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')"><img src="${row.logo}" alt="${row.team}" style="width:20px; vertical-align:middle; margin-right:5px;">${row.team}</a></td>
             <td>${row.count}</td>
             <td>${row.distribution}</td>
             <td>$${row.cost.toFixed(2)}</td>
@@ -1261,7 +1256,7 @@
         }
       }
 
-      // Added sortTable function to fix table header clicks causing errors.
+      // Added sortTable function to fix header clicks causing errors.
       function sortTable(n) {
         const table = document.getElementById("resultsTable");
         const tbody = table.tBodies[0];
