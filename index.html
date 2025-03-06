@@ -444,6 +444,7 @@
         justify-content: space-between;
         gap: 10px;
         margin-top: 15px;
+        margin-bottom: 15px;
       }
       .detail-box {
         background: #1e1e1e;
@@ -747,9 +748,9 @@
         }
       }
 
-      // New: Update set details information.
-      // Basic info: rookie_percentage, release_date, box_breakdown (moved below release_date), and notes (each on its own line).
-      // Then create 5 new boxes using the new JSON fields.
+      // Updated: Update set details information.
+      // The newBoxes-container now includes a rookie percentage detail box (placed to the left of Boxes per case),
+      // and all detail boxes are rendered above the release date.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -764,17 +765,14 @@
           return;
         }
         let html = "";
-        // Basic info (each on separate line)
-        html += "<p><strong>Rookie Percentage:</strong> " + (setObj.rookie_percentage || "N/A") + "</p>";
-        html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
-        html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
-        html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
         
-        // New 5 boxes section
+        // New detail boxes container (all boxes appear above the release date)
         html += '<div class="newBoxes-container">';
+        // Rookie Percentage box (new detail box added to the left)
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.rookie_percentage || "N/A") + '</div><div class="detail-label">Rookie Percentage</div></div>';
         // Boxes per case
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.boxes_per_case || "N/A") + '</div><div class="detail-label">Boxes per case</div></div>';
-        // Packs per box (updated to use packs_per_box)
+        // Packs per box
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.packs_per_box || "N/A") + '</div><div class="detail-label">Packs per box</div></div>';
         // Cards per pack
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.cards_per_pack || "N/A") + '</div><div class="detail-label">Cards per pack</div></div>';
@@ -792,6 +790,11 @@
         html += '<div class="detail-box"><div class="detail-value">' + cardsPerCase + '</div><div class="detail-label">Cards per case</div></div>';
         html += '</div>'; // close newBoxes-container
         
+        // Basic info (placed below the detail boxes)
+        html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
+        html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
+        html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
+
         detailsDiv.innerHTML = html;
       }
 
