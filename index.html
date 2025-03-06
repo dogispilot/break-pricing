@@ -331,15 +331,30 @@
         width: 100%;
         text-align: left;
       }
-      .summary-box .amount {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 0.25em;
-        font-family: 'BreakPricingFontBold', sans-serif;
+      /* Updated detail-box styling */
+      .detail-box {
+        background: #1e1e1e;
+        padding: 15px;
+        border-radius: 8px;
+        flex: 1;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        display: flex;
+        flex-direction: column;
       }
-      .summary-box .label {
-        font-size: 1rem;
-        font-weight: 400;
+      /* Increase the value font size and weight */
+      .detail-box .detail-value {
+        font-size: 1.8rem;
+        font-weight: 900;
+        margin-bottom: 5px;
+        color: #e0e0e0;
+      }
+      /* Reduce the label font size and anchor it to the bottom */
+      .detail-box .detail-label {
+        font-size: 0.8rem;
+        color: #bbb;
+        text-align: center;
+        margin-top: auto;
       }
       .link-icon {
         width: 16px;
@@ -445,28 +460,6 @@
         gap: 10px;
         margin-top: 15px;
         margin-bottom: 15px;
-      }
-      .detail-box {
-        background: #1e1e1e;
-        padding: 15px;
-        border-radius: 8px;
-        flex: 1;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      }
-      .detail-box .detail-value {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #e0e0e0;
-      }
-      .detail-box .detail-label {
-        font-size: 1rem;
-        color: #bbb;
-        text-align: center;
-      }
-      .setDetails-bottom p {
-        margin: 5px 0;
       }
     </style>
   </head>
@@ -587,6 +580,7 @@
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
+        <!-- The header text will include the selected year -->
         <h2>Key Rookies</h2>
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
@@ -717,6 +711,11 @@
           option.textContent = year;
           yearSelect.appendChild(option);
         });
+        // Set default year to "2024-25" if it exists
+        if (years.includes("2024-25")) {
+          yearSelect.value = "2024-25";
+          yearSelect.dispatchEvent(new Event("change"));
+        }
         yearSelect.addEventListener("change", function () {
           populateSetSelector();
           updateKeyPlayersSection();
@@ -817,6 +816,8 @@
           keySection.style.display = "none";
           return;
         }
+        // Prepend the selected year to the header text
+        document.querySelector("#keyPlayersSection h2").textContent = selectedYear + " Key Rookies";
         const filteredPlayers = keyPlayersData.filter(
           (player) =>
             (player.setYear === selectedYear || player.setYear === "All") &&
