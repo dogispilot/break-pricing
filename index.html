@@ -431,6 +431,28 @@
       .glow-hockeychecklists:hover {
         box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
       }
+      /* New: Set Details Container */
+      .setDetails-container {
+        background-color: #2c2c2c;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      .setDetails-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .setDetail-item {
+        flex: 1;
+        margin-right: 10px;
+      }
+      .setDetail-item:last-child {
+        margin-right: 0;
+      }
+      .setDetails-bottom p {
+        margin: 5px 0;
+      }
     </style>
   </head>
   <body>
@@ -546,7 +568,7 @@
         </div>
       </form>
 
-      <!-- New: Set Details Section -->
+      <!-- New: Set Details Container -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -711,7 +733,7 @@
         }
       }
 
-      // New: Update set details information with bold headers and separate lines
+      // New: Update set details information in its own container with sub-containers
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -725,13 +747,17 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        let detailsHTML = "";
-        detailsHTML += "<p><strong>Rookie Percentage:</strong><br>" + (setObj.rookie_percentage || "N/A") + "</p>";
-        detailsHTML += "<p><strong>Release Date:</strong><br>" + (setObj.release_date || "N/A") + "</p>";
-        detailsHTML += "<p><strong>Configuration:</strong><br>" + (setObj.configuration || "N/A") + "</p>";
-        detailsHTML += "<p><strong>Box Breakdown:</strong><br>" + (setObj.box_breakdown || "N/A") + "</p>";
-        detailsHTML += "<p><strong>Notes:</strong><br>" + (setObj.notes || "N/A") + "</p>";
-        detailsDiv.innerHTML = detailsHTML;
+        let html = '<div class="setDetails-container">';
+        html += '<div class="setDetails-top">';
+        html += '<div class="setDetail-item"><strong>Rookie Percentage:</strong> <span>' + (setObj.rookie_percentage || "N/A") + '</span></div>';
+        html += '<div class="setDetail-item"><strong>Release Date:</strong> <span>' + (setObj.release_date || "N/A") + '</span></div>';
+        html += '<div class="setDetail-item"><strong>Configuration:</strong> <span>' + (setObj.configuration || "N/A") + '</span></div>';
+        html += '</div>';
+        html += '<div class="setDetails-bottom">';
+        html += '<p><strong>Box Breakdown:</strong> ' + (setObj.box_breakdown || "N/A") + '</p>';
+        html += '<p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + '</p>';
+        html += '</div></div>';
+        detailsDiv.innerHTML = html;
       }
 
       function openPlayerEbaySearch(playerName) {
