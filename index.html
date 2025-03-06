@@ -736,11 +736,7 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-        // Automatically select the first available set (if any)
-        if (setSelect.options.length > 1) {
-          setSelect.value = setSelect.options[1].value;
-          setSelect.dispatchEvent(new Event("change"));
-        }
+        // DO NOT auto-select a set on load.
       }
 
       function updateCasePrice() {
