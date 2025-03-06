@@ -431,6 +431,43 @@
       .glow-hockeychecklists:hover {
         box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
       }
+      /* New: Set Details Container */
+      .setDetails-container {
+        background-color: #2c2c2c;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      /* New: New Boxes Container for the 5 new boxes */
+      .newBoxes-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+      .detail-box {
+        background: #1e1e1e;
+        padding: 15px;
+        border-radius: 8px;
+        flex: 1;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      }
+      .detail-box .detail-value {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #e0e0e0;
+      }
+      .detail-box .detail-label {
+        font-size: 1rem;
+        color: #bbb;
+        text-align: center;
+      }
+      .setDetails-bottom p {
+        margin: 5px 0;
+      }
     </style>
   </head>
   <body>
@@ -472,47 +509,47 @@
             </button>
           </div>
         </div>
-        <!-- Row 2: Cost of a Case with Lookup Buttons -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
-            <!-- Reduced width tooltip for Cost of a Case -->
-            <div class="toast input-tooltip" style="display:none; max-width:300px;">
-              This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
-            </div>
-            <div class="input-button-group">
-              <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
-              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
-                Dave &amp; Adams
-              </button>
-              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
-                Steel City
-              </button>
-              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
-                Midwest Cards
-              </button>
-              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
-                Blowout Cards
-              </button>
-              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo" />
-                Out of the Box
-              </button>
-            </div>
-          </div>
-        </div>
         <!-- Break Pricing Options Link -->
         <div class="form-row">
           <div class="form-group">
             <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" style="color: #007bff; text-decoration: underline; font-family: 'BreakPricingFont', sans-serif;">Break Pricing Options</a>
           </div>
         </div>
-        <!-- Break Pricing Options Hidden Menu -->
+        <!-- Break Pricing Options Hidden Menu with Cost of a Case and Markup Options -->
         <div id="breakPricingOptionsMenu" style="display: none;">
+          <!-- Cost of a Case Section -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
+              <div class="toast input-tooltip" style="display:none; max-width:300px;">
+                This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
+              </div>
+              <div class="input-button-group">
+                <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
+                <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
+                  <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
+                  Dave &amp; Adams
+                </button>
+                <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
+                  <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
+                  Steel City
+                </button>
+                <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
+                  <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
+                  Midwest Cards
+                </button>
+                <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
+                  <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
+                  Blowout Cards
+                </button>
+                <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
+                  <img src="resources/ootb.png" alt="Out of the Box Logo" />
+                  Out of the Box
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Markup and Other Pricing Options -->
           <div class="form-row small-input-row">
             <div class="form-group">
               <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
@@ -546,7 +583,7 @@
         </div>
       </form>
 
-      <!-- New: Set Details Section -->
+      <!-- New: Set Details Container -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -620,7 +657,6 @@
       let pieChart;
       let tableData = [];
       let currentSortedColumn = -1;
-      let highlightTeams = new Set();
       const sortDirections = { 0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1 };
 
       function parsePercentage(value) {
@@ -711,7 +747,9 @@
         }
       }
 
-      // New: Update set details information
+      // Updated: Update set details information.
+      // The newBoxes-container now includes a rookie percentage detail box (placed to the left of Boxes per case),
+      // and all detail boxes are rendered above the release date.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -725,13 +763,38 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        let detailsHTML = "";
-        detailsHTML += "<p>Rookie Percentage: " + (setObj.rookie_percentage || "N/A") + "</p>";
-        detailsHTML += "<p>Release Date: " + (setObj.release_date || "N/A") + "</p>";
-        detailsHTML += "<p>Configuration: " + (setObj.configuration || "N/A") + "</p>";
-        detailsHTML += "<p>Box Breakdown: " + (setObj.box_breakdown || "N/A") + "</p>";
-        detailsHTML += "<p>Notes: " + (setObj.notes || "N/A") + "</p>";
-        detailsDiv.innerHTML = detailsHTML;
+        let html = "";
+        
+        // New detail boxes container (all boxes appear above the release date)
+        html += '<div class="newBoxes-container">';
+        // Rookie Percentage box (new detail box added to the left)
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.rookie_percentage || "N/A") + '</div><div class="detail-label">Rookie Percentage</div></div>';
+        // Boxes per case
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.boxes_per_case || "N/A") + '</div><div class="detail-label">Boxes per case</div></div>';
+        // Packs per box
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.packs_per_box || "N/A") + '</div><div class="detail-label">Packs per box</div></div>';
+        // Cards per pack
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.cards_per_pack || "N/A") + '</div><div class="detail-label">Cards per pack</div></div>';
+        // Cards per box: packs_per_box * cards_per_pack
+        let cardsPerBox = "N/A";
+        if (setObj.packs_per_box && setObj.cards_per_pack) {
+          cardsPerBox = setObj.packs_per_box * setObj.cards_per_pack;
+        }
+        html += '<div class="detail-box"><div class="detail-value">' + cardsPerBox + '</div><div class="detail-label">Cards per box</div></div>';
+        // Cards per case: packs_per_box * cards_per_pack * boxes_per_case
+        let cardsPerCase = "N/A";
+        if (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) {
+          cardsPerCase = setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case;
+        }
+        html += '<div class="detail-box"><div class="detail-value">' + cardsPerCase + '</div><div class="detail-label">Cards per case</div></div>';
+        html += '</div>'; // close newBoxes-container
+        
+        // Basic info (placed below the detail boxes)
+        html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
+        html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
+        html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
+
+        detailsDiv.innerHTML = html;
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1108,7 +1171,18 @@
         resultsHtml += '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
         resultsHtml += "</tr></thead><tbody>";
 
-        const tbodyHtml = renderRows(rows);
+        const tbodyHtml = rows.map(row => {
+          return `<tr>
+            <td>${row.team}</td>
+            <td>${row.count}</td>
+            <td>${row.distribution}</td>
+            <td>$${row.cost.toFixed(2)}</td>
+            <td>$${row.price.toFixed(2)}</td>
+            <td>$${row.whatnotFees.toFixed(2)}</td>
+            <td>$${row.transactionFees.toFixed(2)}</td>
+            <td>$${row.profit.toFixed(2)}</td>
+          </tr>`;
+        }).join("");
         resultsHtml += tbodyHtml + "</tbody></table>";
         document.getElementById("results").innerHTML = resultsHtml;
 
@@ -1187,71 +1261,24 @@
         }
       }
 
-      function renderRows(arr) {
-        let html = "";
-        arr.forEach((row) => {
-          let highlightClass = highlightTeams.has(row.team) ? "highlight" : "";
-          html += `<tr class="${highlightClass}">`;
-          html += `<td><a href="#" onclick="openTeamSearch('${row.team}')" style="color: inherit; text-decoration: none;">`;
-          html += row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : "";
-          html += row.team;
-          html += '<img src="resources/share_white.png" alt="Share" class="link-icon">';
-          html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
-          html += "</a></td>";
-          html += `<td>${row.count}</td>`;
-          html += `<td>${row.distribution}</td>`;
-          html += `<td>$${row.cost.toFixed(2)}</td>`;
-          html += `<td>$${row.price.toFixed(2)}</td>`;
-          html += `<td>$${row.whatnotFees.toFixed(2)}</td>`;
-          html += `<td>$${row.transactionFees.toFixed(2)}</td>`;
-          html += `<td>$${row.profit.toFixed(2)}</td>`;
-          html += "</tr>";
-        });
-        return html;
-      }
-
-      function sortTable(columnIndex) {
-        if (!tableData) return;
-        if (currentSortedColumn !== columnIndex) {
-          sortDirections[columnIndex] = 1;
-          currentSortedColumn = columnIndex;
-        } else {
-          sortDirections[columnIndex] *= -1;
-        }
-        const direction = sortDirections[columnIndex];
-        tableData.sort((a, b) => {
-          let aVal, bVal;
-          if (columnIndex === 0) {
-            aVal = a.team.toLowerCase();
-            bVal = b.team.toLowerCase();
-          } else if (columnIndex === 1) {
-            aVal = Number(a.count);
-            bVal = Number(b.count);
-          } else if (columnIndex === 2) {
-            aVal = parseFloat(a.distribution);
-            bVal = parseFloat(b.distribution);
-          } else if (columnIndex === 3) {
-            aVal = Number(a.cost);
-            bVal = Number(b.cost);
-          } else if (columnIndex === 4) {
-            aVal = Number(a.price);
-            bVal = Number(b.price);
-          } else if (columnIndex === 5) {
-            aVal = Number(a.whatnotFees);
-            bVal = Number(b.whatnotFees);
-          } else if (columnIndex === 6) {
-            aVal = Number(a.transactionFees);
-            bVal = Number(b.transactionFees);
-          } else if (columnIndex === 7) {
-            aVal = Number(a.profit);
-            bVal = Number(b.profit);
+      // Added sortTable function to fix table header clicks causing errors.
+      function sortTable(n) {
+        const table = document.getElementById("resultsTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        let dir = sortDirections[n] || 1;
+        rows.sort((a, b) => {
+          let aText = a.cells[n].textContent.trim();
+          let bText = b.cells[n].textContent.trim();
+          let aNum = parseFloat(aText.replace(/[^0-9.-]/g, ""));
+          let bNum = parseFloat(bText.replace(/[^0-9.-]/g, ""));
+          if (!isNaN(aNum) && !isNaN(bNum)) {
+            return (aNum - bNum) * dir;
           }
-          if (aVal < bVal) return -1 * direction;
-          if (aVal > bVal) return 1 * direction;
-          return 0;
+          return aText.localeCompare(bText) * dir;
         });
-        const tbody = document.getElementById("resultsTable").getElementsByTagName("tbody")[0];
-        tbody.innerHTML = renderRows(tableData);
+        rows.forEach(row => tbody.appendChild(row));
+        sortDirections[n] = -dir;
       }
 
       const summaryBoxes = document.querySelectorAll(".summary-box");
@@ -1295,6 +1322,31 @@
             alert("Error loading JSON file: " + error.message);
           });
       });
+      window.addEventListener("resize", function () {
+        const boxes = document.querySelectorAll('.detail-box');
+        if(boxes.length) adjustDetailBoxes();
+      });
+
+      // Adjust the font sizes in the new detail boxes so that they all have equal height.
+      function adjustDetailBoxes() {
+        const boxes = document.querySelectorAll('.detail-box');
+        boxes.forEach(box => {
+          box.style.fontSize = "1.2rem";
+        });
+        let minHeight = Infinity;
+        boxes.forEach(box => {
+          if (box.scrollHeight < minHeight) {
+            minHeight = box.scrollHeight;
+          }
+        });
+        boxes.forEach(box => {
+          while (box.scrollHeight > minHeight) {
+            let currentSize = parseFloat(window.getComputedStyle(box).fontSize);
+            if(currentSize < 10) break;
+            box.style.fontSize = (currentSize * 0.95) + "px";
+          }
+        });
+      }
     </script>
   </body>
 </html>
