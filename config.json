@@ -2,7 +2,7 @@
   "sets": [
        {
             "year": "2021-22",
-            "name": "Artifacts",
+            "name": "Upper Deck Artifacts",
             "price": "$1,999.95",
             "cards": {
                 "Tampa Bay Lightning": 21473,
@@ -41,7 +41,7 @@
         },
         {
             "year": "2021-22",
-            "name": "Black Diamond",
+            "name": "Upper Deck Black Diamond",
             "price": "$2,099.95",
             "cards": {
                 "Los Angeles Kings": 1569,
@@ -80,7 +80,7 @@
         },
         {
             "year": "2021-22",
-            "name": "Clear Cut",
+            "name": "Upper Deck Clear Cut",
             "price": "$2,379.95",
             "cards": {
                 "Los Angeles Kings": 1569,
@@ -119,7 +119,7 @@
         },
         {
             "year": "2021-22",
-            "name": "Extended Series",
+            "name": "Upper Deck Extended Series",
             "price": "$659.95",
             "cards": {
                 "Florida Panthers": 3634,
@@ -158,7 +158,7 @@
         },
         {
             "year": "2021-22",
-            "name": "MVP",
+            "name": "Upper Deck MVP",
             "price": "$599.95",
             "cards": {
                 "Montreal Canadiens": 2094,
