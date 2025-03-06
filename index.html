@@ -453,7 +453,7 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
       .detail-box .detail-value {
-        font-size: 1.2rem; /* Reduced base size */
+        font-size: 1.2rem; /* Base size (will be reduced if needed) */
         font-weight: bold;
         margin-bottom: 5px;
         color: #e0e0e0;
@@ -771,8 +771,35 @@
         html += '<p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + '</p>';
         html += '</div></div>';
         detailsDiv.innerHTML = html;
-        // After updating the details, adjust font sizes so all boxes have the same height.
+        // Adjust the font sizes so all boxes have the same height
         adjustDetailBoxes();
+      }
+
+      // New: Adjust font sizes for the three detail boxes so they all have the same height as the smallest box.
+      function adjustDetailBoxes() {
+        const boxes = document.querySelectorAll('.detail-box');
+        // Reset to the base font size
+        boxes.forEach(box => {
+          box.style.fontSize = "1.2rem";
+        });
+        // Determine the minimum scrollHeight among the boxes
+        let minHeight = Infinity;
+        boxes.forEach(box => {
+          // Use scrollHeight to get the full content height
+          const boxHeight = box.scrollHeight;
+          if (boxHeight < minHeight) {
+            minHeight = boxHeight;
+          }
+        });
+        // For each box, reduce its font size until its scrollHeight is no greater than minHeight
+        boxes.forEach(box => {
+          while (box.scrollHeight > minHeight) {
+            let currentFontSize = parseFloat(window.getComputedStyle(box).fontSize);
+            // Prevent the font size from going too low (e.g., below 10px)
+            if (currentFontSize < 10) break;
+            box.style.fontSize = (currentFontSize * 0.95) + "px";
+          }
+        });
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1228,73 +1255,6 @@
         }
       }
 
-      function renderRows(arr) {
-        let html = "";
-        arr.forEach((row) => {
-          let highlightClass = highlightTeams.has(row.team) ? "highlight" : "";
-          html += `<tr class="${highlightClass}">`;
-          html += `<td><a href="#" onclick="openTeamSearch('${row.team}')" style="color: inherit; text-decoration: none;">`;
-          html += row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : "";
-          html += row.team;
-          html += '<img src="resources/share_white.png" alt="Share" class="link-icon">';
-          html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
-          html += "</a></td>";
-          html += `<td>${row.count}</td>`;
-          html += `<td>${row.distribution}</td>`;
-          html += `<td>$${row.cost.toFixed(2)}</td>`;
-          html += `<td>$${row.price.toFixed(2)}</td>`;
-          html += `<td>$${row.whatnotFees.toFixed(2)}</td>`;
-          html += `<td>$${row.transactionFees.toFixed(2)}</td>`;
-          html += `<td>$${row.profit.toFixed(2)}</td>`;
-          html += "</tr>";
-        });
-        return html;
-      }
-
-      function sortTable(columnIndex) {
-        if (!tableData) return;
-        if (currentSortedColumn !== columnIndex) {
-          sortDirections[columnIndex] = 1;
-          currentSortedColumn = columnIndex;
-        } else {
-          sortDirections[columnIndex] *= -1;
-        }
-        const direction = sortDirections[columnIndex];
-        tableData.sort((a, b) => {
-          let aVal, bVal;
-          if (columnIndex === 0) {
-            aVal = a.team.toLowerCase();
-            bVal = b.team.toLowerCase();
-          } else if (columnIndex === 1) {
-            aVal = Number(a.count);
-            bVal = Number(b.count);
-          } else if (columnIndex === 2) {
-            aVal = parseFloat(a.distribution);
-            bVal = parseFloat(b.distribution);
-          } else if (columnIndex === 3) {
-            aVal = Number(a.cost);
-            bVal = Number(b.cost);
-          } else if (columnIndex === 4) {
-            aVal = Number(a.price);
-            bVal = Number(b.price);
-          } else if (columnIndex === 5) {
-            aVal = Number(a.whatnotFees);
-            bVal = Number(b.whatnotFees);
-          } else if (columnIndex === 6) {
-            aVal = Number(a.transactionFees);
-            bVal = Number(b.transactionFees);
-          } else if (columnIndex === 7) {
-            aVal = Number(a.profit);
-            bVal = Number(b.profit);
-          }
-          if (aVal < bVal) return -1 * direction;
-          if (aVal > bVal) return 1 * direction;
-          return 0;
-        });
-        const tbody = document.getElementById("resultsTable").getElementsByTagName("tbody")[0];
-        tbody.innerHTML = renderRows(tableData);
-      }
-
       const summaryBoxes = document.querySelectorAll(".summary-box");
       summaryBoxes.forEach((box) => {
         box.addEventListener("click", function () {
@@ -1302,35 +1262,6 @@
           toast.style.display = toast.style.display === "block" ? "none" : "block";
         });
       });
-
-      // New: Adjust the font sizes in the detail boxes so that they all have the same height (using the smallest box height)
-      function adjustDetailBoxes() {
-        const boxes = document.querySelectorAll('.detail-box');
-        boxes.forEach(box => {
-          // Store the original font-size if not already stored
-          if (!box.dataset.initialFontSize) {
-            box.dataset.initialFontSize = window.getComputedStyle(box).fontSize;
-          } else {
-            box.style.fontSize = box.dataset.initialFontSize;
-          }
-        });
-        let minHeight = Infinity;
-        boxes.forEach(box => {
-          const h = box.clientHeight;
-          if (h < minHeight) {
-            minHeight = h;
-          }
-        });
-        boxes.forEach(box => {
-          const currentHeight = box.clientHeight;
-          if (currentHeight > minHeight) {
-            const computedStyle = window.getComputedStyle(box);
-            const currentFontSize = parseFloat(computedStyle.fontSize);
-            const newFontSize = currentFontSize * (minHeight / currentHeight);
-            box.style.fontSize = newFontSize + "px";
-          }
-        });
-      }
 
       window.addEventListener("load", function () {
         fetch("config.json")
