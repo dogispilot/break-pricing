@@ -472,39 +472,8 @@
             </button>
           </div>
         </div>
-        <!-- Row 2: Cost of a Case with Lookup Buttons -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
-            <!-- Reduced width tooltip for Cost of a Case -->
-            <div class="toast input-tooltip" style="display:none; max-width:300px;">
-              This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
-            </div>
-            <div class="input-button-group">
-              <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
-              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
-                Dave &amp; Adams
-              </button>
-              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
-                Steel City
-              </button>
-              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
-                Midwest Cards
-              </button>
-              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
-                Blowout Cards
-              </button>
-              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo" />
-                Out of the Box
-              </button>
-            </div>
-          </div>
-        </div>
+        <!-- Removed the original "Cost of a Case" row from here -->
+
         <!-- Break Pricing Options Link -->
         <div class="form-row">
           <div class="form-group">
@@ -552,6 +521,40 @@
       <div id="keyPlayersSection" style="display:none;">
         <h2>Key Rookies</h2>
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
+      </div>
+
+      <!-- Moved: Cost of a Case with Lookup Buttons -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
+          <!-- Reduced width tooltip for Cost of a Case -->
+          <div class="toast input-tooltip" style="display:none; max-width:300px;">
+            This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
+          </div>
+          <div class="input-button-group">
+            <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
+            <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
+              <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
+              Dave &amp; Adams
+            </button>
+            <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
+              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
+              Steel City
+            </button>
+            <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
+              <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
+              Midwest Cards
+            </button>
+            <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
+              <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
+              Blowout Cards
+            </button>
+            <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
+              <img src="resources/ootb.png" alt="Out of the Box Logo" />
+              Out of the Box
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- Chart and summary boxes -->
@@ -711,7 +714,7 @@
         }
       }
 
-      // New: Update set details information
+      // New: Update set details information with bold headers and separate lines
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -726,11 +729,11 @@
           return;
         }
         let detailsHTML = "";
-        detailsHTML += "<p>Rookie Percentage: " + (setObj.rookie_percentage || "N/A") + "</p>";
-        detailsHTML += "<p>Release Date: " + (setObj.release_date || "N/A") + "</p>";
-        detailsHTML += "<p>Configuration: " + (setObj.configuration || "N/A") + "</p>";
-        detailsHTML += "<p>Box Breakdown: " + (setObj.box_breakdown || "N/A") + "</p>";
-        detailsHTML += "<p>Notes: " + (setObj.notes || "N/A") + "</p>";
+        detailsHTML += "<p><strong>Rookie Percentage:</strong><br>" + (setObj.rookie_percentage || "N/A") + "</p>";
+        detailsHTML += "<p><strong>Release Date:</strong><br>" + (setObj.release_date || "N/A") + "</p>";
+        detailsHTML += "<p><strong>Configuration:</strong><br>" + (setObj.configuration || "N/A") + "</p>";
+        detailsHTML += "<p><strong>Box Breakdown:</strong><br>" + (setObj.box_breakdown || "N/A") + "</p>";
+        detailsHTML += "<p><strong>Notes:</strong><br>" + (setObj.notes || "N/A") + "</p>";
         detailsDiv.innerHTML = detailsHTML;
       }
 
