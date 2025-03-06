@@ -714,6 +714,7 @@
         // Set default year to "2024-25" if it exists
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
+          // Dispatch change event to load key rookies and set data
           yearSelect.dispatchEvent(new Event("change"));
         }
         yearSelect.addEventListener("change", function () {
@@ -736,7 +737,7 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-        // DO NOT auto-select a set on load.
+        // Do NOT auto-select any set.
       }
 
       function updateCasePrice() {
@@ -824,10 +825,7 @@
             (player.setYear === selectedYear || player.setYear === "All") &&
             player.type.toLowerCase() === "rookie"
         );
-        if (filteredPlayers.length === 0) {
-          keySection.style.display = "none";
-          return;
-        }
+        // Always display the key rookies section (even if there are no players)
         keySection.style.display = "block";
         filteredPlayers.forEach((player) => {
           highlightTeams.add(player.team);
@@ -1090,6 +1088,7 @@
         const pieChartCanvas = document.getElementById("pieChart");
         const pieChartMessage = document.getElementById("pieChartMessage");
 
+        // If no set is selected, show the "please select" message and do not calculate profit
         if (!selectedYear || !selectedSetName) {
           chartContainer.style.display = "block";
           pieChartCanvas.style.display = "none";
