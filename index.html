@@ -453,7 +453,7 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
       .detail-box .detail-value {
-        font-size: 1.5rem;
+        font-size: 1.2rem; /* Reduced base size */
         font-weight: bold;
         margin-bottom: 5px;
         color: #e0e0e0;
@@ -581,7 +581,7 @@
         </div>
       </form>
 
-      <!-- New: Set Details Container with Detail Boxes -->
+      <!-- New: Set Details Container with Boxed Detail Items -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -771,6 +771,8 @@
         html += '<p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + '</p>';
         html += '</div></div>';
         detailsDiv.innerHTML = html;
+        // After updating the details, adjust font sizes so all boxes have the same height.
+        adjustDetailBoxes();
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1301,6 +1303,35 @@
         });
       });
 
+      // New: Adjust the font sizes in the detail boxes so that they all have the same height (using the smallest box height)
+      function adjustDetailBoxes() {
+        const boxes = document.querySelectorAll('.detail-box');
+        boxes.forEach(box => {
+          // Store the original font-size if not already stored
+          if (!box.dataset.initialFontSize) {
+            box.dataset.initialFontSize = window.getComputedStyle(box).fontSize;
+          } else {
+            box.style.fontSize = box.dataset.initialFontSize;
+          }
+        });
+        let minHeight = Infinity;
+        boxes.forEach(box => {
+          const h = box.clientHeight;
+          if (h < minHeight) {
+            minHeight = h;
+          }
+        });
+        boxes.forEach(box => {
+          const currentHeight = box.clientHeight;
+          if (currentHeight > minHeight) {
+            const computedStyle = window.getComputedStyle(box);
+            const currentFontSize = parseFloat(computedStyle.fontSize);
+            const newFontSize = currentFontSize * (minHeight / currentHeight);
+            box.style.fontSize = newFontSize + "px";
+          }
+        });
+      }
+
       window.addEventListener("load", function () {
         fetch("config.json")
           .then((response) => {
@@ -1334,6 +1365,7 @@
             alert("Error loading JSON file: " + error.message);
           });
       });
+      window.addEventListener("resize", adjustDetailBoxes);
     </script>
   </body>
 </html>
