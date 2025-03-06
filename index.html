@@ -770,12 +770,12 @@
         html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
         html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
         
-        // New 5 boxes section (configuration removed)
+        // New 5 boxes section
         html += '<div class="newBoxes-container">';
         // Boxes per case
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.boxes_per_case || "N/A") + '</div><div class="detail-label">Boxes per case</div></div>';
-        // Packs per case
-        html += '<div class="detail-box"><div class="detail-value">' + (setObj.packs_per_case || "N/A") + '</div><div class="detail-label">Packs per case</div></div>';
+        // Packs per box (updated to use packs_per_box)
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.packs_per_box || "N/A") + '</div><div class="detail-label">Packs per box</div></div>';
         // Cards per pack
         html += '<div class="detail-box"><div class="detail-value">' + (setObj.cards_per_pack || "N/A") + '</div><div class="detail-label">Cards per pack</div></div>';
         // Cards per box: packs_per_box * cards_per_pack
