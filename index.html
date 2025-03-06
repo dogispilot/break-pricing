@@ -1168,7 +1168,17 @@
 
         const tbodyHtml = rows.map(row => {
           return `<tr>
-            <td><a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')"><img src="${row.logo}" alt="${row.team}" style="width:20px; vertical-align:middle; margin-right:5px;">${row.team}</a></td>
+            <td>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
+                <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="margin-left:10px;">
+                <img src="resources/share_white.png" alt="Share" class="link-icon" style="width:16px; height:16px;">
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="margin-left:5px;">
+                <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon" style="width:16px; height:16px;">
+              </a>
+            </td>
             <td>${row.count}</td>
             <td>${row.distribution}</td>
             <td>$${row.cost.toFixed(2)}</td>
