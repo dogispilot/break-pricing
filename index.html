@@ -431,19 +431,18 @@
       .glow-hockeychecklists:hover {
         box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
       }
-      /* New: Set Details Container */
+      /* New: Set Details Container and Detail Boxes */
       .setDetails-container {
         background-color: #2c2c2c;
         border-radius: 8px;
         padding: 15px;
         margin-bottom: 20px;
       }
-      /* New: New Boxes Container for the 5 new boxes */
-      .newBoxes-container {
+      .detail-box-container {
         display: flex;
         justify-content: space-between;
         gap: 10px;
-        margin-top: 15px;
+        margin-bottom: 15px;
       }
       .detail-box {
         background: #1e1e1e;
@@ -454,7 +453,7 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
       .detail-box .detail-value {
-        font-size: 1.2rem; /* Base size, will adjust if needed */
+        font-size: 1.2rem; /* Base size (will be reduced if needed) */
         font-weight: bold;
         margin-bottom: 5px;
         color: #e0e0e0;
@@ -582,7 +581,7 @@
         </div>
       </form>
 
-      <!-- New: Set Details Container -->
+      <!-- New: Set Details Container with Boxed Detail Items -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -747,9 +746,7 @@
         }
       }
 
-      // New: Update set details information.
-      // Basic info: rookie_percentage, release_date, box_breakdown (moved below release_date), and notes (each on its own line).
-      // Then create 5 new boxes using the new JSON fields.
+      // New: Update set details information using new boxed layout.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -763,36 +760,46 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        let html = "";
-        // Basic info (each on separate line)
-        html += "<p><strong>Rookie Percentage:</strong> " + (setObj.rookie_percentage || "N/A") + "</p>";
-        html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
-        html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
-        html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
-        
-        // New 5 boxes section (configuration removed)
-        html += '<div class="newBoxes-container">';
-        // Boxes per case
-        html += '<div class="detail-box"><div class="detail-value">' + (setObj.boxes_per_case || "N/A") + '</div><div class="detail-label">Boxes per case</div></div>';
-        // Packs per case
-        html += '<div class="detail-box"><div class="detail-value">' + (setObj.packs_per_case || "N/A") + '</div><div class="detail-label">Packs per case</div></div>';
-        // Cards per pack
-        html += '<div class="detail-box"><div class="detail-value">' + (setObj.cards_per_pack || "N/A") + '</div><div class="detail-label">Cards per pack</div></div>';
-        // Cards per box: packs_per_box * cards_per_pack
-        let cardsPerBox = "N/A";
-        if (setObj.packs_per_box && setObj.cards_per_pack) {
-          cardsPerBox = setObj.packs_per_box * setObj.cards_per_pack;
-        }
-        html += '<div class="detail-box"><div class="detail-value">' + cardsPerBox + '</div><div class="detail-label">Cards per box</div></div>';
-        // Cards per case: packs_per_box * cards_per_pack * boxes_per_case
-        let cardsPerCase = "N/A";
-        if (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) {
-          cardsPerCase = setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case;
-        }
-        html += '<div class="detail-box"><div class="detail-value">' + cardsPerCase + '</div><div class="detail-label">Cards per case</div></div>';
-        html += '</div>'; // close newBoxes-container
-        
+        let html = '<div class="setDetails-container">';
+        html += '<div class="detail-box-container">';
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.rookie_percentage || "N/A") + '</div><div class="detail-label">Rookie Percentage</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.box_breakdown || "N/A") + '</div><div class="detail-label">Box Breakdown</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + (setObj.configuration || "N/A") + '</div><div class="detail-label">Configuration</div></div>';
+        html += '</div>';
+        html += '<div class="setDetails-bottom">';
+        html += '<p><strong>Release Date:</strong> ' + (setObj.release_date || "N/A") + '</p>';
+        html += '<p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + '</p>';
+        html += '</div></div>';
         detailsDiv.innerHTML = html;
+        // Adjust the font sizes so all boxes have the same height
+        adjustDetailBoxes();
+      }
+
+      // New: Adjust font sizes for the three detail boxes so they all have the same height as the smallest box.
+      function adjustDetailBoxes() {
+        const boxes = document.querySelectorAll('.detail-box');
+        // Reset to the base font size
+        boxes.forEach(box => {
+          box.style.fontSize = "1.2rem";
+        });
+        // Determine the minimum scrollHeight among the boxes
+        let minHeight = Infinity;
+        boxes.forEach(box => {
+          // Use scrollHeight to get the full content height
+          const boxHeight = box.scrollHeight;
+          if (boxHeight < minHeight) {
+            minHeight = boxHeight;
+          }
+        });
+        // For each box, reduce its font size until its scrollHeight is no greater than minHeight
+        boxes.forEach(box => {
+          while (box.scrollHeight > minHeight) {
+            let currentFontSize = parseFloat(window.getComputedStyle(box).fontSize);
+            // Prevent the font size from going too low (e.g., below 10px)
+            if (currentFontSize < 10) break;
+            box.style.fontSize = (currentFontSize * 0.95) + "px";
+          }
+        });
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1289,33 +1296,7 @@
             alert("Error loading JSON file: " + error.message);
           });
       });
-      window.addEventListener("resize", function () {
-        // Re-adjust detail boxes on window resize
-        const boxes = document.querySelectorAll('.detail-box');
-        if(boxes.length) adjustDetailBoxes();
-      });
-
-      // Adjust the font sizes in the new detail boxes so that they all have equal height.
-      function adjustDetailBoxes() {
-        const boxes = document.querySelectorAll('.detail-box');
-        // Reset each to the base size (1.2rem)
-        boxes.forEach(box => {
-          box.style.fontSize = "1.2rem";
-        });
-        let minHeight = Infinity;
-        boxes.forEach(box => {
-          if (box.scrollHeight < minHeight) {
-            minHeight = box.scrollHeight;
-          }
-        });
-        boxes.forEach(box => {
-          while (box.scrollHeight > minHeight) {
-            let currentSize = parseFloat(window.getComputedStyle(box).fontSize);
-            if(currentSize < 10) break;
-            box.style.fontSize = (currentSize * 0.95) + "px";
-          }
-        });
-      }
+      window.addEventListener("resize", adjustDetailBoxes);
     </script>
   </body>
 </html>
