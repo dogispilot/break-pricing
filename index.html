@@ -435,9 +435,9 @@
   </head>
   <body>
     <div class="container">
- <a href="howitworks.html" class="about-link" style="right: 70px;">How it Works</a>
+      <a href="howitworks.html" class="about-link" style="right: 70px;">How it Works</a>
       <a href="about.html" class="about-link" style="right: 20px;">About</a>
-            <div class="header">
+      <div class="header">
         <img src="resources/skunk.png" alt="SkunkSniper Logo" />
         <h1>SkunkSniper.com</h1>
         <p class="subtitle">Sniff out the best breaks.</p>
@@ -460,27 +460,14 @@
             </select>
           </div>
           <div class="form-group no-label">
-            <button
-              type="button"
-              class="lookup-button small glow-tcdb"
-              onclick="openTcdbSearch()"
-              style="padding: 8px 12px; justify-content: center;"
-            >
+            <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; justify-content: center;">
               <img src="resources/tcdb.jpg" alt="TCDB Logo" />
               TCDB
             </button>
           </div>
           <div class="form-group no-label">
-            <button
-              type="button"
-              class="lookup-button small glow-hockeychecklists"
-              onclick="openHockeyChecklistsSearch()"
-              style="justify-content: center;"
-            >
-              <img
-                src="resources/hockeychecklists.png"
-                alt="Hockey Checklists Icon"
-              />
+            <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()" style="justify-content: center;">
+              <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon" />
               HockeyChecklists.com
             </button>
           </div>
@@ -488,72 +475,30 @@
         <!-- Row 2: Cost of a Case with Lookup Buttons -->
         <div class="form-row">
           <div class="form-group">
-            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
-              Cost of a Case ($)
-            </label>
+            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
             <!-- Reduced width tooltip for Cost of a Case -->
             <div class="toast input-tooltip" style="display:none; max-width:300px;">
               This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
             </div>
             <div class="input-button-group">
-              <input
-                type="number"
-                id="casePrice"
-                class="case-price-input"
-                step="0.01"
-                required
-                placeholder="Enter price"
-                value="1999.99"
-              />
-              <button
-                type="button"
-                class="lookup-button small glow-daveadams"
-                onclick="openSetSearch()"
-              >
-                <img
-                  src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg"
-                  alt="Lookup Icon"
-                />
+              <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
+              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
+                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
                 Dave &amp; Adams
               </button>
-              <button
-                type="button"
-                class="lookup-button small steelcity-button glow-steelcity"
-                onclick="openSteelCitySearch()"
-              >
-                <img
-                  src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg"
-                  alt="Steel City Logo"
-                />
+              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
+                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
                 Steel City
               </button>
-              <button
-                type="button"
-                class="lookup-button small glow-midwestcards"
-                onclick="openMidwestCardsSearch()"
-              >
-                <img
-                  src="resources/midwestcards.png"
-                  alt="Midwest Cards Logo"
-                />
+              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
+                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
                 Midwest Cards
               </button>
-              <button
-                type="button"
-                class="lookup-button small glow-blowout"
-                onclick="openBlowoutCardsSearch()"
-              >
-                <img
-                  src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png"
-                  alt="Blowout Cards Logo"
-                />
+              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
+                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
                 Blowout Cards
               </button>
-              <button
-                type="button"
-                class="lookup-button small glow-outofthebox"
-                onclick="openOotbSearch()"
-              >
+              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
                 <img src="resources/ootb.png" alt="Out of the Box Logo" />
                 Out of the Box
               </button>
@@ -570,70 +515,39 @@
         <div id="breakPricingOptionsMenu" style="display: none;">
           <div class="form-row small-input-row">
             <div class="form-group">
-              <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
-                Markup (%)
-              </label>
+              <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
               <div class="toast input-tooltip" style="display:none;">
                 This is the markup a breaker will apply on top of the case cost. Most breaks require a 30% markup to make it worth the breaker's time. This number should go down as the cost of a case goes up.
               </div>
-              <input
-                type="text"
-                id="markup"
-                required
-                placeholder="Enter markup"
-                value="30%"
-              />
+              <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
             </div>
             <div class="form-group">
-              <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
-                User Discount (%)
-              </label>
+              <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
               <div class="toast input-tooltip" style="display:none;">
                 This is the expected total discount a breaker might expect to give when accepting offers. This is blended for all teams.
               </div>
-              <input
-                type="text"
-                id="userDiscount"
-                required
-                placeholder="Enter discount"
-                value="0%"
-              />
+              <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%" />
             </div>
             <div class="form-group">
-              <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
-                Blended Tax (%)
-              </label>
+              <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
               <div class="toast input-tooltip" style="display:none;">
                 This is an estimated tax rate that changes by location. Transaction fees include tax. 5.1% is the average tax rate in the US.
               </div>
-              <input
-                type="text"
-                id="blendedTax"
-                required
-                placeholder="Enter tax"
-                value="5.1%"
-              />
+              <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%" />
             </div>
             <div class="form-group">
-              <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">
-                Supplies per Order ($)
-              </label>
+              <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
               <div class="toast input-tooltip" style="display:none;">
                 This is the expected average cost of supplies per order, per break. This includes things like penny sleeves, top loaders, and mailing supplies.
               </div>
-              <input
-                type="number"
-                id="supplies"
-                step="0.01"
-                required
-                placeholder="Enter supplies cost"
-                value="1.00"
-              />
+              <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
             </div>
           </div>
         </div>
       </form>
 
+      <!-- New: Set Details Section -->
+      <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
         <h2>Key Rookies</h2>
@@ -795,6 +709,29 @@
           const priceValue = parseFloat(setObj.price.replace(/[$,]/g, ""));
           document.getElementById("casePrice").value = priceValue;
         }
+      }
+
+      // New: Update set details information
+      function updateSetDetails() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        const detailsDiv = document.getElementById("setDetails");
+        if (!selectedYear || !selectedSet) {
+          detailsDiv.innerHTML = "";
+          return;
+        }
+        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
+        if (!setObj) {
+          detailsDiv.innerHTML = "";
+          return;
+        }
+        let detailsHTML = "";
+        detailsHTML += "<p>Rookie Percentage: " + (setObj.rookie_percentage || "N/A") + "</p>";
+        detailsHTML += "<p>Release Date: " + (setObj.release_date || "N/A") + "</p>";
+        detailsHTML += "<p>Configuration: " + (setObj.configuration || "N/A") + "</p>";
+        detailsHTML += "<p>Box Breakdown: " + (setObj.box_breakdown || "N/A") + "</p>";
+        detailsHTML += "<p>Notes: " + (setObj.notes || "N/A") + "</p>";
+        detailsDiv.innerHTML = detailsHTML;
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1102,12 +1039,8 @@
 
         const casePrice = parseFloat(document.getElementById("casePrice").value);
         const markup = parsePercentage(document.getElementById("markup").value);
-        const userDiscount = parsePercentage(
-          document.getElementById("userDiscount").value
-        );
-        const blendedTax = parsePercentage(
-          document.getElementById("blendedTax").value
-        );
+        const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
+        const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
 
         if (
@@ -1139,8 +1072,7 @@
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
-          const profit =
-            price - cost - whatnotFees - transactionFees - supplies;
+          const profit = price - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
 
           rows.push({
@@ -1157,39 +1089,23 @@
         }
 
         const totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
-        const totalWhatnotsCut = rows.reduce(
-          (sum, row) => sum + row.whatnotFees,
-          0
-        );
-        const totalCostOfBusiness =
-          rows.reduce((sum, row) => sum + row.transactionFees, 0) +
-          rows.length * supplies;
+        const totalWhatnotsCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
+        const totalCostOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
 
-        document.querySelector("#totalProfitBox .amount").textContent =
-          "$" + totalProfit.toFixed(2);
-        document.querySelector("#whatnotsCutBox .amount").textContent =
-          "$" + totalWhatnotsCut.toFixed(2);
-        document.querySelector("#costOfBusinessBox .amount").textContent =
-          "$" + totalCostOfBusiness.toFixed(2);
+        document.querySelector("#totalProfitBox .amount").textContent = "$" + totalProfit.toFixed(2);
+        document.querySelector("#whatnotsCutBox .amount").textContent = "$" + totalWhatnotsCut.toFixed(2);
+        document.querySelector("#costOfBusinessBox .amount").textContent = "$" + totalCostOfBusiness.toFixed(2);
 
         let resultsHtml = '<table id="resultsTable">';
         resultsHtml += "<thead><tr>";
-        resultsHtml +=
-          '<th data-sort="text" onclick="sortTable(0)">Team</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(1)">Numbered Cards</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(2)">Card Distribution</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(3)">Distributed Cost</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(4)">Distributed Price</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(5)">Whatnot Fees</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(6)">Transaction Fees</th>';
-        resultsHtml +=
-          '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
+        resultsHtml += '<th data-sort="text" onclick="sortTable(0)">Team</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(1)">Numbered Cards</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(2)">Card Distribution</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(3)">Distributed Cost</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(4)">Distributed Price</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(5)">Whatnot Fees</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(6)">Transaction Fees</th>';
+        resultsHtml += '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
         resultsHtml += "</tr></thead><tbody>";
 
         const tbodyHtml = renderRows(rows);
@@ -1231,7 +1147,6 @@
                   {
                     data: chartData,
                     backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
-                    /* Increased offset for more space between slices */
                     offset: 30,
                     borderWidth: 0,
                     borderColor: "transparent"
@@ -1278,14 +1193,10 @@
           let highlightClass = highlightTeams.has(row.team) ? "highlight" : "";
           html += `<tr class="${highlightClass}">`;
           html += `<td><a href="#" onclick="openTeamSearch('${row.team}')" style="color: inherit; text-decoration: none;">`;
-          html += row.logo
-            ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">`
-            : "";
+          html += row.logo ? `<img src="${row.logo}" alt="${row.team} logo" class="logo">` : "";
           html += row.team;
-          html +=
-            '<img src="resources/share_white.png" alt="Share" class="link-icon">';
-          html +=
-            '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
+          html += '<img src="resources/share_white.png" alt="Share" class="link-icon">';
+          html += '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon">';
           html += "</a></td>";
           html += `<td>${row.count}</td>`;
           html += `<td>${row.distribution}</td>`;
@@ -1301,7 +1212,6 @@
 
       function sortTable(columnIndex) {
         if (!tableData) return;
-
         if (currentSortedColumn !== columnIndex) {
           sortDirections[columnIndex] = 1;
           currentSortedColumn = columnIndex;
@@ -1309,7 +1219,6 @@
           sortDirections[columnIndex] *= -1;
         }
         const direction = sortDirections[columnIndex];
-
         tableData.sort((a, b) => {
           let aVal, bVal;
           if (columnIndex === 0) {
@@ -1337,15 +1246,11 @@
             aVal = Number(a.profit);
             bVal = Number(b.profit);
           }
-
           if (aVal < bVal) return -1 * direction;
           if (aVal > bVal) return 1 * direction;
           return 0;
         });
-
-        const tbody = document
-          .getElementById("resultsTable")
-          .getElementsByTagName("tbody")[0];
+        const tbody = document.getElementById("resultsTable").getElementsByTagName("tbody")[0];
         tbody.innerHTML = renderRows(tableData);
       }
 
@@ -1353,8 +1258,7 @@
       summaryBoxes.forEach((box) => {
         box.addEventListener("click", function () {
           const toast = this.querySelector(".toast");
-          toast.style.display =
-            toast.style.display === "block" ? "none" : "block";
+          toast.style.display = toast.style.display === "block" ? "none" : "block";
         });
       });
 
@@ -1376,6 +1280,7 @@
             populateYearSelector();
             document.getElementById("setSelect").addEventListener("change", function () {
               updateCasePrice();
+              updateSetDetails();
               calculateProfit();
             });
             const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
