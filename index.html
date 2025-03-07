@@ -453,6 +453,18 @@
         margin-top: 15px;
         margin-bottom: 15px;
       }
+      /* New pill button style for "Read Set Notes" */
+      .pill-button {
+        display: inline-block;
+        padding: 4px 12px;
+        border: 1px solid #fff;
+        border-radius: 999px;
+        color: #fff;
+        text-decoration: none;
+        font-size: 0.9rem;
+        margin-left: 10px;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -754,7 +766,7 @@
       }
 
       // Updated: Update set details information.
-      // At the end of the Box Breakdown content, a link "Read Set Notes" is added.
+      // At the end of the Box Breakdown text, an empty pill button "Read Set Notes" is added inline.
       // When clicked, it toggles the display of the Notes content.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
@@ -783,8 +795,9 @@
         html += '</div>';
         
         html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
-        html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
-        html += '<p><a href="javascript:void(0)" onclick="toggleSetNotes(this)">Read Set Notes</a></p>';
+        // Inline the "Read Set Notes" pill button after the Box Breakdown text
+        html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") +
+                " <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a></p>";
         html += '<div class="set-notes" style="display:none;"><p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + "</p></div>";
         
         detailsDiv.innerHTML = html;
@@ -1290,7 +1303,7 @@
         });
       });
 
-      // Toggle the display of the set notes when the "Read Set Notes" link is clicked.
+      // Toggle the display of the set notes when the "Read Set Notes" pill button is clicked.
       function toggleSetNotes(link) {
         var notesDiv = link.parentElement.nextElementSibling;
         if (notesDiv.style.display === "none" || notesDiv.style.display === "") {
