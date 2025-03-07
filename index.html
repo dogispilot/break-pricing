@@ -77,7 +77,6 @@
         font-size: 2rem;
         font-family: 'BreakPricingFontBold', sans-serif;
       }
-      /* New subtitle styling */
       .subtitle {
         font-size: 1.2rem;
         font-weight: normal;
@@ -89,11 +88,9 @@
         color: #e0e0e0;
         margin-top: 0;
       }
-      /* New rule: reduce space below the "Key Rookies" title */
       #keyPlayersSection h2 {
         margin-bottom: 0.5rem;
       }
-      /* New rule: bring the distribution copy closer to its header */
       #distributionCopy {
         margin-top: 0;
       }
@@ -342,14 +339,12 @@
         display: flex;
         flex-direction: column;
       }
-      /* Increase the value font size and weight */
       .detail-box .detail-value {
         font-size: 1.8rem;
         font-weight: 900;
         margin-bottom: 5px;
         color: #e0e0e0;
       }
-      /* Reduce the label font size and anchor it to the bottom */
       .detail-box .detail-label {
         font-size: 0.8rem;
         color: #bbb;
@@ -399,7 +394,6 @@
         margin-right: 8px;
         border-radius: 50%;
       }
-      /* New rule: force team names (first column) to stay on one line */
       #resultsTable th:first-child,
       #resultsTable td:first-child {
         white-space: nowrap;
@@ -446,14 +440,12 @@
       .glow-hockeychecklists:hover {
         box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
       }
-      /* New: Set Details Container */
       .setDetails-container {
         background-color: #2c2c2c;
         border-radius: 8px;
         padding: 15px;
         margin-bottom: 20px;
       }
-      /* New: New Boxes Container for the 5 new boxes */
       .newBoxes-container {
         display: flex;
         justify-content: space-between;
@@ -475,7 +467,6 @@
 
       <!-- Calculation Form -->
       <form id="calcForm">
-        <!-- Row 1: Year, Set, TCDB Button, and HockeyChecklists.com Button -->
         <div class="form-row">
           <div class="form-group">
             <label for="yearSelect">Select Year</label>
@@ -502,15 +493,12 @@
             </button>
           </div>
         </div>
-        <!-- Break Pricing Options Link -->
         <div class="form-row">
           <div class="form-group">
             <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" style="color: #007bff; text-decoration: underline; font-family: 'BreakPricingFont', sans-serif;">Break Pricing Options</a>
           </div>
         </div>
-        <!-- Break Pricing Options Hidden Menu with Cost of a Case and Markup Options -->
         <div id="breakPricingOptionsMenu" style="display: none;">
-          <!-- Cost of a Case Section -->
           <div class="form-row">
             <div class="form-group">
               <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -542,7 +530,6 @@
               </div>
             </div>
           </div>
-          <!-- Markup and Other Pricing Options -->
           <div class="form-row small-input-row">
             <div class="form-group">
               <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
@@ -580,7 +567,6 @@
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
-        <!-- The header text will include the selected year -->
         <h2>Key Rookies</h2>
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
@@ -711,17 +697,17 @@
           option.textContent = year;
           yearSelect.appendChild(option);
         });
-        // Set default year to "2024-25" if it exists
-        if (years.includes("2024-25")) {
-          yearSelect.value = "2024-25";
-          // Fire change event so that key rookies update immediately (even with no set selected)
-          yearSelect.dispatchEvent(new Event("change"));
-        }
+        // Register the change event listener BEFORE dispatching default change
         yearSelect.addEventListener("change", function () {
           populateSetSelector();
           updateKeyPlayersSection();
           calculateProfit();
         });
+        // Set default year to "2024-25" if it exists and dispatch change event to fetch sets
+        if (years.includes("2024-25")) {
+          yearSelect.value = "2024-25";
+          yearSelect.dispatchEvent(new Event("change"));
+        }
       }
 
       function populateSetSelector() {
@@ -737,7 +723,6 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-        // Do NOT auto-select any set.
       }
 
       function updateCasePrice() {
@@ -818,14 +803,13 @@
           keySection.style.display = "none";
           return;
         }
-        // Prepend the selected year to the header text
         document.querySelector("#keyPlayersSection h2").textContent = selectedYear + " Key Rookies";
         const filteredPlayers = keyPlayersData.filter(
           (player) =>
             (player.setYear === selectedYear || player.setYear === "All") &&
             player.type.toLowerCase() === "rookie"
         );
-        // Always display the key rookies section regardless of filteredPlayers length
+        // Always display the key rookies section
         keySection.style.display = "block";
         filteredPlayers.forEach((player) => {
           highlightTeams.add(player.team);
@@ -1167,7 +1151,6 @@
         resultsHtml += '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
         resultsHtml += "</tr></thead><tbody>";
 
-        // Highlight rows where the team is in highlightTeams
         const tbodyHtml = rows.map(row => {
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
@@ -1268,7 +1251,6 @@
         }
       }
 
-      // Added sortTable function to fix header clicks causing errors.
       function sortTable(n) {
         const table = document.getElementById("resultsTable");
         const tbody = table.tBodies[0];
@@ -1334,7 +1316,6 @@
         if(boxes.length) adjustDetailBoxes();
       });
 
-      // Adjust the font sizes in the new detail boxes so that they all have equal height.
       function adjustDetailBoxes() {
         const boxes = document.querySelectorAll('.detail-box');
         boxes.forEach(box => {
