@@ -341,16 +341,16 @@
         font-size: 0.8rem;
         color: #bbb;
       }
-
       /* 4-column layout:
-         - Column 1: Single highlight tile
-         - Column 2: Two stacked detail boxes
-         - Column 3: Two stacked detail boxes
-         - Column 4: Single highlight tile
+         - Column 1: Highlight tile spanning two rows (Rookie Percentage)
+         - Column 2: Two stacked detail boxes (top: Boxes per Case, bottom: Packs per Box)
+         - Column 3: Two stacked detail boxes (top: Cards per Pack, bottom: Cards per Box)
+         - Column 4: Highlight tile spanning two rows (Cards per Case)
       */
       .setDetails-grid-4col {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto auto;
         gap: 20px;
         margin-bottom: 20px;
       }
@@ -359,11 +359,14 @@
         flex-direction: column;
         gap: 20px;
       }
+      /* Remove any border from highlight tiles and adjust font size/weight */
       .highlight-tile {
-        /* Add a distinct style if you wish to highlight these tiles differently */
-        border: 2px solid #fff;
+        /* No border */
       }
-
+      .highlight-tile .detail-value {
+        font-size: 2.5rem;
+        font-weight: 900;
+      }
       .link-icon {
         width: 16px;
         height: 16px;
@@ -736,7 +739,6 @@
       function populateYearSelector() {
         const yearSelect = document.getElementById("yearSelect");
         yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
-
         const years = [...new Set(setData.map(set => set.year))].sort(
           (a, b) => parseInt(b.split("-")[0]) - parseInt(a.split("-")[0])
         );
@@ -746,14 +748,11 @@
           option.textContent = year;
           yearSelect.appendChild(option);
         });
-
         yearSelect.addEventListener("change", function() {
           populateSetSelector();
           updateKeyPlayersSection();
           calculateProfit();
         });
-
-        // If you want a default year to be selected, set it here
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
           yearSelect.dispatchEvent(new Event("change"));
@@ -764,13 +763,8 @@
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
         setSelect.innerHTML = '<option value="">--Select Set--</option>';
-
         if (!selectedYear) return;
-
-        const filteredSets = setData
-          .filter(set => set.year === selectedYear)
-          .sort((a,b) => a.name.localeCompare(b.name));
-
+        const filteredSets = setData.filter(set => set.year === selectedYear).sort((a,b) => a.name.localeCompare(b.name));
         filteredSets.forEach(set => {
           const option = document.createElement("option");
           option.value = set.name;
@@ -783,92 +777,68 @@
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
         if (!selectedYear || !selectedSet) return;
-
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
         if (setObj && setObj.price) {
           const price = parseFloat(setObj.price.replace(/[$,]/g, ""));
           document.getElementById("casePrice").value = price;
-          // Update duplicate input as well
           document.getElementById("casePriceDup").value = price;
         }
       }
 
-      // ***** REVISED FUNCTION FOR 4-COLUMN LAYOUT *****
+      // ***** REVISED FUNCTION FOR 4-COLUMN, 2-Row LAYOUT *****
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
         const detailsDiv = document.getElementById("setDetails");
-
         if (!selectedYear || !selectedSet) {
           detailsDiv.innerHTML = "";
           return;
         }
-
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
         if (!setObj) {
           detailsDiv.innerHTML = "";
           return;
         }
-
-        // Calculate derived values
         let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
           : NaN;
-
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
           : NaN;
-
-        // 4 columns:
-        // 1) highlight: rookie percentage
-        // 2) stacked: boxes per case, packs per box
-        // 3) stacked: cards per pack, cards per box
-        // 4) highlight: cards per case
         let html = `
           <div class="setDetails-grid-4col">
-            <!-- Column 1: highlight tile -->
-            <div class="column highlight">
-              <div class="detail-box highlight-tile">
-                <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
-                <div class="detail-label">Rookie Percentage</div>
-              </div>
+            <!-- Column 1: Highlight tile spanning two rows (Rookie Percentage) -->
+            <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
+              <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
+              <div class="detail-label">Rookie Percentage</div>
             </div>
-
-            <!-- Column 2: stacked -->
-            <div class="column stack">
-              <div class="detail-box">
-                <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
-                <div class="detail-label">Boxes per Case</div>
-              </div>
-              <div class="detail-box">
-                <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
-                <div class="detail-label">Packs per Box</div>
-              </div>
+            <!-- Column 2: Stacked: Boxes per Case (top) -->
+            <div class="detail-box" style="grid-column: 2; grid-row: 1;">
+              <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
+              <div class="detail-label">Boxes per Case</div>
             </div>
-
-            <!-- Column 3: stacked -->
-            <div class="column stack">
-              <div class="detail-box">
-                <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
-                <div class="detail-label">Cards per Pack</div>
-              </div>
-              <div class="detail-box">
-                <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
-                <div class="detail-label">Cards per Box</div>
-              </div>
+            <!-- Column 3: Stacked: Cards per Pack (top) -->
+            <div class="detail-box" style="grid-column: 3; grid-row: 1;">
+              <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
+              <div class="detail-label">Cards per Pack</div>
             </div>
-
-            <!-- Column 4: highlight tile -->
-            <div class="column highlight">
-              <div class="detail-box highlight-tile">
-                <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
-                <div class="detail-label">Cards per Case</div>
-              </div>
+            <!-- Column 4: Highlight tile spanning two rows (Cards per Case) -->
+            <div class="detail-box highlight-tile" style="grid-column: 4; grid-row: 1 / span 2;">
+              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
+              <div class="detail-label">Cards per Case</div>
+            </div>
+            <!-- Column 2: Stacked: Packs per Box (bottom) -->
+            <div class="detail-box" style="grid-column: 2; grid-row: 2;">
+              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
+              <div class="detail-label">Packs per Box</div>
+            </div>
+            <!-- Column 3: Stacked: Cards per Box (bottom) -->
+            <div class="detail-box" style="grid-column: 3; grid-row: 2;">
+              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
+              <div class="detail-label">Cards per Box</div>
             </div>
           </div>
         `;
-
-        // Release Date & Notes
         html += `
           <p><strong>Release Date:</strong> ${setObj.release_date || "N/A"}</p>
           <p><strong>Box Breakdown:</strong> ${setObj.box_breakdown || "N/A"}
@@ -878,7 +848,6 @@
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
           </div>
         `;
-
         detailsDiv.innerHTML = html;
       }
       // ***** END REVISED FUNCTION *****
@@ -886,18 +855,10 @@
       function openPlayerEbaySearch(playerName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
-        if (!selectedYear || !selectedSet) {
-          alert("Please select both a year and a set.");
-          return;
-        }
+        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " " + playerName;
-        window.open(
-          "https://www.ebay.com/sch/i.html?_nkw=" +
-            encodeURIComponent(query) +
-            "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1",
-          "_blank"
-        );
+        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
       }
 
       function updateKeyPlayersSection() {
@@ -906,50 +867,32 @@
         const tilesContainer = document.getElementById("keyPlayerTiles");
         tilesContainer.innerHTML = "";
         highlightTeams.clear();
-
-        if (!selectedYear) {
-          keySection.style.display = "none";
-          return;
-        }
-
+        if (!selectedYear) { keySection.style.display = "none"; return; }
         document.querySelector("#keyPlayersSection h2").textContent = selectedYear + " Key Rookies";
-        const filteredPlayers = keyPlayersData.filter(
-          player =>
-            (player.setYear === selectedYear || player.setYear === "All") &&
-            player.type.toLowerCase() === "rookie"
+        const filteredPlayers = keyPlayersData.filter(player =>
+          (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
         );
-
         keySection.style.display = "block";
-
-        filteredPlayers.forEach(player => {
-          highlightTeams.add(player.team);
-        });
-
+        filteredPlayers.forEach(player => { highlightTeams.add(player.team); });
         filteredPlayers.forEach(player => {
           const tile = document.createElement("div");
           tile.className = "key-player-tile";
-
           const teamLogo = document.createElement("img");
           teamLogo.className = "team-logo";
           teamLogo.src = teamLogos[player.team] || "";
           teamLogo.alt = player.team + " logo";
           tile.appendChild(teamLogo);
-
           const profileLink = document.createElement("a");
           profileLink.href = player.profile_link;
           profileLink.target = "_blank";
-
           const playerImg = document.createElement("img");
           playerImg.className = "player-img";
           playerImg.src = player.image;
           playerImg.alt = player.player;
-
           profileLink.appendChild(playerImg);
           tile.appendChild(profileLink);
-
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
-
           const nameLine = document.createElement("div");
           const nameLink = document.createElement("a");
           nameLink.href = player.profile_link;
@@ -959,34 +902,26 @@
           nameLink.textContent = player.player;
           nameLine.appendChild(nameLink);
           infoDiv.appendChild(nameLine);
-
           const notesLine = document.createElement("div");
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
-
           const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
-          ebayLink.onclick = function() {
-            openPlayerEbaySearch(player.player);
-          };
-
+          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
           const shareImg = document.createElement("img");
           shareImg.src = "resources/share_white.png";
           shareImg.alt = "Share";
           shareImg.className = "link-icon";
           ebayLink.appendChild(shareImg);
-
           const ebayImg = document.createElement("img");
           ebayImg.src = "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
           ebayImg.alt = "eBay";
           ebayImg.className = "link-icon ebay-icon";
           ebayLink.appendChild(ebayImg);
-
           ebayLine.appendChild(ebayLink);
           infoDiv.appendChild(ebayLine);
-
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
         });
@@ -1032,151 +967,80 @@
       function openSetSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open(
-          "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
       }
 
       function openSteelCitySearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open(
-          "https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
       }
 
       function openTcdbSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet;
-        window.open(
-          "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
       }
 
       function openHockeyChecklistsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet;
-        window.open(
-          "https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
       }
 
       function openMidwestCardsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open(
-          "https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
       }
 
       function openBlowoutCardsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open(
-          "https://www.blowoutcards.com/catalogsearch/result/?q=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://www.blowoutcards.com/catalogsearch/result/?q=" + encodeURIComponent(query), "_blank");
       }
 
       function openOotbSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) {
-          alert("Please select a set first.");
-          return;
-        }
-        if (!selectedYear) {
-          alert("Please select a set year first.");
-          return;
-        }
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open(
-          "https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query),
-          "_blank"
-        );
+        window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
       }
 
       function openTeamSearch(teamName) {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
-        if (!selectedYear || !selectedSet) {
-          alert("Please select both a year and a set.");
-          return;
-        }
+        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
         const firstYear = selectedYear.split("-")[0];
         const query = firstYear + " " + selectedSet + " " + teamName;
-        window.open(
-          "https://www.ebay.com/sch/i.html?_nkw=" +
-            encodeURIComponent(query) +
-            "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1",
-          "_blank"
-        );
+        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
       }
 
       function calculateProfit() {
@@ -1185,33 +1049,23 @@
         const chartContainer = document.getElementById("chartContainer");
         const pieChartCanvas = document.getElementById("pieChart");
         const pieChartMessage = document.getElementById("pieChartMessage");
-
         if (!selectedYear || !selectedSetName) {
           chartContainer.style.display = "block";
           pieChartCanvas.style.display = "none";
           pieChartMessage.style.display = "flex";
           return;
         }
-
         const casePrice = parseFloat(document.getElementById("casePrice").value);
         const markup = parsePercentage(document.getElementById("markup").value);
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
-
-        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) {
-          return;
-        }
-
+        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
-
         const teamData = setObj.cards || setObj.most_numbered_cards;
         let totalCards = 0;
-        for (let team in teamData) {
-          totalCards += teamData[team];
-        }
-
+        for (let team in teamData) { totalCards += teamData[team]; }
         let rows = [];
         for (let team in teamData) {
           const count = teamData[team];
@@ -1222,7 +1076,6 @@
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = price - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
-
           rows.push({
             team: team,
             logo: teamLogos[team] || "",
@@ -1235,17 +1088,12 @@
             profit: profit
           });
         }
-
-        // Update Summary Tiles
         let totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
         let whatnotCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
         let costOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
-
         document.querySelector("#totalProfitBox .amount").textContent = "$" + totalProfit.toFixed(2);
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
-
-        // Build Full Table
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
@@ -1255,7 +1103,6 @@
           '<th data-sort="number" onclick="sortTableFull(5)">Transaction Fees</th>' +
           '<th data-sort="number" onclick="sortTableFull(6)">Potential Profit</th>' +
           '</tr></thead><tbody>';
-
         let fullRowsHtml = rows.map(row => {
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
@@ -1277,10 +1124,7 @@
             <td>$${row.profit.toFixed(2)}</td>
           </tr>`;
         }).join("");
-
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
-
-        // Build Trimmed Table
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(0)">Numbered Cards</th>' +
@@ -1288,7 +1132,6 @@
           '<th data-sort="number" onclick="sortTableTrimmed(2)">Distributed Cost</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(3)">Distributed Cost + Markup</th>' +
           '</tr></thead><tbody>';
-
         let trimmedRowsHtml = rows.map(row => {
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
@@ -1308,12 +1151,9 @@
             <td>$${row.price.toFixed(2)}</td>
           </tr>`;
         }).join("");
-
         let trimmedTableHtml = trimmedHeader + trimmedRowsHtml + "</tbody></table>";
-
         document.getElementById("fullResults").innerHTML = fullTableHtml;
         document.getElementById("results").innerHTML = trimmedTableHtml;
-
         if (rows.length > 0) {
           document.getElementById("teamPricesHeader").style.display = "block";
           document.getElementById("distributionCopy").style.display = "block";
@@ -1321,19 +1161,15 @@
           document.getElementById("teamPricesHeader").style.display = "none";
           document.getElementById("distributionCopy").style.display = "none";
         }
-
         tableData = rows;
-
         const chartData = [totalProfit, whatnotCut, costOfBusiness];
         chartContainer.style.display = "block";
-
         if (chartData.every(val => val === 0)) {
           pieChartCanvas.style.display = "none";
           pieChartMessage.style.display = "flex";
         } else {
           pieChartCanvas.style.display = "block";
           pieChartMessage.style.display = "none";
-
           if (pieChart) {
             pieChart.data.datasets[0].data = chartData;
             pieChart.update();
@@ -1358,24 +1194,11 @@
                 plugins: {
                   legend: {
                     position: "bottom",
-                    labels: {
-                      font: { family: "BreakPricingFont" },
-                      color: "#e0e0e0"
-                    }
+                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" }
                   },
-                  dropShadowPlugin: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 10,
-                    shadowColor: "rgba(0,0,0,0.5)"
-                  }
+                  dropShadowPlugin: { shadowBlur: 10, shadowOffsetX: 0, shadowOffsetY: 10, shadowColor: "rgba(0,0,0,0.5)" }
                 },
-                elements: {
-                  arc: {
-                    borderWidth: 0,
-                    borderColor: "transparent"
-                  }
-                }
+                elements: { arc: { borderWidth: 0, borderColor: "transparent" } }
               },
               plugins: [dropShadowPlugin, legendMargin]
             });
@@ -1388,18 +1211,14 @@
         const tbody = table.tBodies[0];
         const rows = Array.from(tbody.rows);
         let dir = sortDirections[n] || 1;
-
         rows.sort((a, b) => {
           let aText = a.cells[n].textContent.trim();
           let bText = b.cells[n].textContent.trim();
           let aNum = parseFloat(aText.replace(/[^0-9.-]/g, ""));
           let bNum = parseFloat(bText.replace(/[^0-9.-]/g, ""));
-          if (!isNaN(aNum) && !isNaN(bNum)) {
-            return (aNum - bNum) * dir;
-          }
+          if (!isNaN(aNum) && !isNaN(bNum)) { return (aNum - bNum) * dir; }
           return aText.localeCompare(bText) * dir;
         });
-
         rows.forEach(row => tbody.appendChild(row));
         sortDirections[n] = -dir;
       }
@@ -1409,18 +1228,14 @@
         const tbody = table.tBodies[0];
         const rows = Array.from(tbody.rows);
         let dir = sortDirections[n] || 1;
-
         rows.sort((a, b) => {
           let aText = a.cells[n].textContent.trim();
           let bText = b.cells[n].textContent.trim();
           let aNum = parseFloat(aText.replace(/[^0-9.-]/g, ""));
           let bNum = parseFloat(bText.replace(/[^0-9.-]/g, ""));
-          if (!isNaN(aNum) && !isNaN(bNum)) {
-            return (aNum - bNum) * dir;
-          }
+          if (!isNaN(aNum) && !isNaN(bNum)) { return (aNum - bNum) * dir; }
           return aText.localeCompare(bText) * dir;
         });
-
         rows.forEach(row => tbody.appendChild(row));
         sortDirections[n] = -dir;
       }
@@ -1447,36 +1262,24 @@
       window.addEventListener("load", function() {
         fetch("config.json")
           .then(response => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok: " + response.statusText);
-            }
+            if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
             return response.json();
           })
           .then(jsonData => {
-            if (!jsonData.sets) {
-              alert('Invalid JSON format: missing "sets" property.');
-              return;
-            }
+            if (!jsonData.sets) { alert('Invalid JSON format: missing "sets" property.'); return; }
             setData = jsonData.sets;
             keyPlayersData = jsonData["Key Players"] || [];
-
             populateYearSelector();
-
             document.getElementById("setSelect").addEventListener("change", function() {
               updateCasePrice();
               updateSetDetails();
               calculateProfit();
             });
-
-            const calcInputs = document.querySelectorAll(
-              "#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select, #priceSettingsDuplicate input, #priceSettingsDuplicate select"
-            );
+            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select, #priceSettingsDuplicate input, #priceSettingsDuplicate select");
             calcInputs.forEach(input => {
               input.addEventListener("input", calculateProfit);
               input.addEventListener("change", calculateProfit);
             });
-
-            // Link duplicate cost input with original
             document.getElementById("casePriceDup").addEventListener("input", function() {
               document.getElementById("casePrice").value = this.value;
               calculateProfit();
@@ -1484,14 +1287,11 @@
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
             });
-
-            // Toggle duplicate Price Settings row when Price Settings button is clicked
             document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
               e.preventDefault();
               var dup = document.getElementById("priceSettingsDuplicate");
               dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
             });
-
             calculateProfit();
           })
           .catch(error => {
@@ -1507,15 +1307,9 @@
 
       function adjustDetailBoxes() {
         const boxes = document.querySelectorAll('.detail-box');
-        boxes.forEach(box => {
-          box.style.fontSize = "1.2rem";
-        });
+        boxes.forEach(box => { box.style.fontSize = "1.2rem"; });
         let minHeight = Infinity;
-        boxes.forEach(box => {
-          if (box.scrollHeight < minHeight) {
-            minHeight = box.scrollHeight;
-          }
-        });
+        boxes.forEach(box => { if (box.scrollHeight < minHeight) { minHeight = box.scrollHeight; } });
         boxes.forEach(box => {
           while (box.scrollHeight > minHeight) {
             let currentSize = parseFloat(window.getComputedStyle(box).fontSize);
