@@ -84,6 +84,7 @@
       #teamPricesHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
         margin-top: 40px;
+        text-align: center;
       }
       /* New rule to match the Distribution header */
       #breakPricingHeader {
@@ -525,8 +526,8 @@
       </div>
 
       <!-- Distribution Section (Trimmed Table) -->
-      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
-      <p class="small-copy" id="distributionCopy" style="display: none;">
+      <h2 id="teamPricesHeader">Distribution of Numbered Cards</h2>
+      <p class="small-copy" id="distributionCopy">
         Highlighted rows represent teams with key rookies.
         <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
@@ -564,7 +565,11 @@
           </div>
         </div>
       </div>
-      <div id="results"></div>
+      
+      <!-- Results Section with Empty State -->
+      <div id="results">
+        <p>Please select a year and set to get started sniping.</p>
+      </div>
 
       <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
