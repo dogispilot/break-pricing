@@ -497,7 +497,18 @@
       </form>
       <!-- Set Details Container -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
-      <!-- Price Settings Menu (Moved above the table, below header text) -->
+      <!-- Key Rookies Section -->
+      <div id="keyPlayersSection" style="display:none;">
+        <h2>Key Rookies</h2>
+        <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
+      </div>
+      <!-- Distribution Section (Trimmed Table) -->
+      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
+      <p class="small-copy" id="distributionCopy" style="display: none;">
+        Highlighted rows represent teams with key rookies.
+        <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
+      </p>
+      <!-- Price Settings Menu (Moved here, below the distribution text and above the table) -->
       <div id="priceSettingsDuplicate" style="display:none; margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
@@ -531,17 +542,6 @@
           </div>
         </div>
       </div>
-      <!-- Key Rookies Section -->
-      <div id="keyPlayersSection" style="display:none;">
-        <h2>Key Rookies</h2>
-        <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
-      </div>
-      <!-- Distribution Section (Trimmed Table) -->
-      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
-      <p class="small-copy" id="distributionCopy" style="display: none;">
-        Highlighted rows represent teams with key rookies.
-        <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
-      </p>
       <div id="results"></div>
       <!-- Chart and Summary Boxes -->
       <div class="chart-summary-container">
