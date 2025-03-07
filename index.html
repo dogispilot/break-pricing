@@ -371,8 +371,9 @@
         vertical-align: middle;
       }
       .ebay-icon {
-        width: 20px;
-        height: 20px;
+        /* For the eBay button, the height is fixed and the width will adjust automatically */
+        height: 24px;
+        width: auto;
       }
       table {
         width: 100%;
@@ -476,10 +477,10 @@
         background-color: #fff !important;
         padding: 2px 8px;
       }
-      /* Override inline styles for images inside ebay buttons (remove shadow) */
+      /* Override inline styles for images inside ebay buttons to maintain aspect ratio */
       .ebay-btn img {
-        width: 24px !important;
         height: 24px !important;
+        width: auto !important;
         box-shadow: none;
       }
       /* New class for NHL buttons */
