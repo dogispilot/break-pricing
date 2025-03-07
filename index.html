@@ -453,7 +453,7 @@
         margin-top: 15px;
         margin-bottom: 15px;
       }
-      /* Pill button style for "Read Set Notes" and "Tools for Breakers" */
+      /* Pill button style for "Read Set Notes" and "Breaker Settings" */
       .pill-button {
         display: inline-block;
         padding: 4px 12px;
@@ -477,7 +477,7 @@
         <p class="subtitle">Sniff out the best breaks.</p>
       </div>
 
-      <!-- Calculation Form (without the break pricing options content) -->
+      <!-- Calculation Form (without break pricing options content) -->
       <form id="calcForm">
         <div class="form-row">
           <div class="form-group">
@@ -507,10 +507,51 @@
         </div>
       </form>
 
-      <!-- Tools for Breakers button and options container -->
-      <div style="text-align: center; margin-top: 20px;">
-        <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Tools for Breakers</a>
+      <!-- Set Details Container -->
+      <div id="setDetails" style="margin-bottom: 20px;"></div>
+      <!-- Key Rookies Section -->
+      <div id="keyPlayersSection" style="display:none;">
+        <h2>Key Rookies</h2>
+        <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
+
+      <!-- Chart and summary boxes -->
+      <div class="chart-summary-container">
+        <div id="chartContainer">
+          <canvas id="pieChart"></canvas>
+          <div id="pieChartMessage">
+            Please select a year and set to get started sniping.
+          </div>
+        </div>
+        <div class="summary-container">
+          <div id="totalProfitBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Breaker's Profit</div>
+            <div class="toast">
+              Profit is how much money a breaker will make.
+            </div>
+          </div>
+          <div id="whatnotsCutBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Whatnot's Cut</div>
+            <div class="toast">
+              Whatnot's cut is 8% of the breaker’s listed price, before tax.
+            </div>
+          </div>
+          <div id="costOfBusinessBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Cost of Business</div>
+            <div class="toast">
+              Cost of Business includes transaction fees and additional per order supplies cost.
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Breaker Settings button placed right below the Cost of Business card -->
+      <div style="text-align: center; margin-top: 10px;">
+        <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Breaker Settings</a>
+      </div>
+      <!-- Break Pricing Options content -->
       <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
         <div class="form-row">
           <div class="form-group">
@@ -575,47 +616,6 @@
         </div>
       </div>
 
-      <!-- Set Details Container -->
-      <div id="setDetails" style="margin-bottom: 20px;"></div>
-      <!-- Key Rookies Section -->
-      <div id="keyPlayersSection" style="display:none;">
-        <h2>Key Rookies</h2>
-        <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
-      </div>
-
-      <!-- Chart and summary boxes -->
-      <div class="chart-summary-container">
-        <div id="chartContainer">
-          <canvas id="pieChart"></canvas>
-          <div id="pieChartMessage">
-            Please select a year and set to get started sniping.
-          </div>
-        </div>
-        <div class="summary-container">
-          <div id="totalProfitBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Breaker's Profit</div>
-            <div class="toast">
-              Profit is how much money a breaker will make.
-            </div>
-          </div>
-          <div id="whatnotsCutBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Whatnot's Cut</div>
-            <div class="toast">
-              Whatnot's cut is 8% of the breaker’s listed price, before tax.
-            </div>
-          </div>
-          <div id="costOfBusinessBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Cost of Business</div>
-            <div class="toast">
-              Cost of Business includes transaction fees and additional per order supplies cost.
-            </div>
-          </div>
-        </div>
-      </div>
-      
       <!-- Distribution Section -->
       <h2 id="teamPricesHeader" style="display: none;">Card Distribution by Team</h2>
       <p class="small-copy" id="distributionCopy" style="display: none;">
@@ -644,7 +644,7 @@
         }
       }
 
-      // Toggle the break pricing options menu (now below the Tools for Breakers button)
+      // Toggle the break pricing options menu (now located below the Breaker Settings button)
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         if (menu.style.display === "none" || menu.style.display === "") {
