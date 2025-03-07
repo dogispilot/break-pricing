@@ -472,24 +472,23 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* New class for eBay buttons with white background and reduced height */
-      .ebay-btn {
+      /* New classes for ebay and nhl buttons */
+      .ebay-btn, .nhl-btn {
         background-color: #fff !important;
         padding: 2px 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
-      /* Override inline styles for images inside ebay buttons to maintain aspect ratio */
+      /* ebay button image: a little smaller */
       .ebay-btn img {
         height: 20px !important;
         width: auto !important;
         box-shadow: none;
       }
-      /* New class for NHL buttons with bigger logo */
-      .nhl-btn {
-        background-color: #fff !important;
-        padding: 2px 8px;
-      }
+      /* nhl button image: bigger */
       .nhl-btn img {
-        height: 28px !important;
+        height: 32px !important;
         width: auto !important;
         box-shadow: none;
       }
