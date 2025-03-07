@@ -919,13 +919,15 @@
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
-          // Updated eBay link as a pill-button with logo and label
+          // Updated eBay link as a pill-button without text and with extra top margin
           const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
           ebayLink.className = "pill-button";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;"> eBay';
+          // Add extra space at the top of the button
+          ebayLink.style.marginTop = "8px";
+          ebayLink.innerHTML = '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;">';
           ebayLine.appendChild(ebayLink);
           infoDiv.appendChild(ebayLine);
           tile.appendChild(infoDiv);
@@ -1115,11 +1117,8 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="margin-left:10px;">
-                <img src="resources/share_white.png" alt="Share" class="link-icon" style="width:16px; height:16px;">
-              </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button" style="margin-left:5px;">
-                <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;"> eBay
+                <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1144,11 +1143,8 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="margin-left:10px;">
-                <img src="resources/share_white.png" alt="Share" class="link-icon" style="width:16px; height:16px;">
-              </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button" style="margin-left:5px;">
-                <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;"> eBay
+                <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon" style="vertical-align:middle; margin-right:4px; width:16px; height:16px;">
               </a>
             </td>
             <td>${row.count}</td>
