@@ -564,8 +564,9 @@
           </div>
         </div>
       </div>
+      <div id="results"></div>
 
-      <!-- New Break Pricing Header above the Pie Chart -->
+      <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
         Transparency in the break pricing process.
@@ -678,6 +679,8 @@
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+        // Dispatch a resize event to help Chart.js recalc dimensions
+        window.dispatchEvent(new Event('resize'));
       }
 
       function toggleInputTooltip(labelElement) {
