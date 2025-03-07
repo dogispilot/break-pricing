@@ -453,7 +453,7 @@
         margin-top: 15px;
         margin-bottom: 15px;
       }
-      /* New pill button style for "Read Set Notes" */
+      /* Pill button style for "Read Set Notes" and "Tools for Breakers" */
       .pill-button {
         display: inline-block;
         padding: 4px 12px;
@@ -505,11 +505,7 @@
             </button>
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" style="color: #007bff; text-decoration: underline; font-family: 'BreakPricingFont', sans-serif;">Break Pricing Options</a>
-          </div>
-        </div>
+        <!-- (Removed the original Break Pricing Options link from here) -->
         <div id="breakPricingOptionsMenu" style="display: none;">
           <div class="form-row">
             <div class="form-group">
@@ -575,7 +571,7 @@
         </div>
       </form>
 
-      <!-- New: Set Details Container -->
+      <!-- Set Details Container -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -614,6 +610,10 @@
             </div>
           </div>
         </div>
+      </div>
+      <!-- New Tools for Breakers pill button placed below the chart-summary-container -->
+      <div style="text-align: center; margin-top: 20px;">
+        <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Tools for Breakers</a>
       </div>
 
       <!-- Distribution Section -->
@@ -788,7 +788,7 @@
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.boxes_per_case, false) + '</div><div class="detail-label">Boxes per case</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.packs_per_box, false) + '</div><div class="detail-label">Packs per box</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.cards_per_pack, false) + '</div><div class="detail-label">Cards per pack</div></div>';
-        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_box) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10)/10 : NaN;
+        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10)/10 : NaN;
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerBox, false) + '</div><div class="detail-label">Cards per box</div></div>';
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10)/10 : NaN;
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerCase, false) + '</div><div class="detail-label">Cards per case</div></div>';
