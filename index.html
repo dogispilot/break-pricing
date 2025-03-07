@@ -999,9 +999,9 @@
         // Build Full Table (all columns except "Numbered Cards")
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
-          '<th data-sort="number" onclick="sortTableFull(1)">Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
           '<th data-sort="number" onclick="sortTableFull(2)">Distributed Cost</th>' +
-          '<th data-sort="number" onclick="sortTableFull(3)">Distributed Price</th>' +
+          '<th data-sort="number" onclick="sortTableFull(3)">Distributed Cost + Margin</th>' +
           '<th data-sort="number" onclick="sortTableFull(4)">Whatnot Fees</th>' +
           '<th data-sort="number" onclick="sortTableFull(5)">Transaction Fees</th>' +
           '<th data-sort="number" onclick="sortTableFull(6)">Potential Profit</th>' +
@@ -1032,9 +1032,9 @@
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(0)">Numbered Cards</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(1)">Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Card Distribution</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(2)">Distributed Cost</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(3)">Distributed Price</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(3)">Distributed Cost + Markup</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
