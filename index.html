@@ -341,13 +341,29 @@
         font-size: 0.8rem;
         color: #bbb;
       }
-      /* Grid layout for the 6 detail boxes */
-      .setDetails-grid {
+
+      /* 4-column layout:
+         - Column 1: Single highlight tile
+         - Column 2: Two stacked detail boxes
+         - Column 3: Two stacked detail boxes
+         - Column 4: Single highlight tile
+      */
+      .setDetails-grid-4col {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 20px;
         margin-bottom: 20px;
       }
+      .setDetails-grid-4col .column.stack {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .highlight-tile {
+        /* Add a distinct style if you wish to highlight these tiles differently */
+        border: 2px solid #fff;
+      }
+
       .link-icon {
         width: 16px;
         height: 16px;
@@ -419,8 +435,8 @@
         .summary-container .summary-box {
           margin: 10px 0;
         }
-        /* Stack the detail boxes in a single column on small screens */
-        .setDetails-grid {
+        /* Stack columns on mobile */
+        .setDetails-grid-4col {
           grid-template-columns: 1fr !important;
         }
       }
@@ -737,6 +753,7 @@
           calculateProfit();
         });
 
+        // If you want a default year to be selected, set it here
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
           yearSelect.dispatchEvent(new Event("change"));
@@ -776,7 +793,7 @@
         }
       }
 
-      // ***** UPDATED FUNCTION FOR NEW GRID LAYOUT *****
+      // ***** REVISED FUNCTION FOR 4-COLUMN LAYOUT *****
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -802,32 +819,51 @@
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
           : NaN;
 
-        // Build the 2x3 grid for the six detail boxes
+        // 4 columns:
+        // 1) highlight: rookie percentage
+        // 2) stacked: boxes per case, packs per box
+        // 3) stacked: cards per pack, cards per box
+        // 4) highlight: cards per case
         let html = `
-          <div class="setDetails-grid">
-            <div class="detail-box">
-              <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
-              <div class="detail-label">Rookie Percentage</div>
+          <div class="setDetails-grid-4col">
+            <!-- Column 1: highlight tile -->
+            <div class="column highlight">
+              <div class="detail-box highlight-tile">
+                <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
+                <div class="detail-label">Rookie Percentage</div>
+              </div>
             </div>
-            <div class="detail-box">
-              <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
-              <div class="detail-label">Boxes per Case</div>
+
+            <!-- Column 2: stacked -->
+            <div class="column stack">
+              <div class="detail-box">
+                <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
+                <div class="detail-label">Boxes per Case</div>
+              </div>
+              <div class="detail-box">
+                <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
+                <div class="detail-label">Packs per Box</div>
+              </div>
             </div>
-            <div class="detail-box">
-              <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
-              <div class="detail-label">Cards per Pack</div>
+
+            <!-- Column 3: stacked -->
+            <div class="column stack">
+              <div class="detail-box">
+                <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
+                <div class="detail-label">Cards per Pack</div>
+              </div>
+              <div class="detail-box">
+                <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
+                <div class="detail-label">Cards per Box</div>
+              </div>
             </div>
-            <div class="detail-box">
-              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
-              <div class="detail-label">Packs per Box</div>
-            </div>
-            <div class="detail-box">
-              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
-              <div class="detail-label">Cards per Box</div>
-            </div>
-            <div class="detail-box">
-              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
-              <div class="detail-label">Cards per Case</div>
+
+            <!-- Column 4: highlight tile -->
+            <div class="column highlight">
+              <div class="detail-box highlight-tile">
+                <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
+                <div class="detail-label">Cards per Case</div>
+              </div>
             </div>
           </div>
         `;
@@ -845,7 +881,7 @@
 
         detailsDiv.innerHTML = html;
       }
-      // ***** END OF UPDATED FUNCTION *****
+      // ***** END REVISED FUNCTION *****
 
       function openPlayerEbaySearch(playerName) {
         const selectedYear = document.getElementById("yearSelect").value;
