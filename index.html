@@ -471,10 +471,10 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* New class for eBay buttons with white background */
+      /* New class for eBay buttons with white background and reduced height */
       .ebay-btn {
         background-color: #fff !important;
-        padding: 2px 8px; /* reduced padding for a shorter height */
+        padding: 2px 8px;
       }
       /* Override inline styles for images inside ebay buttons */
       .ebay-btn img {
@@ -930,7 +930,7 @@
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
-          // Updated eBay link as a pill-button without text, with extra top margin, and using the new ebay-btn class
+          // eBay button
           const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
@@ -940,6 +940,16 @@
           ebayLink.innerHTML = '<img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="ebay-icon">';
           ebayLine.appendChild(ebayLink);
           infoDiv.appendChild(ebayLine);
+          // NHL profile button
+          const nhlLine = document.createElement("div");
+          const nhlLink = document.createElement("a");
+          nhlLink.href = player.profile_link;
+          nhlLink.target = "_blank";
+          nhlLink.className = "pill-button ebay-btn";
+          nhlLink.style.marginTop = "8px";
+          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="ebay-icon">';
+          nhlLine.appendChild(nhlLink);
+          infoDiv.appendChild(nhlLine);
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
         });
