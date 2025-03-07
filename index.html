@@ -477,7 +477,7 @@
         <p class="subtitle">Sniff out the best breaks.</p>
       </div>
 
-      <!-- Calculation Form -->
+      <!-- Calculation Form (without the break pricing options content) -->
       <form id="calcForm">
         <div class="form-row">
           <div class="form-group">
@@ -505,70 +505,75 @@
             </button>
           </div>
         </div>
-        <div id="breakPricingOptionsMenu" style="display: none;">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
-              <div class="toast input-tooltip" style="display:none; max-width:300px;">
-                This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
-              </div>
-              <div class="input-button-group">
-                <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
-                <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                  <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
-                  Dave &amp; Adams
-                </button>
-                <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                  <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
-                  Steel City
-                </button>
-                <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                  <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
-                  Midwest Cards
-                </button>
-                <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                  <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
-                  Blowout Cards
-                </button>
-                <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                  <img src="resources/ootb.png" alt="Out of the Box Logo" />
-                  Out of the Box
-                </button>
-              </div>
+      </form>
+
+      <!-- Tools for Breakers button and options container -->
+      <div style="text-align: center; margin-top: 20px;">
+        <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Tools for Breakers</a>
+      </div>
+      <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
+            <div class="toast input-tooltip" style="display:none; max-width:300px;">
+              This is the estimated cost of case from a major online retailer. This will not always be correct as prices fluctuate often. Please lookup case prices using the buttons here, and adjust cost manually as necessary.
             </div>
-          </div>
-          <div class="form-row small-input-row">
-            <div class="form-group">
-              <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
-              <div class="toast input-tooltip" style="display:none;">
-                This is the markup a breaker will apply on top of the case cost. Most breaks require a 30% markup to make it worth the breaker's time. This number should go down as the cost of a case goes up.
-              </div>
-              <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
-            </div>
-            <div class="form-group">
-              <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
-              <div class="toast input-tooltip" style="display:none;">
-                This is the expected total discount a breaker might expect to give when accepting offers. This is blended for all teams.
-              </div>
-              <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%" />
-            </div>
-            <div class="form-group">
-              <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
-              <div class="toast input-tooltip" style="display:none;">
-                This is an estimated tax rate that changes by location. Transaction fees include tax. 5.1% is the average tax rate in the US.
-              </div>
-              <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%" />
-            </div>
-            <div class="form-group">
-              <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
-              <div class="toast input-tooltip" style="display:none;">
-                This is the expected average cost of supplies per order, per break. This includes things like penny sleeves, top loaders, and mailing supplies.
-              </div>
-              <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
+            <div class="input-button-group">
+              <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
+              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
+                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
+                Dave &amp; Adams
+              </button>
+              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
+                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
+                Steel City
+              </button>
+              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
+                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
+                Midwest Cards
+              </button>
+              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
+                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
+                Blowout Cards
+              </button>
+              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
+                <img src="resources/ootb.png" alt="Out of the Box Logo" />
+                Out of the Box
+              </button>
             </div>
           </div>
         </div>
-      </form>
+        <div class="form-row small-input-row">
+          <div class="form-group">
+            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the markup a breaker will apply on top of the case cost. Most breaks require a 30% markup to make it worth the breaker's time. This number should go down as the cost of a case goes up.
+            </div>
+            <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
+          </div>
+          <div class="form-group">
+            <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the expected total discount a breaker might expect to give when accepting offers. This is blended for all teams.
+            </div>
+            <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%" />
+          </div>
+          <div class="form-group">
+            <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is an estimated tax rate that changes by location. Transaction fees include tax. 5.1% is the average tax rate in the US.
+            </div>
+            <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%" />
+          </div>
+          <div class="form-group">
+            <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the expected average cost of supplies per order, per break. This includes things like penny sleeves, top loaders, and mailing supplies.
+            </div>
+            <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
+          </div>
+        </div>
+      </div>
 
       <!-- Set Details Container -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
@@ -610,11 +615,7 @@
           </div>
         </div>
       </div>
-      <!-- Tools for Breakers pill button placed below the chart -->
-      <div style="text-align: center; margin-top: 20px;">
-        <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Tools for Breakers</a>
-      </div>
-
+      
       <!-- Distribution Section -->
       <h2 id="teamPricesHeader" style="display: none;">Card Distribution by Team</h2>
       <p class="small-copy" id="distributionCopy" style="display: none;">
@@ -627,7 +628,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       // Helper: Format a detail value.
-      // If isRookie is true, round down to one decimal and append a "%";
+      // If isRookie is true, round down to one decimal and append a "%" ;
       // otherwise, if the number is whole, return without a decimal; if not, round to one decimal.
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
@@ -643,7 +644,7 @@
         }
       }
 
-      // Toggle the break pricing options menu
+      // Toggle the break pricing options menu (now below the Tools for Breakers button)
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         if (menu.style.display === "none" || menu.style.display === "") {
@@ -764,7 +765,7 @@
         }
       }
 
-      // Updated: Update set details information.
+      // Update set details information.
       // At the end of the Box Breakdown text, an inline pill button "Read Set Notes" is added.
       // When clicked, it toggles the display of the Notes content.
       function updateSetDetails() {
