@@ -301,7 +301,7 @@
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       }
-      /* Make the amounts a lot bolder and larger */
+      /* Make the summary amounts bolder and larger */
       .summary-box .amount {
         font-weight: 900;
         font-size: 2rem;
@@ -340,7 +340,7 @@
         border-radius: 8px;
         flex: 1;
         text-align: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         display: flex;
         flex-direction: column;
       }
@@ -481,7 +481,7 @@
         <p class="subtitle">Sniff out the best breaks.</p>
       </div>
 
-      <!-- Calculation Form (without break pricing options content) -->
+      <!-- Calculation Form -->
       <form id="calcForm">
         <div class="form-row">
           <div class="form-group">
@@ -519,6 +519,13 @@
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
 
+      <!-- Distribution Section (moved above the pie chart) -->
+      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
+      <p class="small-copy" id="distributionCopy" style="display: none;">
+        Highlighted rows represent teams with key rookies.
+      </p>
+      <div id="results"></div>
+
       <!-- Chart and summary boxes -->
       <div class="chart-summary-container">
         <div id="chartContainer">
@@ -549,14 +556,14 @@
               Cost of Business includes transaction fees and additional per order supplies cost.
             </div>
           </div>
-          <!-- Breaker Settings button placed within the summary container,
-               centered below the Cost of Business tile -->
+          <!-- Breaker Settings button is now inside the summary container on the right, centered below the Cost of Business tile -->
           <div style="text-align: center; margin-top: 10px;">
             <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Breaker Settings</a>
           </div>
         </div>
       </div>
-      <!-- Break Pricing Options content placed below the chart/summary section and above the distribution header -->
+
+      <!-- Breaker Settings content (remains below the chart/summary area) -->
       <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
         <div class="form-row">
           <div class="form-group">
@@ -620,13 +627,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Distribution Section -->
-      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
-      <p class="small-copy" id="distributionCopy" style="display: none;">
-        Highlighted rows represent teams with key rookies.
-      </p>
-      <div id="results"></div>
     </div>
 
     <!-- Include Chart.js at the end so we can use it -->
@@ -649,7 +649,7 @@
         }
       }
 
-      // Toggle the break pricing options menu (now located below the pie chart and summary section)
+      // Toggle the break pricing options menu (now located below the chart and above the distribution header)
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         if (menu.style.display === "none" || menu.style.display === "") {
@@ -1339,7 +1339,7 @@
               updateSetDetails();
               calculateProfit();
             });
-            // Attach event listeners to all inputs/selects in both the calcForm and the Breaker Settings section.
+            // Attach event listeners to inputs/selects in both the calcForm and the Breaker Settings section.
             const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select");
             calcInputs.forEach((input) => {
               input.addEventListener("input", calculateProfit);
