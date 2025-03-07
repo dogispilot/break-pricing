@@ -547,7 +547,7 @@
           </div>
         </div>
       </div>
-      <!-- Breaker Settings button and content (moved below the pie chart and summary) -->
+      <!-- Breaker Settings button and content placed below the pie chart and summary -->
       <div style="text-align: center; margin-top: 10px;">
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Breaker Settings</a>
       </div>
@@ -643,7 +643,7 @@
         }
       }
 
-      // Toggle the break pricing options menu (now located below the pie chart and above the distribution header)
+      // Toggle the break pricing options menu (now located below the pie chart and above the distribution section)
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         if (menu.style.display === "none" || menu.style.display === "") {
@@ -1333,7 +1333,8 @@
               updateSetDetails();
               calculateProfit();
             });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
+            // Added event listeners to inputs/selects in both the calcForm and the Breaker Settings container.
+            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select");
             calcInputs.forEach((input) => {
               input.addEventListener("input", calculateProfit);
               input.addEventListener("change", calculateProfit);
