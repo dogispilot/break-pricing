@@ -540,7 +540,7 @@
       <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
       <p class="small-copy" id="distributionCopy" style="display: none;">
         Highlighted rows represent teams with key rookies.
-        <a href="javascript:void(0)" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
+        <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
       <div id="results"></div>
       <!-- Chart and Summary Boxes -->
@@ -1188,7 +1188,8 @@
               document.getElementById("casePriceDup").value = this.value;
             });
             // Toggle duplicate Price Settings row when Price Settings button is clicked
-            document.getElementById("priceSettingsButton").addEventListener("click", function() {
+            document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
+              e.preventDefault();
               var dup = document.getElementById("priceSettingsDuplicate");
               dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
             });
