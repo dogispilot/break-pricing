@@ -714,7 +714,7 @@
         // Set default year to "2024-25" if it exists
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
-          // Dispatch change event to load key rookies and set data
+          // Fire change event so that key rookies update immediately (even with no set selected)
           yearSelect.dispatchEvent(new Event("change"));
         }
         yearSelect.addEventListener("change", function () {
@@ -825,7 +825,7 @@
             (player.setYear === selectedYear || player.setYear === "All") &&
             player.type.toLowerCase() === "rookie"
         );
-        // Always display the key rookies section (even if there are no players)
+        // Always display the key rookies section regardless of filteredPlayers length
         keySection.style.display = "block";
         filteredPlayers.forEach((player) => {
           highlightTeams.add(player.team);
@@ -1167,8 +1167,9 @@
         resultsHtml += '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
         resultsHtml += "</tr></thead><tbody>";
 
+        // Highlight rows where the team is in highlightTeams
         const tbodyHtml = rows.map(row => {
-          return `<tr>
+          return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
