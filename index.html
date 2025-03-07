@@ -475,6 +475,15 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
+      /* New styling for empty state container */
+      .empty-state {
+        text-align: center;
+        font-size: 1.5rem;
+        background-color: #2c2c2c;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -568,7 +577,9 @@
       
       <!-- Results Section with Empty State -->
       <div id="results">
-        <p>Please select a year and set to get started sniping.</p>
+        <div class="empty-state">
+          <p>Please select a year and set to get started sniping.</p>
+        </div>
       </div>
 
       <!-- Break Pricing Tools Header & Transparency Text -->
@@ -1327,3 +1338,4 @@
     </script>
   </body>
 </html>
+
