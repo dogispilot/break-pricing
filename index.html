@@ -531,11 +531,6 @@
           </div>
         </div>
       </div>
-      <!-- Price Settings Toggle Button -->
-      <p class="small-copy" id="distributionCopy" style="display: none;">
-        Highlighted rows represent teams with key rookies.
-        <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
-      </p>
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
         <h2>Key Rookies</h2>
@@ -543,6 +538,10 @@
       </div>
       <!-- Distribution Section (Trimmed Table) -->
       <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
+      <p class="small-copy" id="distributionCopy" style="display: none;">
+        Highlighted rows represent teams with key rookies.
+        <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
+      </p>
       <div id="results"></div>
       <!-- Chart and Summary Boxes -->
       <div class="chart-summary-container">
@@ -568,7 +567,7 @@
             <div class="label">Cost of Business</div>
             <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
           </div>
-          <!-- Breaker Settings Toggle Button (Remains below the summary if needed) -->
+          <!-- Breaker Settings button positioned in the summary container -->
           <div style="text-align: center; margin-top: 10px;">
             <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Breaker Settings</a>
           </div>
@@ -630,6 +629,8 @@
           </div>
         </div>
       </div>
+      <!-- Full Distribution Table (Full View: all columns except "Numbered Cards") -->
+      <div id="fullResults"></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -1186,7 +1187,7 @@
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
             });
-            // Toggle Price Settings row when Price Settings button is clicked
+            // Toggle duplicate Price Settings row when Price Settings button is clicked
             document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
               e.preventDefault();
               var dup = document.getElementById("priceSettingsDuplicate");
