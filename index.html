@@ -615,7 +615,7 @@
     <!-- Include Chart.js at the end so we can use it -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Helper: Format a detail value. If numeric, round down to one decimal. Otherwise, return the coming soon image.
+      // Helper: Format a detail value. If numeric, round down to one decimal; otherwise, return the coming soon image.
       function formatDetail(val) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
@@ -747,7 +747,9 @@
         }
       }
 
-      // Updated: Update set details information using formatDetail() for each detail card.
+      // Updated: Update set details information.
+      // At the end of the Box Breakdown content, a link "Read Set Notes" is added.
+      // When clicked, it toggles the display of the Notes content.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -776,8 +778,9 @@
         
         html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
         html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") + "</p>";
-        html += "<p><strong>Notes:</strong> " + (setObj.notes || "N/A") + "</p>";
-
+        html += '<p><a href="javascript:void(0)" onclick="toggleSetNotes(this)">Read Set Notes</a></p>';
+        html += '<div class="set-notes" style="display:none;"><p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + "</p></div>";
+        
         detailsDiv.innerHTML = html;
       }
 
@@ -813,7 +816,7 @@
             (player.setYear === selectedYear || player.setYear === "All") &&
             player.type.toLowerCase() === "rookie"
         );
-        // Always display key rookies section even if filteredPlayers is empty
+        // Always display key rookies section
         keySection.style.display = "block";
         filteredPlayers.forEach((player) => {
           highlightTeams.add(player.team);
@@ -1280,6 +1283,18 @@
           toast.style.display = toast.style.display === "block" ? "none" : "block";
         });
       });
+
+      // Toggle the display of the set notes when the "Read Set Notes" link is clicked.
+      function toggleSetNotes(link) {
+        var notesDiv = link.parentElement.nextElementSibling;
+        if (notesDiv.style.display === "none" || notesDiv.style.display === "") {
+          notesDiv.style.display = "block";
+          link.textContent = "Hide Set Notes";
+        } else {
+          notesDiv.style.display = "none";
+          link.textContent = "Read Set Notes";
+        }
+      }
 
       window.addEventListener("load", function () {
         fetch("config.json")
