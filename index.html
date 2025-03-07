@@ -505,7 +505,6 @@
             </button>
           </div>
         </div>
-        <!-- (Removed the original Break Pricing Options link from here) -->
         <div id="breakPricingOptionsMenu" style="display: none;">
           <div class="form-row">
             <div class="form-group">
@@ -611,7 +610,7 @@
           </div>
         </div>
       </div>
-      <!-- New Tools for Breakers pill button placed below the chart-summary-container -->
+      <!-- Tools for Breakers pill button placed below the chart -->
       <div style="text-align: center; margin-top: 20px;">
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Tools for Breakers</a>
       </div>
@@ -628,14 +627,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       // Helper: Format a detail value.
-      // If isRookie is true, round down to one decimal;
+      // If isRookie is true, round down to one decimal and append a "%";
       // otherwise, if the number is whole, return without a decimal; if not, round to one decimal.
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
           if (isRookie) {
             let rounded = Math.floor(num * 10) / 10;
-            return rounded.toFixed(1);
+            return rounded.toFixed(1) + "%";
           } else {
             return (num % 1 === 0) ? num.toFixed(0) : num.toFixed(1);
           }
