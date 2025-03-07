@@ -629,7 +629,7 @@
     <script>
       // Helper: Format a detail value.
       // If isRookie is true, round down to one decimal;
-      // otherwise, use standard rounding to one decimal.
+      // otherwise, if the number is whole, return without a decimal; if not, round to one decimal.
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
@@ -637,7 +637,7 @@
             let rounded = Math.floor(num * 10) / 10;
             return rounded.toFixed(1);
           } else {
-            return num.toFixed(1);
+            return (num % 1 === 0) ? num.toFixed(0) : num.toFixed(1);
           }
         } else {
           return '<img src="resources/comingsoon.png" alt="Coming Soon" style="max-width:100%; vertical-align:middle;">';
@@ -766,7 +766,7 @@
       }
 
       // Updated: Update set details information.
-      // At the end of the Box Breakdown text, an empty pill button "Read Set Notes" is added inline.
+      // At the end of the Box Breakdown text, an inline pill button "Read Set Notes" is added.
       // When clicked, it toggles the display of the Notes content.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
@@ -788,14 +788,13 @@
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.boxes_per_case, false) + '</div><div class="detail-label">Boxes per case</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.packs_per_box, false) + '</div><div class="detail-label">Packs per box</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.cards_per_pack, false) + '</div><div class="detail-label">Cards per pack</div></div>';
-        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10)/10 : NaN;
+        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_box) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10)/10 : NaN;
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerBox, false) + '</div><div class="detail-label">Cards per box</div></div>';
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10)/10 : NaN;
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerCase, false) + '</div><div class="detail-label">Cards per case</div></div>';
         html += '</div>';
         
         html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
-        // Inline the "Read Set Notes" pill button after the Box Breakdown text
         html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") +
                 " <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a></p>";
         html += '<div class="set-notes" style="display:none;"><p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + "</p></div>";
@@ -835,7 +834,6 @@
             (player.setYear === selectedYear || player.setYear === "All") &&
             player.type.toLowerCase() === "rookie"
         );
-        // Always display key rookies section
         keySection.style.display = "block";
         filteredPlayers.forEach((player) => {
           highlightTeams.add(player.team);
