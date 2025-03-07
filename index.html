@@ -399,8 +399,13 @@
         margin-right: 8px;
         border-radius: 50%;
       }
+      #resultsTable, #fullResultsTable {
+        /* Ensure both tables have similar styling */
+      }
       #resultsTable th:first-child,
-      #resultsTable td:first-child {
+      #resultsTable td:first-child,
+      #fullResultsTable th:first-child,
+      #fullResultsTable td:first-child {
         white-space: nowrap;
       }
       @media (max-width: 600px) {
@@ -519,14 +524,14 @@
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
 
-      <!-- Distribution Section (moved above the pie chart) -->
+      <!-- Distribution Section (Trimmed Table) -->
       <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
       <p class="small-copy" id="distributionCopy" style="display: none;">
         Highlighted rows represent teams with key rookies.
       </p>
       <div id="results"></div>
 
-      <!-- Chart and summary boxes -->
+      <!-- Chart and Summary Boxes -->
       <div class="chart-summary-container">
         <div id="chartContainer">
           <canvas id="pieChart"></canvas>
@@ -556,14 +561,14 @@
               Cost of Business includes transaction fees and additional per order supplies cost.
             </div>
           </div>
-          <!-- Breaker Settings button is now inside the summary container on the right, centered below the Cost of Business tile -->
+          <!-- Breaker Settings button positioned in the summary container -->
           <div style="text-align: center; margin-top: 10px;">
             <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button">Breaker Settings</a>
           </div>
         </div>
       </div>
 
-      <!-- Breaker Settings content (remains below the chart/summary area) -->
+      <!-- Breaker Settings Content (Price Options) -->
       <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
         <div class="form-row">
           <div class="form-group">
@@ -627,6 +632,10 @@
           </div>
         </div>
       </div>
+
+      <!-- Full Distribution Table (Full View: all columns) -->
+      <div id="fullResults"></div>
+
     </div>
 
     <!-- Include Chart.js at the end so we can use it -->
@@ -649,7 +658,7 @@
         }
       }
 
-      // Toggle the break pricing options menu (now located below the chart and above the distribution header)
+      // Toggle the break pricing options menu
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         if (menu.style.display === "none" || menu.style.display === "") {
@@ -731,13 +740,11 @@
           option.textContent = year;
           yearSelect.appendChild(option);
         });
-        // Register the change event listener BEFORE dispatching default change
         yearSelect.addEventListener("change", function () {
           populateSetSelector();
           updateKeyPlayersSection();
           calculateProfit();
         });
-        // Set default year to "2024-25" if it exists and dispatch change event to fetch sets
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
           yearSelect.dispatchEvent(new Event("change"));
@@ -770,9 +777,6 @@
         }
       }
 
-      // Update set details information.
-      // At the end of the Box Breakdown text, an inline pill button "Read Set Notes" is added.
-      // When clicked, it toggles the display of the Notes content.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -787,23 +791,20 @@
           return;
         }
         let html = "";
-        
         html += '<div class="newBoxes-container">';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.rookie_percentage, true) + '</div><div class="detail-label">Rookie Percentage</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.boxes_per_case, false) + '</div><div class="detail-label">Boxes per case</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.packs_per_box, false) + '</div><div class="detail-label">Packs per box</div></div>';
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.cards_per_pack, false) + '</div><div class="detail-label">Cards per pack</div></div>';
-        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10)/10 : NaN;
+        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10 : NaN;
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerBox, false) + '</div><div class="detail-label">Cards per box</div></div>';
-        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10)/10 : NaN;
+        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10 : NaN;
         html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerCase, false) + '</div><div class="detail-label">Cards per case</div></div>';
         html += '</div>';
-        
         html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
         html += "<p><strong>Box Breakdown:</strong> " + (setObj.box_breakdown || "N/A") +
                 " <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a></p>";
         html += '<div class="set-notes" style="display:none;"><p><strong>Notes:</strong> ' + (setObj.notes || "N/A") + "</p></div>";
-        
         detailsDiv.innerHTML = html;
       }
 
@@ -816,10 +817,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " " + playerName;
-        const url =
-          "https://www.ebay.com/sch/i.html?_nkw=" +
-          encodeURIComponent(query) +
-          "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
+        const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
         window.open(url, "_blank");
       }
 
@@ -834,25 +832,19 @@
           return;
         }
         document.querySelector("#keyPlayersSection h2").textContent = selectedYear + " Key Rookies";
-        const filteredPlayers = keyPlayersData.filter(
-          (player) =>
-            (player.setYear === selectedYear || player.setYear === "All") &&
-            player.type.toLowerCase() === "rookie"
+        const filteredPlayers = keyPlayersData.filter((player) =>
+          (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
         );
         keySection.style.display = "block";
-        filteredPlayers.forEach((player) => {
-          highlightTeams.add(player.team);
-        });
+        filteredPlayers.forEach((player) => { highlightTeams.add(player.team); });
         filteredPlayers.forEach((player) => {
           const tile = document.createElement("div");
           tile.className = "key-player-tile";
-
           const teamLogo = document.createElement("img");
           teamLogo.className = "team-logo";
           teamLogo.src = teamLogos[player.team] || "";
           teamLogo.alt = player.team + " logo";
           tile.appendChild(teamLogo);
-
           const profileLink = document.createElement("a");
           profileLink.href = player.profile_link;
           profileLink.target = "_blank";
@@ -862,10 +854,8 @@
           playerImg.alt = player.player;
           profileLink.appendChild(playerImg);
           tile.appendChild(profileLink);
-
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
-
           const nameLine = document.createElement("div");
           const nameLink = document.createElement("a");
           nameLink.href = player.profile_link;
@@ -875,33 +865,26 @@
           nameLink.textContent = player.player;
           nameLine.appendChild(nameLink);
           infoDiv.appendChild(nameLine);
-
           const notesLine = document.createElement("div");
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
-
           const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
-          ebayLink.onclick = function () {
-            openPlayerEbaySearch(player.player);
-          };
+          ebayLink.onclick = function () { openPlayerEbaySearch(player.player); };
           const shareImg = document.createElement("img");
           shareImg.src = "resources/share_white.png";
           shareImg.alt = "Share";
           shareImg.className = "link-icon";
           ebayLink.appendChild(shareImg);
-
           const ebayImg = document.createElement("img");
-          ebayImg.src =
-            "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
+          ebayImg.src = "https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png";
           ebayImg.alt = "eBay";
           ebayImg.className = "link-icon ebay-icon";
           ebayLink.appendChild(ebayImg);
           ebayLine.appendChild(ebayLink);
           infoDiv.appendChild(ebayLine);
-
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
         });
@@ -957,9 +940,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        const url =
-          "https://www.dacardworld.com/search/?Search=" +
-          encodeURIComponent(query);
+        const url = "https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -976,9 +957,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        const url =
-          "https://www.steelcitycollectibles.com/search?q=" +
-          encodeURIComponent(query);
+        const url = "https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -995,9 +974,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet;
-        const url =
-          "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" +
-          encodeURIComponent(query);
+        const url = "https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -1014,9 +991,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet;
-        const url =
-          "https://hockeychecklists.com/checklist?search=" +
-          encodeURIComponent(query);
+        const url = "https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -1033,9 +1008,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        const url =
-          "https://www.midwestcards.com/search/?search_query=" +
-          encodeURIComponent(query);
+        const url = "https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -1052,9 +1025,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        const url =
-          "https://www.blowoutcards.com/catalogsearch/result/?q=" +
-          encodeURIComponent(query);
+        const url = "https://www.blowoutcards.com/catalogsearch/result/?q=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -1071,9 +1042,7 @@
         }
         const yearPrefix = selectedYear.split("-")[0];
         const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        const url =
-          "https://www.outoftheboxcards.com/?s=" +
-          encodeURIComponent(query);
+        const url = "https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query);
         window.open(url, "_blank");
       }
 
@@ -1087,10 +1056,7 @@
         }
         const firstYear = selectedYear.split("-")[0];
         const query = firstYear + " " + selectedSet + " " + teamName;
-        const url =
-          "https://www.ebay.com/sch/i.html?_nkw=" +
-          encodeURIComponent(query) +
-          "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
+        const url = "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1";
         window.open(url, "_blank");
       }
 
@@ -1114,19 +1080,11 @@
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
 
-        if (
-          isNaN(casePrice) ||
-          isNaN(markup) ||
-          isNaN(userDiscount) ||
-          isNaN(blendedTax) ||
-          isNaN(supplies)
-        ) {
+        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) {
           return;
         }
 
-        const setObj = setData.find(
-          (set) => set.year === selectedYear && set.name === selectedSetName
-        );
+        const setObj = setData.find((set) => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
 
         const teamData = setObj.cards || setObj.most_numbered_cards;
@@ -1145,7 +1103,6 @@
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = price - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
-
           rows.push({
             team: team,
             logo: teamLogos[team] || "",
@@ -1159,27 +1116,18 @@
           });
         }
 
-        const totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
-        const totalWhatnotsCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
-        const totalCostOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
-
-        document.querySelector("#totalProfitBox .amount").textContent = "$" + totalProfit.toFixed(2);
-        document.querySelector("#whatnotsCutBox .amount").textContent = "$" + totalWhatnotsCut.toFixed(2);
-        document.querySelector("#costOfBusinessBox .amount").textContent = "$" + totalCostOfBusiness.toFixed(2);
-
-        let resultsHtml = '<table id="resultsTable">';
-        resultsHtml += "<thead><tr>";
-        resultsHtml += '<th data-sort="text" onclick="sortTable(0)">Team</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(1)">Numbered Cards</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(2)">Card Distribution</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(3)">Distributed Cost</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(4)">Distributed Price</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(5)">Whatnot Fees</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(6)">Transaction Fees</th>';
-        resultsHtml += '<th data-sort="number" onclick="sortTable(7)">Potential Profit</th>';
-        resultsHtml += "</tr></thead><tbody>";
-
-        const tbodyHtml = rows.map(row => {
+        // Build full table (all columns)
+        let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
+          '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
+          '<th data-sort="number" onclick="sortTableFull(1)">Numbered Cards</th>' +
+          '<th data-sort="number" onclick="sortTableFull(2)">Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableFull(3)">Distributed Cost</th>' +
+          '<th data-sort="number" onclick="sortTableFull(4)">Distributed Price</th>' +
+          '<th data-sort="number" onclick="sortTableFull(5)">Whatnot Fees</th>' +
+          '<th data-sort="number" onclick="sortTableFull(6)">Transaction Fees</th>' +
+          '<th data-sort="number" onclick="sortTableFull(7)">Potential Profit</th>' +
+          '</tr></thead><tbody>';
+        let fullRowsHtml = rows.map(row => {
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
@@ -1201,8 +1149,40 @@
             <td>$${row.profit.toFixed(2)}</td>
           </tr>`;
         }).join("");
-        resultsHtml += tbodyHtml + "</tbody></table>";
-        document.getElementById("results").innerHTML = resultsHtml;
+        let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
+
+        // Build trimmed table (remove whatnotFees, transactionFees, profit)
+        let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
+          '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(2)">Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(3)">Distributed Cost</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Price</th>' +
+          '</tr></thead><tbody>';
+        let trimmedRowsHtml = rows.map(row => {
+          return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
+            <td>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
+                <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="margin-left:10px;">
+                <img src="resources/share_white.png" alt="Share" class="link-icon" style="width:16px; height:16px;">
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="margin-left:5px;">
+                <img src="https://cdn4.iconfinder.com/data/icons/flat-brand-logo-2/512/ebay-1024.png" alt="eBay" class="link-icon ebay-icon" style="width:16px; height:16px;">
+              </a>
+            </td>
+            <td>${row.count}</td>
+            <td>${row.distribution}</td>
+            <td>$${row.cost.toFixed(2)}</td>
+            <td>$${row.price.toFixed(2)}</td>
+          </tr>`;
+        }).join("");
+        let trimmedTableHtml = trimmedHeader + trimmedRowsHtml + "</tbody></table>";
+
+        // Insert the full table into the new container and trimmed table into the existing results container.
+        document.getElementById("fullResults").innerHTML = fullTableHtml;
+        document.getElementById("results").innerHTML = trimmedTableHtml;
 
         if (rows.length > 0) {
           document.getElementById("teamPricesHeader").style.display = "block";
@@ -1214,9 +1194,11 @@
 
         tableData = rows;
 
-        const chartData = [totalProfit, totalWhatnotsCut, totalCostOfBusiness];
+        const chartData = [rows.reduce((sum, row) => sum + row.profit, 0),
+                           rows.reduce((sum, row) => sum + row.whatnotFees, 0),
+                           rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies];
         chartContainer.style.display = "block";
-        if (chartData.every((val) => val === 0)) {
+        if (chartData.every(val => val === 0)) {
           pieChartCanvas.style.display = "none";
           pieChartMessage.style.display = "flex";
         } else {
@@ -1230,48 +1212,27 @@
             pieChart = new Chart(ctx, {
               type: "pie",
               data: {
-                labels: [
-                  "Breaker's Profit",
-                  "Whatnot's Cut",
-                  "Cost of Business"
-                ],
-                datasets: [
-                  {
-                    data: chartData,
-                    backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
-                    offset: 30,
-                    borderWidth: 0,
-                    borderColor: "transparent"
-                  }
-                ]
+                labels: ["Breaker's Profit", "Whatnot's Cut", "Cost of Business"],
+                datasets: [{
+                  data: chartData,
+                  backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
+                  offset: 30,
+                  borderWidth: 0,
+                  borderColor: "transparent"
+                }]
               },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: {
-                  padding: { bottom: 0 }
-                },
+                layout: { padding: { bottom: 0 } },
                 plugins: {
                   legend: {
                     position: "bottom",
-                    labels: {
-                      font: { family: "BreakPricingFont" },
-                      color: "#e0e0e0"
-                    }
+                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" }
                   },
-                  dropShadowPlugin: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 10,
-                    shadowColor: "rgba(0, 0, 0, 0.5)"
-                  }
+                  dropShadowPlugin: { shadowBlur: 10, shadowOffsetX: 0, shadowOffsetY: 10, shadowColor: "rgba(0, 0, 0, 0.5)" }
                 },
-                elements: {
-                  arc: {
-                    borderWidth: 0,
-                    borderColor: "transparent"
-                  }
-                }
+                elements: { arc: { borderWidth: 0, borderColor: "transparent" } }
               },
               plugins: [dropShadowPlugin, legendMargin]
             });
@@ -1279,7 +1240,26 @@
         }
       }
 
-      function sortTable(n) {
+      function sortTableFull(n) {
+        const table = document.getElementById("fullResultsTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        let dir = sortDirections[n] || 1;
+        rows.sort((a, b) => {
+          let aText = a.cells[n].textContent.trim();
+          let bText = b.cells[n].textContent.trim();
+          let aNum = parseFloat(aText.replace(/[^0-9.-]/g, ""));
+          let bNum = parseFloat(bText.replace(/[^0-9.-]/g, ""));
+          if (!isNaN(aNum) && !isNaN(bNum)) {
+            return (aNum - bNum) * dir;
+          }
+          return aText.localeCompare(bText) * dir;
+        });
+        rows.forEach(row => tbody.appendChild(row));
+        sortDirections[n] = -dir;
+      }
+
+      function sortTableTrimmed(n) {
         const table = document.getElementById("resultsTable");
         const tbody = table.tBodies[0];
         const rows = Array.from(tbody.rows);
@@ -1306,7 +1286,6 @@
         });
       });
 
-      // Toggle the display of the set notes when the "Read Set Notes" pill button is clicked.
       function toggleSetNotes(link) {
         var notesDiv = link.parentElement.nextElementSibling;
         if (notesDiv.style.display === "none" || notesDiv.style.display === "") {
@@ -1339,7 +1318,6 @@
               updateSetDetails();
               calculateProfit();
             });
-            // Attach event listeners to inputs/selects in both the calcForm and the Breaker Settings section.
             const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select");
             calcInputs.forEach((input) => {
               input.addEventListener("input", calculateProfit);
@@ -1352,26 +1330,21 @@
             alert("Error loading JSON file: " + error.message);
           });
       });
+
       window.addEventListener("resize", function () {
         const boxes = document.querySelectorAll('.detail-box');
-        if(boxes.length) adjustDetailBoxes();
+        if (boxes.length) adjustDetailBoxes();
       });
 
       function adjustDetailBoxes() {
         const boxes = document.querySelectorAll('.detail-box');
-        boxes.forEach(box => {
-          box.style.fontSize = "1.2rem";
-        });
+        boxes.forEach(box => { box.style.fontSize = "1.2rem"; });
         let minHeight = Infinity;
-        boxes.forEach(box => {
-          if (box.scrollHeight < minHeight) {
-            minHeight = box.scrollHeight;
-          }
-        });
+        boxes.forEach(box => { if (box.scrollHeight < minHeight) { minHeight = box.scrollHeight; } });
         boxes.forEach(box => {
           while (box.scrollHeight > minHeight) {
             let currentSize = parseFloat(window.getComputedStyle(box).fontSize);
-            if(currentSize < 10) break;
+            if (currentSize < 10) break;
             box.style.fontSize = (currentSize * 0.95) + "px";
           }
         });
