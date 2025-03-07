@@ -530,7 +530,7 @@
         Highlighted rows represent teams with key rookies.
         <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
-      <!-- Price Settings Menu (Moved here, below the distribution text and above the table) -->
+      <!-- Price Settings Menu (Duplicate) -->
       <div id="priceSettingsDuplicate" style="display:none; margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
@@ -564,7 +564,6 @@
           </div>
         </div>
       </div>
-      <div id="results"></div>
 
       <!-- New Break Pricing Header above the Pie Chart -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
@@ -572,35 +571,7 @@
         Transparency in the break pricing process.
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Breaker Settings</a>
       </p>
-
-      <!-- Chart and Summary Boxes -->
-      <div class="chart-summary-container">
-        <div id="chartContainer">
-          <canvas id="pieChart"></canvas>
-          <div id="pieChartMessage">
-            Please select a year and set to get started sniping.
-          </div>
-        </div>
-        <div class="summary-container">
-          <div id="totalProfitBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Breaker's Profit</div>
-            <div class="toast">Profit is how much money a breaker will make.</div>
-          </div>
-          <div id="whatnotsCutBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Whatnot's Cut</div>
-            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
-          </div>
-          <div id="costOfBusinessBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Cost of Business</div>
-            <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Breaker Settings Content (Price Options) -->
+      <!-- BREAKER SETTINGS MENU MOVED HERE -->
       <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
         <div class="form-row">
           <div class="form-group">
@@ -653,6 +624,33 @@
             <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
             <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
             <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart and Summary Boxes -->
+      <div class="chart-summary-container">
+        <div id="chartContainer">
+          <canvas id="pieChart"></canvas>
+          <div id="pieChartMessage">
+            Please select a year and set to get started sniping.
+          </div>
+        </div>
+        <div class="summary-container">
+          <div id="totalProfitBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Breaker's Profit</div>
+            <div class="toast">Profit is how much money a breaker will make.</div>
+          </div>
+          <div id="whatnotsCutBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Whatnot's Cut</div>
+            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
+          </div>
+          <div id="costOfBusinessBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Cost of Business</div>
+            <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
           </div>
         </div>
       </div>
