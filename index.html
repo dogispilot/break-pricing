@@ -615,12 +615,18 @@
     <!-- Include Chart.js at the end so we can use it -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Helper: Format a detail value. If numeric, round down to one decimal; otherwise, return the coming soon image.
-      function formatDetail(val) {
+      // Helper: Format a detail value.
+      // If isRookie is true, round down to one decimal;
+      // otherwise, use standard rounding to one decimal.
+      function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
-          let rounded = Math.floor(num * 10) / 10;
-          return rounded.toFixed(1);
+          if (isRookie) {
+            let rounded = Math.floor(num * 10) / 10;
+            return rounded.toFixed(1);
+          } else {
+            return num.toFixed(1);
+          }
         } else {
           return '<img src="resources/comingsoon.png" alt="Coming Soon" style="max-width:100%; vertical-align:middle;">';
         }
@@ -766,14 +772,14 @@
         let html = "";
         
         html += '<div class="newBoxes-container">';
-        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.rookie_percentage) + '</div><div class="detail-label">Rookie Percentage</div></div>';
-        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.boxes_per_case) + '</div><div class="detail-label">Boxes per case</div></div>';
-        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.packs_per_box) + '</div><div class="detail-label">Packs per box</div></div>';
-        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.cards_per_pack) + '</div><div class="detail-label">Cards per pack</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.rookie_percentage, true) + '</div><div class="detail-label">Rookie Percentage</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.boxes_per_case, false) + '</div><div class="detail-label">Boxes per case</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.packs_per_box, false) + '</div><div class="detail-label">Packs per box</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(setObj.cards_per_pack, false) + '</div><div class="detail-label">Cards per pack</div></div>';
         let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10)/10 : NaN;
-        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerBox) + '</div><div class="detail-label">Cards per box</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerBox, false) + '</div><div class="detail-label">Cards per box</div></div>';
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case) ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10)/10 : NaN;
-        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerCase) + '</div><div class="detail-label">Cards per case</div></div>';
+        html += '<div class="detail-box"><div class="detail-value">' + formatDetail(cardsPerCase, false) + '</div><div class="detail-label">Cards per case</div></div>';
         html += '</div>';
         
         html += "<p><strong>Release Date:</strong> " + (setObj.release_date || "N/A") + "</p>";
