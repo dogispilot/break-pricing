@@ -497,19 +497,7 @@
       </form>
       <!-- Set Details Container -->
       <div id="setDetails" style="margin-bottom: 20px;"></div>
-      <!-- Key Rookies Section -->
-      <div id="keyPlayersSection" style="display:none;">
-        <h2>Key Rookies</h2>
-        <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
-      </div>
-      <!-- Distribution Section (Trimmed Table) -->
-      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
-      <p class="small-copy" id="distributionCopy" style="display: none;">
-        Highlighted rows represent teams with key rookies.
-        <a href="javascript:void(0)" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
-      </p>
-      <div id="results"></div>
-      <!-- Price Settings Duplicate (hidden by default) -->
+      <!-- Price Settings Menu (Moved above the table, below header text) -->
       <div id="priceSettingsDuplicate" style="display:none; margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
@@ -543,6 +531,18 @@
           </div>
         </div>
       </div>
+      <!-- Key Rookies Section -->
+      <div id="keyPlayersSection" style="display:none;">
+        <h2>Key Rookies</h2>
+        <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
+      </div>
+      <!-- Distribution Section (Trimmed Table) -->
+      <h2 id="teamPricesHeader" style="display: none;">Distribution of Numbered Cards</h2>
+      <p class="small-copy" id="distributionCopy" style="display: none;">
+        Highlighted rows represent teams with key rookies.
+        <a href="javascript:void(0)" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
+      </p>
+      <div id="results"></div>
       <!-- Chart and Summary Boxes -->
       <div class="chart-summary-container">
         <div id="chartContainer">
@@ -734,7 +734,10 @@
         if (!selectedYear || !selectedSet) return;
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
         if (setObj && setObj.price) {
-          document.getElementById("casePrice").value = parseFloat(setObj.price.replace(/[$,]/g, ""));
+          const price = parseFloat(setObj.price.replace(/[$,]/g, ""));
+          document.getElementById("casePrice").value = price;
+          // Update duplicate input as well
+          document.getElementById("casePriceDup").value = price;
         }
       }
       function updateSetDetails() {
@@ -986,6 +989,13 @@
             profit: profit
           });
         }
+        // Update Summary Tiles with calculated values
+        let totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
+        let whatnotCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
+        let costOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
+        document.querySelector("#totalProfitBox .amount").textContent = "$" + totalProfit.toFixed(2);
+        document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
+        document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
         // Build Full Table (all columns except "Numbered Cards")
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
@@ -1056,9 +1066,7 @@
           document.getElementById("distributionCopy").style.display = "none";
         }
         tableData = rows;
-        const chartData = [rows.reduce((sum, row) => sum + row.profit, 0),
-                           rows.reduce((sum, row) => sum + row.whatnotFees, 0),
-                           rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies];
+        const chartData = [totalProfit, whatnotCut, costOfBusiness];
         chartContainer.style.display = "block";
         if (chartData.every(val => val === 0)) {
           pieChartCanvas.style.display = "none";
