@@ -371,7 +371,7 @@
         vertical-align: middle;
       }
       .ebay-icon {
-        /* For the eBay button, the height is fixed and the width will adjust automatically */
+        /* Maintain aspect ratio */
         height: 24px;
         width: auto;
       }
@@ -483,13 +483,13 @@
         width: auto !important;
         box-shadow: none;
       }
-      /* New class for NHL buttons */
+      /* New class for NHL buttons with bigger logo */
       .nhl-btn {
         background-color: #fff !important;
         padding: 2px 8px;
       }
       .nhl-btn img {
-        height: 20px !important;
+        height: 28px !important;
         width: auto !important;
         box-shadow: none;
       }
@@ -941,26 +941,26 @@
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
+          // Create container for the buttons (displayed inline)
+          const buttonsContainer = document.createElement("div");
+          buttonsContainer.style.display = "inline-flex";
+          buttonsContainer.style.gap = "4px";
+          buttonsContainer.style.marginTop = "8px";
           // eBay button
-          const ebayLine = document.createElement("div");
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
           ebayLink.className = "pill-button ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.style.marginTop = "8px";
           ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
-          ebayLine.appendChild(ebayLink);
-          infoDiv.appendChild(ebayLine);
-          // NHL profile button using new nhl-btn styling
-          const nhlLine = document.createElement("div");
+          buttonsContainer.appendChild(ebayLink);
+          // NHL button
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
           nhlLink.className = "pill-button nhl-btn";
-          nhlLink.style.marginTop = "8px";
-          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="ebay-icon">';
-          nhlLine.appendChild(nhlLink);
-          infoDiv.appendChild(nhlLine);
+          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
+          buttonsContainer.appendChild(nhlLink);
+          infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
         });
