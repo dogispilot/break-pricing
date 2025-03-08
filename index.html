@@ -510,6 +510,33 @@
         color: #fff;
         cursor: pointer;
       }
+      
+      /* =============== UPDATED STYLES FOR KEY ROOKIE TILES =============== */
+      /* Increase player image size by ~25% (from 50px to 62.5px) */
+      .key-player-tile img.player-img {
+        width: 62.5px !important;
+        height: 62.5px !important;
+      }
+      /* Increase team logo size by 50% (from 30px to 45px), add 75% opacity, and overlap it onto the right edge of the player photo */
+      .key-player-tile img.team-logo {
+        width: 45px !important;
+        height: 45px !important;
+        opacity: 0.75;
+        border-radius: 50%;
+        /* Reorder so that the team logo appears after the player image */
+        order: 2;
+        position: relative;
+        margin: 0;
+        /* Negative left margin to overlap the right edge of the player photo */
+        margin-left: -20px;
+        z-index: 2;
+      }
+      /* Ensure the anchor (containing the player photo) stays in front */
+      .key-player-tile a {
+        order: 1;
+        position: relative;
+        z-index: 1;
+      }
     </style>
   </head>
   <body>
