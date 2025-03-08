@@ -1034,13 +1034,15 @@
           ebayLink.href = "javascript:void(0)";
           ebayLink.className = "pill-button ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" style="width:65px; height:20px;">';
+          // Updated inline style with !important for key rookie buttons
+          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" style="width:65px !important; height:20px !important;">';
           buttonsContainer.appendChild(ebayLink);
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
           nhlLink.className = "pill-button nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" style="width:65px; height:20px;">';
+          // Updated inline style with !important for key rookie buttons
+          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" style="width:65px !important; height:20px !important;">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
@@ -1237,7 +1239,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay" style="width:48.75px; height:15px;">
+                <img src="resources/ebay_button.png" alt="eBay" style="width:48.75px !important; height:15px !important;">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1263,7 +1265,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay" style="width:48.75px; height:15px;">
+                <img src="resources/ebay_button.png" alt="eBay" style="width:48.75px !important; height:15px !important;">
               </a>
             </td>
             <td>${row.count}</td>
