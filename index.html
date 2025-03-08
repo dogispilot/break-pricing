@@ -106,7 +106,7 @@
       }
       /* Hide the original form row with the select elements */
       .form-row {
-        display: none;
+        display: none; /* hidden to make way for the new sentence dropdowns */
       }
       .form-row .form-group {
         flex: 1;
@@ -359,104 +359,11 @@
         margin-left: 4px;
         vertical-align: middle;
       }
-      /* Updated eBay and NHL buttons: now only display the button images */
-      .ebay-btn, .nhl-btn {
-        display: inline-block;
-      }
-      .ebay-btn img {
-        display: block;
-        max-width: 100%;
-      }
-      .nhl-btn img {
-        display: block;
-        max-width: 100%;
-      }
-      /* Remove the extra classes from the pill-button if present */
-      .pill-button {
-        border: none;
-        background: none;
-        padding: 0;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-      th, td {
-        padding: 12px 15px;
-        border: 1px solid #333;
-        text-align: left;
-      }
-      th {
-        background-color: #007bff;
-        color: #fff;
-        cursor: pointer;
-        user-select: none;
-      }
-      th:hover {
-        background-color: #0056b3;
-      }
-      tr:nth-child(even) {
-        background-color: #2c2c2c;
-      }
-      tr.highlight {
-        background-color: rgba(255,222,12,0.2);
-      }
-      img.logo {
-        width: 30px;
-        height: 30px;
-        margin-right: 8px;
-        border-radius: 50%;
-      }
-      #resultsTable, #fullResultsTable {
-      }
-      #resultsTable th:first-child,
-      #resultsTable td:first-child,
-      #fullResultsTable th:first-child,
-      #fullResultsTable td:first-child {
-        white-space: nowrap;
-      }
-      #fullResults {
-        clear: both;
-        margin-top: 20px;
-      }
-      @media (max-width: 600px) {
-        .chart-summary-container {
-          flex-direction: column;
-        }
-        #chartContainer, .summary-container {
-          width: 100%;
-          height: auto;
-        }
-        .summary-container .summary-box {
-          margin: 10px 0;
-        }
-        /* Stack columns on mobile */
-        .setDetails-grid-4col {
-          grid-template-columns: 1fr !important;
-        }
-      }
-      .glow-outofthebox:hover {
-        box-shadow: 0 0 8px #f70000, 0 0 16px #f70000;
-      }
-      .glow-blowout:hover {
-        box-shadow: 0 0 8px #9a0e20, 0 0 16px #9a0e20;
-      }
-      .glow-tcdb:hover {
-        box-shadow: 0 0 8px #c84c19, 0 0 16px #c84c19;
-      }
-      .glow-daveadams:hover {
-        box-shadow: 0 0 8px #27465a, 0 0 16px #27465a;
-      }
-      .glow-steelcity:hover {
-        box-shadow: 0 0 8px #e2d61e, 0 0 16px #e2d61e;
-      }
-      .glow-midwestcards:hover {
-        box-shadow: 0 0 8px #e8b144, 0 0 16px #e8b144;
-      }
-      .glow-hockeychecklists:hover {
-        box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
-      }
+      /* Updated eBay and NHL buttons: now only update the inner HTML to use the new images */
+      /* In key player tiles and table rows, the anchor elements still use the pill-button styling */
+      /* but their inner HTML is updated below */
+      /* (No changes to other uses of pill-button styling) */
+
       .dropdown-container {
         display: inline-block;
         position: relative;
@@ -512,7 +419,7 @@
         <p class="subtitle">Sniff out the best breaks.</p>
       </div>
 
-      <!-- NEW SENTENCE + DROPDOWNS -->
+      <!-- =================== NEW SENTENCE + DROPDOWNS =================== -->
       <div id="selectionSentence">
         I want to explore 
         <span class="dropdown-container">
@@ -525,6 +432,7 @@
           <ul class="dropdown-menu" id="yearDropdownMenu"></ul>
         </span>.
       </div>
+      <!-- =============================================================== -->
 
       <!-- Calculation Form (Hidden selects remain for existing logic) -->
       <form id="calcForm">
@@ -986,18 +894,18 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          // eBay button now uses the new image.
+          // Update eBay button to use the new image
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "ebay-btn";
+          ebayLink.className = "pill-button ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
           ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay Button">';
           buttonsContainer.appendChild(ebayLink);
-          // NHL button now uses the new image.
+          // Update NHL button to use the new image
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
-          nhlLink.className = "nhl-btn";
+          nhlLink.className = "pill-button nhl-btn";
           nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Button">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
@@ -1194,7 +1102,7 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
                 <img src="resources/ebay_button.png" alt="eBay Button">
               </a>
             </td>
@@ -1220,7 +1128,7 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
                 <img src="resources/ebay_button.png" alt="eBay Button">
               </a>
             </td>
