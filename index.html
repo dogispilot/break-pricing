@@ -215,35 +215,26 @@
         align-items: center;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
-      /* UPDATED STYLES FOR KEY ROOKIE TILES */
-      /* The images will be wrapped in a container with class "player-images" */
-      .player-images {
-        display: flex;
-        align-items: center;
-      }
-      .player-images img.team-logo {
-        width: 68px !important;
-        height: 68px !important;
-        opacity: 0.75;
+      .key-player-tile img.team-logo {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
         border-radius: 50%;
-        position: relative;
-        z-index: 2;
       }
-      .player-images img.player-img {
-        width: 78px !important;
-        height: 78px !important;
+      .key-player-tile img.player-img {
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
-        position: relative;
-        z-index: 1;
-        margin-left: -20px; /* Overlap the left edge of the player image over the team logo */
+        object-fit: cover;
+        margin-right: 10px;
       }
       .key-player-info {
         display: flex;
         flex-direction: column;
-        margin-left: 10px;
       }
-      .key-player-info div {
-        margin: 2px 0;
+      .key-player-info strong {
+        font-size: 1.1rem;
+        margin-bottom: 4px;
       }
       .key-player-notes {
         font-size: 0.9rem;
@@ -462,7 +453,7 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* UPDATED STYLES FOR NHL and eBay BUTTONS */
+      /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
       .ebay-btn, .nhl-btn {
         background: none !important;
         padding: 0 !important;
@@ -475,7 +466,7 @@
         width: auto !important;
         box-shadow: none !important;
       }
-      /* NEW DROPDOWN STYLES FOR THE SENTENCE */
+      /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
         font-size: 1.8rem; /* Increased font size for the sentence */
@@ -956,9 +947,15 @@
         detailsDiv.innerHTML = html;
       }
 
-      // UPDATED updateKeyPlayersSection: remove URL links for player name and image;
-      // place both images in a new "player-images" container,
-      // and shift the player image left so its left edge overlaps the right edge of the team logo.
+      function openPlayerEbaySearch(playerName) {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " " + playerName;
+        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      }
+
       function updateKeyPlayersSection() {
         const selectedYear = document.getElementById("yearSelect").value;
         const keySection = document.getElementById("keyPlayersSection");
@@ -975,40 +972,35 @@
         filteredPlayers.forEach(player => {
           const tile = document.createElement("div");
           tile.className = "key-player-tile";
-          
-          // Create a container for the team logo and player image
-          const imagesContainer = document.createElement("div");
-          imagesContainer.className = "player-images";
-          
-          // Create team logo image
           const teamLogo = document.createElement("img");
           teamLogo.className = "team-logo";
           teamLogo.src = teamLogos[player.team] || "";
           teamLogo.alt = player.team + " logo";
-          
-          // Create player image (no link)
+          tile.appendChild(teamLogo);
+          const profileLink = document.createElement("a");
+          profileLink.href = player.profile_link;
+          profileLink.target = "_blank";
           const playerImg = document.createElement("img");
           playerImg.className = "player-img";
           playerImg.src = player.image;
           playerImg.alt = player.player;
-          // The negative left margin is applied via CSS in .player-images img.player-img
-          
-          imagesContainer.appendChild(teamLogo);
-          imagesContainer.appendChild(playerImg);
-          tile.appendChild(imagesContainer);
-          
-          // Create info div with plain text for player name and notes
+          profileLink.appendChild(playerImg);
+          tile.appendChild(profileLink);
           const infoDiv = document.createElement("div");
           infoDiv.className = "key-player-info";
           const nameLine = document.createElement("div");
-          nameLine.textContent = player.player;
+          const nameLink = document.createElement("a");
+          nameLink.href = player.profile_link;
+          nameLink.target = "_blank";
+          nameLink.style.textDecoration = "none";
+          nameLink.style.color = "inherit";
+          nameLink.textContent = player.player;
+          nameLine.appendChild(nameLink);
           infoDiv.appendChild(nameLine);
           const notesLine = document.createElement("div");
           notesLine.className = "key-player-notes";
           notesLine.textContent = player.notes || "";
           infoDiv.appendChild(notesLine);
-          
-          // Buttons remain unchanged
           const buttonsContainer = document.createElement("div");
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
@@ -1027,19 +1019,46 @@
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
-          
           tilesContainer.appendChild(tile);
         });
       }
 
-      function openPlayerEbaySearch(playerName) {
-        const selectedYear = document.getElementById("yearSelect").value;
-        const selectedSet = document.getElementById("setSelect").value;
-        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet + " " + playerName;
-        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-      }
+      const teamLogos = {
+        "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+        "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
+        "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
+        "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+        "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+        "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+        "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+        "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+        "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+        "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+        "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+        "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+        "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+        "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
+        "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+        "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+        "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+        "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+        "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+        "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+        "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+        "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+        "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+        "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+        "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
+        "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+        "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+        "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
+        "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+        "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+        "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
+        "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+      };
 
       function openSetSearch() {
         const selectedSet = document.getElementById("setSelect").value;
