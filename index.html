@@ -86,7 +86,6 @@
         margin-top: 40px;
         text-align: center;
       }
-      /* New rule to match the Distribution header */
       #breakPricingHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
         margin-top: 40px;
@@ -104,9 +103,9 @@
       form#calcForm {
         margin-bottom: 25px;
       }
-      /* Hide the original form row with the select elements */
-      .form-row {
-        display: none; /* hidden to make way for the new sentence dropdowns */
+      /* Only hide the form rows inside the calculation form */
+      #calcForm .form-row {
+        display: none;
       }
       .form-row .form-group {
         flex: 1;
@@ -453,48 +452,23 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* Global styles for ebay and nhl buttons */
+      /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
       .ebay-btn, .nhl-btn {
-        background-color: #fff !important;
-        padding: 1px 8px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        background: none !important;
+        padding: 0 !important;
+        border: none !important;
+        display: inline !important;
+        text-decoration: none !important;
       }
-      .ebay-btn img {
+      .ebay-btn img, .nhl-btn img {
         height: 16px !important;
         width: auto !important;
-        box-shadow: none;
+        box-shadow: none !important;
       }
-      .nhl-btn img {
-        height: 32px !important;
-        width: auto !important;
-        box-shadow: none;
-      }
-      /* Reduce the overall height of the buttons in the key rookies section by overriding padding */
-      #keyPlayersSection .pill-button {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-      }
-      #keyPlayersSection .ebay-btn {
-        height: 16px !important;
-      }
-      #keyPlayersSection .nhl-btn {
-        height: 32px !important;
-      }
-      .empty-state {
-        text-align: center;
-        font-size: 1.5rem;
-        background-color: #2c2c2c;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-      }
-
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.8rem; /* Increased font size for the sentence */
         margin-bottom: 20px;
       }
       .dropdown-container {
@@ -504,6 +478,9 @@
       }
       .dropdown-label {
         text-decoration: underline;
+        font-weight: 900; /* Extra super bold */
+        font-size: 2rem; /* Bigger font for the selector text */
+        color: #FFEE00; /* Specified color */
       }
       .dropdown-menu {
         display: none;
@@ -527,11 +504,18 @@
       .dropdown-menu li:hover {
         background-color: #444;
       }
-      /* Make sure the text inside the dropdown is readable and not underlined */
       .dropdown-menu li {
         text-decoration: none;
         color: #fff;
         cursor: pointer;
+      }
+      /* Rule to show menus when toggled */
+      .open-menu {
+        display: block !important;
+      }
+      /* Initially hide the menus */
+      #priceSettingsDuplicate, #breakPricingOptionsMenu {
+        display: none;
       }
     </style>
   </head>
@@ -547,7 +531,7 @@
 
       <!-- =================== NEW SENTENCE + DROPDOWNS =================== -->
       <div id="selectionSentence">
-        Explore the set 
+        I want to explore 
         <span class="dropdown-container">
           <span class="dropdown-label" id="selectedSetLabel">--Select Set--</span>
           <ul class="dropdown-menu" id="setDropdownMenu"></ul>
@@ -606,7 +590,7 @@
         <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
       <!-- Price Settings Menu (Duplicate) -->
-      <div id="priceSettingsDuplicate" style="display:none; margin-top:10px;">
+      <div id="priceSettingsDuplicate" style="margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -654,7 +638,7 @@
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Breaker Settings</a>
       </p>
       <!-- BREAKER SETTINGS MENU MOVED HERE -->
-      <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
+      <div id="breakPricingOptionsMenu" style="margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -757,10 +741,10 @@
         }
       }
 
+      // Toggling the breaker settings menu by toggling the "open-menu" class
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
-        menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
-        // Dispatch a resize event to help Chart.js recalc dimensions
+        menu.classList.toggle("open-menu");
         window.dispatchEvent(new Event('resize'));
       }
 
@@ -830,19 +814,13 @@
           option.textContent = year;
           yearSelect.appendChild(option);
         });
-
-        // Also build the custom dropdown for years:
         buildYearDropdown(years);
-
         yearSelect.addEventListener("change", function() {
-          // Update the label in our new sentence
           document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
           populateSetSelector();
           updateKeyPlayersSection();
           calculateProfit();
         });
-
-        // If we want a default year pre-selected:
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
           yearSelect.dispatchEvent(new Event("change"));
@@ -865,20 +843,28 @@
         });
       }
 
+      // Modified populateSetSelector to reset set if it doesn't match the new year.
       function populateSetSelector() {
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
+        const previousValue = setSelect.value;
         setSelect.innerHTML = '<option value="">--Select Set--</option>';
         if (!selectedYear) return;
-        const filteredSets = setData.filter(set => set.year === selectedYear).sort((a,b) => a.name.localeCompare(b.name));
+        const filteredSets = setData.filter(set => set.year === selectedYear).sort((a, b) => a.name.localeCompare(b.name));
         filteredSets.forEach(set => {
           const option = document.createElement("option");
           option.value = set.name;
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-
-        // Also build the custom dropdown for sets:
+        // If previous set is no longer valid, reset.
+        if (!filteredSets.some(set => set.name === previousValue)) {
+          setSelect.value = "";
+          document.getElementById("selectedSetLabel").textContent = "--Select Set--";
+        } else {
+          setSelect.value = previousValue;
+          document.getElementById("selectedSetLabel").textContent = previousValue;
+        }
         buildSetDropdown(filteredSets);
       }
 
@@ -958,9 +944,8 @@
           </div>
         `;
         html += `
-          <p><strong>Release Date:</strong> ${setObj.release_date || "N/A"}</p>
-          <p><strong>Box Breakdown:</strong> ${setObj.box_breakdown || "N/A"}
-            <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a>
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -1027,19 +1012,17 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          // eBay button
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "pill-button ebay-btn";
+          ebayLink.className = "ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
+          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
           buttonsContainer.appendChild(ebayLink);
-          // NHL button
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
-          nhlLink.className = "pill-button nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
+          nhlLink.className = "nhl-btn";
+          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" class="nhl-icon">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
@@ -1169,14 +1152,12 @@
         const chartContainer = document.getElementById("chartContainer");
         const pieChartCanvas = document.getElementById("pieChart");
         const pieChartMessage = document.getElementById("pieChartMessage");
-        // Update the custom labels in the sentence
         if (selectedYear) {
           document.getElementById("selectedYearLabel").textContent = selectedYear;
         }
         if (selectedSetName) {
           document.getElementById("selectedSetLabel").textContent = selectedSetName;
         }
-
         if (!selectedYear || !selectedSetName) {
           chartContainer.style.display = "block";
           pieChartCanvas.style.display = "none";
@@ -1237,8 +1218,8 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1263,8 +1244,8 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.count}</td>
@@ -1381,7 +1362,6 @@
         }
       }
 
-      // === Event listeners for toggling the new dropdown menus ===
       document.getElementById("selectedYearLabel").addEventListener("click", function() {
         const menu = document.getElementById("yearDropdownMenu");
         menu.classList.toggle("open");
@@ -1389,6 +1369,13 @@
       document.getElementById("selectedSetLabel").addEventListener("click", function() {
         const menu = document.getElementById("setDropdownMenu");
         menu.classList.toggle("open");
+      });
+
+      // Toggling the Price Settings menu using CSS class toggling
+      document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
+        e.preventDefault();
+        var dup = document.getElementById("priceSettingsDuplicate");
+        dup.classList.toggle("open-menu");
       });
 
       window.addEventListener("load", function() {
@@ -1419,11 +1406,6 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
-            });
-            document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
-              e.preventDefault();
-              var dup = document.getElementById("priceSettingsDuplicate");
-              dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
             });
             calculateProfit();
           })
