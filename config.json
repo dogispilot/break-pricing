@@ -412,9 +412,9 @@
                 "Nashville Predators": 953,
                 "Columbus Blue Jackets": 805
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 24,
+            "cards_per_pack": 8
         },
         {
             "year": "2021-22",
@@ -459,9 +459,9 @@
                 "Toronto Maple Leafs": 9590,
                 "Seattle Kraken": 1358
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 24,
+            "cards_per_pack": 8
         },
         {
             "year": "2021-22",
@@ -506,9 +506,9 @@
                 "Pittsburgh Penguins": 432,
                 "San Jose Sharks": 345
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 30,
+            "packs_per_box": 1,
+            "cards_per_pack": 1
         },
         {
             "year": "2022-23",
@@ -741,9 +741,9 @@
                 "Calgary Flames": 2667,
                 "Washington Capitals": 2339
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2022-23",
@@ -1117,9 +1117,9 @@
                 "San Jose Sharks": 2211,
                 "Winnipeg Jets": 1459
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2023-24",
@@ -1211,9 +1211,9 @@
                 "Tampa Bay Lightning": 2044,
                 "Winnipeg Jets": 1059
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2023-24",
@@ -1446,9 +1446,9 @@
                 "Nashville Predators": 1663,
                 "Vegas Golden Knights": 1200
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2022-23",
@@ -1586,9 +1586,9 @@
                 "San Jose Sharks": 272,
                 "Tampa Bay Lightning": 113
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 30,
+            "packs_per_box": 1,
+            "cards_per_pack": 1
         },
         {
             "year": "2024-25",
@@ -1727,9 +1727,9 @@
                 "Nashville Predators": 840,
                 "Seattle Kraken": 292
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2023-24",
@@ -1868,9 +1868,9 @@
                 "Washington Capitals": 3691,
                 "Winnipeg Jets": 3483
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 18,
+            "packs_per_box": 6,
+            "cards_per_pack": 1
         },
         {
             "year": "2023-24",
@@ -1914,9 +1914,9 @@
                 "Winnipeg Jets": 5416,
                 "Tampa Bay Lightning": 3807
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 1,
+            "cards_per_pack": 5
         },
         {
             "year": "2023-24",
@@ -2425,9 +2425,9 @@
                 "Vegas Golden Knights": 4992,
                 "Carolina Hurricanes": 4800
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 18,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2022-23",
@@ -2472,9 +2472,9 @@
                 "Nashville Predators": 5085,
                 "Washington Capitals": 4549
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 1,
+            "cards_per_pack": 5
         },
         {
             "year": "2022-23",
@@ -2519,9 +2519,9 @@
                 "Washington Capitals": 3383,
                 "Florida Panthers": 3332
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 16,
+            "packs_per_box": 1,
+            "cards_per_pack": 8
         },
         {
             "year": "2022-23",
@@ -2613,9 +2613,9 @@
                 "Florida Panthers": 1930,
                 "Washington Capitals": 1767
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 6,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2022-23",
@@ -2707,9 +2707,9 @@
                 "Florida Panthers": 2157,
                 "Washington Capitals": 1465
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 8,
+            "packs_per_box": 1,
+            "cards_per_pack": 4
         },
         {
             "year": "2021-22",
@@ -2891,9 +2891,9 @@
                 "New York Islanders": 2445,
                 "Calgary Flames": 2260
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2021-22",
@@ -2978,9 +2978,9 @@
                 "Calgary Flames": 3017,
                 "Toronto Maple Leafs": 2439
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 18,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2021-22",
@@ -3025,9 +3025,9 @@
                 "Toronto Maple Leafs": 2314,
                 "New York Islanders": 1681
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 1,
+            "cards_per_pack": 5
         },
         {
             "year": "2021-22",
@@ -3072,9 +3072,9 @@
                 "Seattle Kraken": 2797,
                 "Edmonton Oilers": 2747
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 16,
+            "packs_per_box": 1,
+            "cards_per_pack": 8
         },
         {
             "year": "2021-22",
@@ -3166,9 +3166,9 @@
                 "New York Islanders": 2302,
                 "Seattle Kraken": 2029
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 6,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2021-22",
@@ -3213,9 +3213,9 @@
                 "Toronto Maple Leafs": 2375,
                 "Edmonton Oilers": 2322
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 16,
+            "packs_per_box": 1,
+            "cards_per_pack": 4
         },
         {
             "year": "2020-21",
@@ -3307,9 +3307,9 @@
                 "Nashville Predators": 1323,
                 "Seattle Kraken": 0
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 6,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2022-23",
@@ -3354,9 +3354,9 @@
                 "San Jose Sharks": 1085,
                 "New York Islanders": 1051
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 24,
+            "cards_per_pack": 8
         },
         {
             "year": "2024-25",
