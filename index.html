@@ -472,26 +472,35 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* New classes for ebay and nhl buttons */
+      /* Global styles for ebay and nhl buttons */
       .ebay-btn, .nhl-btn {
         background-color: #fff !important;
-        /* Reduced vertical padding to make buttons less tall */
         padding: 1px 8px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
       }
-      /* ebay button image: reduce size further */
       .ebay-btn img {
         height: 16px !important;
         width: auto !important;
         box-shadow: none;
       }
-      /* nhl button image remains larger */
       .nhl-btn img {
         height: 32px !important;
         width: auto !important;
         box-shadow: none;
+      }
+      /* Reduce the overall height of the buttons in the key rookies section by overriding padding */
+      #keyPlayersSection .pill-button {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        /* Optionally, you can set a fixed height equal to the image height */
+      }
+      #keyPlayersSection .ebay-btn {
+        height: 16px !important;
+      }
+      #keyPlayersSection .nhl-btn {
+        height: 32px !important;
       }
       /* New styling for empty state container */
       .empty-state {
