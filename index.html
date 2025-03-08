@@ -506,7 +506,7 @@
         text-decoration: underline;
         font-weight: bold;
         font-size: 2rem; /* Bigger font for the selector text */
-        color: #FFEE00; /* Color as requested */
+        color: #FFEE00; /* Specified color */
       }
       .dropdown-menu {
         display: none;
@@ -860,18 +860,28 @@
         });
       }
 
+      // Modified populateSetSelector to reset set if it doesn't match the new year.
       function populateSetSelector() {
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
+        const previousValue = setSelect.value;
         setSelect.innerHTML = '<option value="">--Select Set--</option>';
         if (!selectedYear) return;
-        const filteredSets = setData.filter(set => set.year === selectedYear).sort((a,b) => a.name.localeCompare(b.name));
+        const filteredSets = setData.filter(set => set.year === selectedYear).sort((a, b) => a.name.localeCompare(b.name));
         filteredSets.forEach(set => {
           const option = document.createElement("option");
           option.value = set.name;
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
+        // If previous set is no longer valid, reset.
+        if (!filteredSets.some(set => set.name === previousValue)) {
+          setSelect.value = "";
+          document.getElementById("selectedSetLabel").textContent = "--Select Set--";
+        } else {
+          setSelect.value = previousValue;
+          document.getElementById("selectedSetLabel").textContent = previousValue;
+        }
         buildSetDropdown(filteredSets);
       }
 
