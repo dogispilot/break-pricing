@@ -734,9 +734,11 @@
         }
       }
 
+      // Updated toggle function for Breaker Settings using computed style
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
-        menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+        var currentDisplay = window.getComputedStyle(menu).display;
+        menu.style.display = (currentDisplay === "none") ? "block" : "none";
         window.dispatchEvent(new Event('resize'));
       }
 
@@ -1364,6 +1366,14 @@
         menu.classList.toggle("open");
       });
 
+      // Updated event listener for Price Settings using computed style
+      document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
+        e.preventDefault();
+        var dup = document.getElementById("priceSettingsDuplicate");
+        var currentDisplay = window.getComputedStyle(dup).display;
+        dup.style.display = (currentDisplay === "none") ? "block" : "none";
+      });
+
       window.addEventListener("load", function() {
         fetch("config.json")
           .then(response => {
@@ -1392,11 +1402,6 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
-            });
-            document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
-              e.preventDefault();
-              var dup = document.getElementById("priceSettingsDuplicate");
-              dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
             });
             calculateProfit();
           })
