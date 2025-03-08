@@ -1184,6 +1184,12 @@
         if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
+        
+        // Calculate cards per case from the set object
+        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
+          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
+          : NaN;
+          
         const teamData = setObj.cards || setObj.most_numbered_cards;
         let totalCards = 0;
         for (let team in teamData) { totalCards += teamData[team]; }
@@ -1215,6 +1221,8 @@
         document.querySelector("#totalProfitBox .amount").textContent = "$" + totalProfit.toFixed(2);
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
+        
+        // Build Full Distribution Table (unchanged)
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
@@ -1243,14 +1251,19 @@
           </tr>`;
         }).join("");
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
+        
+        // Build Trimmed Distribution Table
+        // New header: remove Distributed Cost column and add "Expected #'d Cards per Case"
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(0)">Numbered Cards</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Card Distribution</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(2)">Distributed Cost</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(3)">Distributed Cost + Markup</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(3)">Expected #\'d Cards per Case</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
+          // Calculate expected numbered cards per case for this team
+          let expectedCards = cardsPerCase * (row.count / totalCards);
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
@@ -1262,11 +1275,12 @@
             </td>
             <td>${row.count}</td>
             <td>${row.distribution}</td>
-            <td>$${row.cost.toFixed(2)}</td>
+            <td>${expectedCards.toFixed(1)}</td>
             <td>$${row.price.toFixed(2)}</td>
           </tr>`;
         }).join("");
         let trimmedTableHtml = trimmedHeader + trimmedRowsHtml + "</tbody></table>";
+        
         document.getElementById("fullResults").innerHTML = fullTableHtml;
         document.getElementById("results").innerHTML = trimmedTableHtml;
         if (rows.length > 0) {
