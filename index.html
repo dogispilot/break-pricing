@@ -107,6 +107,11 @@
       #calcForm .form-row {
         display: none;
       }
+      .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
       .form-row .form-group {
         flex: 1;
         min-width: 200px;
@@ -119,6 +124,13 @@
       .small-input-row .form-group input,
       .small-input-row .form-group select {
         max-width: 100px;
+      }
+      /* NEW: make the breaker settings small-input row display all fields in one row */
+      #breakPricingOptionsMenu .small-input-row {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 15px;
+        align-items: flex-end;
       }
       .form-group label {
         margin-bottom: 6px;
