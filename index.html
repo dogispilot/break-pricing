@@ -479,7 +479,7 @@
       }
       .dropdown-label {
         text-decoration: underline;
-        font-weight: 900; /* Changed from 'bold' to extra super bold */
+        font-weight: 900; /* Extra super bold */
         font-size: 2rem; /* Bigger font for the selector text */
         color: #FFEE00; /* Specified color */
       }
@@ -509,6 +509,10 @@
         text-decoration: none;
         color: #fff;
         cursor: pointer;
+      }
+      /* New class for toggling menus */
+      .open-menu {
+        display: block !important;
       }
     </style>
   </head>
@@ -734,11 +738,10 @@
         }
       }
 
-      // Updated toggle function for Breaker Settings using computed style
+      // New toggle using CSS class for Breaker Settings menu
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
-        var currentDisplay = window.getComputedStyle(menu).display;
-        menu.style.display = (currentDisplay === "none") ? "block" : "none";
+        menu.classList.toggle("open-menu");
         window.dispatchEvent(new Event('resize'));
       }
 
@@ -1366,12 +1369,11 @@
         menu.classList.toggle("open");
       });
 
-      // Updated event listener for Price Settings using computed style
+      // Updated event listener for Price Settings menu using CSS class toggling
       document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
         e.preventDefault();
         var dup = document.getElementById("priceSettingsDuplicate");
-        var currentDisplay = window.getComputedStyle(dup).display;
-        dup.style.display = (currentDisplay === "none") ? "block" : "none";
+        dup.classList.toggle("open-menu");
       });
 
       window.addEventListener("load", function() {
