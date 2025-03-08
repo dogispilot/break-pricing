@@ -913,101 +913,6 @@
         }
       }
 
-      // Modified updateKeyPlayersSection for key rookie tile styling adjustments
-      function updateKeyPlayersSection() {
-        const selectedYear = document.getElementById("yearSelect").value;
-        const keySection = document.getElementById("keyPlayersSection");
-        const tilesContainer = document.getElementById("keyPlayerTiles");
-        tilesContainer.innerHTML = "";
-        highlightTeams.clear();
-        if (!selectedYear) { keySection.style.display = "none"; return; }
-        document.querySelector("#keyPlayersSection h2").textContent = selectedYear + " Key Rookies";
-        const filteredPlayers = keyPlayersData.filter(player =>
-          (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
-        );
-        keySection.style.display = "block";
-        filteredPlayers.forEach(player => { highlightTeams.add(player.team); });
-        filteredPlayers.forEach(player => {
-          const tile = document.createElement("div");
-          tile.className = "key-player-tile";
-          // Set tile position relative if needed
-          tile.style.position = "relative";
-          
-          // Create a link that will contain the player image and team logo overlay
-          const profileLink = document.createElement("a");
-          profileLink.href = player.profile_link;
-          profileLink.target = "_blank";
-          // Set profileLink to relative so its children can be absolutely positioned
-          profileLink.style.position = "relative";
-          
-          const playerImg = document.createElement("img");
-          playerImg.className = "player-img";
-          playerImg.src = player.image;
-          playerImg.alt = player.player;
-          // Increase player image size by 25% (from 50px to 62.5px)
-          playerImg.style.width = "62.5px";
-          playerImg.style.height = "62.5px";
-          
-          profileLink.appendChild(playerImg);
-          
-          // Create the team logo to overlay on the player photo
-          const teamLogo = document.createElement("img");
-          teamLogo.className = "team-logo";
-          teamLogo.src = teamLogos[player.team] || "";
-          teamLogo.alt = player.team + " logo";
-          // Increase team logo size by 50% (from 30px to 45px)
-          teamLogo.style.width = "45px";
-          teamLogo.style.height = "45px";
-          // Set transparency to 75%
-          teamLogo.style.opacity = "0.75";
-          // Position team logo to overlap the right edge of the player photo
-          teamLogo.style.position = "absolute";
-          teamLogo.style.top = "50%";
-          teamLogo.style.left = "100%";
-          teamLogo.style.transform = "translate(-50%, -50%)";
-          
-          // Append team logo inside the profileLink to overlap the player image
-          profileLink.appendChild(teamLogo);
-          
-          tile.appendChild(profileLink);
-          
-          const infoDiv = document.createElement("div");
-          infoDiv.className = "key-player-info";
-          const nameLine = document.createElement("div");
-          const nameLink = document.createElement("a");
-          nameLink.href = player.profile_link;
-          nameLink.target = "_blank";
-          nameLink.style.textDecoration = "none";
-          nameLink.style.color = "inherit";
-          nameLink.textContent = player.player;
-          nameLine.appendChild(nameLink);
-          infoDiv.appendChild(nameLine);
-          const notesLine = document.createElement("div");
-          notesLine.className = "key-player-notes";
-          notesLine.textContent = player.notes || "";
-          infoDiv.appendChild(notesLine);
-          const buttonsContainer = document.createElement("div");
-          buttonsContainer.style.display = "inline-flex";
-          buttonsContainer.style.gap = "4px";
-          buttonsContainer.style.marginTop = "8px";
-          const ebayLink = document.createElement("a");
-          ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "pill-button ebay-btn";
-          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" style="width:65px !important; height:20px !important;">';
-          buttonsContainer.appendChild(ebayLink);
-          const nhlLink = document.createElement("a");
-          nhlLink.href = player.profile_link;
-          nhlLink.target = "_blank";
-          nhlLink.className = "pill-button nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" style="width:65px !important; height:20px !important;">';
-          buttonsContainer.appendChild(nhlLink);
-          infoDiv.appendChild(buttonsContainer);
-          tile.appendChild(infoDiv);
-          tilesContainer.appendChild(tile);
-        });
-      }
-
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1075,6 +980,110 @@
         const query = yearPrefix + " " + selectedSet + " " + playerName;
         window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
       }
+
+      function updateKeyPlayersSection() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const keySection = document.getElementById("keyPlayersSection");
+        const tilesContainer = document.getElementById("keyPlayerTiles");
+        tilesContainer.innerHTML = "";
+        highlightTeams.clear();
+        if (!selectedYear) { keySection.style.display = "none"; return; }
+        document.querySelector("#keyPlayersSection h2").textContent = selectedYear + " Key Rookies";
+        const filteredPlayers = keyPlayersData.filter(player =>
+          (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
+        );
+        keySection.style.display = "block";
+        filteredPlayers.forEach(player => { highlightTeams.add(player.team); });
+        filteredPlayers.forEach(player => {
+          const tile = document.createElement("div");
+          tile.className = "key-player-tile";
+          const teamLogo = document.createElement("img");
+          teamLogo.className = "team-logo";
+          teamLogo.src = teamLogos[player.team] || "";
+          teamLogo.alt = player.team + " logo";
+          tile.appendChild(teamLogo);
+          const profileLink = document.createElement("a");
+          profileLink.href = player.profile_link;
+          profileLink.target = "_blank";
+          const playerImg = document.createElement("img");
+          playerImg.className = "player-img";
+          playerImg.src = player.image;
+          playerImg.alt = player.player;
+          profileLink.appendChild(playerImg);
+          tile.appendChild(profileLink);
+          const infoDiv = document.createElement("div");
+          infoDiv.className = "key-player-info";
+          const nameLine = document.createElement("div");
+          const nameLink = document.createElement("a");
+          nameLink.href = player.profile_link;
+          nameLink.target = "_blank";
+          nameLink.style.textDecoration = "none";
+          nameLink.style.color = "inherit";
+          nameLink.textContent = player.player;
+          nameLine.appendChild(nameLink);
+          infoDiv.appendChild(nameLine);
+          const notesLine = document.createElement("div");
+          notesLine.className = "key-player-notes";
+          notesLine.textContent = player.notes || "";
+          infoDiv.appendChild(notesLine);
+          const buttonsContainer = document.createElement("div");
+          buttonsContainer.style.display = "inline-flex";
+          buttonsContainer.style.gap = "4px";
+          buttonsContainer.style.marginTop = "8px";
+          const ebayLink = document.createElement("a");
+          ebayLink.href = "javascript:void(0)";
+          ebayLink.className = "pill-button ebay-btn";
+          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
+          ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
+          buttonsContainer.appendChild(ebayLink);
+          const nhlLink = document.createElement("a");
+          nhlLink.href = player.profile_link;
+          nhlLink.target = "_blank";
+          nhlLink.className = "pill-button nhl-btn";
+          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
+          buttonsContainer.appendChild(nhlLink);
+          infoDiv.appendChild(buttonsContainer);
+          tile.appendChild(infoDiv);
+          tilesContainer.appendChild(tile);
+        });
+      }
+
+      const teamLogos = {
+        "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+        "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
+        "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
+        "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+        "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+        "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+        "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+        "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+        "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+        "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+        "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+        "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+        "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+        "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
+        "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+        "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+        "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+        "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+        "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+        "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+        "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+        "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+        "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+        "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+        "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
+        "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+        "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+        "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
+        "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+        "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+        "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
+        "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+      };
 
       function openSetSearch() {
         const selectedSet = document.getElementById("setSelect").value;
@@ -1228,7 +1237,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay" style="width:48.75px !important; height:15px !important;">
+                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1254,7 +1263,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay" style="width:48.75px !important; height:15px !important;">
+                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.count}</td>
