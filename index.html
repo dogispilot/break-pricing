@@ -510,12 +510,7 @@
         color: #fff;
         cursor: pointer;
       }
-      /* Updated rule for toggling Price Settings and Breaker Settings menus */
-      #priceSettingsDuplicate.open,
-      #breakPricingOptionsMenu.open {
-        display: block !important;
-      }
-      /* Initially hide the menus */
+      /* Initially hide the Price Settings and Breaker Settings menus */
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
@@ -729,25 +724,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      function formatDetail(val, isRookie) {
-        let num = parseFloat(val);
-        if (!isNaN(num)) {
-          if (isRookie) {
-            let rounded = Math.floor(num * 10) / 10;
-            return rounded.toFixed(1) + "%";
-          } else {
-            return (num % 1 === 0) ? num.toFixed(0) : num.toFixed(1);
-          }
+      // Helper function to toggle display like the "Read Set Notes" button.
+      function toggleDisplay(elementId) {
+        var el = document.getElementById(elementId);
+        if (el.style.display === "block") {
+          el.style.display = "none";
         } else {
-          return '<img src="resources/comingsoon.png" alt="Coming Soon" style="max-width:100%; vertical-align:middle;">';
+          el.style.display = "block";
         }
-      }
-
-      // Toggling the breaker settings menu by toggling the "open" class
-      function toggleBreakPricingOptions() {
-        var menu = document.getElementById("breakPricingOptionsMenu");
-        menu.classList.toggle("open");
-        window.dispatchEvent(new Event('resize'));
       }
 
       function toggleInputTooltip(labelElement) {
@@ -1374,12 +1358,22 @@
         menu.classList.toggle("open");
       });
 
-      // Updated toggling of Price Settings menu to use the "open" class
+      // Update the Price Settings button to toggle display inline
       document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
         e.preventDefault();
-        var dup = document.getElementById("priceSettingsDuplicate");
-        dup.classList.toggle("open");
+        toggleDisplay("priceSettingsDuplicate");
       });
+
+      // Update the Breaker Settings toggle to work inline like "Read Set Notes"
+      function toggleBreakPricingOptions() {
+        var menu = document.getElementById("breakPricingOptionsMenu");
+        if (menu.style.display === "block") {
+          menu.style.display = "none";
+        } else {
+          menu.style.display = "block";
+        }
+        window.dispatchEvent(new Event('resize'));
+      }
 
       window.addEventListener("load", function() {
         fetch("config.json")
