@@ -539,6 +539,52 @@
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
+      /* ======= iOS Toggle Switch Styles ======= */
+      .toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 28px;
+        margin-left: 10px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 28px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      .switch input:checked + .slider {
+        background-color: #007bff;
+      }
+      .switch input:checked + .slider:before {
+        transform: translateX(22px);
+      }
     </style>
   </head>
   <body>
@@ -693,13 +739,16 @@
           </div>
         </div>
         <div class="form-row small-input-row">
-          <!-- Updated markup field with a toggle button -->
+          <!-- Updated markup field with an iOS-style toggle switch -->
           <div class="form-group">
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabel">(%)</span></label>
             <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.</div>
-            <div style="display:flex; align-items:center; gap:5px;">
+            <div class="toggle-container">
               <input type="text" id="markup" required placeholder="Enter markup" value="30" />
-              <button type="button" id="markupToggle" onclick="toggleMarkupMode()">%</button>
+              <label class="switch">
+                <input type="checkbox" id="markupToggleCheckbox" onchange="toggleMarkupMode()">
+                <span class="slider"></span>
+              </label>
             </div>
           </div>
           <div class="form-group">
@@ -757,9 +806,9 @@
       let markupMode = "%";
 
       function toggleMarkupMode() {
-        // Toggle the markup mode between "%" and "$" and update calculations immediately
-        markupMode = markupMode === "%" ? "$" : "%";
-        document.getElementById("markupToggle").textContent = markupMode;
+        const checkbox = document.getElementById("markupToggleCheckbox");
+        // When checkbox is checked, use flat dollar markup, otherwise percentage.
+        markupMode = checkbox.checked ? "$" : "%";
         document.getElementById("markupLabel").textContent = "(" + markupMode + ")";
         calculateProfit();
       }
