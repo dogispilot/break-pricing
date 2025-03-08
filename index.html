@@ -514,6 +514,10 @@
       .open-menu {
         display: block !important;
       }
+      /* New rule to initially hide the menus */
+      #priceSettingsDuplicate, #breakPricingOptionsMenu {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -587,7 +591,7 @@
         <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
       <!-- Price Settings Menu (Duplicate) -->
-      <div id="priceSettingsDuplicate" style="display:none; margin-top:10px;">
+      <div id="priceSettingsDuplicate" style="margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -635,7 +639,7 @@
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Breaker Settings</a>
       </p>
       <!-- BREAKER SETTINGS MENU MOVED HERE -->
-      <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
+      <div id="breakPricingOptionsMenu" style="margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -738,7 +742,7 @@
         }
       }
 
-      // New toggle using CSS class for Breaker Settings menu
+      // Toggling the breaker settings menu by toggling the "open-menu" class
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         menu.classList.toggle("open-menu");
@@ -1369,7 +1373,7 @@
         menu.classList.toggle("open");
       });
 
-      // Updated event listener for Price Settings menu using CSS class toggling
+      // Toggling the Price Settings menu using CSS class toggling
       document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
         e.preventDefault();
         var dup = document.getElementById("priceSettingsDuplicate");
