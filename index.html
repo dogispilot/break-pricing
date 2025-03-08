@@ -807,7 +807,7 @@
 
       function toggleMarkupMode() {
         const checkbox = document.getElementById("markupToggleCheckbox");
-        // When checkbox is checked, use flat dollar markup, otherwise percentage.
+        // When checkbox is checked, use flat dollar markup; otherwise, percentage.
         markupMode = checkbox.checked ? "$" : "%";
         document.getElementById("markupLabel").textContent = "(" + markupMode + ")";
         calculateProfit();
@@ -1257,10 +1257,11 @@
         // Use different math depending on whether markup is a percentage or a fixed dollar amount.
         if (markupMode === "%") {
           markup = parsePercentage(markupInput);
-          rawPrice = (function(cost) { return cost * (1 + markup); });
+          rawPrice = function(cost) { return cost * (1 + markup); };
         } else {
           markup = parseFloat(markupInput);
-          rawPrice = (function(cost) { return cost + markup; });
+          // For fixed $ markup, distribute the markup proportionally:
+          rawPrice = function(cost) { return cost + (markup * (cost / casePrice)); };
         }
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
