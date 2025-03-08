@@ -494,7 +494,7 @@
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.8rem; /* Increased font size for the sentence */
         margin-bottom: 20px;
       }
       .dropdown-container {
@@ -504,6 +504,9 @@
       }
       .dropdown-label {
         text-decoration: underline;
+        font-weight: bold;
+        font-size: 2rem; /* Bigger font for the selector text */
+        color: #FFEE00; /* Color as requested */
       }
       .dropdown-menu {
         display: none;
@@ -527,7 +530,6 @@
       .dropdown-menu li:hover {
         background-color: #444;
       }
-      /* Make sure the text inside the dropdown is readable and not underlined */
       .dropdown-menu li {
         text-decoration: none;
         color: #fff;
@@ -547,7 +549,7 @@
 
       <!-- =================== NEW SENTENCE + DROPDOWNS =================== -->
       <div id="selectionSentence">
-        Explore the set 
+        I want to explore 
         <span class="dropdown-container">
           <span class="dropdown-label" id="selectedSetLabel">--Select Set--</span>
           <ul class="dropdown-menu" id="setDropdownMenu"></ul>
@@ -760,7 +762,6 @@
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
-        // Dispatch a resize event to help Chart.js recalc dimensions
         window.dispatchEvent(new Event('resize'));
       }
 
@@ -830,19 +831,13 @@
           option.textContent = year;
           yearSelect.appendChild(option);
         });
-
-        // Also build the custom dropdown for years:
         buildYearDropdown(years);
-
         yearSelect.addEventListener("change", function() {
-          // Update the label in our new sentence
           document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
           populateSetSelector();
           updateKeyPlayersSection();
           calculateProfit();
         });
-
-        // If we want a default year pre-selected:
         if (years.includes("2024-25")) {
           yearSelect.value = "2024-25";
           yearSelect.dispatchEvent(new Event("change"));
@@ -877,8 +872,6 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-
-        // Also build the custom dropdown for sets:
         buildSetDropdown(filteredSets);
       }
 
@@ -1027,14 +1020,12 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          // eBay button
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
           ebayLink.className = "pill-button ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
           ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
           buttonsContainer.appendChild(ebayLink);
-          // NHL button
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
@@ -1169,14 +1160,12 @@
         const chartContainer = document.getElementById("chartContainer");
         const pieChartCanvas = document.getElementById("pieChart");
         const pieChartMessage = document.getElementById("pieChartMessage");
-        // Update the custom labels in the sentence
         if (selectedYear) {
           document.getElementById("selectedYearLabel").textContent = selectedYear;
         }
         if (selectedSetName) {
           document.getElementById("selectedSetLabel").textContent = selectedSetName;
         }
-
         if (!selectedYear || !selectedSetName) {
           chartContainer.style.display = "block";
           pieChartCanvas.style.display = "none";
@@ -1381,7 +1370,6 @@
         }
       }
 
-      // === Event listeners for toggling the new dropdown menus ===
       document.getElementById("selectedYearLabel").addEventListener("click", function() {
         const menu = document.getElementById("yearDropdownMenu");
         menu.classList.toggle("open");
