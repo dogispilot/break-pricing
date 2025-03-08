@@ -18,7 +18,6 @@
       rel="stylesheet"
     />
     <style>
-      /* [CSS remains unchanged from previous version] */
       @font-face {
         font-family: 'BreakPricingFont';
         src: url('fonts/breakpricingfont.ttf') format('truetype');
@@ -618,6 +617,13 @@
         </div>
       </div>
       
+      <!-- Results Section with Empty State -->
+      <div id="results">
+        <div class="empty-state">
+          <p>Please select a year and set to get started sniping.</p>
+        </div>
+      </div>
+
       <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
@@ -1358,15 +1364,7 @@
         menu.classList.toggle("open");
       });
 
-      // Attach Price Settings button listener immediately on load
       window.addEventListener("load", function() {
-        document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
-          e.preventDefault();
-          var dup = document.getElementById("priceSettingsDuplicate");
-          dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
-        });
-
-        // Now fetch the config and attach the rest of the event listeners
         fetch("config.json")
           .then(response => {
             if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
@@ -1394,6 +1392,11 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
+            });
+            document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
+              e.preventDefault();
+              var dup = document.getElementById("priceSettingsDuplicate");
+              dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
             });
             calculateProfit();
           })
