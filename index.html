@@ -510,11 +510,12 @@
         color: #fff;
         cursor: pointer;
       }
-      /* New class for toggling menus */
-      .open-menu {
+      /* Updated rule for toggling Price Settings and Breaker Settings menus */
+      #priceSettingsDuplicate.open,
+      #breakPricingOptionsMenu.open {
         display: block !important;
       }
-      /* New rule to initially hide the menus */
+      /* Initially hide the menus */
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
@@ -742,10 +743,10 @@
         }
       }
 
-      // Toggling the breaker settings menu by toggling the "open-menu" class
+      // Toggling the breaker settings menu by toggling the "open" class
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
-        menu.classList.toggle("open-menu");
+        menu.classList.toggle("open");
         window.dispatchEvent(new Event('resize'));
       }
 
@@ -1373,11 +1374,11 @@
         menu.classList.toggle("open");
       });
 
-      // Toggling the Price Settings menu using CSS class toggling
+      // Updated toggling of Price Settings menu to use the "open" class
       document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
         e.preventDefault();
         var dup = document.getElementById("priceSettingsDuplicate");
-        dup.classList.toggle("open-menu");
+        dup.classList.toggle("open");
       });
 
       window.addEventListener("load", function() {
