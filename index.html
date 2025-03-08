@@ -464,7 +464,6 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* Global styles for ebay and nhl buttons have been updated above */
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
@@ -924,19 +923,11 @@
               <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
               <div class="detail-label">Cards per Case</div>
             </div>
-            <div class="detail-box" style="grid-column: 2; grid-row: 2;">
-              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
-              <div class="detail-label">Packs per Box</div>
-            </div>
-            <div class="detail-box" style="grid-column: 3; grid-row: 2;">
-              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
-              <div class="detail-label">Cards per Box</div>
-            </div>
           </div>
         `;
+        // Updated content above Key Rookies as a sentence.
         html += `
-          <p><strong>Release Date:</strong> ${setObj.release_date || "N/A"}</p>
-          <p><strong>Box Breakdown:</strong> ${setObj.box_breakdown || "N/A"}
+          <p>${setObj.name} released on ${setObj.release_date || "N/A"}. Each box contains ${setObj.box_breakdown || "N/A"}.
             <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
