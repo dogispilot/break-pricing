@@ -106,7 +106,7 @@
       }
       /* Hide the original form row with the select elements */
       .form-row {
-        display: none; /* hidden to make way for the new sentence dropdowns */
+        display: none;
       }
       .form-row .form-group {
         flex: 1;
@@ -359,25 +359,23 @@
         margin-left: 4px;
         vertical-align: middle;
       }
-      /* Updated Global styles for ebay and nhl buttons */
+      /* Updated eBay and NHL buttons: now only display the button images */
       .ebay-btn, .nhl-btn {
-        background-color: #fff !important;
-        padding: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 20px !important;
-        width: 60px !important;
+        display: inline-block;
       }
       .ebay-btn img {
-        height: 16px !important;
-        width: auto !important;
-        box-shadow: none;
+        display: block;
+        max-width: 100%;
       }
       .nhl-btn img {
-        height: 18px !important; /* Increased size for the NHL logo */
-        width: auto !important;
-        box-shadow: none;
+        display: block;
+        max-width: 100%;
+      }
+      /* Remove the extra classes from the pill-button if present */
+      .pill-button {
+        border: none;
+        background: none;
+        padding: 0;
       }
       table {
         width: 100%;
@@ -459,22 +457,6 @@
       .glow-hockeychecklists:hover {
         box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
       }
-      .pill-button {
-        display: inline-block;
-        padding: 4px 12px;
-        border: 1px solid #fff;
-        border-radius: 999px;
-        color: #fff;
-        text-decoration: none;
-        font-size: 0.9rem;
-        cursor: pointer;
-      }
-      /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
-      #selectionSentence {
-        text-align: center;
-        font-size: 1.8rem; /* Increased font size for the sentence */
-        margin-bottom: 20px;
-      }
       .dropdown-container {
         display: inline-block;
         position: relative;
@@ -483,8 +465,8 @@
       .dropdown-label {
         text-decoration: underline;
         font-weight: bold;
-        font-size: 2rem; /* Bigger font for the selector text */
-        color: #FFEE00; /* Specified color */
+        font-size: 2rem;
+        color: #FFEE00;
       }
       .dropdown-menu {
         display: none;
@@ -513,6 +495,11 @@
         color: #fff;
         cursor: pointer;
       }
+      #selectionSentence {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+      }
     </style>
   </head>
   <body>
@@ -525,7 +512,7 @@
         <p class="subtitle">Sniff out the best breaks.</p>
       </div>
 
-      <!-- =================== NEW SENTENCE + DROPDOWNS =================== -->
+      <!-- NEW SENTENCE + DROPDOWNS -->
       <div id="selectionSentence">
         I want to explore 
         <span class="dropdown-container">
@@ -538,7 +525,6 @@
           <ul class="dropdown-menu" id="yearDropdownMenu"></ul>
         </span>.
       </div>
-      <!-- =============================================================== -->
 
       <!-- Calculation Form (Hidden selects remain for existing logic) -->
       <form id="calcForm">
@@ -933,7 +919,7 @@
         // Updated content above Key Rookies as a sentence.
         html += `
           <p>${setObj.name} released on ${setObj.release_date || "N/A"}. Each box contains ${setObj.box_breakdown || "N/A"}.
-            <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a>
+            <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class="pill-button">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -1000,17 +986,19 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
+          // eBay button now uses the new image.
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "pill-button ebay-btn";
+          ebayLink.className = "ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
+          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay Button">';
           buttonsContainer.appendChild(ebayLink);
+          // NHL button now uses the new image.
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
-          nhlLink.className = "pill-button nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
+          nhlLink.className = "nhl-btn";
+          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Button">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
@@ -1206,8 +1194,8 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay Button">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1232,8 +1220,8 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay Button">
               </a>
             </td>
             <td>${row.count}</td>
