@@ -43,9 +43,9 @@
                 "Nashville Predators": 8953,
                 "Seattle Kraken": 1098
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 8,
+            "cards_per_pack": 4
         },
         {
             "year": "2021-22",
@@ -85,9 +85,9 @@
                 "Pittsburgh Penguins": 432,
                 "San Jose Sharks": 345
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 10,
+            "packs_per_box": 1,
+            "cards_per_pack": 6
         },
         {
             "year": "2021-22",
@@ -132,9 +132,9 @@
                 "Pittsburgh Penguins": 432,
                 "San Jose Sharks": 345
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 30,
+            "packs_per_box": 1,
+            "cards_per_pack": 1
         },
         {
             "year": "2021-22",
@@ -179,9 +179,9 @@
                 "Calgary Flames": 2212,
                 "Seattle Kraken": 0
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 20,
+            "packs_per_box": 24,
+            "cards_per_pack": 8
         },
         {
             "year": "2021-22",
@@ -272,9 +272,9 @@
                 "Calgary Flames": 2212,
                 "Seattle Kraken": 0
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 16,
+            "packs_per_box": 18,
+            "cards_per_pack": 10
         },
         {
             "year": "2021-22",
@@ -319,9 +319,9 @@
                 "Toronto Maple Leafs": 9590,
                 "Seattle Kraken": 1358
             },
-            "boxes_per_case": "Not Available",
-            "packs_per_box": "Not Available",
-            "cards_per_pack": "Not Available"
+            "boxes_per_case": 16,
+            "packs_per_box": 12,
+            "cards_per_pack": 12
         },
         {
             "year": "2021-22",
