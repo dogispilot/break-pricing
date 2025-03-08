@@ -479,7 +479,7 @@
       }
       .dropdown-label {
         text-decoration: underline;
-        font-weight: 900; /* Extra super bold */
+        font-weight: bold;
         font-size: 2rem; /* Bigger font for the selector text */
         color: #FFEE00; /* Specified color */
       }
@@ -509,10 +509,6 @@
         text-decoration: none;
         color: #fff;
         cursor: pointer;
-      }
-      /* Initially hide the Price Settings and Breaker Settings menus */
-      #priceSettingsDuplicate, #breakPricingOptionsMenu {
-        display: none;
       }
     </style>
   </head>
@@ -587,7 +583,7 @@
         <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
       <!-- Price Settings Menu (Duplicate) -->
-      <div id="priceSettingsDuplicate" style="margin-top:10px;">
+      <div id="priceSettingsDuplicate" style="display:none; margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -635,7 +631,7 @@
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Breaker Settings</a>
       </p>
       <!-- BREAKER SETTINGS MENU MOVED HERE -->
-      <div id="breakPricingOptionsMenu" style="margin-top:10px;">
+      <div id="breakPricingOptionsMenu" style="display: none; margin-top: 10px;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -724,14 +720,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Helper function to toggle display like the "Read Set Notes" button.
-      function toggleDisplay(elementId) {
-        var el = document.getElementById(elementId);
-        if (el.style.display === "block") {
-          el.style.display = "none";
+      function formatDetail(val, isRookie) {
+        let num = parseFloat(val);
+        if (!isNaN(num)) {
+          if (isRookie) {
+            let rounded = Math.floor(num * 10) / 10;
+            return rounded.toFixed(1) + "%";
+          } else {
+            return (num % 1 === 0) ? num.toFixed(0) : num.toFixed(1);
+          }
         } else {
-          el.style.display = "block";
+          return '<img src="resources/comingsoon.png" alt="Coming Soon" style="max-width:100%; vertical-align:middle;">';
         }
+      }
+
+      function toggleBreakPricingOptions() {
+        var menu = document.getElementById("breakPricingOptionsMenu");
+        menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
+        window.dispatchEvent(new Event('resize'));
       }
 
       function toggleInputTooltip(labelElement) {
@@ -929,10 +935,10 @@
             </div>
           </div>
         `;
-        // Updated sentence formatting for release date and box breakdown:
         html += `
-          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          <p><strong>Release Date:</strong> ${setObj.release_date || "N/A"}</p>
+          <p><strong>Box Breakdown:</strong> ${setObj.box_breakdown || "N/A"}
+            <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -1358,23 +1364,6 @@
         menu.classList.toggle("open");
       });
 
-      // Update the Price Settings button to toggle display inline
-      document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        toggleDisplay("priceSettingsDuplicate");
-      });
-
-      // Update the Breaker Settings toggle to work inline like "Read Set Notes"
-      function toggleBreakPricingOptions() {
-        var menu = document.getElementById("breakPricingOptionsMenu");
-        if (menu.style.display === "block") {
-          menu.style.display = "none";
-        } else {
-          menu.style.display = "block";
-        }
-        window.dispatchEvent(new Event('resize'));
-      }
-
       window.addEventListener("load", function() {
         fetch("config.json")
           .then(response => {
@@ -1403,6 +1392,11 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
+            });
+            document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
+              e.preventDefault();
+              var dup = document.getElementById("priceSettingsDuplicate");
+              dup.style.display = (dup.style.display === "none" || dup.style.display === "") ? "block" : "none";
             });
             calculateProfit();
           })
