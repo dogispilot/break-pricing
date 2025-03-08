@@ -1009,13 +1009,13 @@
           ebayLink.href = "javascript:void(0)";
           ebayLink.className = "ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
+          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
           buttonsContainer.appendChild(ebayLink);
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
           nhlLink.className = "nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
+          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" class="nhl-icon">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
@@ -1212,7 +1212,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
+                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1238,7 +1238,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
+                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.count}</td>
