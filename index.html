@@ -935,10 +935,10 @@
             </div>
           </div>
         `;
+        // Updated sentence formatting for release date and box breakdown:
         html += `
-          <p><strong>Release Date:</strong> ${setObj.release_date || "N/A"}</p>
-          <p><strong>Box Breakdown:</strong> ${setObj.box_breakdown || "N/A"}
-            <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a>
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
