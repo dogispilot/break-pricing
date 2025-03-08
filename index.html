@@ -453,44 +453,19 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
-      /* Global styles for ebay and nhl buttons */
+      /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
       .ebay-btn, .nhl-btn {
-        background-color: #fff !important;
-        padding: 1px 8px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        background: none !important;
+        padding: 0 !important;
+        border: none !important;
+        display: inline !important;
+        text-decoration: none !important;
       }
-      .ebay-btn img {
+      .ebay-btn img, .nhl-btn img {
         height: 16px !important;
         width: auto !important;
-        box-shadow: none;
+        box-shadow: none !important;
       }
-      .nhl-btn img {
-        height: 32px !important;
-        width: auto !important;
-        box-shadow: none;
-      }
-      /* Reduce the overall height of the buttons in the key rookies section by overriding padding */
-      #keyPlayersSection .pill-button {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-      }
-      #keyPlayersSection .ebay-btn {
-        height: 16px !important;
-      }
-      #keyPlayersSection .nhl-btn {
-        height: 32px !important;
-      }
-      .empty-state {
-        text-align: center;
-        font-size: 1.5rem;
-        background-color: #2c2c2c;
-        padding: 20px;
-        border-radius: 8px;
-        margin-top: 20px;
-      }
-
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
@@ -1032,14 +1007,14 @@
           buttonsContainer.style.marginTop = "8px";
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "pill-button ebay-btn";
+          ebayLink.className = "ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
           ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
           buttonsContainer.appendChild(ebayLink);
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
-          nhlLink.className = "pill-button nhl-btn";
+          nhlLink.className = "nhl-btn";
           nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
@@ -1236,7 +1211,7 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
                 <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
@@ -1262,7 +1237,7 @@
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
                 <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
