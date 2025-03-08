@@ -150,7 +150,7 @@
         color: #e0e0e0;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
         transition: border 0.2s, box-shadow 0.2s;
-        /* Ensure buttons use the correct font */
+        /* Ensure inputs use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .form-group input:focus,
@@ -693,10 +693,14 @@
           </div>
         </div>
         <div class="form-row small-input-row">
+          <!-- Updated markup field with a toggle button -->
           <div class="form-group">
-            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost.</div>
-            <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
+            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabel">(%)</span></label>
+            <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.</div>
+            <div style="display:flex; align-items:center; gap:5px;">
+              <input type="text" id="markup" required placeholder="Enter markup" value="30" />
+              <button type="button" id="markupToggle" onclick="toggleMarkupMode()">%</button>
+            </div>
           </div>
           <div class="form-group">
             <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
@@ -749,6 +753,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      // Global variable for markup mode; can be "%" or "$"
+      let markupMode = "%";
+
+      function toggleMarkupMode() {
+        // Toggle the markup mode between "%" and "$"
+        markupMode = markupMode === "%" ? "$" : "%";
+        // Update the button text and label accordingly
+        document.getElementById("markupToggle").textContent = markupMode;
+        document.getElementById("markupLabel").textContent = "(" + markupMode + ")";
+      }
+
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
@@ -1187,7 +1202,17 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        const markup = parsePercentage(document.getElementById("markup").value);
+        let markupInput = document.getElementById("markup").value;
+        let rawPrice;
+        let markup;
+        // Use different math depending on whether markup is a percentage or a fixed dollar amount.
+        if (markupMode === "%") {
+          markup = parsePercentage(markupInput);
+          rawPrice = (function(cost) { return cost * (1 + markup); });
+        } else {
+          markup = parseFloat(markupInput);
+          rawPrice = (function(cost) { return cost + markup; });
+        }
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
@@ -1207,8 +1232,9 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          const rawPrice = cost * (1 + markup);
-          const price = rawPrice * (1 - userDiscount);
+          // Use the appropriate rawPrice calculation based on markup mode
+          let computedRawPrice = rawPrice(cost);
+          const price = computedRawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = price - cost - whatnotFees - transactionFees - supplies;
