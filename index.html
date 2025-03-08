@@ -757,11 +757,11 @@
       let markupMode = "%";
 
       function toggleMarkupMode() {
-        // Toggle the markup mode between "%" and "$"
+        // Toggle the markup mode between "%" and "$" and update calculations immediately
         markupMode = markupMode === "%" ? "$" : "%";
-        // Update the button text and label accordingly
         document.getElementById("markupToggle").textContent = markupMode;
         document.getElementById("markupLabel").textContent = "(" + markupMode + ")";
+        calculateProfit();
       }
 
       function formatDetail(val, isRookie) {
