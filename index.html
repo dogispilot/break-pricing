@@ -336,7 +336,7 @@
         font-size: 0.8rem;
         color: #bbb;
       }
-      /* 4-column layout for set details with 6 tiles */
+      /* 4-column layout for set details */
       .setDetails-grid-4col {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -359,7 +359,90 @@
         margin-left: 4px;
         vertical-align: middle;
       }
-      /* Retain pill-button styling for other uses */
+      .ebay-icon {
+        height: 16px;
+        width: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th, td {
+        padding: 12px 15px;
+        border: 1px solid #333;
+        text-align: left;
+      }
+      th {
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        user-select: none;
+      }
+      th:hover {
+        background-color: #0056b3;
+      }
+      tr:nth-child(even) {
+        background-color: #2c2c2c;
+      }
+      tr.highlight {
+        background-color: rgba(255,222,12,0.2);
+      }
+      img.logo {
+        width: 30px;
+        height: 30px;
+        margin-right: 8px;
+        border-radius: 50%;
+      }
+      #resultsTable, #fullResultsTable {
+      }
+      #resultsTable th:first-child,
+      #resultsTable td:first-child,
+      #fullResultsTable th:first-child,
+      #fullResultsTable td:first-child {
+        white-space: nowrap;
+      }
+      #fullResults {
+        clear: both;
+        margin-top: 20px;
+      }
+      @media (max-width: 600px) {
+        .chart-summary-container {
+          flex-direction: column;
+        }
+        #chartContainer, .summary-container {
+          width: 100%;
+          height: auto;
+        }
+        .summary-container .summary-box {
+          margin: 10px 0;
+        }
+        /* Stack columns on mobile */
+        .setDetails-grid-4col {
+          grid-template-columns: 1fr !important;
+        }
+      }
+      .glow-outofthebox:hover {
+        box-shadow: 0 0 8px #f70000, 0 0 16px #f70000;
+      }
+      .glow-blowout:hover {
+        box-shadow: 0 0 8px #9a0e20, 0 0 16px #9a0e20;
+      }
+      .glow-tcdb:hover {
+        box-shadow: 0 0 8px #c84c19, 0 0 16px #c84c19;
+      }
+      .glow-daveadams:hover {
+        box-shadow: 0 0 8px #27465a, 0 0 16px #27465a;
+      }
+      .glow-steelcity:hover {
+        box-shadow: 0 0 8px #e2d61e, 0 0 16px #e2d61e;
+      }
+      .glow-midwestcards:hover {
+        box-shadow: 0 0 8px #e8b144, 0 0 16px #e8b144;
+      }
+      .glow-hockeychecklists:hover {
+        box-shadow: 0 0 8px #021e9b, 0 0 16px #021e9b;
+      }
       .pill-button {
         display: inline-block;
         padding: 4px 12px;
@@ -370,6 +453,50 @@
         font-size: 0.9rem;
         cursor: pointer;
       }
+      /* Global styles for ebay and nhl buttons */
+      .ebay-btn, .nhl-btn {
+        background-color: #fff !important;
+        padding: 1px 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .ebay-btn img {
+        height: 16px !important;
+        width: auto !important;
+        box-shadow: none;
+      }
+      .nhl-btn img {
+        height: 32px !important;
+        width: auto !important;
+        box-shadow: none;
+      }
+      /* Reduce the overall height of the buttons in the key rookies section by overriding padding */
+      #keyPlayersSection .pill-button {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+      #keyPlayersSection .ebay-btn {
+        height: 16px !important;
+      }
+      #keyPlayersSection .nhl-btn {
+        height: 32px !important;
+      }
+      .empty-state {
+        text-align: center;
+        font-size: 1.5rem;
+        background-color: #2c2c2c;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+
+      /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
+      #selectionSentence {
+        text-align: center;
+        font-size: 1.8rem; /* Increased font size for the sentence */
+        margin-bottom: 20px;
+      }
       .dropdown-container {
         display: inline-block;
         position: relative;
@@ -378,8 +505,8 @@
       .dropdown-label {
         text-decoration: underline;
         font-weight: bold;
-        font-size: 2rem;
-        color: #FFEE00;
+        font-size: 2rem; /* Bigger font for the selector text */
+        color: #FFEE00; /* Specified color */
       }
       .dropdown-menu {
         display: none;
@@ -407,11 +534,6 @@
         text-decoration: none;
         color: #fff;
         cursor: pointer;
-      }
-      #selectionSentence {
-        text-align: center;
-        font-size: 1.8rem;
-        margin-bottom: 20px;
       }
     </style>
   </head>
@@ -804,14 +926,12 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        // Calculate additional values
         let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
           : NaN;
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
           : NaN;
-        // Build a grid with 6 tiles
         let html = `
           <div class="setDetails-grid-4col">
             <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
@@ -840,10 +960,10 @@
             </div>
           </div>
         `;
-        // Append the sentence with release date and box breakdown plus a Read Set Notes button.
         html += `
-          <p>${setObj.name} released on ${setObj.release_date || "N/A"}. Each box contains ${setObj.box_breakdown || "N/A"}.
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          <p><strong>Release Date:</strong> ${setObj.release_date || "N/A"}</p>
+          <p><strong>Box Breakdown:</strong> ${setObj.box_breakdown || "N/A"}
+            <a href='javascript:void(0)' onclick='toggleSetNotes(this)' class='pill-button'>Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -910,19 +1030,17 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          // Update eBay button to use the new image
           const ebayLink = document.createElement("a");
           ebayLink.href = "javascript:void(0)";
           ebayLink.className = "pill-button ebay-btn";
           ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay Button">';
+          ebayLink.innerHTML = '<img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">';
           buttonsContainer.appendChild(ebayLink);
-          // Update NHL button to use the new image
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
           nhlLink.className = "pill-button nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Button">';
+          nhlLink.innerHTML = '<img src="resources/nhl_small.png" alt="NHL Profile" class="nhl-icon">';
           buttonsContainer.appendChild(nhlLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
@@ -1119,7 +1237,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay Button">
+                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.distribution}</td>
@@ -1145,7 +1263,7 @@
                 <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="pill-button ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay Button">
+                <img src="resources/ebaylogo_small.png" alt="eBay" class="ebay-icon">
               </a>
             </td>
             <td>${row.count}</td>
