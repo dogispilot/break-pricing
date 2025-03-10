@@ -590,17 +590,19 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        font-size: 12px;
+        font-size: 14px;
         pointer-events: none;
         opacity: 1;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
       }
-      .slider .toggle-text.percent {
+      /* Switch order: $ on left, % on right */
+      .slider .toggle-text.dollar {
         left: 10px;
       }
-      .slider .toggle-text.dollar {
+      .slider .toggle-text.percent {
         right: 10px;
       }
-      /* When unchecked, highlight percentage */
+      /* When unchecked (default mode is %), highlight % (right) */
       .switch input:not(:checked) + .slider .toggle-text.percent {
         color: #fff;
         font-weight: bold;
@@ -609,14 +611,14 @@
         color: rgba(255,255,255,0.5);
         font-weight: normal;
       }
-      /* When checked, highlight dollar */
-      .switch input:checked + .slider .toggle-text.percent {
-        color: rgba(255,255,255,0.5);
-        font-weight: normal;
-      }
+      /* When checked (mode is $), highlight $ (left) */
       .switch input:checked + .slider .toggle-text.dollar {
         color: #fff;
         font-weight: bold;
+      }
+      .switch input:checked + .slider .toggle-text.percent {
+        color: rgba(255,255,255,0.5);
+        font-weight: normal;
       }
     </style>
   </head>
@@ -776,8 +778,9 @@
               <label class="switch">
                 <input type="checkbox" id="markupToggleCheckbox" onchange="toggleMarkupMode()">
                 <span class="slider">
-                  <span class="toggle-text percent">%</span>
+                  <!-- Now $ comes first and % second -->
                   <span class="toggle-text dollar">$</span>
+                  <span class="toggle-text percent">%</span>
                 </span>
               </label>
             </div>
