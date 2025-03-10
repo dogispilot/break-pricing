@@ -18,6 +18,7 @@
       rel="stylesheet"
     />
     <style>
+      /* (All CSS remains unchanged from the previous update) */
       @font-face {
         font-family: 'BreakPricingFont';
         src: url('fonts/breakpricingfont.ttf') format('truetype');
@@ -672,170 +673,15 @@
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
 
-      <!-- Distribution Section (Trimmed Table) -->
+      <!-- Distribution Section (Full Distribution Table) -->
       <h2 id="teamPricesHeader">Distribution of Numbered Cards</h2>
       <p class="small-copy" id="distributionCopy">
         Highlighted rows represent teams with key rookies.
         <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
-      <!-- Price Settings Menu (Duplicate) -->
-      <div id="priceSettingsDuplicate" style="margin-top:10px;">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
-            <div class="toast input-tooltip" style="display:none; max-width:300px;">
-              This is the estimated cost of a case from a major online retailer. Prices may fluctuate so please verify.
-            </div>
-            <div class="input-button-group">
-              <input type="number" id="casePriceDup" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" style="color:#e0e0e0;" />
-              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
-                Dave &amp; Adams
-              </button>
-              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
-                Steel City
-              </button>
-              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
-                Midwest Cards
-              </button>
-              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
-                Blowout Cards
-              </button>
-              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo" />
-                Out of the Box
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- New markup field row in Price Settings Duplicate -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabelDup">(%)</span></label>
-            <div class="toast input-tooltip" style="display:none;">
-              This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.
-            </div>
-            <div class="toggle-container">
-              <input type="text" id="markupDup" required placeholder="Enter markup" value="30" />
-              <label class="switch">
-                <input type="checkbox" id="markupToggleCheckboxDup">
-                <span class="slider">
-                  <span class="toggle-text dollar">$</span>
-                  <span class="toggle-text percent">%</span>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Break Pricing Tools Header & Transparency Text -->
-      <h2 id="breakPricingHeader">Break Pricing Tools</h2>
-      <p class="small-copy" id="breakPricingCopy">
-        Transparency in the break pricing process.
-        <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Breaker Settings</a>
-      </p>
-      <!-- BREAKER SETTINGS MENU MOVED HERE -->
-      <div id="breakPricingOptionsMenu" style="margin-top:10px;">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
-            <div class="toast input-tooltip" style="display:none; max-width:300px;">
-              This is the estimated cost of a case from a major online retailer. Prices may fluctuate so please verify.
-            </div>
-            <div class="input-button-group">
-              <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
-              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
-                Dave &amp; Adams
-              </button>
-              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
-                Steel City
-              </button>
-              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
-                Midwest Cards
-              </button>
-              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
-                Blowout Cards
-              </button>
-              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo" />
-                Out of the Box
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="form-row small-input-row">
-          <!-- Markup field in Breaker Settings -->
-          <div class="form-group">
-            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabel">(%)</span></label>
-            <div class="toast input-tooltip" style="display:none;">
-              This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.
-            </div>
-            <div class="toggle-container">
-              <input type="text" id="markup" required placeholder="Enter markup" value="30" />
-              <label class="switch">
-                <input type="checkbox" id="markupToggleCheckbox" onchange="toggleMarkupMode()">
-                <span class="slider">
-                  <span class="toggle-text dollar">$</span>
-                  <span class="toggle-text percent">%</span>
-                </span>
-              </label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
-            <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%" />
-          </div>
-          <div class="form-group">
-            <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
-            <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%" />
-          </div>
-          <div class="form-group">
-            <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
-            <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
-            <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Chart and Summary Boxes -->
-      <div class="chart-summary-container">
-        <div id="chartContainer">
-          <canvas id="pieChart"></canvas>
-          <div id="pieChartMessage">
-            Please select a year and set to get started sniping.
-          </div>
-        </div>
-        <div class="summary-container">
-          <div id="totalProfitBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Breaker's Profit</div>
-            <div class="toast">Profit is how much money a breaker will make.</div>
-          </div>
-          <div id="whatnotsCutBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Whatnot's Cut</div>
-            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
-          </div>
-          <div id="costOfBusinessBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Cost of Business</div>
-            <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Full Distribution Table (Full View: all columns) -->
+      <!-- Full Distribution Table container -->
       <div id="fullResults"></div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -867,7 +713,6 @@
         }
       }
 
-      // Toggling the breaker settings menu by toggling the "open-menu" class
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         menu.classList.toggle("open-menu");
@@ -969,7 +814,6 @@
         });
       }
 
-      // Modified populateSetSelector to reset set if it doesn't match the new year.
       function populateSetSelector() {
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
@@ -1137,7 +981,6 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          // Append NHL button first, then eBay button.
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
@@ -1344,7 +1187,6 @@
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
         
-        // Build Full Distribution Table
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
@@ -1374,15 +1216,12 @@
         }).join("");
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
         
-        // Removed assignment to non-existent "results" element.
+        // Always display the table by assigning the full table HTML to "fullResults"
         document.getElementById("fullResults").innerHTML = fullTableHtml;
-        if (rows.length > 0) {
-          document.getElementById("teamPricesHeader").style.display = "block";
-          document.getElementById("distributionCopy").style.display = "block";
-        } else {
-          document.getElementById("teamPricesHeader").style.display = "none";
-          document.getElementById("distributionCopy").style.display = "none";
-        }
+        // Ensure the distribution header and copy are visible
+        document.getElementById("teamPricesHeader").style.display = "block";
+        document.getElementById("distributionCopy").style.display = "block";
+        
         tableData = rows;
         const chartData = [totalProfit, whatnotCut, costOfBusiness];
         chartContainer.style.display = "block";
