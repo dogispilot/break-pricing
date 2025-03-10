@@ -539,6 +539,47 @@
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
+      
+      /* iOS style toggle switch */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      .switch input:checked + .slider {
+        background-color: #007bff;
+      }
+      .switch input:checked + .slider:before {
+        transform: translateX(26px);
+      }
     </style>
   </head>
   <body>
@@ -646,13 +687,6 @@
         </div>
       </div>
       
-      <!-- Results Section with Empty State -->
-      <div id="results">
-        <div class="empty-state">
-          <p>Please select a year and set to get started sniping.</p>
-        </div>
-      </div>
-
       <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
@@ -694,9 +728,16 @@
         </div>
         <div class="form-row small-input-row">
           <div class="form-group">
-            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
+            <!-- Updated markup input with toggle -->
+            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;" id="markupLabel">Markup (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost.</div>
-            <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <input type="text" id="markup" required placeholder="Enter markup percentage" value="30%" style="flex: 1;" />
+              <label class="switch">
+                <input type="checkbox" id="markupToggle">
+                <span class="slider"></span>
+              </label>
+            </div>
           </div>
           <div class="form-group">
             <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
@@ -1187,11 +1228,10 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        const markup = parsePercentage(document.getElementById("markup").value);
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
-        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
+        if (isNaN(casePrice) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
@@ -1204,10 +1244,21 @@
         let totalCards = 0;
         for (let team in teamData) { totalCards += teamData[team]; }
         let rows = [];
+        // Determine if we are in dollar mode (toggle checked) or percentage mode
+        const isDollarMode = document.getElementById("markupToggle").checked;
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          const rawPrice = cost * (1 + markup);
+          let rawPrice;
+          if (isDollarMode) {
+            let markupDollar = parseFloat(document.getElementById("markup").value.replace(/[^0-9.]/g, ""));
+            if (isNaN(markupDollar)) markupDollar = 0;
+            // In dollar mode, add a proportion of the total dollar markup to this team’s cost:
+            rawPrice = cost + (markupDollar * (count / totalCards));
+          } else {
+            let markupPercent = parsePercentage(document.getElementById("markup").value);
+            rawPrice = cost * (1 + markupPercent);
+          }
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
@@ -1442,6 +1493,23 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
+            });
+            // Add event listener for the markup toggle to change the label and placeholder
+            document.getElementById("markupToggle").addEventListener("change", function() {
+              var label = document.getElementById("markupLabel");
+              var markupInput = document.getElementById("markup");
+              if (this.checked) {
+                label.textContent = "Markup ($)";
+                markupInput.placeholder = "Enter markup in dollars";
+                markupInput.value = markupInput.value.replace("%", "").replace("$", "").trim();
+              } else {
+                label.textContent = "Markup (%)";
+                markupInput.placeholder = "Enter markup percentage";
+                if (markupInput.value !== "" && !markupInput.value.includes("%")) {
+                  markupInput.value = markupInput.value + "%";
+                }
+              }
+              calculateProfit();
             });
             calculateProfit();
           })
