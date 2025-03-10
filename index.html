@@ -18,7 +18,6 @@
       rel="stylesheet"
     />
     <style>
-      /* [All CSS remains unchanged from the previous version] */
       @font-face {
         font-family: 'BreakPricingFont';
         src: url('fonts/breakpricingfont.ttf') format('truetype');
@@ -562,7 +561,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #007bff;
+        background-color: #007bff; /* Blue when % is selected (unchecked) */
         transition: 0.4s;
         border-radius: 28px;
       }
@@ -578,7 +577,7 @@
         border-radius: 50%;
       }
       .switch input:checked + .slider {
-        background-color: #2e7d32;
+        background-color: #2e7d32; /* Green when $ is selected (checked) */
       }
       .switch input:checked + .slider:before {
         transform: translateX(22px);
@@ -600,23 +599,12 @@
       .slider .toggle-text.percent {
         right: 10px;
       }
-      /* When unchecked (default mode is %), highlight % (right) */
-      .switch input:not(:checked) + .slider .toggle-text.percent {
-        color: #fff;
-        font-weight: bold;
+      /* Hide the unselected toggle value */
+      .switch input:checked + .slider .toggle-text.percent {
+        display: none;
       }
       .switch input:not(:checked) + .slider .toggle-text.dollar {
-        color: rgba(255,255,255,0.5);
-        font-weight: normal;
-      }
-      /* When checked (mode is $), highlight $ (left) */
-      .switch input:checked + .slider .toggle-text.dollar {
-        color: #fff;
-        font-weight: bold;
-      }
-      .switch input:checked + .slider .toggle-text.percent {
-        color: rgba(255,255,255,0.5);
-        font-weight: normal;
+        display: none;
       }
     </style>
   </head>
@@ -1130,7 +1118,7 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          // Switch the order: append NHL button first, then eBay button.
+          // Append NHL button first, then eBay button.
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
