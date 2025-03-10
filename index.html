@@ -539,44 +539,6 @@
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
-      /* NEW: iOS toggle switch styles */
-      .switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 28px;
-      }
-      .switch input { 
-        display: none; 
-      }
-      .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        border-radius: 28px;
-      }
-      .slider:before {
-        position: absolute;
-        content: "";
-        height: 22px;
-        width: 22px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-      }
-      input:checked + .slider {
-        background-color: #007bff;
-      }
-      input:checked + .slider:before {
-        transform: translateX(22px);
-      }
     </style>
   </head>
   <body>
@@ -684,6 +646,13 @@
         </div>
       </div>
       
+      <!-- Results Section with Empty State -->
+      <div id="results">
+        <div class="empty-state">
+          <p>Please select a year and set to get started sniping.</p>
+        </div>
+      </div>
+
       <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
@@ -728,16 +697,6 @@
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost.</div>
             <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
-            <!-- NEW: Toggle switch for markup type -->
-            <div style="display: flex; align-items: center; margin-top: 6px;">
-              <label for="markupTypeToggle" style="margin-right: 10px;">Markup Type:</label>
-              <span style="margin-right: 5px;">%</span>
-              <label class="switch">
-                <input type="checkbox" id="markupTypeToggle">
-                <span class="slider"></span>
-              </label>
-              <span style="margin-left: 5px;">$</span>
-            </div>
           </div>
           <div class="form-group">
             <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
@@ -1228,14 +1187,11 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        // NEW: check toggle state to decide markup calculation
-        const isFlatMarkup = document.getElementById("markupTypeToggle").checked;
-        let rawPrice;
-        const markupInput = document.getElementById("markup").value;
+        const markup = parsePercentage(document.getElementById("markup").value);
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
-        if (isNaN(casePrice) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
+        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
@@ -1251,16 +1207,7 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          if (isFlatMarkup) {
-            // For flat markup, add the flat dollar value to cost
-            let flatMarkup = parseFloat(markupInput.replace(/[^0-9.]/g, ""));
-            if (isNaN(flatMarkup)) flatMarkup = 0;
-            rawPrice = cost + flatMarkup;
-          } else {
-            // For percentage markup, calculate as before
-            let markupPercent = parsePercentage(markupInput);
-            rawPrice = cost * (1 + markupPercent);
-          }
+          const rawPrice = cost * (1 + markup);
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
@@ -1466,9 +1413,6 @@
         var dup = document.getElementById("priceSettingsDuplicate");
         dup.classList.toggle("open-menu");
       });
-
-      // Recalculate profit whenever the markup type toggle changes
-      document.getElementById("markupTypeToggle").addEventListener("change", calculateProfit);
 
       window.addEventListener("load", function() {
         fetch("config.json")
