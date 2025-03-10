@@ -1244,19 +1244,24 @@
         let totalCards = 0;
         for (let team in teamData) { totalCards += teamData[team]; }
         let rows = [];
-        // Determine if we are in dollar mode (toggle checked) or percentage mode
+        // Ensure markup field is not empty
+        let markupValue = document.getElementById("markup").value.trim();
         const isDollarMode = document.getElementById("markupToggle").checked;
+        if (markupValue === "") {
+          markupValue = isDollarMode ? "0" : "0%";
+          document.getElementById("markup").value = markupValue;
+        }
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
           let rawPrice;
           if (isDollarMode) {
-            let markupDollar = parseFloat(document.getElementById("markup").value.replace(/[^0-9.]/g, ""));
+            let markupDollar = parseFloat(markupValue.replace(/[^0-9.]/g, ""));
             if (isNaN(markupDollar)) markupDollar = 0;
-            // In dollar mode, add a proportion of the total dollar markup to this team’s cost:
+            // Distribute fixed dollar markup proportionally
             rawPrice = cost + (markupDollar * (count / totalCards));
           } else {
-            let markupPercent = parsePercentage(document.getElementById("markup").value);
+            let markupPercent = parsePercentage(markupValue);
             rawPrice = cost * (1 + markupPercent);
           }
           const price = rawPrice * (1 - userDiscount);
@@ -1494,7 +1499,7 @@
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
             });
-            // Add event listener for the markup toggle to change the label and placeholder
+            // Update the markup toggle handler without interfering with layout or value format
             document.getElementById("markupToggle").addEventListener("change", function() {
               var label = document.getElementById("markupLabel");
               var markupInput = document.getElementById("markup");
