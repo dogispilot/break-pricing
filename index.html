@@ -585,6 +585,35 @@
       .switch input:checked + .slider:before {
         transform: translateX(22px);
       }
+      /* Embedded text styles */
+      .slider .toggle-text {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+        pointer-events: none;
+      }
+      .slider .toggle-text.percent {
+        left: 10px;
+      }
+      .slider .toggle-text.dollar {
+        right: 10px;
+      }
+      /* Toggle visibility based on checkbox state */
+      .switch input:not(:checked) + .slider .toggle-text.percent {
+        opacity: 1;
+      }
+      .switch input:not(:checked) + .slider .toggle-text.dollar {
+        opacity: 0;
+      }
+      .switch input:checked + .slider .toggle-text.percent {
+        opacity: 0;
+      }
+      .switch input:checked + .slider .toggle-text.dollar {
+        opacity: 1;
+      }
     </style>
   </head>
   <body>
@@ -692,13 +721,6 @@
         </div>
       </div>
       
-      <!-- Results Section with Empty State -->
-      <div id="results">
-        <div class="empty-state">
-          <p>Please select a year and set to get started sniping.</p>
-        </div>
-      </div>
-
       <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
@@ -742,12 +764,17 @@
           <!-- Updated markup field with an iOS-style toggle switch -->
           <div class="form-group">
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabel">(%)</span></label>
-            <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.</div>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.
+            </div>
             <div class="toggle-container">
               <input type="text" id="markup" required placeholder="Enter markup" value="30" />
               <label class="switch">
                 <input type="checkbox" id="markupToggleCheckbox" onchange="toggleMarkupMode()">
-                <span class="slider"></span>
+                <span class="slider">
+                  <span class="toggle-text percent">%</span>
+                  <span class="toggle-text dollar">$</span>
+                </span>
               </label>
             </div>
           </div>
