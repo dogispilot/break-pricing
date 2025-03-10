@@ -1244,19 +1244,16 @@
         let totalCards = 0;
         for (let team in teamData) { totalCards += teamData[team]; }
         let rows = [];
-        // Ensure markup field is not empty
+        // Use the toggle to decide how to interpret the markup input.
         let markupValue = document.getElementById("markup").value.trim();
+        if (markupValue === "") { markupValue = "0"; }
         const isDollarMode = document.getElementById("markupToggle").checked;
-        if (markupValue === "") {
-          markupValue = isDollarMode ? "0" : "0%";
-          document.getElementById("markup").value = markupValue;
-        }
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
           let rawPrice;
           if (isDollarMode) {
-            let markupDollar = parseFloat(markupValue.replace(/[^0-9.]/g, ""));
+            let markupDollar = parseFloat(markupValue);
             if (isNaN(markupDollar)) markupDollar = 0;
             // Distribute fixed dollar markup proportionally
             rawPrice = cost + (markupDollar * (count / totalCards));
@@ -1319,7 +1316,6 @@
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
         
         // Build Trimmed Distribution Table
-        // New header: remove "Distributed Cost" column and add "Expected #'d Cards per Case"
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
@@ -1328,7 +1324,6 @@
           '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
-          // Calculate expected numbered cards per case for this team
           let expectedCards = cardsPerCase * (row.count / totalCards);
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
@@ -1499,20 +1494,16 @@
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
             });
-            // Update the markup toggle handler without interfering with layout or value format
+            // Update the markup toggle handler to only update the label and placeholder
             document.getElementById("markupToggle").addEventListener("change", function() {
               var label = document.getElementById("markupLabel");
               var markupInput = document.getElementById("markup");
               if (this.checked) {
                 label.textContent = "Markup ($)";
                 markupInput.placeholder = "Enter markup in dollars";
-                markupInput.value = markupInput.value.replace("%", "").replace("$", "").trim();
               } else {
                 label.textContent = "Markup (%)";
                 markupInput.placeholder = "Enter markup percentage";
-                if (markupInput.value !== "" && !markupInput.value.includes("%")) {
-                  markupInput.value = markupInput.value + "%";
-                }
               }
               calculateProfit();
             });
