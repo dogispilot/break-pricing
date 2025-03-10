@@ -585,15 +585,14 @@
       .switch input:checked + .slider:before {
         transform: translateX(22px);
       }
-      /* Embedded text styles */
+      /* Embedded text styles – always visible with active label highlighted */
       .slider .toggle-text {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
         font-size: 12px;
-        font-weight: bold;
-        color: white;
         pointer-events: none;
+        opacity: 1;
       }
       .slider .toggle-text.percent {
         left: 10px;
@@ -601,18 +600,23 @@
       .slider .toggle-text.dollar {
         right: 10px;
       }
-      /* Toggle visibility based on checkbox state */
+      /* When unchecked, highlight percentage */
       .switch input:not(:checked) + .slider .toggle-text.percent {
-        opacity: 1;
+        color: #fff;
+        font-weight: bold;
       }
       .switch input:not(:checked) + .slider .toggle-text.dollar {
-        opacity: 0;
+        color: rgba(255,255,255,0.5);
+        font-weight: normal;
       }
+      /* When checked, highlight dollar */
       .switch input:checked + .slider .toggle-text.percent {
-        opacity: 0;
+        color: rgba(255,255,255,0.5);
+        font-weight: normal;
       }
       .switch input:checked + .slider .toggle-text.dollar {
-        opacity: 1;
+        color: #fff;
+        font-weight: bold;
       }
     </style>
   </head>
