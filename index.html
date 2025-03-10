@@ -18,6 +18,7 @@
       rel="stylesheet"
     />
     <style>
+      /* [All CSS remains unchanged from the previous version] */
       @font-face {
         font-family: 'BreakPricingFont';
         src: url('fonts/breakpricingfont.ttf') format('truetype');
@@ -150,7 +151,6 @@
         color: #e0e0e0;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
         transition: border 0.2s, box-shadow 0.2s;
-        /* Ensure inputs use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .form-group input:focus,
@@ -184,7 +184,6 @@
         align-items: center;
         gap: 8px;
         transition: transform 0.2s, box-shadow 0.2s;
-        /* Ensure buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .lookup-button.small {
@@ -471,7 +470,6 @@
         text-decoration: none;
         font-size: 0.9rem;
         cursor: pointer;
-        /* Ensure pill buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
@@ -490,7 +488,7 @@
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
-        font-size: 1.8rem; /* Increased font size for the sentence */
+        font-size: 1.8rem;
         margin-bottom: 20px;
       }
       .dropdown-container {
@@ -500,9 +498,9 @@
       }
       .dropdown-label {
         text-decoration: underline;
-        font-weight: 900; /* Extra super bold */
-        font-size: 2rem; /* Bigger font for the selector text */
-        color: #FFEE00; /* Specified color */
+        font-weight: 900;
+        font-size: 2rem;
+        color: #FFEE00;
       }
       .dropdown-menu {
         display: none;
@@ -564,7 +562,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #007bff; /* Blue when % is selected (unchecked) */
+        background-color: #007bff;
         transition: 0.4s;
         border-radius: 28px;
       }
@@ -580,7 +578,7 @@
         border-radius: 50%;
       }
       .switch input:checked + .slider {
-        background-color: #2e7d32; /* Green when $ is selected (checked) */
+        background-color: #2e7d32;
       }
       .switch input:checked + .slider:before {
         transform: translateX(22px);
@@ -1132,18 +1130,19 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          const ebayLink = document.createElement("a");
-          ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "ebay-btn";
-          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
-          buttonsContainer.appendChild(ebayLink);
+          // Switch the order: append NHL button first, then eBay button.
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
           nhlLink.className = "nhl-btn";
           nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" class="nhl-icon">';
           buttonsContainer.appendChild(nhlLink);
+          const ebayLink = document.createElement("a");
+          ebayLink.href = "javascript:void(0)";
+          ebayLink.className = "ebay-btn";
+          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
+          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
+          buttonsContainer.appendChild(ebayLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
