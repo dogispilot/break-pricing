@@ -790,7 +790,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Global variable to determine markup mode (true = percentage, false = flat dollar)
+      // Global flag to control markup mode (true = percentage; false = flat dollar)
       let markupIsPercentage = true;
 
       function formatDetail(val, isRookie) {
@@ -1231,14 +1231,13 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        // Update markup calculation based on toggle mode
-        let markupInputValue = document.getElementById("markup").value;
-        let markupCalc, rawPrice;
+        let rawPrice;
+        let markupCalc;
         if (markupIsPercentage) {
-          markupCalc = parsePercentage(markupInputValue);
+          markupCalc = parsePercentage(document.getElementById("markup").value);
           rawPrice = casePrice * (1 + markupCalc);
         } else {
-          markupCalc = parseFloat(markupInputValue);
+          markupCalc = parseFloat(document.getElementById("markup").value);
           if (isNaN(markupCalc)) markupCalc = 0;
           rawPrice = casePrice + markupCalc;
         }
@@ -1261,7 +1260,6 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          // Use the rawPrice calculated above for this team
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
@@ -1497,22 +1495,17 @@
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
             });
-            // Add event listener for the markup toggle switch
+            // Markup toggle: update only the label and mode flag
             document.getElementById("markupToggle").addEventListener("change", function() {
               markupIsPercentage = this.checked;
               let label = document.getElementById("markupLabel");
               let toggleLabel = document.getElementById("markupToggleLabel");
-              let markupInput = document.getElementById("markup");
               if (markupIsPercentage) {
                 label.textContent = "Markup (%)";
                 toggleLabel.textContent = "Percent";
-                if(!markupInput.value.toString().includes("%")) {
-                  markupInput.value = markupInput.value + "%";
-                }
               } else {
                 label.textContent = "Markup ($)";
                 toggleLabel.textContent = "Flat";
-                markupInput.value = markupInput.value.toString().replace("%", "");
               }
               calculateProfit();
             });
