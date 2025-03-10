@@ -711,6 +711,25 @@
             </div>
           </div>
         </div>
+        <!-- New markup field row in Price Settings Duplicate -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabelDup">(%)</span></label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the markup a breaker applies on top of the case cost. It can be a percentage or a fixed dollar amount.
+            </div>
+            <div class="toggle-container">
+              <input type="text" id="markupDup" required placeholder="Enter markup" value="30" />
+              <label class="switch">
+                <input type="checkbox" id="markupToggleCheckboxDup">
+                <span class="slider">
+                  <span class="toggle-text dollar">$</span>
+                  <span class="toggle-text percent">%</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
       
       <!-- Break Pricing Tools Header & Transparency Text -->
@@ -753,7 +772,7 @@
           </div>
         </div>
         <div class="form-row small-input-row">
-          <!-- Updated markup field with an iOS-style toggle switch -->
+          <!-- Markup field in Breaker Settings -->
           <div class="form-group">
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup <span id="markupLabel">(%)</span></label>
             <div class="toast input-tooltip" style="display:none;">
@@ -764,7 +783,6 @@
               <label class="switch">
                 <input type="checkbox" id="markupToggleCheckbox" onchange="toggleMarkupMode()">
                 <span class="slider">
-                  <!-- Now $ comes first and % second -->
                   <span class="toggle-text dollar">$</span>
                   <span class="toggle-text percent">%</span>
                 </span>
@@ -827,9 +845,11 @@
 
       function toggleMarkupMode() {
         const checkbox = document.getElementById("markupToggleCheckbox");
-        // When checkbox is checked, use flat dollar markup; otherwise, percentage.
         markupMode = checkbox.checked ? "$" : "%";
         document.getElementById("markupLabel").textContent = "(" + markupMode + ")";
+        if(document.getElementById("markupLabelDup")){
+          document.getElementById("markupLabelDup").textContent = "(" + markupMode + ")";
+        }
         calculateProfit();
       }
 
@@ -963,7 +983,6 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-        // If previous set is no longer valid, reset.
         if (!filteredSets.some(set => set.name === previousValue)) {
           setSelect.value = "";
           document.getElementById("selectedSetLabel").textContent = "--Select Set--";
@@ -1275,13 +1294,11 @@
         let markupInput = document.getElementById("markup").value;
         let rawPrice;
         let markup;
-        // Use different math depending on whether markup is a percentage or a fixed dollar amount.
         if (markupMode === "%") {
           markup = parsePercentage(markupInput);
           rawPrice = function(cost) { return cost * (1 + markup); };
         } else {
           markup = parseFloat(markupInput);
-          // For fixed $ markup, distribute the markup proportionally:
           rawPrice = function(cost) { return cost + (markup * (cost / casePrice)); };
         }
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
@@ -1291,7 +1308,6 @@
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
-        // Calculate cards per case from the set object
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
           : NaN;
@@ -1303,7 +1319,6 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          // Use the appropriate rawPrice calculation based on markup mode
           let computedRawPrice = rawPrice(cost);
           const price = computedRawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
@@ -1329,7 +1344,7 @@
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
         
-        // Build Full Distribution Table (unchanged)
+        // Build Full Distribution Table
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
@@ -1359,37 +1374,8 @@
         }).join("");
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
         
-        // Build Trimmed Distribution Table
-        // New header: remove "Distributed Cost" column and add "Expected #'d Cards per Case"
-        let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
-          '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Distribution</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(3)">Expected #\'d Cards per Case</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
-          '</tr></thead><tbody>';
-        let trimmedRowsHtml = rows.map(row => {
-          // Calculate expected numbered cards per case for this team
-          let expectedCards = cardsPerCase * (row.count / totalCards);
-          return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
-            <td>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
-                <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
-              </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
-                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
-              </a>
-            </td>
-            <td>${row.count}</td>
-            <td>${row.distribution}</td>
-            <td>${expectedCards.toFixed(1)}</td>
-            <td>$${row.price.toFixed(2)}</td>
-          </tr>`;
-        }).join("");
-        let trimmedTableHtml = trimmedHeader + trimmedRowsHtml + "</tbody></table>";
-        
+        // Removed assignment to non-existent "results" element.
         document.getElementById("fullResults").innerHTML = fullTableHtml;
-        document.getElementById("results").innerHTML = trimmedTableHtml;
         if (rows.length > 0) {
           document.getElementById("teamPricesHeader").style.display = "block";
           document.getElementById("distributionCopy").style.display = "block";
@@ -1504,7 +1490,6 @@
         menu.classList.toggle("open");
       });
 
-      // Toggling the Price Settings menu using CSS class toggling
       document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
         e.preventDefault();
         var dup = document.getElementById("priceSettingsDuplicate");
@@ -1539,6 +1524,20 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
+            });
+            document.getElementById("markupDup").addEventListener("input", function() {
+              document.getElementById("markup").value = this.value;
+              calculateProfit();
+            });
+            document.getElementById("markup").addEventListener("input", function() {
+              document.getElementById("markupDup").value = this.value;
+            });
+            document.getElementById("markupToggleCheckboxDup").addEventListener("change", function() {
+              document.getElementById("markupToggleCheckbox").checked = this.checked;
+              toggleMarkupMode();
+            });
+            document.getElementById("markupToggleCheckbox").addEventListener("change", function() {
+              document.getElementById("markupToggleCheckboxDup").checked = this.checked;
             });
             calculateProfit();
           })
