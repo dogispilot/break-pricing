@@ -539,6 +539,47 @@
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
+      /* =============== iOS style toggle switch =============== */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 28px;
+        margin-left: 10px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 28px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #007bff;
+      }
+      input:checked + .slider:before {
+        transform: translateX(22px);
+      }
     </style>
   </head>
   <body>
@@ -646,13 +687,6 @@
         </div>
       </div>
       
-      <!-- Results Section with Empty State -->
-      <div id="results">
-        <div class="empty-state">
-          <p>Please select a year and set to get started sniping.</p>
-        </div>
-      </div>
-
       <!-- Break Pricing Tools Header & Transparency Text -->
       <h2 id="breakPricingHeader">Break Pricing Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
@@ -694,9 +728,16 @@
         </div>
         <div class="form-row small-input-row">
           <div class="form-group">
-            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
+            <label for="markup" id="markupLabel" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost.</div>
-            <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
+            <div style="display: flex; align-items: center;">
+              <input type="text" id="markup" required placeholder="Enter markup" value="30%" style="flex: 1;" />
+              <label class="switch">
+                <input type="checkbox" id="markupToggle" checked>
+                <span class="slider round"></span>
+              </label>
+              <span id="markupToggleLabel" style="margin-left: 8px;">Percent</span>
+            </div>
           </div>
           <div class="form-group">
             <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
@@ -749,6 +790,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      // Global variable to determine markup mode (true = percentage, false = flat dollar)
+      let markupIsPercentage = true;
+
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
@@ -1187,11 +1231,21 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        const markup = parsePercentage(document.getElementById("markup").value);
+        // Update markup calculation based on toggle mode
+        let markupInputValue = document.getElementById("markup").value;
+        let markupCalc, rawPrice;
+        if (markupIsPercentage) {
+          markupCalc = parsePercentage(markupInputValue);
+          rawPrice = casePrice * (1 + markupCalc);
+        } else {
+          markupCalc = parseFloat(markupInputValue);
+          if (isNaN(markupCalc)) markupCalc = 0;
+          rawPrice = casePrice + markupCalc;
+        }
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
-        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
+        if (isNaN(casePrice) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
@@ -1207,7 +1261,7 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          const rawPrice = cost * (1 + markup);
+          // Use the rawPrice calculated above for this team
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
@@ -1442,6 +1496,25 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
+            });
+            // Add event listener for the markup toggle switch
+            document.getElementById("markupToggle").addEventListener("change", function() {
+              markupIsPercentage = this.checked;
+              let label = document.getElementById("markupLabel");
+              let toggleLabel = document.getElementById("markupToggleLabel");
+              let markupInput = document.getElementById("markup");
+              if (markupIsPercentage) {
+                label.textContent = "Markup (%)";
+                toggleLabel.textContent = "Percent";
+                if(!markupInput.value.toString().includes("%")) {
+                  markupInput.value = markupInput.value + "%";
+                }
+              } else {
+                label.textContent = "Markup ($)";
+                toggleLabel.textContent = "Flat";
+                markupInput.value = markupInput.value.toString().replace("%", "");
+              }
+              calculateProfit();
             });
             calculateProfit();
           })
