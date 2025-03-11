@@ -696,7 +696,7 @@
             <div class="toast input-tooltip" style="display:none;">
               This is the markup a breaker applies on top of the distributed cost.
               In percent mode: [distributed cost] × (1 + markup/100)
-              In dollar mode: [distributed cost] + markup (allocated proportionally).
+              In dollar mode: [distributed cost] + (distributed cost/case price × markup).
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -709,21 +709,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
-            <input type="text" id="userDiscountDup" required placeholder="Enter discount" value="0%" />
-          </div>
-          <div class="form-group">
-            <label for="blendedTaxDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
-            <input type="text" id="blendedTaxDup" required placeholder="Enter tax" value="5.1%" />
-          </div>
-          <div class="form-group">
-            <label for="suppliesDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
-            <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
-            <input type="number" id="suppliesDup" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
-          </div>
+          <!-- Removed User Discount, Blended Tax, and Supplies per Order fields from duplicate menu -->
         </div>
       </div>
       
@@ -1287,7 +1273,7 @@
         let markupValue = parseFloat(markupInput);
         if (isNaN(markupValue)) markupValue = 0;
         const isDollar = document.getElementById("markupToggle").checked;
-        // User discount, blended tax, and supplies used for fee/profit calculations remain unchanged.
+        // User discount, blended tax, and supplies are still used from breaker settings.
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
@@ -1306,8 +1292,7 @@
           const cost = (count / totalCards) * casePrice;
           // Apply markup to the distributed cost:
           // In percent mode: cost * (1 + markupValue/100)
-          // In dollar mode: allocate the flat markup proportionally:
-          // New cost = cost + (cost / casePrice) * markupValue
+          // In dollar mode: allocate the flat markup proportionally: cost + (cost/casePrice) * markupValue
           let distributedCostPlusMargin;
           if (isDollar) {
             distributedCostPlusMargin = cost + (cost / casePrice) * markupValue;
@@ -1326,7 +1311,6 @@
             count: count,
             distribution: distribution,
             cost: cost,
-            // This "price" field now uses the corrected distributedCostPlusMargin
             price: distributedCostPlusMargin,
             whatnotFees: whatnotFees,
             transactionFees: transactionFees,
