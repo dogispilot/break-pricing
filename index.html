@@ -150,7 +150,6 @@
         color: #e0e0e0;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
         transition: border 0.2s, box-shadow 0.2s;
-        /* Ensure buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .form-group input:focus,
@@ -184,7 +183,6 @@
         align-items: center;
         gap: 8px;
         transition: transform 0.2s, box-shadow 0.2s;
-        /* Ensure buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .lookup-button.small {
@@ -471,7 +469,6 @@
         text-decoration: none;
         font-size: 0.9rem;
         cursor: pointer;
-        /* Ensure pill buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
@@ -490,7 +487,7 @@
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
-        font-size: 1.8rem; /* Increased font size for the sentence */
+        font-size: 1.8rem;
         margin-bottom: 20px;
       }
       .dropdown-container {
@@ -500,9 +497,9 @@
       }
       .dropdown-label {
         text-decoration: underline;
-        font-weight: 900; /* Extra super bold */
-        font-size: 2rem; /* Bigger font for the selector text */
-        color: #FFEE00; /* Specified color */
+        font-weight: 900;
+        font-size: 2rem;
+        color: #FFEE00;
       }
       .dropdown-menu {
         display: none;
@@ -531,7 +528,6 @@
         color: #fff;
         cursor: pointer;
       }
-      /* Rule to show menus when toggled */
       .open-menu {
         display: block !important;
       }
@@ -828,7 +824,7 @@
           <div id="whatnotsCutBox" class="summary-box">
             <div class="amount">$0.00</div>
             <div class="label">Whatnot's Cut</div>
-            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, before tax.</div>
+            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, after markup and discount.</div>
           </div>
           <div id="costOfBusinessBox" class="summary-box">
             <div class="amount">$0.00</div>
@@ -858,7 +854,6 @@
         }
       }
 
-      // Toggling the breaker settings menu by toggling the "open-menu" class
       function toggleBreakPricingOptions() {
         var menu = document.getElementById("breakPricingOptionsMenu");
         menu.classList.toggle("open-menu");
@@ -960,7 +955,6 @@
         });
       }
 
-      // Modified populateSetSelector to reset set if it doesn't match the new year.
       function populateSetSelector() {
         const selectedYear = document.getElementById("yearSelect").value;
         const setSelect = document.getElementById("setSelect");
@@ -974,7 +968,6 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
-        // If previous set is no longer valid, reset.
         if (!filteredSets.some(set => set.name === previousValue)) {
           setSelect.value = "";
           document.getElementById("selectedSetLabel").textContent = "--Select Set--";
@@ -1293,7 +1286,6 @@
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
-        // Calculate cards per case from the set object
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
           : NaN;
@@ -1307,14 +1299,13 @@
           const cost = (count / totalCards) * casePrice;
           let basePrice;
           if (isDollar) {
-            // Distribute the flat dollar markup proportionally
             basePrice = cost + ((count / totalCards) * markupValue);
           } else {
-            // Apply percentage markup to the team's distributed cost
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          const whatnotFees = cost * 0.08;
+          // Whatnot fees are now 8% of the distributed price (i.e., cost+markup after discount)
+          const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
@@ -1337,7 +1328,6 @@
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
         
-        // Build Full Distribution Table (unchanged except for updated price)
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
@@ -1367,8 +1357,6 @@
         }).join("");
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
         
-        // Build Trimmed Distribution Table
-        // New header: remove "Distributed Cost" column and add "Expected #'d Cards per Case"
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
@@ -1377,7 +1365,6 @@
           '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
-          // Calculate expected numbered cards per case for this team
           let expectedCards = cardsPerCase * (row.count / totalCards);
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
@@ -1512,14 +1499,12 @@
         menu.classList.toggle("open");
       });
 
-      // Toggling the Price Settings menu using CSS class toggling
       document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
         e.preventDefault();
         var dup = document.getElementById("priceSettingsDuplicate");
         dup.classList.toggle("open-menu");
       });
 
-      // Link markup inputs between the two menus
       document.getElementById("markupDup").addEventListener("input", function() {
         document.getElementById("markup").value = this.value;
         calculateProfit();
@@ -1528,7 +1513,6 @@
         document.getElementById("markupDup").value = this.value;
       });
 
-      // Link the markup toggle between menus and update label text
       document.getElementById("markupToggleDup").addEventListener("change", function() {
         document.getElementById("markupToggle").checked = this.checked;
         updateMarkupToggleLabel();
@@ -1545,7 +1529,6 @@
         document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
       }
 
-      // Link the remaining inputs between menus
       document.getElementById("userDiscountDup").addEventListener("input", function() {
         document.getElementById("userDiscount").value = this.value;
         calculateProfit();
@@ -1590,7 +1573,6 @@
               input.addEventListener("input", calculateProfit);
               input.addEventListener("change", calculateProfit);
             });
-            // Link the case price inputs between the two menus
             document.getElementById("casePriceDup").addEventListener("input", function() {
               document.getElementById("casePrice").value = this.value;
               calculateProfit();
