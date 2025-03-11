@@ -695,8 +695,8 @@
             <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
             <div class="toast input-tooltip" style="display:none;">
               This is the markup a breaker applies on top of the case cost.
-              In percent mode: [case price] * (1 + markup/100)
-              In dollar mode: [case price] + markup.
+              In percent mode: [distributed cost] * (1 + markup/100)
+              In dollar mode: [distributed cost] + (distributed markup).
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -779,8 +779,8 @@
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
             <div class="toast input-tooltip" style="display:none;">
               This is the markup a breaker applies on top of the case cost.
-              In percent mode: [case price] * (1 + markup/100)
-              In dollar mode: [case price] + markup.
+              In percent mode: [distributed cost] * (1 + markup/100)
+              In dollar mode: [distributed cost] + (distributed markup).
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -1282,21 +1282,14 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        // Get markup value and determine mode (dollar or percent)
         const markupInput = document.getElementById("markup").value;
         let markupValue = parseFloat(markupInput);
         if (isNaN(markupValue)) markupValue = 0;
         const isDollar = document.getElementById("markupToggle").checked;
-        let rawPrice;
-        if (isDollar) {
-          rawPrice = casePrice + markupValue;
-        } else {
-          rawPrice = casePrice * (1 + markupValue / 100);
-        }
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
-        if (isNaN(casePrice) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
+        
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
@@ -1312,11 +1305,18 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          // Use the rawPrice calculated above instead of cost * (1 + markup)
-          const price = rawPrice * (1 - userDiscount);
+          let basePrice;
+          if (isDollar) {
+            // Distribute the flat dollar markup proportionally
+            basePrice = cost + ((count / totalCards) * markupValue);
+          } else {
+            // Apply percentage markup to the team's distributed cost
+            basePrice = cost * (1 + (markupValue / 100));
+          }
+          const distributedPrice = basePrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
-          const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
-          const profit = price - cost - whatnotFees - transactionFees - supplies;
+          const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
+          const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
           rows.push({
             team: team,
@@ -1324,7 +1324,7 @@
             count: count,
             distribution: distribution,
             cost: cost,
-            price: price,
+            price: distributedPrice,
             whatnotFees: whatnotFees,
             transactionFees: transactionFees,
             profit: profit
@@ -1337,7 +1337,7 @@
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
         
-        // Build Full Distribution Table (unchanged)
+        // Build Full Distribution Table (unchanged except for updated price)
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
