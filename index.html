@@ -685,8 +685,8 @@
             </div>
           </div>
         </div>
-        <div class="form-row small-input-row">
-          <!-- Markup input with iOS toggle in duplicate menu -->
+        <!-- Added margin-top to the second row to match breaker settings -->
+        <div class="form-row small-input-row" style="margin-top:20px;">
           <div class="form-group">
             <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
             <div class="toast input-tooltip" style="display:none;">
@@ -770,7 +770,6 @@
           </div>
         </div>
         <div class="form-row small-input-row">
-          <!-- Markup input with iOS toggle in breaker settings menu -->
           <div class="form-group">
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
             <div class="toast input-tooltip" style="display:none;">
@@ -1304,7 +1303,7 @@
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          // Whatnot fees are now 8% of the distributed price (i.e., cost+markup after discount)
+          // Whatnot fees are now calculated from the distributed cost + markup (after discount)
           const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
