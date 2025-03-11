@@ -694,9 +694,9 @@
           <div class="form-group">
             <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
             <div class="toast input-tooltip" style="display:none;">
-              This is the markup a breaker applies on top of the case cost.
-              In percent mode: [case price] * (1 + markup/100)
-              In dollar mode: [case price] + markup.
+              This is the markup a breaker applies on top of the distributed cost.
+              In percent mode: [distributed cost] × (1 + markup/100)
+              In dollar mode: [distributed cost] + markup.
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -778,9 +778,9 @@
           <div class="form-group">
             <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
             <div class="toast input-tooltip" style="display:none;">
-              This is the markup a breaker applies on top of the case cost.
-              In percent mode: [case price] * (1 + markup/100)
-              In dollar mode: [case price] + markup.
+              This is the markup a breaker applies on top of the distributed cost.
+              In percent mode: [distributed cost] × (1 + markup/100)
+              In dollar mode: [distributed cost] + markup.
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -1282,17 +1282,12 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        // Get markup value and determine mode (dollar or percent)
+        // Get markup value and determine mode (dollar or percentage)
         const markupInput = document.getElementById("markup").value;
         let markupValue = parseFloat(markupInput);
         if (isNaN(markupValue)) markupValue = 0;
         const isDollar = document.getElementById("markupToggle").checked;
-        let rawPrice;
-        if (isDollar) {
-          rawPrice = casePrice + markupValue;
-        } else {
-          rawPrice = casePrice * (1 + markupValue / 100);
-        }
+        // Note: The user discount is still used for fee and profit calculations.
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
@@ -1300,23 +1295,31 @@
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
-        // Calculate cards per case from the set object
-        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
-          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
-          : NaN;
-          
+        // For each team, compute the distributed cost then apply the markup
         const teamData = setObj.cards || setObj.most_numbered_cards;
         let totalCards = 0;
         for (let team in teamData) { totalCards += teamData[team]; }
         let rows = [];
         for (let team in teamData) {
           const count = teamData[team];
+          // Distributed cost for this team
           const cost = (count / totalCards) * casePrice;
-          // Use the rawPrice calculated above instead of cost * (1 + markup)
-          const price = rawPrice * (1 - userDiscount);
+          // Calculate "Distributed Cost + Margin" as per new requirements:
+          // If in dollar mode: distributed cost + markupValue
+          // If in percent mode: distributed cost × (1 + markupValue/100)
+          let distributedCostPlusMargin;
+          if (isDollar) {
+            distributedCostPlusMargin = cost + markupValue;
+          } else {
+            distributedCostPlusMargin = cost * (1 + markupValue / 100);
+          }
+          // (User discount is NOT applied to this column per the update.)
+          // Calculate fees and profit using the discounted sale price (if needed)
+          // For fee/profit calculations, we still use the sale price after discount.
+          const salePrice = distributedCostPlusMargin * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
-          const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
-          const profit = price - cost - whatnotFees - transactionFees - supplies;
+          const transactionFees = (salePrice * (1 + blendedTax)) * 0.029 + 0.3;
+          const profit = salePrice - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
           rows.push({
             team: team,
@@ -1324,7 +1327,8 @@
             count: count,
             distribution: distribution,
             cost: cost,
-            price: price,
+            // Use the new "distributed cost + margin" value in tables:
+            price: distributedCostPlusMargin,
             whatnotFees: whatnotFees,
             transactionFees: transactionFees,
             profit: profit
@@ -1337,7 +1341,7 @@
         document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
         document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
         
-        // Build Full Distribution Table (unchanged)
+        // Build Full Distribution Table
         let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
@@ -1368,17 +1372,17 @@
         let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
         
         // Build Trimmed Distribution Table
-        // New header: remove "Distributed Cost" column and add "Expected #'d Cards per Case"
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Distribution</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(3)">Expected #\'d Cards per Case</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Margin</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
-          // Calculate expected numbered cards per case for this team
-          let expectedCards = cardsPerCase * (row.count / totalCards);
+          let expectedCards = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
+            ? (Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10) * (row.count / totalCards)
+            : NaN;
           return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
             <td>
               <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
@@ -1390,7 +1394,7 @@
             </td>
             <td>${row.count}</td>
             <td>${row.distribution}</td>
-            <td>${expectedCards.toFixed(1)}</td>
+            <td>${isNaN(expectedCards) ? "N/A" : expectedCards.toFixed(1)}</td>
             <td>$${row.price.toFixed(2)}</td>
           </tr>`;
         }).join("");
