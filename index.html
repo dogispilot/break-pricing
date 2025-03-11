@@ -685,7 +685,7 @@
             </div>
           </div>
         </div>
-        <!-- Second row now only contains the Markup input and has a top margin -->
+        <!-- Added margin-top to the second row to match breaker settings -->
         <div class="form-row small-input-row" style="margin-top:20px;">
           <div class="form-group">
             <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
@@ -704,6 +704,21 @@
                 <span id="markupToggleLabelDup" style="margin-left:5px;">%</span>
               </div>
             </div>
+          </div>
+          <div class="form-group">
+            <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
+            <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
+            <input type="text" id="userDiscountDup" required placeholder="Enter discount" value="0%" />
+          </div>
+          <div class="form-group">
+            <label for="blendedTaxDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
+            <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
+            <input type="text" id="blendedTaxDup" required placeholder="Enter tax" value="5.1%" />
+          </div>
+          <div class="form-group">
+            <label for="suppliesDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
+            <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
+            <input type="number" id="suppliesDup" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
           </div>
         </div>
       </div>
@@ -773,7 +788,21 @@
               </div>
             </div>
           </div>
-          <!-- The user discount, blended tax, and supplies inputs have been removed here -->
+          <div class="form-group">
+            <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
+            <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
+            <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%" />
+          </div>
+          <div class="form-group">
+            <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
+            <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
+            <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%" />
+          </div>
+          <div class="form-group">
+            <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
+            <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
+            <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
+          </div>
         </div>
       </div>
 
@@ -1274,7 +1303,7 @@
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          // Whatnot fees are calculated from the distributed cost + markup (after discount)
+          // Whatnot fees are now calculated from the distributed cost + markup (after discount)
           const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
@@ -1482,6 +1511,7 @@
       document.getElementById("markup").addEventListener("input", function() {
         document.getElementById("markupDup").value = this.value;
       });
+
       document.getElementById("markupToggleDup").addEventListener("change", function() {
         document.getElementById("markupToggle").checked = this.checked;
         updateMarkupToggleLabel();
@@ -1497,6 +1527,28 @@
         document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
         document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
       }
+
+      document.getElementById("userDiscountDup").addEventListener("input", function() {
+        document.getElementById("userDiscount").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("userDiscount").addEventListener("input", function() {
+        document.getElementById("userDiscountDup").value = this.value;
+      });
+      document.getElementById("blendedTaxDup").addEventListener("input", function() {
+        document.getElementById("blendedTax").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("blendedTax").addEventListener("input", function() {
+        document.getElementById("blendedTaxDup").value = this.value;
+      });
+      document.getElementById("suppliesDup").addEventListener("input", function() {
+        document.getElementById("supplies").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("supplies").addEventListener("input", function() {
+        document.getElementById("suppliesDup").value = this.value;
+      });
 
       window.addEventListener("load", function() {
         fetch("config.json")
