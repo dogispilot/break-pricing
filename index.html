@@ -150,6 +150,7 @@
         color: #e0e0e0;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
         transition: border 0.2s, box-shadow 0.2s;
+        /* Ensure buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .form-group input:focus,
@@ -183,6 +184,7 @@
         align-items: center;
         gap: 8px;
         transition: transform 0.2s, box-shadow 0.2s;
+        /* Ensure buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       .lookup-button.small {
@@ -469,6 +471,7 @@
         text-decoration: none;
         font-size: 0.9rem;
         cursor: pointer;
+        /* Ensure pill buttons use the correct font */
         font-family: 'BreakPricingFont', sans-serif;
       }
       /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
@@ -487,7 +490,7 @@
       /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
-        font-size: 1.8rem;
+        font-size: 1.8rem; /* Increased font size for the sentence */
         margin-bottom: 20px;
       }
       .dropdown-container {
@@ -497,9 +500,9 @@
       }
       .dropdown-label {
         text-decoration: underline;
-        font-weight: 900;
-        font-size: 2rem;
-        color: #FFEE00;
+        font-weight: 900; /* Extra super bold */
+        font-size: 2rem; /* Bigger font for the selector text */
+        color: #FFEE00; /* Specified color */
       }
       .dropdown-menu {
         display: none;
@@ -528,9 +531,11 @@
         color: #fff;
         cursor: pointer;
       }
+      /* Rule to show menus when toggled */
       .open-menu {
         display: block !important;
       }
+      /* Initially hide the menus */
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
@@ -704,7 +709,7 @@
               </div>
             </div>
           </div>
-          <!-- User Discount, Blended Tax, and Supplies per Order have been removed here -->
+          <!-- Removed User Discount, Blended Tax, and Supplies per Order fields from duplicate menu -->
         </div>
       </div>
       
@@ -955,6 +960,7 @@
           option.textContent = set.name;
           setSelect.appendChild(option);
         });
+        // If previous set is no longer valid, reset.
         if (!filteredSets.some(set => set.name === previousValue)) {
           setSelect.value = "";
           document.getElementById("selectedSetLabel").textContent = "--Select Set--";
@@ -1286,7 +1292,7 @@
           const cost = (count / totalCards) * casePrice;
           // Apply markup to the distributed cost:
           // In percent mode: cost * (1 + markupValue/100)
-          // In dollar mode: cost + (cost/casePrice) * markupValue (allocated proportionally)
+          // In dollar mode: allocate the flat markup proportionally: cost + (cost/casePrice) * markupValue
           let distributedCostPlusMargin;
           if (isDollar) {
             distributedCostPlusMargin = cost + (cost / casePrice) * markupValue;
@@ -1295,8 +1301,7 @@
           }
           // For fee/profit calculations, user discount is applied to the sale price.
           const salePrice = distributedCostPlusMargin * (1 - userDiscount);
-          // Update: whatnot fees are now 8% of the distributed cost + markup value.
-          const whatnotFees = distributedCostPlusMargin * 0.08;
+          const whatnotFees = cost * 0.08;
           const transactionFees = (salePrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = salePrice - cost - whatnotFees - transactionFees - supplies;
           const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
