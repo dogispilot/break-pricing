@@ -217,19 +217,6 @@
         font-family: 'BreakPricingFontBold', sans-serif;
         text-align: center;
       }
-      /* NEW: Configuration container matching key rookies style */
-      .configuration-container {
-        margin-top: 30px;
-        padding: 15px;
-        background: #2c2c2c;
-        border-radius: 8px;
-      }
-      .configuration-container h2 {
-        font-family: 'BreakPricingFontBold', sans-serif;
-        text-align: center;
-        margin-top: 0;
-        margin-bottom: 20px;
-      }
       .key-player-tiles-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -674,8 +661,8 @@
         </div>
       </form>
 
-      <!-- Configuration Container for Set Details -->
-      <div id="configurationSection" class="configuration-container" style="display:none;"></div>
+      <!-- Set Details Container -->
+      <div id="setDetails" style="margin-bottom: 20px;"></div>
 
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -1030,20 +1017,29 @@
         });
       }
 
-      // Updated function to build the configuration container
+      function updateCasePrice() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        if (!selectedYear || !selectedSet) return;
+        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
+        if (setObj && setObj.price) {
+          const price = parseFloat(setObj.price.replace(/[$,]/g, ""));
+          document.getElementById("casePrice").value = price;
+          document.getElementById("casePriceDup").value = price;
+        }
+      }
+
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
-        const configDiv = document.getElementById("configurationSection");
+        const detailsDiv = document.getElementById("setDetails");
         if (!selectedYear || !selectedSet) {
-          configDiv.style.display = "none";
-          configDiv.innerHTML = "";
+          detailsDiv.innerHTML = "";
           return;
         }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
         if (!setObj) {
-          configDiv.style.display = "none";
-          configDiv.innerHTML = "";
+          detailsDiv.innerHTML = "";
           return;
         }
         let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
@@ -1052,9 +1048,7 @@
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
           : NaN;
-          
-        let html = `<h2>Configuration</h2>`;
-        html += `
+        let html = `
           <div class="setDetails-grid-4col">
             <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
               <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
@@ -1083,15 +1077,14 @@
           </div>
         `;
         html += `
-          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}.
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
             <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
           </div>
         `;
-        configDiv.innerHTML = html;
-        configDiv.style.display = "block";
+        detailsDiv.innerHTML = html;
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1596,7 +1589,6 @@
               document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
               updateCasePrice();
               updateSetDetails();
-              updateKeyPlayersSection();
               calculateProfit();
             });
             const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select, #priceSettingsDuplicate input, #priceSettingsDuplicate select");
