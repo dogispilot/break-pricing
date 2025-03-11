@@ -539,6 +539,51 @@
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
+      /* ===== iOS Style Toggle CSS ===== */
+      .toggle-container {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 10px;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+      }
+      .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: #2196F3;
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
     </style>
   </head>
   <body>
@@ -645,10 +690,24 @@
           </div>
         </div>
         <div class="form-row small-input-row">
+          <!-- Markup input with iOS toggle in duplicate menu -->
           <div class="form-group">
-            <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost.</div>
-            <input type="text" id="markupDup" required placeholder="Enter markup" value="30%" />
+            <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the markup a breaker applies on top of the case cost.
+              In percent mode: [case price] * (1 + markup/100)
+              In dollar mode: [case price] + markup.
+            </div>
+            <div style="display: flex; align-items: center;">
+              <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
+              <div class="toggle-container">
+                <label class="switch">
+                  <input type="checkbox" id="markupToggleDup">
+                  <span class="slider"></span>
+                </label>
+                <span id="markupToggleLabelDup" style="margin-left:5px;">%</span>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
@@ -715,10 +774,24 @@
           </div>
         </div>
         <div class="form-row small-input-row">
+          <!-- Markup input with iOS toggle in breaker settings menu -->
           <div class="form-group">
-            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the markup a breaker applies on top of the case cost.</div>
-            <input type="text" id="markup" required placeholder="Enter markup" value="30%" />
+            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup</label>
+            <div class="toast input-tooltip" style="display:none;">
+              This is the markup a breaker applies on top of the case cost.
+              In percent mode: [case price] * (1 + markup/100)
+              In dollar mode: [case price] + markup.
+            </div>
+            <div style="display: flex; align-items: center;">
+              <input type="text" id="markup" required placeholder="Enter markup" value="30" style="flex:1;" />
+              <div class="toggle-container">
+                <label class="switch">
+                  <input type="checkbox" id="markupToggle">
+                  <span class="slider"></span>
+                </label>
+                <span id="markupToggleLabel" style="margin-left:5px;">%</span>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
@@ -1209,11 +1282,21 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        const markup = parsePercentage(document.getElementById("markup").value);
+        // Get markup value and determine mode (dollar or percent)
+        const markupInput = document.getElementById("markup").value;
+        let markupValue = parseFloat(markupInput);
+        if (isNaN(markupValue)) markupValue = 0;
+        const isDollar = document.getElementById("markupToggle").checked;
+        let rawPrice;
+        if (isDollar) {
+          rawPrice = casePrice + markupValue;
+        } else {
+          rawPrice = casePrice * (1 + markupValue / 100);
+        }
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
-        if (isNaN(casePrice) || isNaN(markup) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
+        if (isNaN(casePrice) || isNaN(userDiscount) || isNaN(blendedTax) || isNaN(supplies)) { return; }
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
@@ -1229,7 +1312,7 @@
         for (let team in teamData) {
           const count = teamData[team];
           const cost = (count / totalCards) * casePrice;
-          const rawPrice = cost * (1 + markup);
+          // Use the rawPrice calculated above instead of cost * (1 + markup)
           const price = rawPrice * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (price * (1 + blendedTax)) * 0.029 + 0.3;
@@ -1436,6 +1519,55 @@
         dup.classList.toggle("open-menu");
       });
 
+      // Link markup inputs between the two menus
+      document.getElementById("markupDup").addEventListener("input", function() {
+        document.getElementById("markup").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("markup").addEventListener("input", function() {
+        document.getElementById("markupDup").value = this.value;
+      });
+
+      // Link the markup toggle between menus and update label text
+      document.getElementById("markupToggleDup").addEventListener("change", function() {
+        document.getElementById("markupToggle").checked = this.checked;
+        updateMarkupToggleLabel();
+        calculateProfit();
+      });
+      document.getElementById("markupToggle").addEventListener("change", function() {
+        document.getElementById("markupToggleDup").checked = this.checked;
+        updateMarkupToggleLabel();
+        calculateProfit();
+      });
+      function updateMarkupToggleLabel() {
+        const isDollar = document.getElementById("markupToggle").checked;
+        document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
+        document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
+      }
+
+      // Link the remaining inputs between menus
+      document.getElementById("userDiscountDup").addEventListener("input", function() {
+        document.getElementById("userDiscount").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("userDiscount").addEventListener("input", function() {
+        document.getElementById("userDiscountDup").value = this.value;
+      });
+      document.getElementById("blendedTaxDup").addEventListener("input", function() {
+        document.getElementById("blendedTax").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("blendedTax").addEventListener("input", function() {
+        document.getElementById("blendedTaxDup").value = this.value;
+      });
+      document.getElementById("suppliesDup").addEventListener("input", function() {
+        document.getElementById("supplies").value = this.value;
+        calculateProfit();
+      });
+      document.getElementById("supplies").addEventListener("input", function() {
+        document.getElementById("suppliesDup").value = this.value;
+      });
+
       window.addEventListener("load", function() {
         fetch("config.json")
           .then(response => {
@@ -1465,38 +1597,6 @@
             });
             document.getElementById("casePrice").addEventListener("input", function() {
               document.getElementById("casePriceDup").value = this.value;
-            });
-            // Link the markup inputs between the two menus
-            document.getElementById("markupDup").addEventListener("input", function() {
-              document.getElementById("markup").value = this.value;
-              calculateProfit();
-            });
-            document.getElementById("markup").addEventListener("input", function() {
-              document.getElementById("markupDup").value = this.value;
-            });
-            // Link the user discount inputs between the two menus
-            document.getElementById("userDiscountDup").addEventListener("input", function() {
-              document.getElementById("userDiscount").value = this.value;
-              calculateProfit();
-            });
-            document.getElementById("userDiscount").addEventListener("input", function() {
-              document.getElementById("userDiscountDup").value = this.value;
-            });
-            // Link the blended tax inputs between the two menus
-            document.getElementById("blendedTaxDup").addEventListener("input", function() {
-              document.getElementById("blendedTax").value = this.value;
-              calculateProfit();
-            });
-            document.getElementById("blendedTax").addEventListener("input", function() {
-              document.getElementById("blendedTaxDup").value = this.value;
-            });
-            // Link the supplies inputs between the two menus
-            document.getElementById("suppliesDup").addEventListener("input", function() {
-              document.getElementById("supplies").value = this.value;
-              calculateProfit();
-            });
-            document.getElementById("supplies").addEventListener("input", function() {
-              document.getElementById("suppliesDup").value = this.value;
             });
             calculateProfit();
           })
