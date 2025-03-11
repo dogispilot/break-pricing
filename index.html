@@ -543,11 +543,11 @@
         display: none;
       }
       /* ===== iOS Style Toggle CSS ===== */
-   .toggle-container {
-    display: inline-flex;
-    align-items: center;
-    margin-left: 10px;
-    padding: 8px 0;
+      .toggle-container {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 10px;
+        padding: 8px 0;
       }
       /* New rule to ensure the %/$ text is vertically centered */
       .toggle-container span {
@@ -730,17 +730,17 @@
               </div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="display: none;">
             <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
             <input type="text" id="userDiscountDup" required placeholder="Enter discount" value="0%" />
           </div>
-          <div class="form-group">
+          <div class="form-group" style="display: none;">
             <label for="blendedTaxDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
             <input type="text" id="blendedTaxDup" required placeholder="Enter tax" value="5.1%" />
           </div>
-          <div class="form-group">
+          <div class="form-group" style="display: none;">
             <label for="suppliesDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
             <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
             <input type="number" id="suppliesDup" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
@@ -1592,44 +1592,13 @@
               updateSetDetails();
               calculateProfit();
             });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select, #priceSettingsDuplicate input, #priceSettingsDuplicate select");
-            calcInputs.forEach(input => {
-              input.addEventListener("input", calculateProfit);
-              input.addEventListener("change", calculateProfit);
-            });
-            document.getElementById("casePriceDup").addEventListener("input", function() {
-              document.getElementById("casePrice").value = this.value;
-              calculateProfit();
-            });
-            document.getElementById("casePrice").addEventListener("input", function() {
-              document.getElementById("casePriceDup").value = this.value;
-            });
-            calculateProfit();
+            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
+            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
           })
-          .catch(error => {
-            console.error("Error loading JSON:", error);
-            alert("Error loading JSON file: " + error.message);
+          .catch(err => {
+            console.error("Error loading config.json:", err);
           });
       });
-
-      window.addEventListener("resize", function() {
-        const boxes = document.querySelectorAll('.detail-box');
-        if (boxes.length) adjustDetailBoxes();
-      });
-
-      function adjustDetailBoxes() {
-        const boxes = document.querySelectorAll('.detail-box');
-        boxes.forEach(box => { box.style.fontSize = "1.2rem"; });
-        let minHeight = Infinity;
-        boxes.forEach(box => { if (box.scrollHeight < minHeight) { minHeight = box.scrollHeight; } });
-        boxes.forEach(box => {
-          while (box.scrollHeight > minHeight) {
-            let currentSize = parseFloat(window.getComputedStyle(box).fontSize);
-            if (currentSize < 10) break;
-            box.style.fontSize = (currentSize * 0.95) + "px";
-          }
-        });
-      }
     </script>
   </body>
 </html>
