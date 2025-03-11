@@ -234,8 +234,8 @@
       }
       /* UPDATED IMAGE STYLES FOR KEY ROOKIES */
       .key-player-tile img.team-logo {
-        width: 90px;
-        height: 90px;
+        width: 67.5px;
+        height: 67.5px;
         margin-right: 0;
         border-radius: 50%;
         opacity: 0.75;
@@ -1145,18 +1145,18 @@
           buttonsContainer.style.display = "inline-flex";
           buttonsContainer.style.gap = "4px";
           buttonsContainer.style.marginTop = "8px";
-          const ebayLink = document.createElement("a");
-          ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "ebay-btn";
-          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
-          buttonsContainer.appendChild(ebayLink);
           const nhlLink = document.createElement("a");
           nhlLink.href = player.profile_link;
           nhlLink.target = "_blank";
           nhlLink.className = "nhl-btn";
           nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" class="nhl-icon">';
           buttonsContainer.appendChild(nhlLink);
+          const ebayLink = document.createElement("a");
+          ebayLink.href = "javascript:void(0)";
+          ebayLink.className = "ebay-btn";
+          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
+          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
+          buttonsContainer.appendChild(ebayLink);
           infoDiv.appendChild(buttonsContainer);
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
