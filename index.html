@@ -541,11 +541,18 @@
         align-items: center;
         margin-left: 10px;
       }
+      /* New rule to ensure the %/$ text is vertically centered */
+      .toggle-container span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 28px;
+        font-size: 1rem;
+      }
       .switch {
         position: relative;
         display: inline-block;
-        width: 40px;
-        height: 20px;
+        width: 50px;
+        height: 28px;
       }
       .switch input { 
         opacity: 0;
@@ -559,15 +566,15 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
+        background-color: #007bff; /* Blue background for % mode */
         transition: .4s;
-        border-radius: 20px;
+        border-radius: 28px;
       }
       .slider:before {
         position: absolute;
         content: "";
-        height: 16px;
-        width: 16px;
+        height: 24px;
+        width: 24px;
         left: 2px;
         bottom: 2px;
         background-color: white;
@@ -575,10 +582,20 @@
         border-radius: 50%;
       }
       input:checked + .slider {
-        background-color: #2196F3;
+        background-color: #28a745; /* Green background for $ mode */
       }
       input:checked + .slider:before {
-        transform: translateX(20px);
+        transform: translateX(22px);
+      }
+      /* NEW: Styling for the empty state container */
+      .empty-state {
+        border: 1px solid #444;
+        padding: 20px;
+        background-color: #2c2c2c;
+        text-align: center;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        margin-top: 20px;
       }
     </style>
   </head>
