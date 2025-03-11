@@ -696,7 +696,7 @@
             <div class="toast input-tooltip" style="display:none;">
               This is the markup a breaker applies on top of the distributed cost.
               In percent mode: [distributed cost] × (1 + markup/100)
-              In dollar mode: [distributed cost] + markup.
+              In dollar mode: [distributed cost] + markup (allocated proportionally).
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -780,7 +780,7 @@
             <div class="toast input-tooltip" style="display:none;">
               This is the markup a breaker applies on top of the distributed cost.
               In percent mode: [distributed cost] × (1 + markup/100)
-              In dollar mode: [distributed cost] + markup.
+              In dollar mode: [distributed cost] + (distributed cost/case price × markup).
             </div>
             <div style="display: flex; align-items: center;">
               <input type="text" id="markup" required placeholder="Enter markup" value="30" style="flex:1;" />
@@ -1282,12 +1282,12 @@
           return;
         }
         const casePrice = parseFloat(document.getElementById("casePrice").value);
-        // Get markup value and determine mode (dollar or percentage)
+        // Get markup value and determine mode (dollar or percent)
         const markupInput = document.getElementById("markup").value;
         let markupValue = parseFloat(markupInput);
         if (isNaN(markupValue)) markupValue = 0;
         const isDollar = document.getElementById("markupToggle").checked;
-        // Note: The user discount is still used for fee and profit calculations.
+        // User discount, blended tax, and supplies used for fee/profit calculations remain unchanged.
         const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
         const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
         const supplies = parseFloat(document.getElementById("supplies").value);
@@ -1295,7 +1295,7 @@
         const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
         if (!setObj) return;
         
-        // For each team, compute the distributed cost then apply the markup
+        // For each team, compute the distributed cost then apply markup
         const teamData = setObj.cards || setObj.most_numbered_cards;
         let totalCards = 0;
         for (let team in teamData) { totalCards += teamData[team]; }
@@ -1304,18 +1304,17 @@
           const count = teamData[team];
           // Distributed cost for this team
           const cost = (count / totalCards) * casePrice;
-          // Calculate "Distributed Cost + Margin" as per new requirements:
-          // If in dollar mode: distributed cost + markupValue
-          // If in percent mode: distributed cost × (1 + markupValue/100)
+          // Apply markup to the distributed cost:
+          // In percent mode: cost * (1 + markupValue/100)
+          // In dollar mode: allocate the flat markup proportionally:
+          // New cost = cost + (cost / casePrice) * markupValue
           let distributedCostPlusMargin;
           if (isDollar) {
-            distributedCostPlusMargin = cost + markupValue;
+            distributedCostPlusMargin = cost + (cost / casePrice) * markupValue;
           } else {
             distributedCostPlusMargin = cost * (1 + markupValue / 100);
           }
-          // (User discount is NOT applied to this column per the update.)
-          // Calculate fees and profit using the discounted sale price (if needed)
-          // For fee/profit calculations, we still use the sale price after discount.
+          // For fee/profit calculations, user discount is applied to the sale price.
           const salePrice = distributedCostPlusMargin * (1 - userDiscount);
           const whatnotFees = cost * 0.08;
           const transactionFees = (salePrice * (1 + blendedTax)) * 0.029 + 0.3;
@@ -1327,7 +1326,7 @@
             count: count,
             distribution: distribution,
             cost: cost,
-            // Use the new "distributed cost + margin" value in tables:
+            // This "price" field now uses the corrected distributedCostPlusMargin
             price: distributedCostPlusMargin,
             whatnotFees: whatnotFees,
             transactionFees: transactionFees,
