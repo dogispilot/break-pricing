@@ -103,10 +103,6 @@
       form#calcForm {
         margin-bottom: 25px;
       }
-      /* Only hide the form rows inside the calculation form */
-      #calcForm .form-row {
-        display: none;
-      }
       .form-row {
         display: flex;
         flex-wrap: wrap;
@@ -125,14 +121,12 @@
       .small-input-row .form-group select {
         max-width: 100px;
       }
-      /* NEW: make the breaker settings small-input row display all fields in one row */
       #breakPricingOptionsMenu .small-input-row {
         display: flex;
         flex-wrap: nowrap;
         gap: 15px;
         align-items: flex-end;
       }
-      /* NEW: add extra space between rows in the breaker settings menu */
       #breakPricingOptionsMenu .form-row:first-of-type {
         margin-bottom: 20px;
       }
@@ -232,7 +226,6 @@
         align-items: center;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
-      /* UPDATED IMAGE STYLES FOR KEY ROOKIES */
       .key-player-tile img.team-logo {
         width: 67.5px;
         height: 67.5px;
@@ -360,7 +353,6 @@
         font-size: 0.8rem;
         color: #bbb;
       }
-      /* 4-column layout for set details */
       .setDetails-grid-4col {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -441,7 +433,6 @@
         .summary-container .summary-box {
           margin: 10px 0;
         }
-        /* Stack columns on mobile */
         .setDetails-grid-4col {
           grid-template-columns: 1fr !important;
         }
@@ -478,7 +469,6 @@
         cursor: pointer;
         font-family: 'BreakPricingFont', sans-serif;
       }
-      /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
       .ebay-btn, .nhl-btn {
         background: none !important;
         padding: 0 !important;
@@ -491,7 +481,6 @@
         width: auto !important;
         box-shadow: none !important;
       }
-      /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
         font-size: 1.8rem;
@@ -538,7 +527,6 @@
       .open-menu {
         display: block !important;
       }
-      /* Initially hide the menus */
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
@@ -547,19 +535,19 @@
         display: inline-flex;
         align-items: center;
         margin-left: 10px;
+        height: 44px; /* Updated to match parent container's height */
       }
-      /* New rule to ensure the %/$ text is vertically centered */
       .toggle-container span {
         display: inline-block;
         vertical-align: middle;
-        line-height: 28px;
+        line-height: 44px; /* Updated for vertical centering */
         font-size: 1rem;
       }
       .switch {
         position: relative;
         display: inline-block;
-        width: 50px;
-        height: 28px;
+        width: 80px;  /* Updated width */
+        height: 44px; /* Updated height */
       }
       .switch input { 
         opacity: 0;
@@ -573,15 +561,15 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #007bff; /* Blue background for % mode */
+        background-color: #007bff;
         transition: .4s;
-        border-radius: 28px;
+        border-radius: 22px;
       }
       .slider:before {
         position: absolute;
         content: "";
-        height: 24px;
-        width: 24px;
+        height: 40px; /* Updated for equal top/bottom spacing */
+        width: 40px;
         left: 2px;
         bottom: 2px;
         background-color: white;
@@ -589,20 +577,16 @@
         border-radius: 50%;
       }
       input:checked + .slider {
-        background-color: #28a745; /* Green background for $ mode */
+        background-color: #28a745;
       }
       input:checked + .slider:before {
-        transform: translateX(22px);
+        transform: translateX(38px); /* Updated translation */
       }
-      /* NEW: Styling for the empty state container */
-      .empty-state {
-        border: 1px solid #444;
-        padding: 20px;
-        background-color: #2c2c2c;
+      /* NEW DROPDOWN STYLES FOR THE SENTENCE */
+      #selectionSentence {
         text-align: center;
-        font-size: 1.2rem;
-        border-radius: 8px;
-        margin-top: 20px;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
       }
     </style>
   </head>
@@ -709,7 +693,6 @@
             </div>
           </div>
         </div>
-        <!-- Added margin-top to the second row to match breaker settings -->
         <div class="form-row small-input-row" style="margin-top:20px;">
           <div class="form-group">
             <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup [% or $]</label>
@@ -1327,7 +1310,6 @@
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          // Whatnot fees are now calculated from the distributed cost + markup (after discount)
           const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
@@ -1591,44 +1573,15 @@
               updateSetDetails();
               calculateProfit();
             });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #breakPricingOptionsMenu select, #priceSettingsDuplicate input, #priceSettingsDuplicate select");
+            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select, #breakPricingOptionsMenu input, #priceSettingsDuplicate input, #priceSettingsDuplicate select");
             calcInputs.forEach(input => {
-              input.addEventListener("input", calculateProfit);
               input.addEventListener("change", calculateProfit);
             });
-            document.getElementById("casePriceDup").addEventListener("input", function() {
-              document.getElementById("casePrice").value = this.value;
-              calculateProfit();
-            });
-            document.getElementById("casePrice").addEventListener("input", function() {
-              document.getElementById("casePriceDup").value = this.value;
-            });
-            calculateProfit();
           })
           .catch(error => {
-            console.error("Error loading JSON:", error);
-            alert("Error loading JSON file: " + error.message);
+            console.error("Error fetching config.json:", error);
           });
       });
-
-      window.addEventListener("resize", function() {
-        const boxes = document.querySelectorAll('.detail-box');
-        if (boxes.length) adjustDetailBoxes();
-      });
-
-      function adjustDetailBoxes() {
-        const boxes = document.querySelectorAll('.detail-box');
-        boxes.forEach(box => { box.style.fontSize = "1.2rem"; });
-        let minHeight = Infinity;
-        boxes.forEach(box => { if (box.scrollHeight < minHeight) { minHeight = box.scrollHeight; } });
-        boxes.forEach(box => {
-          while (box.scrollHeight > minHeight) {
-            let currentSize = parseFloat(window.getComputedStyle(box).fontSize);
-            if (currentSize < 10) break;
-            box.style.fontSize = (currentSize * 0.95) + "px";
-          }
-        });
-      }
     </script>
   </body>
 </html>
