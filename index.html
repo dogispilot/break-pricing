@@ -232,7 +232,6 @@
         align-items: center;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
-      /* UPDATED IMAGE STYLES FOR KEY ROOKIES */
       .key-player-tile img.team-logo {
         width: 67.5px;
         height: 67.5px;
@@ -345,10 +344,11 @@
         padding: 15px;
         border-radius: 8px;
         text-align: center;
+        font-size: 1.3rem;
+        font-weight: 500;
+        position: relative;
+        cursor: pointer;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
       }
       .detail-box .detail-value {
         font-size: 1.8rem;
@@ -360,18 +360,12 @@
         font-size: 0.8rem;
         color: #bbb;
       }
-      /* 4-column layout for set details */
       .setDetails-grid-4col {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: auto auto;
         gap: 20px;
         margin-bottom: 20px;
-      }
-      .setDetails-grid-4col .column.stack {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
       }
       .highlight-tile .detail-value {
         font-size: 2.5rem;
@@ -441,7 +435,6 @@
         .summary-container .summary-box {
           margin: 10px 0;
         }
-        /* Stack columns on mobile */
         .setDetails-grid-4col {
           grid-template-columns: 1fr !important;
         }
@@ -478,7 +471,6 @@
         cursor: pointer;
         font-family: 'BreakPricingFont', sans-serif;
       }
-      /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
       .ebay-btn, .nhl-btn {
         background: none !important;
         padding: 0 !important;
@@ -491,7 +483,6 @@
         width: auto !important;
         box-shadow: none !important;
       }
-      /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
         font-size: 1.8rem;
@@ -538,18 +529,15 @@
       .open-menu {
         display: block !important;
       }
-      /* Initially hide the menus */
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
-      /* ===== iOS Style Toggle CSS ===== */
       .toggle-container {
         display: inline-flex;
         align-items: center;
         margin-left: 10px;
         padding: 8px 0;
       }
-      /* New rule to ensure the %/$ text is vertically centered */
       .toggle-container span {
         display: inline-block;
         vertical-align: middle;
@@ -574,7 +562,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #007bff; /* Blue background for % mode */
+        background-color: #007bff;
         transition: .4s;
         border-radius: 28px;
       }
@@ -590,12 +578,11 @@
         border-radius: 50%;
       }
       input:checked + .slider {
-        background-color: #28a745; /* Green background for $ mode */
+        background-color: #28a745;
       }
       input:checked + .slider:before {
         transform: translateX(22px);
       }
-      /* NEW: Styling for the empty state container */
       .empty-state {
         border: 1px solid #444;
         padding: 20px;
@@ -662,8 +649,8 @@
         </div>
       </form>
 
-      <!-- Set Details Container -->
-      <div id="setDetails" style="margin-bottom: 20px;"></div>
+      <!-- Set Details Container (Updated to mimic Key Rookies style) -->
+      <div id="setDetailsContainer" style="margin-bottom: 20px;"></div>
 
       <!-- Key Rookies Section -->
       <div id="keyPlayersSection" style="display:none;">
@@ -710,7 +697,6 @@
             </div>
           </div>
         </div>
-        <!-- Added margin-top to the second row to match breaker settings -->
         <div class="form-row small-input-row" style="margin-top:20px;">
           <div class="form-group">
             <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup [% or $]</label>
@@ -761,7 +747,6 @@
         Transparency in the break pricing process.
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
-      <!-- BREAKER SETTINGS MENU MOVED HERE -->
       <div id="breakPricingOptionsMenu" style="margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
@@ -1030,10 +1015,12 @@
         }
       }
 
+      // Updated updateSetDetails to output the six tiles and accompanying text
+      // into a container styled like the key rookies container.
       function updateSetDetails() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
-        const detailsDiv = document.getElementById("setDetails");
+        const detailsDiv = document.getElementById("setDetailsContainer");
         if (!selectedYear || !selectedSet) {
           detailsDiv.innerHTML = "";
           return;
@@ -1045,41 +1032,52 @@
         }
         let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
-          : NaN;
+          : "N/A";
         let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
           ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
-          : NaN;
+          : "N/A";
         let html = `
-          <div class="setDetails-grid-4col">
-            <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
-              <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
-              <div class="detail-label">Rookie Percentage</div>
+          <div class="key-player-tiles-container" id="setDetailsTiles">
+            <div class="key-player-tile">
+              <div class="key-player-info">
+                <strong>${formatDetail(setObj.rookie_percentage, true)}</strong>
+                <span>Rookie %</span>
+              </div>
             </div>
-            <div class="detail-box" style="grid-column: 2; grid-row: 1;">
-              <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
-              <div class="detail-label">Boxes per Case</div>
+            <div class="key-player-tile">
+              <div class="key-player-info">
+                <strong>${formatDetail(setObj.boxes_per_case, false)}</strong>
+                <span>Boxes/Case</span>
+              </div>
             </div>
-            <div class="detail-box" style="grid-column: 3; grid-row: 1;">
-              <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
-              <div class="detail-label">Cards per Pack</div>
+            <div class="key-player-tile">
+              <div class="key-player-info">
+                <strong>${formatDetail(setObj.cards_per_pack, false)}</strong>
+                <span>Cards/Pack</span>
+              </div>
             </div>
-            <div class="detail-box highlight-tile" style="grid-column: 4; grid-row: 1 / span 2;">
-              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
-              <div class="detail-label">Cards per Case</div>
+            <div class="key-player-tile">
+              <div class="key-player-info">
+                <strong>${formatDetail(cardsPerCase, false)}</strong>
+                <span>Cards/Case</span>
+              </div>
             </div>
-            <div class="detail-box" style="grid-column: 2; grid-row: 2;">
-              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
-              <div class="detail-label">Packs per Box</div>
+            <div class="key-player-tile">
+              <div class="key-player-info">
+                <strong>${formatDetail(setObj.packs_per_box, false)}</strong>
+                <span>Packs/Box</span>
+              </div>
             </div>
-            <div class="detail-box" style="grid-column: 3; grid-row: 2;">
-              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
-              <div class="detail-label">Cards per Box</div>
+            <div class="key-player-tile">
+              <div class="key-player-info">
+                <strong>${formatDetail(cardsPerBox, false)}</strong>
+                <span>Cards/Box</span>
+              </div>
             </div>
           </div>
-        `;
-        html += `
-          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          <p class="small-copy" style="text-align: center; margin-top: 10px;">
+            ${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button" style="margin-left: 10px;">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -1328,7 +1326,6 @@
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          // Whatnot fees are now calculated from the distributed cost + markup (after discount)
           const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
@@ -1592,11 +1589,9 @@
               updateSetDetails();
               calculateProfit();
             });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
-            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
           })
-          .catch(err => {
-            console.error("Error loading config.json:", err);
+          .catch(error => {
+            console.error("Error fetching config.json:", error);
           });
       });
     </script>
