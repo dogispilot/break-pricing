@@ -605,6 +605,12 @@
         border-radius: 8px;
         margin-top: 20px;
       }
+      /* NEW: Styling for the set details section to match Key Rookies background */
+      .set-details-container {
+        background: #2c2c2c;
+        padding: 15px;
+        border-radius: 8px;
+      }
     </style>
   </head>
   <body>
@@ -1085,7 +1091,8 @@
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
           </div>
         `;
-        detailsDiv.innerHTML = html;
+        // Wrap the content in a container with the same background as Key Rookies
+        detailsDiv.innerHTML = '<div class="set-details-container">' + html + '</div>';
       }
 
       function openPlayerEbaySearch(playerName) {
