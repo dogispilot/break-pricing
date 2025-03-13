@@ -678,6 +678,33 @@
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
 
+       <!-- Chart and Summary Boxes -->
+      <div class="chart-summary-container">
+        <div id="chartContainer">
+          <canvas id="pieChart"></canvas>
+          <div id="pieChartMessage">
+            Please select a year and set to get started sniping.
+          </div>
+        </div>
+        <div class="summary-container">
+          <div id="totalProfitBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Breaker's Profit</div>
+            <div class="toast">Profit is how much money a breaker will make.</div>
+          </div>
+          <div id="whatnotsCutBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Whatnot's Cut</div>
+            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, after markup and discount.</div>
+          </div>
+          <div id="costOfBusinessBox" class="summary-box">
+            <div class="amount">$0.00</div>
+            <div class="label">Cost of Business</div>
+            <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Distribution Section (Trimmed Table) -->
       <h2 id="teamPricesHeader">Break Sniffer</h2>
       <p class="small-copy" id="distributionCopy">
@@ -838,36 +865,7 @@
         </div>
       </div>
 
-      <!-- Chart and Summary Boxes -->
-      <div class="chart-summary-container">
-        <div id="chartContainer">
-          <canvas id="pieChart"></canvas>
-          <div id="pieChartMessage">
-            Please select a year and set to get started sniping.
-          </div>
-        </div>
-        <div class="summary-container">
-          <div id="totalProfitBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Breaker's Profit</div>
-            <div class="toast">Profit is how much money a breaker will make.</div>
-          </div>
-          <div id="whatnotsCutBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Whatnot's Cut</div>
-            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, after markup and discount.</div>
-          </div>
-          <div id="costOfBusinessBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Cost of Business</div>
-            <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Full Distribution Table (Full View: all columns) -->
-      <div id="fullResults"></div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
