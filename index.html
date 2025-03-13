@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -82,18 +81,11 @@
         text-align: center;
         margin-top: 0;
       }
-      #teamPricesHeader {
-        font-family: 'BreakPricingFontBold', sans-serif;
-        margin-top: 40px;
-        text-align: center;
-      }
+      /* Removed unused break sniffer header and copy styles */
       #breakPricingHeader {
         font-family: 'BreakPricingFontBold', sans-serif;
         margin-top: 40px;
         text-align: center;
-      }
-      #distributionCopy {
-        margin-top: 0;
       }
       .small-copy {
         text-align: center;
@@ -233,7 +225,6 @@
         align-items: center;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
-      /* UPDATED IMAGE STYLES FOR KEY ROOKIES */
       .key-player-tile img.team-logo {
         width: 67.5px;
         height: 67.5px;
@@ -361,7 +352,6 @@
         font-size: 0.8rem;
         color: #bbb;
       }
-      /* 4-column layout for set details */
       .setDetails-grid-4col {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -442,7 +432,6 @@
         .summary-container .summary-box {
           margin: 10px 0;
         }
-        /* Stack columns on mobile */
         .setDetails-grid-4col {
           grid-template-columns: 1fr !important;
         }
@@ -479,7 +468,6 @@
         cursor: pointer;
         font-family: 'BreakPricingFont', sans-serif;
       }
-      /* =============== UPDATED STYLES FOR NHL and eBay BUTTONS =============== */
       .ebay-btn, .nhl-btn {
         background: none !important;
         padding: 0 !important;
@@ -492,7 +480,6 @@
         width: auto !important;
         box-shadow: none !important;
       }
-      /* =============== NEW DROPDOWN STYLES FOR THE SENTENCE =============== */
       #selectionSentence {
         text-align: center;
         font-size: 1.8rem;
@@ -539,18 +526,16 @@
       .open-menu {
         display: block !important;
       }
-      /* Initially hide the menus */
+      /* Hide the duplicate price settings and break sniffer sections */
       #priceSettingsDuplicate, #breakPricingOptionsMenu {
         display: none;
       }
-      /* ===== iOS Style Toggle CSS ===== */
       .toggle-container {
         display: inline-flex;
         align-items: center;
         margin-left: 10px;
         padding: 8px 0;
       }
-      /* New rule to ensure the %/$ text is vertically centered */
       .toggle-container span {
         display: inline-block;
         vertical-align: middle;
@@ -575,7 +560,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #007bff; /* Blue background for % mode */
+        background-color: #007bff;
         transition: .4s;
         border-radius: 28px;
       }
@@ -591,12 +576,11 @@
         border-radius: 50%;
       }
       input:checked + .slider {
-        background-color: #28a745; /* Green background for $ mode */
+        background-color: #28a745;
       }
       input:checked + .slider:before {
         transform: translateX(22px);
       }
-      /* NEW: Styling for the empty state container */
       .empty-state {
         border: 1px solid #444;
         padding: 20px;
@@ -606,7 +590,6 @@
         border-radius: 8px;
         margin-top: 20px;
       }
-      /* NEW: Styling for the set details section to match Key Rookies background */
       .set-details-container {
         background: #2c2c2c;
         padding: 15px;
@@ -678,97 +661,12 @@
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
 
-      <!-- Distribution Section (Trimmed Table) -->
-      <h2 id="teamPricesHeader">Break Sniffer</h2>
-      <p class="small-copy" id="distributionCopy">
-        Highlighted rows represent teams with key rookies.
-        <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
-      </p>
-      <!-- Price Settings Menu (Duplicate) -->
-      <div id="priceSettingsDuplicate" style="margin-top:10px;">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
-            <div class="toast input-tooltip" style="display:none; max-width:300px;">
-              This is the estimated cost of a case from a major online retailer. Prices may fluctuate so please verify.
-            </div>
-            <div class="input-button-group">
-              <input type="number" id="casePriceDup" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" style="color:#e0e0e0;" />
-              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
-                Dave &amp; Adams
-              </button>
-              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
-                Steel City
-              </button>
-              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
-                Midwest Cards
-              </button>
-              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
-                Blowout Cards
-              </button>
-              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo" />
-                Out of the Box
-              </button>
-            </div>
-          </div>
-        </div>
-        <!-- Added margin-top to the second row to match breaker settings -->
-        <div class="form-row small-input-row" style="margin-top:20px;">
-          <div class="form-group">
-            <label for="markupDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup [% or $]</label>
-            <div class="toast input-tooltip" style="display:none;">
-              This is the markup a breaker applies on top of the case cost.
-              In percent mode: [distributed cost] * (1 + markup/100)
-              In dollar mode: [distributed cost] + (distributed markup).
-            </div>
-            <div style="display: flex; align-items: center;">
-              <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
-              <div class="toggle-container">
-                <label class="switch">
-                  <input type="checkbox" id="markupToggleDup">
-                  <span class="slider"></span>
-                </label>
-                <span id="markupToggleLabelDup" style="margin-left:5px;">%</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group" style="display: none;">
-            <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
-            <input type="text" id="userDiscountDup" required placeholder="Enter discount" value="0%" />
-          </div>
-          <div class="form-group" style="display: none;">
-            <label for="blendedTaxDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
-            <input type="text" id="blendedTaxDup" required placeholder="Enter tax" value="5.1%" />
-          </div>
-          <div class="form-group" style="display: none;">
-            <label for="suppliesDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
-            <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
-            <input type="number" id="suppliesDup" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
-          </div>
-        </div>
-      </div>
-      
-      <!-- Results Section with Empty State -->
-      <div id="results">
-        <div class="empty-state">
-          <p>Please select a year and set to get started sniping.</p>
-        </div>
-      </div>
-
-      <!-- Break Pricing Tools Header & Transparency Text -->
+      <!-- Breaker Tools Section (moved up, break sniffer section removed) -->
       <h2 id="breakPricingHeader">Breaker Tools</h2>
       <p class="small-copy" id="breakPricingCopy">
         Transparency in the break pricing process.
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
-      <!-- BREAKER SETTINGS MENU MOVED HERE -->
       <div id="breakPricingOptionsMenu" style="margin-top:10px;">
         <div class="form-row">
           <div class="form-group">
@@ -838,30 +736,10 @@
         </div>
       </div>
 
-      <!-- Chart and Summary Boxes -->
-      <div class="chart-summary-container">
-        <div id="chartContainer">
-          <canvas id="pieChart"></canvas>
-          <div id="pieChartMessage">
-            Please select a year and set to get started sniping.
-          </div>
-        </div>
-        <div class="summary-container">
-          <div id="totalProfitBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Breaker's Profit</div>
-            <div class="toast">Profit is how much money a breaker will make.</div>
-          </div>
-          <div id="whatnotsCutBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Whatnot's Cut</div>
-            <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, after markup and discount.</div>
-          </div>
-          <div id="costOfBusinessBox" class="summary-box">
-            <div class="amount">$0.00</div>
-            <div class="label">Cost of Business</div>
-            <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
-          </div>
+      <!-- Results Section with Empty State -->
+      <div id="results">
+        <div class="empty-state">
+          <p>Please select a year and set to get started sniping.</p>
         </div>
       </div>
 
@@ -1033,7 +911,6 @@
         if (setObj && setObj.price) {
           const price = parseFloat(setObj.price.replace(/[$,]/g, ""));
           document.getElementById("casePrice").value = price;
-          document.getElementById("casePriceDup").value = price;
         }
       }
 
@@ -1092,7 +969,6 @@
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
           </div>
         `;
-        // Wrap the content in a container with header text "Set Details" styled like key rookies header
         detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:0; font-family: \'BreakPricingFontBold\', sans-serif;">Set Details</h2>' + html + '</div>';
       }
 
@@ -1336,7 +1212,6 @@
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          // Whatnot fees are now calculated from the distributed cost + markup (after discount)
           const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
@@ -1417,13 +1292,7 @@
         
         document.getElementById("fullResults").innerHTML = fullTableHtml;
         document.getElementById("results").innerHTML = trimmedTableHtml;
-        if (rows.length > 0) {
-          document.getElementById("teamPricesHeader").style.display = "block";
-          document.getElementById("distributionCopy").style.display = "block";
-        } else {
-          document.getElementById("teamPricesHeader").style.display = "none";
-          document.getElementById("distributionCopy").style.display = "none";
-        }
+        
         tableData = rows;
         const chartData = [totalProfit, whatnotCut, costOfBusiness];
         chartContainer.style.display = "block";
@@ -1531,56 +1400,27 @@
         menu.classList.toggle("open");
       });
 
-      document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        var dup = document.getElementById("priceSettingsDuplicate");
-        dup.classList.toggle("open-menu");
-      });
-
-      document.getElementById("markupDup").addEventListener("input", function() {
-        document.getElementById("markup").value = this.value;
-        calculateProfit();
-      });
       document.getElementById("markup").addEventListener("input", function() {
-        document.getElementById("markupDup").value = this.value;
-      });
-
-      document.getElementById("markupToggleDup").addEventListener("change", function() {
-        document.getElementById("markupToggle").checked = this.checked;
-        updateMarkupToggleLabel();
         calculateProfit();
       });
+
       document.getElementById("markupToggle").addEventListener("change", function() {
-        document.getElementById("markupToggleDup").checked = this.checked;
         updateMarkupToggleLabel();
         calculateProfit();
       });
       function updateMarkupToggleLabel() {
         const isDollar = document.getElementById("markupToggle").checked;
         document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
-        document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
       }
 
-      document.getElementById("userDiscountDup").addEventListener("input", function() {
-        document.getElementById("userDiscount").value = this.value;
-        calculateProfit();
-      });
       document.getElementById("userDiscount").addEventListener("input", function() {
-        document.getElementById("userDiscountDup").value = this.value;
-      });
-      document.getElementById("blendedTaxDup").addEventListener("input", function() {
-        document.getElementById("blendedTax").value = this.value;
         calculateProfit();
       });
       document.getElementById("blendedTax").addEventListener("input", function() {
-        document.getElementById("blendedTaxDup").value = this.value;
-      });
-      document.getElementById("suppliesDup").addEventListener("input", function() {
-        document.getElementById("supplies").value = this.value;
         calculateProfit();
       });
       document.getElementById("supplies").addEventListener("input", function() {
-        document.getElementById("suppliesDup").value = this.value;
+        calculateProfit();
       });
 
       window.addEventListener("load", function() {
@@ -1589,22 +1429,15 @@
             if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
             return response.json();
           })
-          .then(jsonData => {
-            if (!jsonData.sets) { alert('Invalid JSON format: missing "sets" property.'); return; }
-            setData = jsonData.sets;
-            keyPlayersData = jsonData["Key Players"] || [];
+          .then(data => {
+            setData = data.sets;
+            keyPlayersData = data.keyPlayers;
             populateYearSelector();
-            document.getElementById("setSelect").addEventListener("change", function() {
-              document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
-              updateCasePrice();
-              updateSetDetails();
-              calculateProfit();
-            });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
-            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
+            updateKeyPlayersSection();
+            calculateProfit();
           })
-          .catch(err => {
-            console.error("Error loading config.json:", err);
+          .catch(error => {
+            console.error("Error fetching config.json:", error);
           });
       });
     </script>
