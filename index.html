@@ -677,7 +677,39 @@
         <h2>Key Rookies</h2>
         <div class="key-player-tiles-container" id="keyPlayerTiles"></div>
       </div>
-
+     <!-- Price Settings Menu (Duplicate) -->
+      <div id="priceSettingsDuplicate" style="margin-top:10px;">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
+            <div class="toast input-tooltip" style="display:none; max-width:300px;">
+              This is the estimated cost of a case from a major online retailer. Prices may fluctuate so please verify.
+            </div>
+            <div class="input-button-group">
+              <input type="number" id="casePriceDup" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" style="color:#e0e0e0;" />
+              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
+                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
+                Dave &amp; Adams
+              </button>
+              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
+                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
+                Steel City
+              </button>
+              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
+                <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
+                Midwest Cards
+              </button>
+              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
+                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
+                Blowout Cards
+              </button>
+              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
+                <img src="resources/ootb.png" alt="Out of the Box Logo" />
+                Out of the Box
+              </button>
+            </div>
+          </div>
+        </div>
         <!-- Added margin-top to the second row to match breaker settings -->
 
       <div class="form-row small-input-row" style="margin-top:20px;">
