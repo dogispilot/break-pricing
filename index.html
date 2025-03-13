@@ -675,8 +675,7 @@
       </div>
 
       <!-- Distribution Section (Trimmed Table) -->
-      <!-- Note: No static wrapper here. The following three elements (the header, the small-copy paragraph, and the price settings menu)
-           will be wrapped dynamically by JavaScript below. -->
+      <!-- These three elements will be wrapped into a new container without moving other parts of the page -->
       <h2 id="teamPricesHeader">Break Sniper</h2>
       <p class="small-copy" id="distributionCopy">
         Highlighted rows represent teams with key rookies.
@@ -752,6 +751,7 @@
           </div>
         </div>
       <!-- End of Distribution Section elements -->
+
       <!-- Results Section with Empty State -->
       <div id="results">
         <div class="empty-state">
@@ -868,7 +868,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // (Existing JavaScript code for functionality remains unchanged...)
+      /* Existing JavaScript functionality remains unchanged */
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
@@ -1554,31 +1554,29 @@
           .catch(error => console.error("Error fetching config.json:", error));
       });
     </script>
-    <!-- NEW SCRIPT: Dynamically wrap the distribution section elements -->
+    <!-- NEW SCRIPT: Wrap the distribution section elements (by their specific IDs) -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        // Find the first element of the distribution section by its id
-        var startElement = document.getElementById('teamPricesHeader');
-        if (!startElement) return;
-        // Create a new wrapper div
-        var wrapper = document.createElement('div');
-        wrapper.id = 'distributionSectionContainer';
-        // Apply the same styling as the keyPlayersSection
-        wrapper.style.background = '#2c2c2c';
-        wrapper.style.padding = '15px';
-        wrapper.style.borderRadius = '8px';
-        wrapper.style.marginTop = '30px';
-        // Move all sibling elements starting at startElement until the element with id "results"
-        var current = startElement;
-        while (current && current.id !== 'results') {
-          // Save next sibling before moving current element
-          var next = current.nextElementSibling;
-          wrapper.appendChild(current);
-          current = next;
+        // Locate the three elements to be wrapped:
+        var headerEl = document.getElementById('teamPricesHeader');
+        var copyEl = document.getElementById('distributionCopy');
+        var settingsEl = document.getElementById('priceSettingsDuplicate');
+        if (headerEl && copyEl && settingsEl) {
+          // Create a new wrapper div
+          var wrapper = document.createElement('div');
+          wrapper.id = 'distributionSectionContainer';
+          // Apply styling to match keyPlayersSection
+          wrapper.style.background = '#2c2c2c';
+          wrapper.style.padding = '15px';
+          wrapper.style.borderRadius = '8px';
+          wrapper.style.marginTop = '30px';
+          // Insert the wrapper into the DOM before headerEl
+          headerEl.parentNode.insertBefore(wrapper, headerEl);
+          // Append the three elements into the wrapper in order
+          wrapper.appendChild(headerEl);
+          wrapper.appendChild(copyEl);
+          wrapper.appendChild(settingsEl);
         }
-        // Insert the wrapper into the DOM just before the "results" element
-        var resultsSection = document.getElementById('results');
-        resultsSection.parentNode.insertBefore(wrapper, resultsSection);
       });
     </script>
   </body>
