@@ -94,12 +94,20 @@
       #distributionCopy {
         margin-top: 0;
       }
-      /* New CSS for the Distribution Section Container */
-      #distributionSection {
-        margin-top: 30px;
-        padding: 15px;
-        background: #2c2c2c;
+      /* New CSS for the Distribution Section background using a pseudo‐element */
+      .distribution-wrapper {
+        position: relative;
+      }
+      .distribution-wrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #2c2c2c; /* matches the keyPlayersSection background */
         border-radius: 8px;
+        z-index: -1;
       }
       .small-copy {
         text-align: center;
@@ -685,13 +693,12 @@
       </div>
 
       <!-- Distribution Section (Trimmed Table) -->
-      <div id="distributionSection">
+      <div class="distribution-wrapper">
         <h2 id="teamPricesHeader">Break Sniffer</h2>
         <p class="small-copy" id="distributionCopy">
           Highlighted rows represent teams with key rookies.
           <a href="#" id="priceSettingsButton" class="pill-button" style="margin-left:10px;">Price Settings</a>
         </p>
-        <!-- Results Section with Empty State -->
         <div id="results">
           <div class="empty-state">
             <p>Please select a year and set to get started sniping.</p>
@@ -707,7 +714,7 @@
       </p>
       <!-- BREAKER SETTINGS MENU MOVED HERE -->
       <div id="breakPricingOptionsMenu" style="margin-top:10px;">
-        <!-- (Price Settings Menu content remains unchanged) -->
+        <!-- Price Settings Menu content remains unchanged -->
       </div>
 
       <!-- Chart and Summary Boxes -->
