@@ -743,17 +743,17 @@
               </div>
             </div>
           </div>
-          <div class="form-group" style="display: none;">
+          <div class="form-group" style="display: flex;">
             <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
             <input type="text" id="userDiscountDup" required placeholder="Enter discount" value="0%" />
           </div>
-          <div class="form-group" style="display: none;">
+          <div class="form-group" style="display: flex;">
             <label for="blendedTaxDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
             <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
             <input type="text" id="blendedTaxDup" required placeholder="Enter tax" value="5.1%" />
           </div>
-          <div class="form-group" style="display: none;">
+          <div class="form-group" style="display: flex;">
             <label for="suppliesDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
             <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
             <input type="number" id="suppliesDup" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
@@ -770,7 +770,7 @@
         <a href="javascript:void(0)" onclick="toggleBreakPricingOptions()" class="pill-button" style="margin-left:10px;">Price Settings</a>
       </p>
       <!-- BREAKER SETTINGS MENU MOVED HERE -->
-      <div id="breakPricingOptionsMenu" style="margin-top:10px;">
+      <div id="breakPricingOptionsMenu" style="display: none;">
         <div class="form-row">
           <div class="form-group">
             <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
