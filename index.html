@@ -297,7 +297,7 @@
         max-width: 300px;
         display: flex;
         flex-direction: column;
-        height: 250px;
+        height: 300px;
       }
       .summary-container .summary-box {
         flex: 1;
@@ -876,6 +876,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      // --- Existing JavaScript functions remain unchanged ---
       function formatDetail(val, isRookie) {
         let num = parseFloat(val);
         if (!isNaN(num)) {
@@ -950,6 +951,64 @@
         }
       };
 
+      function updateSetDetails() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        const detailsDiv = document.getElementById("setDetails");
+        if (!selectedYear || !selectedSet) {
+          detailsDiv.innerHTML = "";
+          return;
+        }
+        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
+        if (!setObj) {
+          detailsDiv.innerHTML = "";
+          return;
+        }
+        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
+          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
+          : NaN;
+        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
+          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
+          : NaN;
+        let html = `
+          <div class="setDetails-grid-4col">
+            <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
+              <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
+              <div class="detail-label">Rookie Percentage</div>
+            </div>
+            <div class="detail-box" style="grid-column: 2; grid-row: 1;">
+              <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
+              <div class="detail-label">Boxes per Case</div>
+            </div>
+            <div class="detail-box" style="grid-column: 3; grid-row: 1;">
+              <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
+              <div class="detail-label">Cards per Pack</div>
+            </div>
+            <div class="detail-box highlight-tile" style="grid-column: 4; grid-row: 1 / span 2;">
+              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
+              <div class="detail-label">Cards per Case</div>
+            </div>
+            <div class="detail-box" style="grid-column: 2; grid-row: 2;">
+              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
+              <div class="detail-label">Packs per Box</div>
+            </div>
+            <div class="detail-box" style="grid-column: 3; grid-row: 2;">
+              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
+              <div class="detail-label">Cards per Box</div>
+            </div>
+          </div>
+        `;
+        html += `
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          </p>
+          <div class="set-notes" style="display:none;">
+            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
+          </div>
+        `;
+        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
+      }
+
       function populateYearSelector() {
         const yearSelect = document.getElementById("yearSelect");
         yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
@@ -966,6 +1025,7 @@
         yearSelect.addEventListener("change", function() {
           document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
           populateSetSelector();
+          updateSetDetails(); // update set details when the year changes
           updateKeyPlayersSection();
           calculateProfit();
         });
@@ -1030,6 +1090,13 @@
         });
       }
 
+      // Attach change event to setSelect to update set details when changed.
+      document.getElementById("setSelect").addEventListener("change", function() {
+        document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
+        updateSetDetails();
+        calculateProfit();
+      });
+
       function updateCasePrice() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1042,74 +1109,6 @@
         }
       }
 
-      function updateSetDetails() {
-        const selectedYear = document.getElementById("yearSelect").value;
-        const selectedSet = document.getElementById("setSelect").value;
-        const detailsDiv = document.getElementById("setDetails");
-        if (!selectedYear || !selectedSet) {
-          detailsDiv.innerHTML = "";
-          return;
-        }
-        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
-        if (!setObj) {
-          detailsDiv.innerHTML = "";
-          return;
-        }
-        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
-          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
-          : NaN;
-        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
-          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
-          : NaN;
-        let html = `
-          <div class="setDetails-grid-4col">
-            <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
-              <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
-              <div class="detail-label">Rookie Percentage</div>
-            </div>
-            <div class="detail-box" style="grid-column: 2; grid-row: 1;">
-              <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
-              <div class="detail-label">Boxes per Case</div>
-            </div>
-            <div class="detail-box" style="grid-column: 3; grid-row: 1;">
-              <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
-              <div class="detail-label">Cards per Pack</div>
-            </div>
-            <div class="detail-box highlight-tile" style="grid-column: 4; grid-row: 1 / span 2;">
-              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
-              <div class="detail-label">Cards per Case</div>
-            </div>
-            <div class="detail-box" style="grid-column: 2; grid-row: 2;">
-              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
-              <div class="detail-label">Packs per Box</div>
-            </div>
-            <div class="detail-box" style="grid-column: 3; grid-row: 2;">
-              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
-              <div class="detail-label">Cards per Box</div>
-            </div>
-          </div>
-        `;
-        html += `
-          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
-          </p>
-          <div class="set-notes" style="display:none;">
-            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
-          </div>
-        `;
-        // Wrap the content in a container with header text "Set Details" styled like key rookies header
-        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
-      }
-
-      function openPlayerEbaySearch(playerName) {
-        const selectedYear = document.getElementById("yearSelect").value;
-        const selectedSet = document.getElementById("setSelect").value;
-        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet + " " + playerName;
-        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-      }
-
       function updateKeyPlayersSection() {
         const selectedYear = document.getElementById("yearSelect").value;
         const keySection = document.getElementById("keyPlayersSection");
@@ -1117,7 +1116,7 @@
         tilesContainer.innerHTML = "";
         highlightTeams.clear();
         if (!selectedYear) { keySection.style.display = "none"; return; }
-        document.querySelector("#keyPlayersSection h2").textContent = "🔑  "+ selectedYear + " Key Rookies  🔑";
+        document.querySelector("#keyPlayersSection h2").textContent = "🔑"+ selectedYear + " Key Rookies 🔑";
         const filteredPlayers = keyPlayersData.filter(player =>
           (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
         );
@@ -1213,6 +1212,15 @@
         "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
         "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
       };
+
+      function openPlayerEbaySearch(playerName) {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " " + playerName;
+        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      }
 
       function openSetSearch() {
         const selectedSet = document.getElementById("setSelect").value;
@@ -1341,7 +1349,6 @@
             basePrice = cost * (1 + (markupValue / 100));
           }
           const distributedPrice = basePrice * (1 - userDiscount);
-          // Whatnot fees are now calculated from the distributed cost + markup (after discount)
           const whatnotFees = distributedPrice * 0.08;
           const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
           const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
@@ -1586,31 +1593,6 @@
       });
       document.getElementById("supplies").addEventListener("input", function() {
         document.getElementById("suppliesDup").value = this.value;
-      });
-
-      window.addEventListener("load", function() {
-        fetch("config.json")
-          .then(response => {
-            if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
-            return response.json();
-          })
-          .then(jsonData => {
-            if (!jsonData.sets) { alert('Invalid JSON format: missing "sets" property.'); return; }
-            setData = jsonData.sets;
-            keyPlayersData = jsonData["Key Players"] || [];
-            populateYearSelector();
-            document.getElementById("setSelect").addEventListener("change", function() {
-              document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
-              updateCasePrice();
-              updateSetDetails();
-              calculateProfit();
-            });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
-            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
-          })
-          .catch(err => {
-            console.error("Error loading config.json:", err);
-          });
       });
     </script>
   </body>
