@@ -273,7 +273,7 @@
       #chartContainer {
         flex: 2;
         height: 300px;
-  background: #1e1e1e; /* Updated background color */
+        background: #1e1e1e;
         padding: 15px;
         border-radius: 8px;
         box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
@@ -310,27 +310,27 @@
         position: relative;
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-          background: #1e1e1e; /* Updated background color */
-
       }
+      /* Make the number value more prominent */
       .summary-box .amount {
         font-weight: 900;
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
+      /* Updated summary boxes so the background is the same as the text color, with white text */
       #totalProfitBox {
         border: 4px solid #2e7d32;
-        color: #2e7d32;
-  background: #1e1e1e; /* Updated background color */
+        color: #fff;
+        background: #2e7d32;
       }
       #whatnotsCutBox {
         border: 4px solid #bfa600;
-        color: #bfa600;
-  background: #1e1e1e; /* Updated background color */
+        color: #fff;
+        background: #bfa600;
       }
       #costOfBusinessBox {
         border: 4px solid #007bff;
-        color: #007bff;
-  background: #1e1e1e; /* Updated background color */
+        color: #fff;
+        background: #007bff;
       }
       .toast {
         margin-top: 8px;
@@ -619,8 +619,7 @@
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 20px;
-          margin-top: 30px; /* Added space on top */
-
+        margin-top: 30px; /* Added space on top */
       }
     </style>
   </head>
