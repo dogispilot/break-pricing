@@ -966,6 +966,7 @@
         yearSelect.addEventListener("change", function() {
           document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
           populateSetSelector();
+          updateSetDetails(); // update set details when year changes
           updateKeyPlayersSection();
           calculateProfit();
         });
@@ -1097,8 +1098,7 @@
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
           </div>
         `;
-        // Wrap the content in a container with header text "Set Details" styled like key rookies header
-        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
+        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
       }
 
       function openPlayerEbaySearch(playerName) {
@@ -1588,30 +1588,24 @@
         document.getElementById("suppliesDup").value = this.value;
       });
 
-      window.addEventListener("load", function() {
-        fetch("config.json")
-          .then(response => {
-            if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
-            return response.json();
-          })
-          .then(jsonData => {
-            if (!jsonData.sets) { alert('Invalid JSON format: missing "sets" property.'); return; }
-            setData = jsonData.sets;
-            keyPlayersData = jsonData["Key Players"] || [];
-            populateYearSelector();
-            document.getElementById("setSelect").addEventListener("change", function() {
-              document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
-              updateCasePrice();
-              updateSetDetails();
-              calculateProfit();
-            });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
-            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
-          })
-          .catch(err => {
-            console.error("Error loading config.json:", err);
-          });
+      // New event listener for set selection change to update set details
+      document.getElementById("setSelect").addEventListener("change", function() {
+        document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
+        updateSetDetails();
+        calculateProfit();
       });
+
+      window.addEventListener("resize", function() {
+        if (pieChart) {
+          pieChart.resize();
+        }
+      });
+
+      // Initialize selectors on page load
+      window.onload = function() {
+        // Assume setData and keyPlayersData are loaded via external script or inline JSON
+        populateYearSelector();
+      };
     </script>
   </body>
 </html>
