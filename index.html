@@ -1118,7 +1118,7 @@
         tilesContainer.innerHTML = "";
         highlightTeams.clear();
         if (!selectedYear) { keySection.style.display = "none"; return; }
-        document.querySelector("#keyPlayersSection h2").textContent = "🔑"+ selectedYear + " Key Rookies 🔑";
+        document.querySelector("#keyPlayersSection h2").textContent = "🔑  "+ selectedYear + " Key Rookies  🔑";
         const filteredPlayers = keyPlayersData.filter(player =>
           (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
         );
