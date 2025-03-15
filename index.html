@@ -410,8 +410,10 @@
       });
       buildYearDropdown(years);
       yearSelect.addEventListener("change", function() {
-        document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
+        document.getElementById("selectedYearLabel").textContent = this.value || "--Select a Year--";
         populateSetSelector();
+        updateSetDetails();
+        updateCasePrice();
         updateKeyPlayersSection();
         calculateProfit();
       });
@@ -427,9 +429,8 @@
         const li = document.createElement("li");
         li.textContent = year;
         li.addEventListener("click", function() {
-          const yearSelect = document.getElementById("yearSelect");
-          yearSelect.value = year;
-          yearSelect.dispatchEvent(new Event("change"));
+          document.getElementById("yearSelect").value = year;
+          document.getElementById("yearSelect").dispatchEvent(new Event("change"));
           yearDropdownMenu.classList.remove("open");
         });
         yearDropdownMenu.appendChild(li);
@@ -472,6 +473,14 @@
         setDropdownMenu.appendChild(li);
       });
     }
+    // New: update set details and key rookies when a set is selected
+    document.getElementById("setSelect").addEventListener("change", function() {
+      document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
+      updateSetDetails();
+      updateCasePrice();
+      updateKeyPlayersSection();
+      calculateProfit();
+    });
     function updateCasePrice() {
       const selectedYear = document.getElementById("yearSelect").value;
       const selectedSet = document.getElementById("setSelect").value;
