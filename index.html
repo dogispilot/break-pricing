@@ -737,22 +737,143 @@
                 In dollar mode: [distributed cost] + (distributed markup).
               </div>
               <div style="display: flex; align-items: center;">
-                <input type="number" id="markupDup" step="0.01" required placeholder="Enter markup" style="color:#e0e0e0;" />
+                <input type="text" id="markupDup" required placeholder="Enter markup" value="30" style="flex:1;" />
                 <div class="toggle-container">
-                  <span>%</span>
                   <label class="switch">
-                    <input type="checkbox" id="markupToggle" />
+                    <input type="checkbox" id="markupToggleDup">
                     <span class="slider"></span>
                   </label>
-                  <span>$</span>
+                  <span id="markupToggleLabelDup" style="margin-left:5px;">%</span>
                 </div>
               </div>
+            </div>
+            <div class="form-group" style="display: flex;">
+              <label for="userDiscountDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
+              <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
+              <input type="text" id="userDiscountDup" required placeholder="Enter discount" value="0%" />
+            </div>
+            <div class="form-group" style="display: flex;">
+              <label for="blendedTaxDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
+              <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
+              <input type="text" id="blendedTaxDup" required placeholder="Enter tax" value="5.1%" />
+            </div>
+            <div class="form-group" style="display: flex;">
+              <label for="suppliesDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
+              <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
+              <input type="number" id="suppliesDup" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Breaker Settings Menu -->
+        <div id="breakPricingOptionsMenu" style="margin-top:10px; display: none !important;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
+              <div class="toast input-tooltip" style="display:none; max-width:300px;">
+                This is the estimated cost of a case from a major online retailer. Prices may fluctuate so please verify.
+              </div>
+              <div class="input-button-group">
+                <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99" />
+                <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
+                  <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon" />
+                  Dave &amp; Adams
+                </button>
+                <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
+                  <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo" />
+                  Steel City
+                </button>
+                <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
+                  <img src="resources/midwestcards.png" alt="Midwest Cards Logo" />
+                  Midwest Cards
+                </button>
+                <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
+                  <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo" />
+                  Blowout Cards
+                </button>
+                <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
+                  <img src="resources/ootb.png" alt="Out of the Box Logo" />
+                  Out of the Box
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-row small-input-row">
+            <div class="form-group">
+              <label for="markup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Markup [% or $]</label>
+              <div class="toast input-tooltip" style="display:none;">
+                This is the markup a breaker applies on top of the case cost.
+                In percent mode: [distributed cost] * (1 + markup/100)
+                In dollar mode: [distributed cost] + (distributed markup).
+              </div>
+              <div style="display: flex; align-items: center;">
+                <input type="text" id="markup" required placeholder="Enter markup" value="30" style="flex:1;" />
+                <div class="toggle-container">
+                  <label class="switch">
+                    <input type="checkbox" id="markupToggle">
+                    <span class="slider"></span>
+                  </label>
+                  <span id="markupToggleLabel" style="margin-left:5px;">%</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor: pointer;">User Discount (%)</label>
+              <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
+              <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%" />
+            </div>
+            <div class="form-group">
+              <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Blended Tax (%)</label>
+              <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
+              <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%" />
+            </div>
+            <div class="form-group">
+              <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Supplies per Order ($)</label>
+              <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
+              <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart and Summary Boxes -->
+        <div class="chart-summary-container">
+          <div id="chartContainer">
+            <canvas id="pieChart"></canvas>
+            <div id="pieChartMessage">
+              Please select a year and set to get started sniping.
+            </div>
+          </div>
+          <div class="summary-container">
+            <div id="totalProfitBox" class="summary-box">
+              <div class="amount">$0.00</div>
+              <div class="label">Breaker's Profit</div>
+              <div class="toast">Profit is how much money a breaker will make.</div>
+            </div>
+            <div id="whatnotsCutBox" class="summary-box">
+              <div class="amount">$0.00</div>
+              <div class="label">Whatnot's Cut</div>
+              <div class="toast">Whatnot's cut is 8% of the breaker’s listed price, after markup and discount.</div>
+            </div>
+            <div id="costOfBusinessBox" class="summary-box">
+              <div class="amount">$0.00</div>
+              <div class="label">Cost of Business</div>
+              <div class="toast">Cost of Business includes transaction fees and additional per order supplies cost.</div>
             </div>
           </div>
         </div>
       </div>
+      
+      <!-- Results Section with Empty State -->
+      <div id="results">
+        <div class="empty-state">
+          <p>Please select a year and set to get started sniping.</p>
+        </div>
+      </div>
+
+      <!-- Full Distribution Table (Full View: all columns) -->
+      <div id="fullResults" style="display: none !important;"></div>
     </div>
-    <!-- All original inline JavaScript functions remain exactly as in your original file -->
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       function formatDetail(val, isRookie) {
@@ -829,6 +950,167 @@
         }
       };
 
+      // ORIGINAL IMPLEMENTATIONS FOR DROPDOWNS
+
+      function populateYearSelector() {
+        const yearSelect = document.getElementById("yearSelect");
+        yearSelect.innerHTML = '<option value="">--Select a Year--</option>';
+        const years = [...new Set(setData.map(set => set.year))].sort(
+          (a, b) => parseInt(b.split("-")[0]) - parseInt(a.split("-")[0])
+        );
+        years.forEach(year => {
+          const option = document.createElement("option");
+          option.value = year;
+          option.textContent = year;
+          yearSelect.appendChild(option);
+        });
+        buildYearDropdown(years);
+        yearSelect.addEventListener("change", function() {
+          document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
+          populateSetSelector();
+          updateKeyPlayersSection();
+          calculateProfit();
+        });
+        if (years.includes("2024-25")) {
+          yearSelect.value = "2024-25";
+          yearSelect.dispatchEvent(new Event("change"));
+        }
+      }
+
+      function buildYearDropdown(years) {
+        const yearDropdownMenu = document.getElementById("yearDropdownMenu");
+        yearDropdownMenu.innerHTML = "";
+        years.forEach(year => {
+          const li = document.createElement("li");
+          li.textContent = year;
+          li.addEventListener("click", function() {
+            const yearSelect = document.getElementById("yearSelect");
+            yearSelect.value = year;
+            yearSelect.dispatchEvent(new Event("change"));
+            yearDropdownMenu.classList.remove("open");
+          });
+          yearDropdownMenu.appendChild(li);
+        });
+      }
+
+      function populateSetSelector() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const setSelect = document.getElementById("setSelect");
+        const previousValue = setSelect.value;
+        setSelect.innerHTML = '<option value="">--Select Set--</option>';
+        if (!selectedYear) return;
+        const filteredSets = setData.filter(set => set.year === selectedYear).sort((a, b) => a.name.localeCompare(b.name));
+        filteredSets.forEach(set => {
+          const option = document.createElement("option");
+          option.value = set.name;
+          option.textContent = set.name;
+          setSelect.appendChild(option);
+        });
+        if (!filteredSets.some(set => set.name === previousValue)) {
+          setSelect.value = "";
+          document.getElementById("selectedSetLabel").textContent = "--Select Set--";
+        } else {
+          setSelect.value = previousValue;
+          document.getElementById("selectedSetLabel").textContent = previousValue;
+        }
+        buildSetDropdown(filteredSets);
+      }
+
+      function buildSetDropdown(filteredSets) {
+        const setDropdownMenu = document.getElementById("setDropdownMenu");
+        const setSelect = document.getElementById("setSelect");
+        setDropdownMenu.innerHTML = "";
+        filteredSets.forEach(s => {
+          const li = document.createElement("li");
+          li.textContent = s.name;
+          li.addEventListener("click", function() {
+            setSelect.value = s.name;
+            setSelect.dispatchEvent(new Event("change"));
+            setDropdownMenu.classList.remove("open");
+          });
+          setDropdownMenu.appendChild(li);
+        });
+      }
+
+      function updateCasePrice() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        if (!selectedYear || !selectedSet) return;
+        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
+        if (setObj && setObj.price) {
+          const price = parseFloat(setObj.price.replace(/[$,]/g, ""));
+          document.getElementById("casePrice").value = price;
+          document.getElementById("casePriceDup").value = price;
+        }
+      }
+
+      function updateSetDetails() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        const detailsDiv = document.getElementById("setDetails");
+        if (!selectedYear || !selectedSet) {
+          detailsDiv.innerHTML = "";
+          return;
+        }
+        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSet);
+        if (!setObj) {
+          detailsDiv.innerHTML = "";
+          return;
+        }
+        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
+          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
+          : NaN;
+        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
+          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
+          : NaN;
+        let html = `
+          <div class="setDetails-grid-4col">
+            <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
+              <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
+              <div class="detail-label">Rookie Percentage</div>
+            </div>
+            <div class="detail-box" style="grid-column: 2; grid-row: 1;">
+              <div class="detail-value">${formatDetail(setObj.boxes_per_case, false)}</div>
+              <div class="detail-label">Boxes per Case</div>
+            </div>
+            <div class="detail-box" style="grid-column: 3; grid-row: 1;">
+              <div class="detail-value">${formatDetail(setObj.cards_per_pack, false)}</div>
+              <div class="detail-label">Cards per Pack</div>
+            </div>
+            <div class="detail-box highlight-tile" style="grid-column: 4; grid-row: 1 / span 2;">
+              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
+              <div class="detail-label">Cards per Case</div>
+            </div>
+            <div class="detail-box" style="grid-column: 2; grid-row: 2;">
+              <div class="detail-value">${formatDetail(setObj.packs_per_box, false)}</div>
+              <div class="detail-label">Packs per Box</div>
+            </div>
+            <div class="detail-box" style="grid-column: 3; grid-row: 2;">
+              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
+              <div class="detail-label">Cards per Box</div>
+            </div>
+          </div>
+        `;
+        html += `
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          </p>
+          <div class="set-notes" style="display:none;">
+            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
+          </div>
+        `;
+        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
+      }
+
+      function openPlayerEbaySearch(playerName) {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " " + playerName;
+        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      }
+
       function updateKeyPlayersSection() {
         const selectedYear = document.getElementById("yearSelect").value;
         const keySection = document.getElementById("keyPlayersSection");
@@ -894,6 +1176,302 @@
           tile.appendChild(infoDiv);
           tilesContainer.appendChild(tile);
         });
+      }
+
+      const teamLogos = {
+        "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+        "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
+        "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
+        "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
+        "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+        "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+        "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
+        "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+        "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
+        "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+        "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+        "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
+        "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
+        "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
+        "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+        "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+        "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+        "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+        "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
+        "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
+        "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+        "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
+        "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+        "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
+        "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+        "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
+        "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+        "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+        "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
+        "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+        "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
+        "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
+        "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
+      };
+
+      function openSetSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+        window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openSteelCitySearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+        window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openTcdbSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet;
+        window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openHockeyChecklistsSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet;
+        window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openMidwestCardsSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+        window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openBlowoutCardsSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+        window.open("https://www.blowoutcards.com/catalogsearch/result/?q=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openOotbSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
+        const selectedYear = document.getElementById("yearSelect").value;
+        if (!selectedSet) { alert("Please select a set first."); return; }
+        if (!selectedYear) { alert("Please select a set year first."); return; }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+        window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
+      }
+
+      function openTeamSearch(teamName) {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSet = document.getElementById("setSelect").value;
+        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
+        const firstYear = selectedYear.split("-")[0];
+        const query = firstYear + " " + selectedSet + " " + teamName;
+        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      }
+
+      function calculateProfit() {
+        const selectedYear = document.getElementById("yearSelect").value;
+        const selectedSetName = document.getElementById("setSelect").value;
+        const chartContainer = document.getElementById("chartContainer");
+        const pieChartCanvas = document.getElementById("pieChart");
+        const pieChartMessage = document.getElementById("pieChartMessage");
+        if (selectedYear) {
+          document.getElementById("selectedYearLabel").textContent = selectedYear;
+        }
+        if (selectedSetName) {
+          document.getElementById("selectedSetLabel").textContent = selectedSetName;
+        }
+        if (!selectedYear || !selectedSetName) {
+          chartContainer.style.display = "block";
+          pieChartCanvas.style.display = "none";
+          pieChartMessage.style.display = "flex";
+          return;
+        }
+        const casePrice = parseFloat(document.getElementById("casePrice").value);
+        const markupInput = document.getElementById("markup").value;
+        let markupValue = parseFloat(markupInput);
+        if (isNaN(markupValue)) markupValue = 0;
+        const isDollar = document.getElementById("markupToggle").checked;
+        const userDiscount = parsePercentage(document.getElementById("userDiscount").value);
+        const blendedTax = parsePercentage(document.getElementById("blendedTax").value);
+        const supplies = parseFloat(document.getElementById("supplies").value);
+        
+        const setObj = setData.find(set => set.year === selectedYear && set.name === selectedSetName);
+        if (!setObj) return;
+        
+        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
+          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
+          : NaN;
+          
+        const teamData = setObj.cards || setObj.most_numbered_cards;
+        let totalCards = 0;
+        for (let team in teamData) { totalCards += teamData[team]; }
+        let rows = [];
+        for (let team in teamData) {
+          const count = teamData[team];
+          const cost = (count / totalCards) * casePrice;
+          let basePrice;
+          if (isDollar) {
+            basePrice = cost + ((count / totalCards) * markupValue);
+          } else {
+            basePrice = cost * (1 + (markupValue / 100));
+          }
+          const distributedPrice = basePrice * (1 - userDiscount);
+          const whatnotFees = distributedPrice * 0.08;
+          const transactionFees = (distributedPrice * (1 + blendedTax)) * 0.029 + 0.3;
+          const profit = distributedPrice - cost - whatnotFees - transactionFees - supplies;
+          const distribution = ((count / totalCards) * 100).toFixed(1) + "%";
+          rows.push({
+            team: team,
+            logo: teamLogos[team] || "",
+            count: count,
+            distribution: distribution,
+            cost: cost,
+            price: distributedPrice,
+            whatnotFees: whatnotFees,
+            transactionFees: transactionFees,
+            profit: profit
+          });
+        }
+        let totalProfit = rows.reduce((sum, row) => sum + row.profit, 0);
+        let whatnotCut = rows.reduce((sum, row) => sum + row.whatnotFees, 0);
+        let costOfBusiness = rows.reduce((sum, row) => sum + row.transactionFees, 0) + rows.length * supplies;
+        document.querySelector("#totalProfitBox .amount").textContent = "$" + totalProfit.toFixed(2);
+        document.querySelector("#whatnotsCutBox .amount").textContent = "$" + whatnotCut.toFixed(2);
+        document.querySelector("#costOfBusinessBox .amount").textContent = "$" + costOfBusiness.toFixed(2);
+        
+        let fullHeader = '<table id="fullResultsTable"><thead><tr>' +
+          '<th data-sort="text" onclick="sortTableFull(0)">Team</th>' +
+          '<th data-sort="number" onclick="sortTableFull(1)">Numbered Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableFull(2)">Distributed Cost</th>' +
+          '<th data-sort="number" onclick="sortTableFull(3)">Distributed Cost + Markup</th>' +
+          '<th data-sort="number" onclick="sortTableFull(4)">Whatnot Fees</th>' +
+          '<th data-sort="number" onclick="sortTableFull(5)">Transaction Fees</th>' +
+          '<th data-sort="number" onclick="sortTableFull(6)">Potential Profit</th>' +
+          '</tr></thead><tbody>';
+        let fullRowsHtml = rows.map(row => {
+          return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
+            <td>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
+                <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
+              </a>
+            </td>
+            <td>${row.distribution}</td>
+            <td>$${row.cost.toFixed(2)}</td>
+            <td>$${row.price.toFixed(2)}</td>
+            <td>$${row.whatnotFees.toFixed(2)}</td>
+            <td>$${row.transactionFees.toFixed(2)}</td>
+            <td>$${row.profit.toFixed(2)}</td>
+          </tr>`;
+        }).join("");
+        let fullTableHtml = fullHeader + fullRowsHtml + "</tbody></table>";
+        
+        let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
+          '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(3)">Avg. Total Cards per Case</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
+          '</tr></thead><tbody>';
+        let trimmedRowsHtml = rows.map(row => {
+          let expectedCards = cardsPerCase * (row.count / totalCards);
+          return `<tr class="${highlightTeams.has(row.team) ? 'highlight' : ''}">
+            <td>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" style="color:#fff; text-decoration:none;">
+                <img src="${row.logo}" alt="${row.team}" style="width:40px; vertical-align:middle; margin-right:10px;">${row.team}
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${row.team.replace(/'/g, "\\'")}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">
+              </a>
+            </td>
+            <td>${row.count}</td>
+            <td>${row.distribution}</td>
+            <td>${expectedCards.toFixed(1)}</td>
+            <td>$${row.price.toFixed(2)}</td>
+          </tr>`;
+        }).join("");
+        let trimmedTableHtml = trimmedHeader + trimmedRowsHtml + "</tbody></table>";
+        
+        document.getElementById("fullResults").innerHTML = fullTableHtml;
+        document.getElementById("results").innerHTML = trimmedTableHtml;
+        if (rows.length > 0) {
+          document.getElementById("teamPricesHeader").style.display = "block";
+          document.getElementById("distributionCopy").style.display = "block";
+        } else {
+          document.getElementById("teamPricesHeader").style.display = "none";
+          document.getElementById("distributionCopy").style.display = "none";
+        }
+        tableData = rows;
+        const chartData = [totalProfit, whatnotCut, costOfBusiness];
+        chartContainer.style.display = "block";
+        if (chartData.every(val => val === 0)) {
+          pieChartCanvas.style.display = "none";
+          pieChartMessage.style.display = "flex";
+        } else {
+          pieChartCanvas.style.display = "block";
+          pieChartMessage.style.display = "none";
+          if (pieChart) {
+            pieChart.data.datasets[0].data = chartData;
+            pieChart.update();
+          } else {
+            const ctx = pieChartCanvas.getContext("2d");
+            pieChart = new Chart(ctx, {
+              type: "pie",
+              data: {
+                labels: ["Breaker's Profit", "Whatnot's Cut", "Cost of Business"],
+                datasets: [{
+                  data: chartData,
+                  backgroundColor: ["#2e7d32", "#bfa600", "#007bff"],
+                  offset: 30,
+                  borderWidth: 0,
+                  borderColor: "transparent"
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: { bottom: 0 } },
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                    labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" }
+                  },
+                  dropShadowPlugin: { shadowBlur: 10, shadowOffsetX: 0, shadowOffsetY: 10, shadowColor: "rgba(0,0,0,0.5)" }
+                },
+                elements: { arc: { borderWidth: 0, borderColor: "transparent" } }
+              },
+              plugins: [dropShadowPlugin, legendMargin]
+            });
+          }
+        }
       }
 
       function sortTableFull(n) {
@@ -1037,158 +1615,12 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      function openMidwestCardsSearch() {
-        const selectedSet = document.getElementById("setSelect").value;
-        const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) { alert("Please select a set first."); return; }
-        if (!selectedYear) { alert("Please select a set year first."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
-      }
-
-      function openBlowoutCardsSearch() {
-        const selectedSet = document.getElementById("setSelect").value;
-        const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) { alert("Please select a set first."); return; }
-        if (!selectedYear) { alert("Please select a set year first."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open("https://www.blowoutcards.com/catalogsearch/result/?q=" + encodeURIComponent(query), "_blank");
-      }
-
-      function openOotbSearch() {
-        const selectedSet = document.getElementById("setSelect").value;
-        const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) { alert("Please select a set first."); return; }
-        if (!selectedYear) { alert("Please select a set year first."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet + " hockey hobby case";
-        window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
-      }
-
-      function openTeamSearch(teamName) {
-        const selectedYear = document.getElementById("yearSelect").value;
-        const selectedSet = document.getElementById("setSelect").value;
-        if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
-        const firstYear = selectedYear.split("-")[0];
-        const query = firstYear + " " + selectedSet + " " + teamName;
-        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-      }
-
-      const summaryBoxes = document.querySelectorAll(".summary-box");
-      summaryBoxes.forEach(box => {
-        box.addEventListener("click", function() {
-          const toast = this.querySelector(".toast");
-          toast.style.display = (toast.style.display === "block") ? "none" : "block";
-        });
-      });
-
-      function toggleSetNotes(link) {
-        var notesDiv = link.parentElement.nextElementSibling;
-        if (notesDiv.style.display === "none" || notesDiv.style.display === "") {
-          notesDiv.style.display = "block";
-          link.textContent = "Hide Set Notes";
-        } else {
-          notesDiv.style.display = "none";
-          link.textContent = "Read Set Notes";
-        }
-      }
-
-      document.getElementById("selectedYearLabel").addEventListener("click", function() {
-        const menu = document.getElementById("yearDropdownMenu");
-        menu.classList.toggle("open");
-      });
-      document.getElementById("selectedSetLabel").addEventListener("click", function() {
-        const menu = document.getElementById("setDropdownMenu");
-        menu.classList.toggle("open");
-      });
-
-      document.getElementById("priceSettingsButton").addEventListener("click", function(e) {
-        e.preventDefault();
-        var dup = document.getElementById("priceSettingsDuplicate");
-        dup.classList.toggle("open-menu");
-      });
-
-      document.getElementById("markupDup").addEventListener("input", function() {
-        document.getElementById("markup").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("markup").addEventListener("input", function() {
-        document.getElementById("markupDup").value = this.value;
-      });
-
-      document.getElementById("markupToggleDup").addEventListener("change", function() {
-        document.getElementById("markupToggle").checked = this.checked;
-        updateMarkupToggleLabel();
-        calculateProfit();
-      });
-      document.getElementById("markupToggle").addEventListener("change", function() {
-        document.getElementById("markupToggleDup").checked = this.checked;
-        updateMarkupToggleLabel();
-        calculateProfit();
-      });
-      function updateMarkupToggleLabel() {
-        const isDollar = document.getElementById("markupToggle").checked;
-        document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
-        document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
-      }
-
-      document.getElementById("userDiscountDup").addEventListener("input", function() {
-        document.getElementById("userDiscount").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("userDiscount").addEventListener("input", function() {
-        document.getElementById("userDiscountDup").value = this.value;
-      });
-      document.getElementById("blendedTaxDup").addEventListener("input", function() {
-        document.getElementById("blendedTax").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("blendedTax").addEventListener("input", function() {
-        document.getElementById("blendedTaxDup").value = this.value;
-      });
-      document.getElementById("suppliesDup").addEventListener("input", function() {
-        document.getElementById("supplies").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("supplies").addEventListener("input", function() {
-        document.getElementById("suppliesDup").value = this.value;
-      });
-
-      window.addEventListener("load", function() {
-        fetch("config.json")
-          .then(response => {
-            if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
-            return response.json();
-          })
-          .then(jsonData => {
-            if (!jsonData.sets) { alert('Invalid JSON format: missing "sets" property.'); return; }
-            setData = jsonData.sets;
-            keyPlayersData = jsonData["Key Players"] || [];
-            populateYearSelector();
-            document.getElementById("setSelect").addEventListener("change", function() {
-              document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
-              updateCasePrice();
-              updateSetDetails();
-              calculateProfit();
-            });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
-            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
-          })
-          .catch(err => {
-            console.error("Error loading config.json:", err);
-          });
-      });
-    </script>
-    <script>
       function openPlayerEbaySearch(playerName) {
         window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(playerName), "_blank");
       }
     </script>
     <script>
-      // Breaker Settings Menu - Duplicate version
-      // This script and all inline functions below remain untouched.
+      // Breaker Settings Menu - Duplicate version (original implementations preserved)
       document.getElementById("markupDup").addEventListener("input", function() {
         document.getElementById("markup").value = this.value;
         calculateProfit();
