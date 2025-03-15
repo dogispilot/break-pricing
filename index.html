@@ -343,6 +343,28 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
+    // Sample key players data for testing.
+    // Replace this array with your actual key players data as needed.
+    keyPlayersData = [
+      {
+        setYear: "2024-25",
+        type: "rookie",
+        team: "Toronto Maple Leafs",
+        player: "John Doe",
+        image: "resources/sample_player.png",
+        profile_link: "https://www.example.com/johndoe",
+        notes: "Promising rookie with high potential."
+      },
+      {
+        setYear: "2024-25",
+        type: "rookie",
+        team: "Boston Bruins",
+        player: "Jane Smith",
+        image: "resources/sample_player2.png",
+        profile_link: "https://www.example.com/janesmith",
+        notes: "Standout performance this season."
+      }
+    ];
     // Utility functions
     function formatDetail(val, isRookie) {
       let num = parseFloat(val);
@@ -364,7 +386,7 @@
       }
     }
     // Global data variables
-    let setData = [], keyPlayersData = [], pieChart, tableData = [];
+    let setData = [];
     const sortDirections = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
     let highlightTeams = new Set();
     function parsePercentage(value) {
