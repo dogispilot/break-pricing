@@ -1057,13 +1057,30 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        let cardsPerBox = (setObj.packs_per_box && setObj.cards_per_pack)
-          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
-          : NaN;
-        let cardsPerCase = (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
-          ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
-          : NaN;
-        let html = `
+        // Release date, box configuration, and set notes content
+        let releaseHtml = `
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          </p>
+          <div class="set-notes" style="display:none;">
+            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
+          </div>
+        `;
+        // TCDB and HockeyChecklists.com buttons (now placed above the grid)
+        let buttonsHtml = `
+          <div class="button-container" style="text-align:center; margin:15px 0;">
+            <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
+              <img src="resources/tcdb.jpg" alt="TCDB Logo" style="vertical-align: middle;"/>
+              TCDB
+            </button>
+            <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()" style="padding: 8px 12px;">
+              <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon" style="vertical-align: middle;"/>
+              HockeyChecklists.com
+            </button>
+          </div>
+        `;
+        // Set details tiles (grid)
+        let gridHtml = `
           <div class="setDetails-grid-4col">
             <div class="detail-box highlight-tile" style="grid-column: 1; grid-row: 1 / span 2;">
               <div class="detail-value">${formatDetail(setObj.rookie_percentage, true)}</div>
@@ -1078,7 +1095,12 @@
               <div class="detail-label">Cards per Pack</div>
             </div>
             <div class="detail-box highlight-tile" style="grid-column: 4; grid-row: 1 / span 2;">
-              <div class="detail-value">${formatDetail(cardsPerCase, false)}</div>
+              <div class="detail-value">${formatDetail(
+                (setObj.packs_per_box && setObj.cards_per_pack && setObj.boxes_per_case)
+                  ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * setObj.boxes_per_case * 10) / 10
+                  : NaN,
+                false
+              )}</div>
               <div class="detail-label">Cards per Case</div>
             </div>
             <div class="detail-box" style="grid-column: 2; grid-row: 2;">
@@ -1086,33 +1108,19 @@
               <div class="detail-label">Packs per Box</div>
             </div>
             <div class="detail-box" style="grid-column: 3; grid-row: 2;">
-              <div class="detail-value">${formatDetail(cardsPerBox, false)}</div>
+              <div class="detail-value">${formatDetail(
+                (setObj.packs_per_box && setObj.cards_per_pack)
+                  ? Math.floor(setObj.packs_per_box * setObj.cards_per_pack * 10) / 10
+                  : NaN,
+                false
+              )}</div>
               <div class="detail-label">Cards per Box</div>
             </div>
           </div>
         `;
-        html += `
-          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
-          </p>
-          <div class="set-notes" style="display:none;">
-            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
-          </div>
-        `;
-        // NEW: Add TCDB and HockeyChecklists.com buttons inside the set details container
-        html += `
-          <div class="button-container" style="text-align:center; margin-top: 15px;">
-            <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
-              <img src="resources/tcdb.jpg" alt="TCDB Logo" style="vertical-align: middle;"/>
-              TCDB
-            </button>
-            <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()" style="padding: 8px 12px;">
-              <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon" style="vertical-align: middle;"/>
-              HockeyChecklists.com
-            </button>
-          </div>
-        `;
-        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
+        // Order: header (already added), then releaseHtml, then buttonsHtml, then gridHtml.
+        detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' 
+          + releaseHtml + buttonsHtml + gridHtml + '</div>';
       }
 
       function openPlayerEbaySearch(playerName) {
