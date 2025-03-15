@@ -1057,9 +1057,9 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        // TCDB and HockeyChecklists.com buttons placed directly below the header
+        // TCDB and HockeyChecklists.com buttons directly below header and centered
         let buttonsHtml = `
-          <div class="button-container" style="text-align:center; margin:15px 0;">
+          <div class="button-container" style="display: flex; justify-content: center; margin:15px 0;">
             <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
               <img src="resources/tcdb.jpg" alt="TCDB Logo" style="vertical-align: middle;"/>
               TCDB
