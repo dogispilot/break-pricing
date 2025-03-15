@@ -1272,7 +1272,7 @@
         }
         // Construct the year parameter in the desired format
         // (The format is "2[set year]"; adjust this logic if needed)
-        var yearParam = "2" + selectedYear;
+        var yearParam = selectedYear;
         var url = "https://hockeychecklists.com/checklist?search=" + encodeURIComponent(selectedSet) +
                   "&year=" + encodeURIComponent(yearParam) +
                   "&brand=" + encodeURIComponent(brandId);
