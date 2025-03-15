@@ -1398,9 +1398,9 @@
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Distribution</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Chance</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(3)">Avg. Total Cards per Case</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Case Cost + Markup</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
           let expectedCards = cardsPerCase * (row.count / totalCards);
