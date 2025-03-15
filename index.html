@@ -968,6 +968,7 @@
         yearSelect.addEventListener("change", function() {
           document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
           populateSetSelector();
+          updateSetDetails(); // Added call to refresh set details on year change
           updateKeyPlayersSection();
           calculateProfit();
         });
