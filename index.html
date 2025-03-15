@@ -1057,7 +1057,7 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        // TCDB and HockeyChecklists.com buttons directly below header and centered
+        // TCDB and HockeyChecklists.com buttons directly below header, on same line and centered
         let buttonsHtml = `
           <div class="button-container" style="display: flex; justify-content: center; margin:15px 0;">
             <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
@@ -1070,10 +1070,10 @@
             </button>
           </div>
         `;
-        // Release date, box configuration, and set notes content
+        // Release date, box configuration, and set notes content with updated Read Set Notes link (underlined text, no pill styling)
         let releaseHtml = `
           <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" style="text-decoration: underline; cursor: pointer;">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -1118,7 +1118,7 @@
             </div>
           </div>
         `;
-        // Order: header (already in the container), then buttonsHtml, then releaseHtml, then gridHtml.
+        // Order: header (already in container), then buttonsHtml, then releaseHtml, then gridHtml.
         detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' 
           + buttonsHtml + releaseHtml + gridHtml + '</div>';
       }
