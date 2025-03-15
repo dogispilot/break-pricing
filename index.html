@@ -621,6 +621,18 @@
         margin-bottom: 20px;
         margin-top: 30px;
       }
+      
+      /* NEW: Center and equal-width non-team columns in tables */
+      #fullResultsTable th:not(:first-child),
+      #fullResultsTable td:not(:first-child) {
+        text-align: center;
+        width: 16.67%;
+      }
+      #resultsTable th:not(:first-child),
+      #resultsTable td:not(:first-child) {
+        text-align: center;
+        width: 25%;
+      }
     </style>
   </head>
   <body>
@@ -968,7 +980,7 @@
         yearSelect.addEventListener("change", function() {
           document.getElementById("selectedYearLabel").textContent = yearSelect.value || "--Select a Year--";
           populateSetSelector();
-          updateSetDetails(); // Added call to refresh set details on year change
+          updateSetDetails(); // Refresh set details on year change
           updateKeyPlayersSection();
           calculateProfit();
         });
@@ -1398,9 +1410,9 @@
         let trimmedHeader = '<table id="resultsTable"><thead><tr>' +
           '<th data-sort="text" onclick="sortTableTrimmed(0)">Team</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(1)">Numbered Cards</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Chance</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(2)">Numbered Card Distribution</th>' +
           '<th data-sort="number" onclick="sortTableTrimmed(3)">Avg. Total Cards per Case</th>' +
-          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Case Cost + Markup</th>' +
+          '<th data-sort="number" onclick="sortTableTrimmed(4)">Distributed Cost + Markup</th>' +
           '</tr></thead><tbody>';
         let trimmedRowsHtml = rows.map(row => {
           let expectedCards = cardsPerCase * (row.count / totalCards);
