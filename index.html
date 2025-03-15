@@ -1057,7 +1057,7 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        // TCDB and HockeyChecklists.com buttons directly below header, on same line and centered
+        // TCDB and HockeyChecklists.com buttons directly below header, on the same line and centered
         let buttonsHtml = `
           <div class="button-container" style="display: flex; justify-content: center; margin:15px 0;">
             <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
@@ -1070,7 +1070,7 @@
             </button>
           </div>
         `;
-        // Release date, box configuration, and set notes content with updated Read Set Notes link (underlined text, no pill styling)
+        // Release date, box configuration, and set notes content with updated Read Set Notes link (underlined text)
         let releaseHtml = `
           <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
             <a href="javascript:void(0)" onclick="toggleSetNotes(this)" style="text-decoration: underline; cursor: pointer;">Read Set Notes</a>
@@ -1256,24 +1256,27 @@
         window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
       }
 
-      function openTcdbSearch() {
-        const selectedSet = document.getElementById("setSelect").value;
-        const selectedYear = document.getElementById("yearSelect").value;
-        if (!selectedSet) { alert("Please select a set first."); return; }
-        if (!selectedYear) { alert("Please select a set year first."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet;
-        window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
-      }
-
+      // Updated openHockeyChecklistsSearch function
       function openHockeyChecklistsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
         if (!selectedSet) { alert("Please select a set first."); return; }
         if (!selectedYear) { alert("Please select a set year first."); return; }
-        const yearPrefix = selectedYear.split("-")[0];
-        const query = yearPrefix + " " + selectedSet;
-        window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
+        // Determine brand ID based on set name
+        var brandId = 11; // default
+        var lowerSet = selectedSet.toLowerCase();
+        if (lowerSet.indexOf("parkhurst") !== -1) {
+          brandId = 16;
+        } else if (lowerSet.indexOf("o-pee-chee") !== -1) {
+          brandId = 1;
+        }
+        // Construct the year parameter in the desired format
+        // (The format is "2[set year]"; adjust this logic if needed)
+        var yearParam = "2" + selectedYear;
+        var url = "https://hockeychecklists.com/checklist?search=" + encodeURIComponent(selectedSet) +
+                  "&year=" + encodeURIComponent(yearParam) +
+                  "&brand=" + encodeURIComponent(brandId);
+        window.open(url, "_blank");
       }
 
       function openMidwestCardsSearch() {
