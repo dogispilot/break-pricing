@@ -18,7 +18,7 @@
       rel="stylesheet"
     />
     <style>
-      /* [All your existing CSS styles remain unchanged] */
+      /* All existing CSS styles remain unchanged */
       @font-face {
         font-family: 'BreakPricingFont';
         src: url('fonts/breakpricingfont.ttf') format('truetype');
@@ -769,18 +769,17 @@
               liSet.textContent = set.name;
               liSet.addEventListener("click", () => {
                 selectedSetLabel.textContent = set.name;
-                // Optionally, update a hidden select element
                 setSelect.value = set.name;
               });
               setDropdownMenu.appendChild(liSet);
 
-              // Also add to the select element (if needed)
+              // Add to the select element
               const optionSet = document.createElement("option");
               optionSet.value = set.name;
               optionSet.textContent = set.name;
               setSelect.appendChild(optionSet);
 
-              // Add year to the set of years
+              // Collect years for dropdown
               if(set.year) {
                 yearsSet.add(set.year);
               }
@@ -796,18 +795,17 @@
               });
               yearDropdownMenu.appendChild(liYear);
 
-              // Also add to the select element
+              // Add to the select element
               const optionYear = document.createElement("option");
               optionYear.value = year;
               optionYear.textContent = year;
               yearSelect.appendChild(optionYear);
             });
 
-            // Filter for key rookies:
-            // In this example, we treat any set with a valid rookie_percentage (not "Not available")
-            // as a key rookie. You could also check for an explicit "type" property if added.
+            // Filter for key rookies based on the "type" property in the JSON file.
+            // Only sets with type exactly equal to "rookie" will be displayed as key rookies.
             const keyRookieSets = sets.filter(set =>
-              set.rookie_percentage && set.rookie_percentage !== "Not available"
+              set.type && set.type.toLowerCase() === "rookie"
             );
 
             if(keyRookieSets.length > 0) {
@@ -819,7 +817,7 @@
                 // Create an image element – using a placeholder image for rookies.
                 const img = document.createElement("img");
                 img.className = "player-img";
-                img.src = "resources/rookie_placeholder.png"; // Ensure you have a placeholder image or update the path accordingly.
+                img.src = "resources/rookie_placeholder.png";
                 img.alt = set.name;
 
                 // Create info container
@@ -831,7 +829,7 @@
 
                 const notes = document.createElement("p");
                 notes.className = "key-player-notes";
-                notes.textContent = "Rookie %: " + set.rookie_percentage;
+                notes.textContent = "Rookie Type: " + set.type;
 
                 infoDiv.appendChild(strong);
                 infoDiv.appendChild(notes);
