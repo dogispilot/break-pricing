@@ -1057,16 +1057,7 @@
           detailsDiv.innerHTML = "";
           return;
         }
-        // Release date, box configuration, and set notes content
-        let releaseHtml = `
-          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
-          </p>
-          <div class="set-notes" style="display:none;">
-            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
-          </div>
-        `;
-        // TCDB and HockeyChecklists.com buttons (now placed above the grid)
+        // TCDB and HockeyChecklists.com buttons placed directly below the header
         let buttonsHtml = `
           <div class="button-container" style="text-align:center; margin:15px 0;">
             <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
@@ -1077,6 +1068,15 @@
               <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon" style="vertical-align: middle;"/>
               HockeyChecklists.com
             </button>
+          </div>
+        `;
+        // Release date, box configuration, and set notes content
+        let releaseHtml = `
+          <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" class="pill-button">Read Set Notes</a>
+          </p>
+          <div class="set-notes" style="display:none;">
+            <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
           </div>
         `;
         // Set details tiles (grid)
@@ -1118,9 +1118,9 @@
             </div>
           </div>
         `;
-        // Order: header (already added), then releaseHtml, then buttonsHtml, then gridHtml.
+        // Order: header (already in the container), then buttonsHtml, then releaseHtml, then gridHtml.
         detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' 
-          + releaseHtml + buttonsHtml + gridHtml + '</div>';
+          + buttonsHtml + releaseHtml + gridHtml + '</div>';
       }
 
       function openPlayerEbaySearch(playerName) {
