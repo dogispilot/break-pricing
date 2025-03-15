@@ -25,7 +25,8 @@
     .subtitle{font-size:1.2rem;margin:5px 0 0 0;}
     h2{text-align:center;margin-top:0;}
     #teamPricesHeader,#breakPricingHeader{font-family:'BreakPricingFontBold',sans-serif;text-align:center;}
-    #teamPricesHeader{margin-top:5px;} #breakPricingHeader{margin-top:40px;}
+    #teamPricesHeader{margin-top:5px;} 
+    #breakPricingHeader{margin-top:40px;}
     #distributionCopy{margin-top:0;}
     .small-copy{text-align:center;font-size:0.9rem;color:#bbb;margin-top:0.5rem;}
     form#calcForm{margin-bottom:25px;}
@@ -247,69 +248,6 @@
           </div>
         </div>
       </div>
-      <div id="breakPricingOptionsMenu" style="margin-top:10px;display:none!important;">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="casePrice" onclick="toggleInputTooltip(this)" style="cursor:pointer;">Cost of a Case ($)</label>
-            <div class="toast input-tooltip" style="display:none;max-width:300px;">
-              This is the estimated cost of a case from a major online retailer. Prices may fluctuate so please verify.
-            </div>
-            <div class="input-button-group">
-              <input type="number" id="casePrice" class="case-price-input" step="0.01" required placeholder="Enter price" value="1999.99">
-              <button type="button" class="lookup-button small glow-daveadams" onclick="openSetSearch()">
-                <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Lookup Icon"> Dave &amp; Adams
-              </button>
-              <button type="button" class="lookup-button small steelcity-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo"> Steel City
-              </button>
-              <button type="button" class="lookup-button small glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo"> Midwest Cards
-              </button>
-              <button type="button" class="lookup-button small glow-blowout" onclick="openBlowoutCardsSearch()">
-                <img src="https://www.blowoutcards.com/skin/frontend/base/default/images/logo-BC-Trademark3.png" alt="Blowout Cards Logo"> Blowout Cards
-              </button>
-              <button type="button" class="lookup-button small glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo"> Out of the Box
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="form-row small-input-row">
-          <div class="form-group">
-            <label for="markup" onclick="toggleInputTooltip(this)" style="cursor:pointer;">Markup [% or $]</label>
-            <div class="toast input-tooltip" style="display:none;">
-              This is the markup a breaker applies on top of the case cost.
-              In percent mode: [distributed cost] * (1 + markup/100)
-              In dollar mode: [distributed cost] + (distributed markup).
-            </div>
-            <div style="display:flex;align-items:center;">
-              <input type="text" id="markup" required placeholder="Enter markup" value="30" style="flex:1;">
-              <div class="toggle-container">
-                <label class="switch">
-                  <input type="checkbox" id="markupToggle">
-                  <span class="slider"></span>
-                </label>
-                <span id="markupToggleLabel" style="margin-left:5px;">%</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="userDiscount" onclick="toggleInputTooltip(this)" style="cursor:pointer;">User Discount (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the expected discount a breaker might offer.</div>
-            <input type="text" id="userDiscount" required placeholder="Enter discount" value="0%">
-          </div>
-          <div class="form-group">
-            <label for="blendedTax" onclick="toggleInputTooltip(this)" style="cursor:pointer;">Blended Tax (%)</label>
-            <div class="toast input-tooltip" style="display:none;">This is the estimated tax rate that applies to transactions.</div>
-            <input type="text" id="blendedTax" required placeholder="Enter tax" value="5.1%">
-          </div>
-          <div class="form-group">
-            <label for="supplies" onclick="toggleInputTooltip(this)" style="cursor:pointer;">Supplies per Order ($)</label>
-            <div class="toast input-tooltip" style="display:none;">This includes costs such as penny sleeves, top loaders, and mailing supplies.</div>
-            <input type="number" id="supplies" step="0.01" required placeholder="Enter supplies cost" value="1.00">
-          </div>
-        </div>
-      </div>
       <div class="chart-summary-container">
         <div id="chartContainer">
           <canvas id="pieChart"></canvas>
@@ -343,28 +281,12 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Sample key players data for testing.
-    // Replace this array with your actual key players data as needed.
-    keyPlayersData = [
-      {
-        setYear: "2024-25",
-        type: "rookie",
-        team: "Toronto Maple Leafs",
-        player: "John Doe",
-        image: "resources/sample_player.png",
-        profile_link: "https://www.example.com/johndoe",
-        notes: "Promising rookie with high potential."
-      },
-      {
-        setYear: "2024-25",
-        type: "rookie",
-        team: "Boston Bruins",
-        player: "Jane Smith",
-        image: "resources/sample_player2.png",
-        profile_link: "https://www.example.com/janesmith",
-        notes: "Standout performance this season."
-      }
-    ];
+    // Global variables for sets and key players (from config.json)
+    let setData = [];
+    let keyPlayersData = [];
+    const sortDirections = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
+    let highlightTeams = new Set();
+
     // Utility functions
     function formatDetail(val, isRookie) {
       let num = parseFloat(val);
@@ -385,10 +307,6 @@
         tooltip.style.display = (tooltip.style.display === 'block') ? 'none' : 'block';
       }
     }
-    // Global data variables
-    let setData = [];
-    const sortDirections = {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1};
-    let highlightTeams = new Set();
     function parsePercentage(value) {
       value = value.toString().replace("%", "").trim();
       let num = parseFloat(value);
@@ -495,7 +413,7 @@
         setDropdownMenu.appendChild(li);
       });
     }
-    // New: update set details and key rookies when a set is selected
+    // When set changes, update details and key players
     document.getElementById("setSelect").addEventListener("change", function() {
       document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
       updateSetDetails();
@@ -565,28 +483,27 @@
       `;
       detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center;margin-top:5px;font-family:\'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
     }
-    function openPlayerEbaySearch(playerName) {
-      const selectedYear = document.getElementById("yearSelect").value;
-      const selectedSet = document.getElementById("setSelect").value;
-      if (!selectedYear || !selectedSet) { alert("Please select both a year and a set."); return; }
-      const yearPrefix = selectedYear.split("-")[0];
-      const query = yearPrefix + " " + selectedSet + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-    }
+    // Update key players section using key players from config.json
     function updateKeyPlayersSection() {
       const selectedYear = document.getElementById("yearSelect").value;
+      const selectedSet = document.getElementById("setSelect").value;
       const keySection = document.getElementById("keyPlayersSection");
       const tilesContainer = document.getElementById("keyPlayerTiles");
       tilesContainer.innerHTML = "";
-      highlightTeams.clear();
-      if (!selectedYear) { keySection.style.display = "none"; return; }
-      document.querySelector("#keyPlayersSection h2").textContent = "🔑  " + selectedYear + " Key Rookies  🔑";
-      const filteredPlayers = keyPlayersData.filter(player =>
-        (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
+      if (!selectedYear || !selectedSet) { keySection.style.display = "none"; return; }
+      // Filter key players from the keyPlayersData array
+      const matchingKeyRookies = keyPlayersData.filter(player =>
+        player.type && player.type.toLowerCase() === "rookie" &&
+        player.year === selectedYear &&
+        player.set === selectedSet
       );
+      if (!matchingKeyRookies.length) {
+        keySection.style.display = "none";
+        return;
+      }
       keySection.style.display = "block";
-      filteredPlayers.forEach(player => { highlightTeams.add(player.team); });
-      filteredPlayers.forEach(player => {
+      document.querySelector("#keyPlayersSection h2").textContent = "🔑 " + selectedYear + " Key Rookies 🔑";
+      matchingKeyRookies.forEach(player => {
         const tile = document.createElement("div");
         tile.className = "key-player-tile";
         const teamLogo = document.createElement("img");
@@ -594,87 +511,25 @@
         teamLogo.src = teamLogos[player.team] || "";
         teamLogo.alt = player.team + " logo";
         tile.appendChild(teamLogo);
-        const profileLink = document.createElement("a");
-        profileLink.href = player.profile_link;
-        profileLink.target = "_blank";
         const playerImg = document.createElement("img");
         playerImg.className = "player-img";
-        playerImg.src = player.image;
-        playerImg.alt = player.player;
-        profileLink.appendChild(playerImg);
-        tile.appendChild(profileLink);
+        // Use player's image if available; otherwise fallback to team logo or placeholder
+        playerImg.src = player.image || teamLogos[player.team] || "resources/placeholder.png";
+        playerImg.alt = player.player || player.team;
+        tile.appendChild(playerImg);
         const infoDiv = document.createElement("div");
         infoDiv.className = "key-player-info";
         const nameLine = document.createElement("div");
-        const nameLink = document.createElement("a");
-        nameLink.href = player.profile_link;
-        nameLink.target = "_blank";
-        nameLink.style.textDecoration = "none";
-        nameLink.style.color = "inherit";
-        nameLink.textContent = player.player;
-        nameLine.appendChild(nameLink);
+        nameLine.textContent = player.player || player.team;
         infoDiv.appendChild(nameLine);
         const notesLine = document.createElement("div");
         notesLine.className = "key-player-notes";
         notesLine.textContent = player.notes || "";
         infoDiv.appendChild(notesLine);
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.style.display = "inline-flex";
-        buttonsContainer.style.gap = "4px";
-        buttonsContainer.style.marginTop = "8px";
-        const nhlLink = document.createElement("a");
-        nhlLink.href = player.profile_link;
-        nhlLink.target = "_blank";
-        nhlLink.className = "nhl-btn";
-        nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" class="nhl-icon">';
-        buttonsContainer.appendChild(nhlLink);
-        const ebayLink = document.createElement("a");
-        ebayLink.href = "javascript:void(0)";
-        ebayLink.className = "ebay-btn";
-        ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-        ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
-        buttonsContainer.appendChild(ebayLink);
-        infoDiv.appendChild(buttonsContainer);
         tile.appendChild(infoDiv);
         tilesContainer.appendChild(tile);
       });
     }
-    const teamLogos = {
-      "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
-      "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
-      "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
-      "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
-      "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
-      "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
-      "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
-      "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
-      "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
-      "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
-      "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
-      "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
-      "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
-      "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
-      "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
-      "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
-      "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
-      "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
-      "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
-      "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
-      "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
-      "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
-      "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
-      "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
-      "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
-      "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
-      "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
-      "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
-      "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
-      "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
-      "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
-      "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
-      "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
-      "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
-    };
     // External search functions
     function openSetSearch() {
       const selectedSet = document.getElementById("setSelect").value;
@@ -857,7 +712,6 @@
         document.getElementById("teamPricesHeader").style.display = "none";
         document.getElementById("distributionCopy").style.display = "none";
       }
-      tableData = rows;
       const chartData = [totalProfit, whatnotCut, costOfBusiness];
       chartContainer.style.display = "block";
       if (chartData.every(val => val === 0)) {
@@ -887,45 +741,16 @@
               responsive: true,
               maintainAspectRatio: false,
               layout: { padding: { bottom: 0 } },
-              plugins: { legend: { position: "bottom", labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" } }, dropShadowPlugin: { shadowBlur: 10, shadowOffsetX: 0, shadowOffsetY: 10, shadowColor: "rgba(0,0,0,0.5)" } },
+              plugins: { 
+                legend: { position: "bottom", labels: { font: { family: "BreakPricingFont" }, color: "#e0e0e0" } },
+                dropShadowPlugin: { shadowBlur: 10, shadowOffsetX: 0, shadowOffsetY: 10, shadowColor: "rgba(0,0,0,0.5)" } 
+              },
               elements: { arc: { borderWidth: 0, borderColor: "transparent" } }
             },
             plugins: [dropShadowPlugin, legendMargin]
           });
         }
       }
-    }
-    function sortTableFull(n) {
-      const table = document.getElementById("fullResultsTable");
-      const tbody = table.tBodies[0];
-      const rows = Array.from(tbody.rows);
-      let dir = sortDirections[n] || 1;
-      rows.sort((a, b) => {
-        let aText = a.cells[n].textContent.trim();
-        let bText = b.cells[n].textContent.trim();
-        let aNum = parseFloat(aText.replace(/[^0-9.-]/g, ""));
-        let bNum = parseFloat(bText.replace(/[^0-9.-]/g, ""));
-        if (!isNaN(aNum) && !isNaN(bNum)) return (aNum - bNum) * dir;
-        return aText.localeCompare(bText) * dir;
-      });
-      rows.forEach(row => tbody.appendChild(row));
-      sortDirections[n] = -dir;
-    }
-    function sortTableTrimmed(n) {
-      const table = document.getElementById("resultsTable");
-      const tbody = table.tBodies[0];
-      const rows = Array.from(tbody.rows);
-      let dir = sortDirections[n] || 1;
-      rows.sort((a, b) => {
-        let aText = a.cells[n].textContent.trim();
-        let bText = b.cells[n].textContent.trim();
-        let aNum = parseFloat(aText.replace(/[^0-9.-]/g, ""));
-        let bNum = parseFloat(bText.replace(/[^0-9.-]/g, ""));
-        if (!isNaN(aNum) && !isNaN(bNum)) return (aNum - bNum) * dir;
-        return aText.localeCompare(bText) * dir;
-      });
-      rows.forEach(row => tbody.appendChild(row));
-      sortDirections[n] = -dir;
     }
     const summaryBoxes = document.querySelectorAll(".summary-box");
     summaryBoxes.forEach(box => {
@@ -1000,12 +825,14 @@
     document.getElementById("supplies").addEventListener("input", function() {
       document.getElementById("suppliesDup").value = this.value;
     });
-    // Load configuration from config.json and initialize dropdowns
+    // Load configuration from config.json and initialize dropdowns.
+    // Assume config.json includes both "sets" and "keyPlayers" properties.
     window.addEventListener("load", function() {
       fetch("config.json")
         .then(response => response.json())
         .then(data => {
           setData = data.sets;
+          keyPlayersData = data.keyPlayers || [];
           populateYearSelector();
         })
         .catch(error => console.error("Error loading config:", error));
