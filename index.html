@@ -675,18 +675,7 @@
               <option value="">--Select Set--</option>
             </select>
           </div>
-          <div class="form-group no-label">
-            <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; justify-content: center;">
-              <img src="resources/tcdb.jpg" alt="TCDB Logo" />
-              TCDB
-            </button>
-          </div>
-          <div class="form-group no-label">
-            <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()" style="justify-content: center;">
-              <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon" />
-              HockeyChecklists.com
-            </button>
-          </div>
+          <!-- TCDB and HockeyChecklists buttons removed from here -->
         </div>
       </form>
 
@@ -874,7 +863,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Results Section with Empty State -->
       <div id="results">
         <div class="empty-state">
@@ -961,8 +950,6 @@
           };
         }
       };
-
-      // ORIGINAL IMPLEMENTATIONS FOR DROPDOWNS
 
       function populateYearSelector() {
         const yearSelect = document.getElementById("yearSelect");
@@ -1110,6 +1097,19 @@
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
+          </div>
+        `;
+        // NEW: Add TCDB and HockeyChecklists.com buttons inside the set details container
+        html += `
+          <div class="button-container" style="text-align:center; margin-top: 15px;">
+            <button type="button" class="lookup-button small glow-tcdb" onclick="openTcdbSearch()" style="padding: 8px 12px; margin-right: 10px;">
+              <img src="resources/tcdb.jpg" alt="TCDB Logo" style="vertical-align: middle;"/>
+              TCDB
+            </button>
+            <button type="button" class="lookup-button small glow-hockeychecklists" onclick="openHockeyChecklistsSearch()" style="padding: 8px 12px;">
+              <img src="resources/hockeychecklists.png" alt="Hockey Checklists Icon" style="vertical-align: middle;"/>
+              HockeyChecklists.com
+            </button>
           </div>
         `;
         detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center; margin-top:5px; font-family: \'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
@@ -1641,7 +1641,6 @@
       document.getElementById("markup").addEventListener("input", function() {
         document.getElementById("markupDup").value = this.value;
       });
-
       document.getElementById("markupToggleDup").addEventListener("change", function() {
         document.getElementById("markupToggle").checked = this.checked;
         updateMarkupToggleLabel();
@@ -1657,7 +1656,6 @@
         document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
         document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
       }
-
       document.getElementById("userDiscountDup").addEventListener("input", function() {
         document.getElementById("userDiscount").value = this.value;
         calculateProfit();
