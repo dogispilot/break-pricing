@@ -5,7 +5,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PL5RQPB0MT"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'G-PL5RQPB0MT');
     </script>
@@ -22,16 +22,12 @@
       @font-face {
         font-family: 'BreakPricingFont';
         src: url('fonts/breakpricingfont.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
       }
       @font-face {
         font-family: 'BreakPricingFontBold';
         src: url('fonts/breakpricingfont_bold.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
       }
-      /* Global Styles */
+      /* Global styles */
       body {
         font-family: 'BreakPricingFont', sans-serif;
         background-color: #121212;
@@ -58,7 +54,7 @@
         background: #1e1e1e;
         padding: 30px;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
       .header {
         display: flex;
@@ -138,7 +134,7 @@
         margin-bottom: 20px;
       }
       .form-group label {
-        margin-bottom: 0px;
+        margin-bottom: 0;
         font-weight: 500;
       }
       .form-group input,
@@ -214,6 +210,7 @@
         padding: 15px;
         background: #2c2c2c;
         border-radius: 8px;
+        display: none;
       }
       #keyPlayersSection h2 {
         font-family: 'BreakPricingFontBold', sans-serif;
@@ -511,7 +508,7 @@
         background-color: #2c2c2c;
         min-width: 160px;
         border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         margin-top: 6px;
         z-index: 9999;
         padding: 0;
@@ -682,6 +679,7 @@
         </p>
         <!-- Price Settings Duplicate -->
         <div id="priceSettingsDuplicate" style="margin-top:10px;">
+          <!-- (Include your duplicate price settings markup here) -->
           <div class="form-row">
             <div class="form-group">
               <label for="casePriceDup" onclick="toggleInputTooltip(this)" style="cursor: pointer;">Cost of a Case ($)</label>
@@ -863,10 +861,6 @@
           updateKeyPlayersSection();
           calculateProfit();
         });
-        if (years.includes("2024-25")) {
-          yearSelect.value = "2024-25";
-          yearSelect.dispatchEvent(new Event("change"));
-        }
       }
       function buildYearDropdown(years) {
         const yearDropdownMenu = document.getElementById("yearDropdownMenu");
@@ -993,7 +987,7 @@
         `;
         detailsDiv.innerHTML = '<div class="set-details-container"><h2 style="text-align:center;margin-top:5px;font-family:\'BreakPricingFontBold\', sans-serif;">📝 Set Details 📝</h2>' + html + '</div>';
       }
-      // New: Update key rookies section using keyPlayersData
+      // Update Key Rookies Section using keyPlayersData from config.json
       function updateKeyPlayersSection() {
         const selectedYear = document.getElementById("yearSelect").value;
         const selectedSet = document.getElementById("setSelect").value;
@@ -1004,7 +998,7 @@
           keySection.style.display = "none";
           return;
         }
-        // Filter keyPlayersData for entries where type is "Rookie" (case-insensitive) and matching year and set.
+        // Filter keyPlayersData for players with type "Rookie" and matching year and set.
         const matchingKeyRookies = keyPlayersData.filter(player =>
           player.type &&
           player.type.toLowerCase() === "rookie" &&
@@ -1043,7 +1037,7 @@
           tilesContainer.appendChild(tile);
         });
       }
-      // External search functions (openSetSearch, openSteelCitySearch, openTcdbSearch, etc.)
+      // External search functions (unchanged)
       function openSetSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
@@ -1115,10 +1109,9 @@
         const query = firstYear + " " + selectedSet + " " + teamName;
         window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
       }
-      // Profit calculation and table functions (preserve your original logic)
+      // Profit calculation and table functions – insert your original logic here
       function calculateProfit() {
-        // Your profit calculation logic goes here.
-        // (This function remains unchanged from your original file.)
+        // ... your original profit calculation code ...
       }
       const summaryBoxes = document.querySelectorAll(".summary-box");
       summaryBoxes.forEach(box => {
@@ -1190,7 +1183,7 @@
       document.getElementById("supplies").addEventListener("input", function() {
         document.getElementById("suppliesDup").value = this.value;
       });
-      // On load, fetch config.json (which includes "sets" and "keyPlayers")
+      // On load: fetch config.json (which includes both "sets" and "keyPlayers")
       window.addEventListener("load", function() {
         fetch("config.json")
           .then(response => response.json())
