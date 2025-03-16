@@ -1070,10 +1070,10 @@
             </button>
           </div>
         `;
-        // Release date, box configuration, and set notes content with updated Read Set Notes link (underlined text)
+        // Release date, box configuration, and set notes content with updated Read Set Notes link (underlined text in white)
         let releaseHtml = `
           <p>${setObj.year} ${setObj.name} was released on <strong>${setObj.release_date || "N/A"}</strong>. Each box contains ${setObj.box_breakdown || "N/A"}. 
-            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" style="text-decoration: underline; cursor: pointer;">Read Set Notes</a>
+            <a href="javascript:void(0)" onclick="toggleSetNotes(this)" style="text-decoration: underline; cursor: pointer; color: #fff;">Read Set Notes</a>
           </p>
           <div class="set-notes" style="display:none;">
             <p><strong>Notes:</strong> ${setObj.notes || "N/A"}</p>
@@ -1256,13 +1256,13 @@
         window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
       }
 
-      // Updated openHockeyChecklistsSearch function
+      // Updated openHockeyChecklistsSearch function with year translation
       function openHockeyChecklistsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
         if (!selectedSet) { alert("Please select a set first."); return; }
         if (!selectedYear) { alert("Please select a set year first."); return; }
-        // Determine brand ID based on set name
+        // Determine brand ID based on set name (case-insensitive)
         var brandId = 11; // default
         var lowerSet = selectedSet.toLowerCase();
         if (lowerSet.indexOf("parkhurst") !== -1) {
@@ -1270,11 +1270,14 @@
         } else if (lowerSet.indexOf("o-pee-chee") !== -1) {
           brandId = 1;
         }
-        // Construct the year parameter in the desired format
-        // (The format is "2[set year]"; adjust this logic if needed)
-        var yearParam = selectedYear;
+        // Translate the selected year from "YYYY-YY" to "YYYY-20YY"
+        var fullYear = selectedYear;
+        var yearParts = selectedYear.split("-");
+        if (yearParts.length === 2) {
+          fullYear = yearParts[0] + "-20" + yearParts[1];
+        }
         var url = "https://hockeychecklists.com/checklist?search=" + encodeURIComponent(selectedSet) +
-                  "&year=" + encodeURIComponent(yearParam) +
+                  "&year=" + encodeURIComponent(fullYear) +
                   "&brand=" + encodeURIComponent(brandId);
         window.open(url, "_blank");
       }
@@ -1589,7 +1592,6 @@
         document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
         document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
       }
-
       document.getElementById("userDiscountDup").addEventListener("input", function() {
         document.getElementById("userDiscount").value = this.value;
         calculateProfit();
