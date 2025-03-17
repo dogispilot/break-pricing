@@ -390,25 +390,30 @@
       return packs * cards;
     }
 
-    // Update Key Rookies section – assuming config.keyRookies exists and is an array of objects
+    // Update Key Rookies section using config.keyPlayers filtered by type "rookie" and selected year
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
-      if (config.keyRookies && Array.isArray(config.keyRookies)) {
-        // Filter key rookies for the selected year (if applicable) and type = 'rookie'
-        const keyRookies = config.keyRookies.filter(r => r.type === 'rookie' && r.year === document.getElementById('setYearSelect').value);
-        keyRookies.forEach(r => {
-          const tile = document.createElement('div');
-          tile.className = 'tile';
-          // Build tile: show player name, images, and notes
-          tile.innerHTML = `<strong>${r.name}</strong><br>
-            <img src="${r.playerPic}" alt="${r.name}" style="width:50px;height:50px;"><br>
-            <img src="${r.teamPic}" alt="Team" style="width:50px;height:50px;"><br>
-            ${r.notes || ""}`;
-          rookieContainer.appendChild(tile);
-        });
+      const selectedYear = document.getElementById('setYearSelect').value;
+      if (config.keyPlayers && Array.isArray(config.keyPlayers)) {
+        // Filter key players for type 'rookie' and for the selected year
+        const keyRookies = config.keyPlayers.filter(player => player.type === 'rookie' && player.year === selectedYear);
+        if (keyRookies.length > 0) {
+          keyRookies.forEach(player => {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            // Build tile content: player's name, images and notes.
+            tile.innerHTML = `<strong>${player.name}</strong><br>
+              <img src="${player.playerPic}" alt="${player.name}" style="width:50px;height:50px;"><br>
+              <img src="${player.teamPic}" alt="Team" style="width:50px;height:50px;"><br>
+              ${player.notes || ""}`;
+            rookieContainer.appendChild(tile);
+          });
+        } else {
+          rookieContainer.textContent = "No key rookie players found for the selected year.";
+        }
       } else {
-        rookieContainer.textContent = "No key rookies available.";
+        rookieContainer.textContent = "No key players data available.";
       }
     }
 
