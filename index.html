@@ -158,7 +158,7 @@
       </select>
       for the years 
       <select id="setYearSelect">
-        <!-- Default should be 2024-25 if available -->
+        <!-- Populated by config -->
       </select>
     </p>
   </section>
@@ -240,29 +240,21 @@
       try {
         const response = await fetch('config.json');
         config = await response.json();
-        populateDropdowns();
+        populateYearDropdown();
+        updateSetNameDropdown(); // populate set names for default year
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
     }
 
-    // Populate the dropdowns for set names and years
-    function populateDropdowns() {
-      const setNameSelect = document.getElementById('setNameSelect');
+    // Populate the year dropdown based on config.sets
+    function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
-      let names = new Set();
-      // Gather unique years and names from config.sets
       config.sets.forEach(s => {
         years.add(s.year);
-        names.add(s.name);
       });
-
-      // Convert sets to arrays and sort (if desired)
       years = Array.from(years).sort();
-      names = Array.from(names).sort();
-
-      // Add default option for year; ensure default is "2024-25" if not in list
       const defaultYear = "2024-25";
       if (!years.includes(defaultYear)) {
         years.unshift(defaultYear);
@@ -274,8 +266,23 @@
         if (year === defaultYear) opt.selected = true;
         setYearSelect.appendChild(opt);
       });
+    }
 
-      names.forEach(name => {
+    // Update the set name dropdown based on the selected year
+    function updateSetNameDropdown() {
+      const year = document.getElementById('setYearSelect').value;
+      const setNameSelect = document.getElementById('setNameSelect');
+      // Clear current options
+      setNameSelect.innerHTML = "";
+      // Add default option
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = "";
+      defaultOpt.textContent = "-- Select Set Name --";
+      setNameSelect.appendChild(defaultOpt);
+      // Filter config.sets by the selected year and add unique set names
+      const filteredSets = config.sets.filter(s => s.year === year);
+      const uniqueNames = [...new Set(filteredSets.map(s => s.name))].sort();
+      uniqueNames.forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
         opt.textContent = name;
@@ -283,9 +290,12 @@
       });
     }
 
-    // Event listeners for dropdowns and button
+    // Event listeners for dropdowns
+    document.getElementById('setYearSelect').addEventListener('change', function() {
+      updateSetNameDropdown();
+      onSelectionChange();
+    });
     document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
-    document.getElementById('setYearSelect').addEventListener('change', onSelectionChange);
     document.getElementById('calcBreak').addEventListener('click', updateBreakSniffer);
     document.getElementById('toggleNotes').addEventListener('click', function(e){
       e.preventDefault();
@@ -293,16 +303,15 @@
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
 
-    // When set name or year is changed, update details
+    // When a selection changes, update the current set and details
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
-      // Find the matching set
+      // Find the matching set (if any)
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
       updateSetDetails();
       updateBreakCaseCost();
       updateKeyRookies();
-      // Optionally clear break sniffer and table if no set is selected
       if (!currentSet) {
         document.getElementById('details-text').textContent = '';
         document.getElementById('set-tiles').innerHTML = '';
@@ -313,7 +322,6 @@
     // Update the cost input field in break sniffer if set price is available
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
-        // Remove any non-numeric characters and convert to number
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
         if (!isNaN(priceNum)) {
           document.getElementById('caseCost').value = priceNum.toFixed(2);
@@ -332,13 +340,11 @@
         tilesDiv.innerHTML = "";
         return;
       }
-      // Build details text
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. Each box contains ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       
-      // Build six tiles
-      tilesDiv.innerHTML = ""; // clear previous content
-      // Hero tiles: rookie percentage and total cards per case
+      // Build six tiles: two hero tiles and four supporting tiles
+      tilesDiv.innerHTML = "";
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.textContent = "Rookie %: " + (currentSet.rookie_percentage || "N/A");
@@ -350,7 +356,6 @@
       heroTile2.textContent = "Total Cards/Case: " + (totalCardsPerCase || "N/A");
       tilesDiv.appendChild(heroTile2);
       
-      // Supporting tiles: boxes per case, packs per box, cards per pack, cards per box
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.textContent = "Boxes/Case: " + (currentSet.boxes_per_case || "N/A");
@@ -373,7 +378,7 @@
       tilesDiv.appendChild(tileCardsBox);
     }
 
-    // Helper: compute total cards per case = boxes_per_case * packs_per_box * cards_per_pack (if numeric)
+    // Helper: compute total cards per case = boxes_per_case * packs_per_box * cards_per_pack
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -396,13 +401,11 @@
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
       if (config.keyPlayers && Array.isArray(config.keyPlayers)) {
-        // Filter key players for type 'rookie' and for the selected year
         const keyRookies = config.keyPlayers.filter(player => player.type === 'rookie' && player.year === selectedYear);
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            // Build tile content: player's name, images and notes.
             tile.innerHTML = `<strong>${player.name}</strong><br>
               <img src="${player.playerPic}" alt="${player.name}" style="width:50px;height:50px;"><br>
               <img src="${player.teamPic}" alt="Team" style="width:50px;height:50px;"><br>
@@ -423,43 +426,21 @@
         alert("Please select a valid set first.");
         return;
       }
-      // Get inputs
       const costCase = parseFloat(document.getElementById('caseCost').value);
       const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
       const usePercent = document.getElementById('markupToggle').checked;
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
       
-      // Compute cost of case including markup
-      let costWithMarkup = 0;
-      if (usePercent) {
-        costWithMarkup = costCase * (1 + markupVal/100);
-      } else {
-        costWithMarkup = costCase + markupVal;
-      }
-      
-      // Whatnots cut is 8% of costWithMarkup
+      let costWithMarkup = usePercent ? costCase * (1 + markupVal/100) : costCase + markupVal;
       const whatnotsCut = costWithMarkup * 0.08;
-      
-      // For each team in currentSet.cards, compute:
-      // distribution percentage = teamCards / totalCards
-      // distributed cost = costCase * distribution percentage
-      // transaction cost per team = distributed cost * (1 + blendedTax/100) * 0.029 + 0.30
-      // cost of business per team = suppliesCost + transaction cost
-      // Then (for the table) also compute:
-      // - Avg. Cards per Case = distribution percentage * totalCardsPerCase
-      // - Distributed Cost + Markup = if usePercent then distributedCost*(1+markupVal/100)
-      //   else distributedCost + (markupVal * distribution percentage)
       
       const teams = currentSet.cards;
       const teamNames = Object.keys(teams);
       const totalCards = teamNames.reduce((sum, team) => sum + teams[team], 0);
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       
-      // For overall cost of business, we sum over teams
       let totalCostOfBusiness = 0;
-      
-      // Prepare table body
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       
@@ -471,16 +452,9 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase).toFixed(2) : "N/A";
-        let distCostWithMarkup = 0;
-        if (usePercent) {
-          distCostWithMarkup = distributedCost * (1 + markupVal/100);
-        } else {
-          distCostWithMarkup = distributedCost + (markupVal * distribution);
-        }
+        let distCostWithMarkup = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
         
-        // Create table row
         const row = document.createElement('tr');
-        // For team logo, if available you might substitute an <img> tag; here we just show the team name.
         row.innerHTML = `
           <td>${team}</td>
           <td>${teamCards}</td>
@@ -491,11 +465,9 @@
         tbody.appendChild(row);
       });
       
-      // Overall Breaker's Profit = (markup amount) - whatnotsCut - totalCostOfBusiness
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       
-      // Update break tiles (three vertical tiles next to pie chart)
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
       const tileProfit = document.createElement('div');
@@ -513,8 +485,6 @@
       tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
       breakTiles.appendChild(tileBusiness);
       
-      // Draw pie chart showing percentage breakdown of markupAmount allocated to:
-      // - Breaker's Profit, Whatnots Cut, and Cost of Business.
       const data = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
@@ -523,7 +493,7 @@
       drawPieChart(data, markupAmount);
     }
 
-    // Draw a simple pie chart on canvas given data and total (for percentage calculation)
+    // Draw a simple pie chart on canvas given data and total value
     function drawPieChart(data, total) {
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
@@ -532,8 +502,6 @@
       const radius = Math.min(centerX, centerY) - 10;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       let startAngle = 0;
-      
-      // Define a set of colors (or compute them)
       const colors = ["#4caf50", "#ff9800", "#2196f3"];
       
       data.forEach((d, i) => {
@@ -547,7 +515,6 @@
         startAngle += sliceAngle;
       });
       
-      // Optionally add labels
       startAngle = 0;
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
@@ -561,7 +528,6 @@
       });
     }
 
-    // Load config on startup
     loadConfig();
   </script>
 </body>
