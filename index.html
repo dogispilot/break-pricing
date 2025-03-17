@@ -1132,109 +1132,22 @@
         window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
       }
 
-      function updateKeyPlayersSection() {
+      // New function to fix the TCDB button functionality
+      function openTcdbSearch() {
+        const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
-        const keySection = document.getElementById("keyPlayersSection");
-        const tilesContainer = document.getElementById("keyPlayerTiles");
-        tilesContainer.innerHTML = "";
-        highlightTeams.clear();
-        if (!selectedYear) { keySection.style.display = "none"; return; }
-        document.querySelector("#keyPlayersSection h2").textContent = "🔑  " + selectedYear + " Key Rookies  🔑";
-        const filteredPlayers = keyPlayersData.filter(player =>
-          (player.setYear === selectedYear || player.setYear === "All") && player.type.toLowerCase() === "rookie"
-        );
-        keySection.style.display = "block";
-        filteredPlayers.forEach(player => { highlightTeams.add(player.team); });
-        filteredPlayers.forEach(player => {
-          const tile = document.createElement("div");
-          tile.className = "key-player-tile";
-          const teamLogo = document.createElement("img");
-          teamLogo.className = "team-logo";
-          teamLogo.src = teamLogos[player.team] || "";
-          teamLogo.alt = player.team + " logo";
-          tile.appendChild(teamLogo);
-          const profileLink = document.createElement("a");
-          profileLink.href = player.profile_link;
-          profileLink.target = "_blank";
-          const playerImg = document.createElement("img");
-          playerImg.className = "player-img";
-          playerImg.src = player.image;
-          playerImg.alt = player.player;
-          profileLink.appendChild(playerImg);
-          tile.appendChild(profileLink);
-          const infoDiv = document.createElement("div");
-          infoDiv.className = "key-player-info";
-          const nameLine = document.createElement("div");
-          const nameLink = document.createElement("a");
-          nameLink.href = player.profile_link;
-          nameLink.target = "_blank";
-          nameLink.style.textDecoration = "none";
-          nameLink.style.color = "inherit";
-          nameLink.textContent = player.player;
-          nameLine.appendChild(nameLink);
-          infoDiv.appendChild(nameLine);
-          const notesLine = document.createElement("div");
-          notesLine.className = "key-player-notes";
-          notesLine.textContent = player.notes || "";
-          infoDiv.appendChild(notesLine);
-          const buttonsContainer = document.createElement("div");
-          buttonsContainer.style.display = "inline-flex";
-          buttonsContainer.style.gap = "4px";
-          buttonsContainer.style.marginTop = "8px";
-          const nhlLink = document.createElement("a");
-          nhlLink.href = player.profile_link;
-          nhlLink.target = "_blank";
-          nhlLink.className = "nhl-btn";
-          nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile" class="nhl-icon">';
-          buttonsContainer.appendChild(nhlLink);
-          const ebayLink = document.createElement("a");
-          ebayLink.href = "javascript:void(0)";
-          ebayLink.className = "ebay-btn";
-          ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
-          ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay" class="ebay-icon">';
-          buttonsContainer.appendChild(ebayLink);
-          infoDiv.appendChild(buttonsContainer);
-          tile.appendChild(infoDiv);
-          tilesContainer.appendChild(tile);
-        });
+        if (!selectedSet) { 
+          alert("Please select a set first."); 
+          return; 
+        }
+        if (!selectedYear) { 
+          alert("Please select a set year first."); 
+          return; 
+        }
+        const yearPrefix = selectedYear.split("-")[0];
+        const query = yearPrefix + " " + selectedSet;
+        window.open("https://www.tcdb.com/search?query=" + encodeURIComponent(query), "_blank");
       }
-
-      const teamLogos = {
-        "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
-        "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
-        "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
-        "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
-        "Calgary Flames": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
-        "Carolina Hurricanes": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
-        "Chicago Blackhawks": "https://assets.nhle.com/logos/nhl/svg/CHI_dark.svg",
-        "Colorado Avalanche": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
-        "Columbus Blue Jackets": "https://assets.nhle.com/logos/nhl/svg/CBJ_dark.svg",
-        "Dallas Stars": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
-        "Detroit Red Wings": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
-        "Edmonton Oilers": "https://assets.nhle.com/logos/nhl/svg/EDM_dark.svg",
-        "Florida Panthers": "https://assets.nhle.com/logos/nhl/svg/FLA_dark.svg",
-        "Los Angeles Kings": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
-        "Minnesota Wild": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
-        "Montréal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
-        "Montreal Canadiens": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
-        "Nashville Predators": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
-        "New Jersey Devils": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
-        "New York Islanders": "https://assets.nhle.com/logos/nhl/svg/NYI_dark.svg",
-        "New York Rangers": "https://assets.nhle.com/logos/nhl/svg/NYR_dark.svg",
-        "Ottawa Senators": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
-        "Philadelphia Flyers": "https://assets.nhle.com/logos/nhl/svg/PHI_dark.svg",
-        "Pittsburgh Penguins": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
-        "San Jose Sharks": "https://assets.nhle.com/logos/nhl/svg/SJS_dark.svg",
-        "Seattle Kraken": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
-        "St. Louis Blues": "https://assets.nhle.com/logos/nhl/svg/STL_dark.svg",
-        "Tampa Bay Lightning": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
-        "Toronto Maple Leafs": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
-        "Utah Hockey Club": "https://assets.nhle.com/logos/nhl/svg/UTA_dark.svg",
-        "Vancouver Canucks": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
-        "Vegas Golden Knights": "https://assets.nhle.com/logos/nhl/svg/VGK_dark.svg",
-        "Washington Capitals": "https://assets.nhle.com/logos/nhl/svg/WSH_dark.svg",
-        "Winnipeg Jets": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg"
-      };
 
       function openSetSearch() {
         const selectedSet = document.getElementById("setSelect").value;
@@ -1256,13 +1169,11 @@
         window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
       }
 
-      // Updated openHockeyChecklistsSearch function with year translation
       function openHockeyChecklistsSearch() {
         const selectedSet = document.getElementById("setSelect").value;
         const selectedYear = document.getElementById("yearSelect").value;
         if (!selectedSet) { alert("Please select a set first."); return; }
         if (!selectedYear) { alert("Please select a set year first."); return; }
-        // Determine brand ID based on set name (case-insensitive)
         var brandId = 11; // default
         var lowerSet = selectedSet.toLowerCase();
         if (lowerSet.indexOf("parkhurst") !== -1) {
@@ -1270,7 +1181,6 @@
         } else if (lowerSet.indexOf("o-pee-chee") !== -1) {
           brandId = 1;
         }
-        // Translate the selected year from "YYYY-YY" to "YYYY-20YY"
         var fullYear = selectedYear;
         var yearParts = selectedYear.split("-");
         if (yearParts.length === 2) {
@@ -1592,103 +1502,8 @@
         document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
         document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
       }
-      document.getElementById("userDiscountDup").addEventListener("input", function() {
-        document.getElementById("userDiscount").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("userDiscount").addEventListener("input", function() {
-        document.getElementById("userDiscountDup").value = this.value;
-      });
-      document.getElementById("blendedTaxDup").addEventListener("input", function() {
-        document.getElementById("blendedTax").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("blendedTax").addEventListener("input", function() {
-        document.getElementById("blendedTaxDup").value = this.value;
-      });
-      document.getElementById("suppliesDup").addEventListener("input", function() {
-        document.getElementById("supplies").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("supplies").addEventListener("input", function() {
-        document.getElementById("suppliesDup").value = this.value;
-      });
-
-      window.addEventListener("load", function() {
-        fetch("config.json")
-          .then(response => {
-            if (!response.ok) { throw new Error("Network response was not ok: " + response.statusText); }
-            return response.json();
-          })
-          .then(jsonData => {
-            if (!jsonData.sets) { alert('Invalid JSON format: missing "sets" property.'); return; }
-            setData = jsonData.sets;
-            keyPlayersData = jsonData["Key Players"] || [];
-            populateYearSelector();
-            document.getElementById("setSelect").addEventListener("change", function() {
-              document.getElementById("selectedSetLabel").textContent = this.value || "--Select Set--";
-              updateCasePrice();
-              updateSetDetails();
-              calculateProfit();
-            });
-            const calcInputs = document.querySelectorAll("#calcForm input, #calcForm select");
-            calcInputs.forEach(input => input.addEventListener("input", calculateProfit));
-          })
-          .catch(err => {
-            console.error("Error loading config.json:", err);
-          });
-      });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      function openPlayerEbaySearch(playerName) {
-        window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(playerName), "_blank");
-      }
-    </script>
-    <script>
-      // Breaker Settings Menu - Duplicate version (original implementations preserved)
-      document.getElementById("markupDup").addEventListener("input", function() {
-        document.getElementById("markup").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("markup").addEventListener("input", function() {
-        document.getElementById("markupDup").value = this.value;
-      });
-      document.getElementById("markupToggleDup").addEventListener("change", function() {
-        document.getElementById("markupToggle").checked = this.checked;
-        updateMarkupToggleLabel();
-        calculateProfit();
-      });
-      document.getElementById("markupToggle").addEventListener("change", function() {
-        document.getElementById("markupToggleDup").checked = this.checked;
-        updateMarkupToggleLabel();
-        calculateProfit();
-      });
-      function updateMarkupToggleLabel() {
-        const isDollar = document.getElementById("markupToggle").checked;
-        document.getElementById("markupToggleLabel").textContent = isDollar ? "$" : "%";
-        document.getElementById("markupToggleLabelDup").textContent = isDollar ? "$" : "%";
-      }
-      document.getElementById("userDiscountDup").addEventListener("input", function() {
-        document.getElementById("userDiscount").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("userDiscount").addEventListener("input", function() {
-        document.getElementById("userDiscountDup").value = this.value;
-      });
-      document.getElementById("blendedTaxDup").addEventListener("input", function() {
-        document.getElementById("blendedTax").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("blendedTax").addEventListener("input", function() {
-        document.getElementById("blendedTaxDup").value = this.value;
-      });
-      document.getElementById("suppliesDup").addEventListener("input", function() {
-        document.getElementById("supplies").value = this.value;
-        calculateProfit();
-      });
-      document.getElementById("supplies").addEventListener("input", function() {
-        document.getElementById("suppliesDup").value = this.value;
+      document.addEventListener("DOMContentLoaded", function() {
+        populateYearSelector();
       });
     </script>
   </body>
