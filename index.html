@@ -395,13 +395,16 @@
       return packs * cards;
     }
 
-    // Update Key Rookies section using config.keyPlayers filtered by type "rookie" and selected year
+    // Update Key Rookies section using the "Key Players" section from the config.
+    // This function filters for players with type "rookie" for the selected set year.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
-      if (config.keyPlayers && Array.isArray(config.keyPlayers)) {
-        const keyRookies = config.keyPlayers.filter(player => player.type === 'rookie' && player.year === selectedYear);
+      // Use the "Key Players" section (note the capitalization)
+      const keyPlayers = config["Key Players"];
+      if (keyPlayers && Array.isArray(keyPlayers)) {
+        const keyRookies = keyPlayers.filter(player => player.type === 'rookie' && player.year === selectedYear);
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
