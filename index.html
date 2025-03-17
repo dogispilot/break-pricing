@@ -72,8 +72,8 @@
       margin-right: 10px;
     }
     #pieChart {
-      width: 200px;
-      height: 200px;
+      width: 250px;
+      height: 250px;
       margin-right: 20px;
     }
     #break-results {
@@ -165,6 +165,7 @@
 
   <!-- Section 2: Set Details -->
   <section id="set-details">
+    <h2>Set Details</h2>
     <div id="details-text"></div>
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
@@ -205,10 +206,9 @@
         Blended tax (%):
         <input type="number" id="blendedTax" step="0.1" value="5.1">
       </label>
-      <button id="calcBreak">Calculate</button>
     </div>
     <div id="break-results">
-      <canvas id="pieChart" width="200" height="200"></canvas>
+      <canvas id="pieChart" width="250" height="250"></canvas>
       <div class="tiles" id="break-tiles">
         <!-- Tiles for Breaker's Profit, Whatnots Cut, Cost of Business -->
       </div>
@@ -242,6 +242,10 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown(); // populate set names for default year
+        // Attach auto-update for break sniffer inputs
+        document.querySelectorAll('#break-inputs input').forEach(input => {
+          input.addEventListener('input', updateBreakSniffer);
+        });
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
@@ -296,7 +300,6 @@
       onSelectionChange();
     });
     document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
-    document.getElementById('calcBreak').addEventListener('click', updateBreakSniffer);
     document.getElementById('toggleNotes').addEventListener('click', function(e){
       e.preventDefault();
       const notesDiv = document.getElementById('set-notes');
@@ -401,7 +404,6 @@
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
-      // Use the "Key Players" section (note the capitalization)
       const keyPlayers = config["Key Players"];
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => player.type === 'rookie' && player.year === selectedYear);
@@ -423,10 +425,9 @@
       }
     }
 
-    // Update Break Sniffer calculations
+    // Update Break Sniffer calculations immediately when any input changes
     function updateBreakSniffer() {
       if (!currentSet) {
-        alert("Please select a valid set first.");
         return;
       }
       const costCase = parseFloat(document.getElementById('caseCost').value);
@@ -496,39 +497,86 @@
       drawPieChart(data, markupAmount);
     }
 
-    // Draw a simple pie chart on canvas given data and total value
+    // Improved Pie Chart drawing function
     function drawPieChart(data, total) {
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 10;
+      const radius = Math.min(centerX, centerY) - 20;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Set up a drop shadow for a modern look
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      
       let startAngle = 0;
-      const colors = ["#4caf50", "#ff9800", "#2196f3"];
+      // Define a refined color palette
+      const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
       
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
-        ctx.fillStyle = colors[i % colors.length];
+        // Create a radial gradient for the slice
+        const grad = ctx.createRadialGradient(centerX, centerY, radius*0.5, centerX, centerY, radius);
+        grad.addColorStop(0, colors[i % colors.length]);
+        grad.addColorStop(1, shadeColor(colors[i % colors.length], -20));
+        
         ctx.beginPath();
         ctx.moveTo(centerX, centerY);
         ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
         ctx.closePath();
+        ctx.fillStyle = grad;
         ctx.fill();
+        // Draw white border around each slice
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
         startAngle += sliceAngle;
       });
       
+      ctx.restore();
+      
+      // Draw labels with lines
       startAngle = 0;
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
         const midAngle = startAngle + sliceAngle/2;
-        const labelX = centerX + (radius / 2) * Math.cos(midAngle);
-        const labelY = centerY + (radius / 2) * Math.sin(midAngle);
-        ctx.fillStyle = "#000";
-        ctx.font = "12px Arial";
-        ctx.fillText(d.label, labelX - 10, labelY);
+        // Position for label line start
+        const lineStartX = centerX + (radius + 5) * Math.cos(midAngle);
+        const lineStartY = centerY + (radius + 5) * Math.sin(midAngle);
+        // Position for label line end
+        const lineEndX = centerX + (radius + 30) * Math.cos(midAngle);
+        const lineEndY = centerY + (radius + 30) * Math.sin(midAngle);
+        ctx.beginPath();
+        ctx.moveTo(lineStartX, lineStartY);
+        ctx.lineTo(lineEndX, lineEndY);
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        // Draw label text
+        ctx.fillStyle = "#333";
+        ctx.font = "bold 14px Arial";
+        const labelText = d.label;
+        // Adjust text position depending on quadrant
+        let textX = lineEndX;
+        if (Math.cos(midAngle) < 0) {
+          textX -= ctx.measureText(labelText).width + 5;
+        } else {
+          textX += 5;
+        }
+        ctx.fillText(labelText, textX, lineEndY + 5);
         startAngle += sliceAngle;
       });
+    }
+    
+    // Utility function to shade a color (percent negative darkens, positive lightens)
+    function shadeColor(color, percent) {
+      let f = parseInt(color.slice(1),16), t = percent<0?0:255, p = percent<0?percent*-1:percent;
+      let R = f>>16, G = f>>8&0x00FF, B = f&0x0000FF;
+      return "#" + (0x1000000 + (Math.round((t-R)*p)+R)*0x10000 + (Math.round((t-G)*p)+G)*0x100 + (Math.round((t-B)*p)+B)).toString(16).slice(1);
     }
 
     loadConfig();
