@@ -93,6 +93,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
     .input-group label {
       margin-bottom: 5px;
@@ -103,6 +104,26 @@
     #break-sniffer input[type="checkbox"] {
       width: 100px;
       padding: 5px;
+    }
+    /* Pill button for Price Settings */
+    #priceSettingsToggle {
+      position: absolute;
+      right: -110px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #66bb6a;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    /* Hidden Price Settings menu */
+    #price-settings {
+      display: none;
+      margin-top: 10px;
+      text-align: center;
     }
     /* Break Sniffer results: values on left, pie chart on right */
     #break-results {
@@ -261,10 +282,13 @@
         <label for="caseCost">Cost of a case</label>
         <input type="number" id="caseCost" step="0.01" value="1999.95">
       </div>
-      <div class="input-group">
+      <div class="input-group" style="position: relative;">
         <label for="markupValue">Markup</label>
         <input type="number" id="markupValue" step="0.01" value="500">
+        <button id="priceSettingsToggle">Price Settings</button>
       </div>
+    </div>
+    <div id="price-settings" style="display: none; text-align: center; margin-bottom: 10px;">
       <div class="input-group">
         <label for="markupToggle">Use % markup</label>
         <input type="checkbox" id="markupToggle">
@@ -315,8 +339,13 @@
         populateYearDropdown();
         updateSetNameDropdown(); // populate set names for default year
         // Attach auto-update for break sniffer inputs
-        document.querySelectorAll('#break-inputs input').forEach(input => {
+        document.querySelectorAll('#break-inputs input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
+        });
+        // Attach event listener to toggle Price Settings menu
+        document.getElementById('priceSettingsToggle').addEventListener('click', function() {
+          const ps = document.getElementById('price-settings');
+          ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'block' : 'none';
         });
         // Call onSelectionChange so that key rookies and break sniffer update on initial load
         onSelectionChange();
