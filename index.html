@@ -270,7 +270,7 @@
     <div id="break-results">
       <canvas id="pieChart" width="250" height="250"></canvas>
       <div class="tiles" id="break-tiles">
-        <!-- Tiles for Breaker's Profit, Whatnots Cut, Cost of Business -->
+        <!-- Breaker boxes will appear here -->
       </div>
     </div>
     <!-- Table of team breakdown -->
@@ -377,11 +377,11 @@
       updateSetDetails();
       updateBreakCaseCost();
       updateKeyRookies();
-      updateBreakSniffer();  // Ensure break sniffer updates on load
+      updateBreakSniffer();
       if (!currentSet) {
-        document.getElementById('details-text').textContent = '';
-        document.getElementById('set-tiles').innerHTML = '';
-        document.getElementById('team-table').querySelector('tbody').innerHTML = '';
+        document.getElementById('details-text').textContent = "Please select a set and year to get started.";
+        document.getElementById('set-tiles').innerHTML = "";
+        document.getElementById('team-table').querySelector('tbody').innerHTML = "";
       }
     }
 
@@ -396,13 +396,14 @@
     }
 
     // Update the Set Details section based on currentSet.
+    // If no set is selected, show an empty state message.
     // Hero cards (2) appear on one line (50% each) and supporting cards (4) appear on the next line (25% each) with gaps.
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
       const tilesDiv = document.getElementById('set-tiles');
       if (!currentSet) {
-        detailsDiv.textContent = "No set found for the selected name and year.";
+        detailsDiv.textContent = "Please select a set and year to get started.";
         notesDiv.textContent = "";
         tilesDiv.innerHTML = "";
         return;
@@ -507,9 +508,18 @@
       }
     }
 
-    // Update Break Sniffer calculations immediately when any input changes
+    // Update Break Sniffer calculations immediately when any input changes.
+    // If no set is selected, display an empty state message.
     function updateBreakSniffer() {
       if (!currentSet) {
+        const breakTiles = document.getElementById('break-tiles');
+        breakTiles.textContent = "Please select a set and year to get started.";
+        const tbody = document.getElementById('team-table').querySelector('tbody');
+        tbody.innerHTML = "";
+        // Clear pie chart
+        const canvas = document.getElementById('pieChart');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         return;
       }
       const costCase = parseFloat(document.getElementById('caseCost').value);
