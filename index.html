@@ -150,6 +150,47 @@
       cursor: pointer;
       font-size: 0.8em;
     }
+    /* New Button Container inside Price Settings */
+    .button-container {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .lookup-button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #888;
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lookup-button img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    .glow-dacardworld:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
+    .glow-steelcity:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
+    .glow-outofthebox:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
+    .glow-midwestcards:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
     /* Break Sniffer results */
     #break-results {
       display: flex;
@@ -260,36 +301,6 @@
       justify-content: center;
       gap: 5px;
     }
-    /* New Button Container in Set Details */
-    .button-container {
-      margin-top: 15px;
-      text-align: center;
-    }
-    .lookup-button {
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      border: 1px solid #888;
-      border-radius: 6px;
-      background: transparent;
-      color: #fff;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .lookup-button img {
-      width: 24px;
-      height: 24px;
-      vertical-align: middle;
-    }
-    .glow-tcdb:hover {
-      box-shadow: 0 4px 12px rgba(200, 76, 25, 0.5);
-      transform: scale(1.05);
-    }
-    .glow-hockeychecklists:hover {
-      box-shadow: 0 4px 12px rgba(2, 30, 155, 0.5);
-      transform: scale(1.05);
-    }
   </style>
 </head>
 <body>
@@ -370,6 +381,25 @@
       <div class="input-group">
         <label for="blendedTax">Blended tax (%)</label>
         <input type="number" id="blendedTax" step="0.1" value="5.1">
+      </div>
+      <!-- New Button Container inside Price Settings -->
+      <div class="button-container">
+        <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
+          <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+          Dacardworld.com
+        </button>
+        <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
+          <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+          SteelCityCollectibles.com
+        </button>
+        <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
+          <img src="resources/ootb.png" alt="Out of the Box Logo">
+          Out of the Box
+        </button>
+        <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
+          <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+          Midwest Cards
+        </button>
       </div>
     </div>
     <div id="break-results">
@@ -718,7 +748,43 @@
       });
     }
 
-    // New functions for the buttons in the Set Details section
+    // New button functions for additional sites inside Price Settings
+    function openDacardworldSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
+    }
+    function openSteelCitySearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
+    }
+    function openOotbSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
+    }
+    function openMidwestCardsSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
+    }
     function openTcdbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -728,7 +794,6 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
     }
-
     function openHockeyChecklistsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
