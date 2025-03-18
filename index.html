@@ -79,13 +79,27 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    #break-sniffer input[type="number"] {
+    /* Break Sniffer input styling */
+    #break-inputs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .input-group label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      text-align: center;
+    }
+    #break-sniffer input[type="number"],
+    #break-sniffer input[type="checkbox"] {
       width: 100px;
       padding: 5px;
-      margin-right: 10px;
-    }
-    #break-sniffer label {
-      margin-right: 10px;
     }
     #pieChart {
       width: 250px;
@@ -209,26 +223,26 @@
   <section id="break-sniffer">
     <h2>Break Sniffer</h2>
     <div id="break-inputs">
-      <label>
-        Cost of a case:
+      <div class="input-group">
+        <label for="caseCost">Cost of a case</label>
         <input type="number" id="caseCost" step="0.01" value="1999.95">
-      </label>
-      <label>
-        Markup:
+      </div>
+      <div class="input-group">
+        <label for="markupValue">Markup</label>
         <input type="number" id="markupValue" step="0.01" value="500">
-      </label>
-      <label>
+      </div>
+      <div class="input-group">
+        <label for="markupToggle">Use % markup</label>
         <input type="checkbox" id="markupToggle">
-        <span>Use % markup</span>
-      </label>
-      <label>
-        Cost of supplies per team:
+      </div>
+      <div class="input-group">
+        <label for="suppliesCost">Cost of supplies per team</label>
         <input type="number" id="suppliesCost" step="0.01" value="1.00">
-      </label>
-      <label>
-        Blended tax (%):
+      </div>
+      <div class="input-group">
+        <label for="blendedTax">Blended tax (%)</label>
         <input type="number" id="blendedTax" step="0.1" value="5.1">
-      </label>
+      </div>
     </div>
     <div id="break-results">
       <canvas id="pieChart" width="250" height="250"></canvas>
