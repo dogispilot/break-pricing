@@ -399,7 +399,8 @@
     }
 
     // Update Key Rookies section using the "Key Players" section from the config.
-    // This function filters for players with type "rookie" and whose setYear matches the selected set year.
+    // This function filters for players with type "rookie" whose setYear matches the selected set year.
+    // It then uses the "player", "image", and "team" fields.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -415,9 +416,11 @@
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            tile.innerHTML = `<strong>${player.name}</strong><br>
-              <img src="${player.playerPic}" alt="${player.name}" style="width:50px;height:50px;"><br>
-              <img src="${player.teamPic}" alt="Team" style="width:50px;height:50px;"><br>
+            // Look up the team URL from config.teamURLs if available.
+            const teamURL = config.teamURLs && config.teamURLs[player.team] ? config.teamURLs[player.team] : "";
+            tile.innerHTML = `<strong>${player.player}</strong><br>
+              <img src="${player.image}" alt="${player.player}" style="width:50px;height:50px;"><br>
+              ${ teamURL ? `<img src="${teamURL}" alt="${player.team}" style="width:50px;height:50px;"><br>` : "" }
               ${player.notes || ""}`;
             rookieContainer.appendChild(tile);
           });
