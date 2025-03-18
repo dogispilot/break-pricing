@@ -104,7 +104,7 @@
       width: 100px;
       padding: 5px;
     }
-    /* Break Sniffer results: use flex to display values and pie chart side by side */
+    /* Break Sniffer results: values on left, pie chart on right */
     #break-results {
       display: flex;
       align-items: center;
@@ -554,6 +554,8 @@
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       
+      const selectedYear = document.getElementById('setYearSelect').value;
+      
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -564,11 +566,19 @@
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase).toFixed(2) : "N/A";
         let distCostWithMarkup = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
         
-        // Look up team image for the table using config.images
-        const teamImage = config.images && config.images[team] ? config.images[team] : "";
+        // Check if the team has any key rookie
+        const keyPlayers = config["Key Players"] || config.keyPlayers;
+        let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player =>
+          player.type && player.type.toLowerCase() === 'rookie' &&
+          player.setYear === selectedYear &&
+          player.Team === team
+        );
+        const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
+        const keyEmoji = hasKeyRookie ? ' 🔑' : '';
+        
         tbody.innerHTML += `
-          <tr>
-            <td>${ teamImage ? `<img src="${teamImage}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;">` : "" }${team}</td>
+          <tr${highlightStyle}>
+            <td>${ config.images && config.images[team] ? `<img src="${config.images[team]}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;">` : "" }${team}${keyEmoji}</td>
             <td>${teamCards}</td>
             <td>${(distribution * 100).toFixed(2)}%</td>
             <td>${avgCardsCase}</td>
