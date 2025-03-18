@@ -36,30 +36,32 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Container for all tiles in set details */
+    /* Container for all tiles */
     .tile-container {
       margin-top: 10px;
     }
-    /* Hero row: two tiles at 50% width each */
+    /* Set Details hero row (2 tiles, 50% width each) with gap */
     .hero-row {
       display: flex;
+      gap: 10px;
       margin-bottom: 10px;
     }
     .hero-row .tile {
-      flex: 0 0 50%;
+      flex: 0 0 calc(50% - 10px);
       box-sizing: border-box;
       padding: 10px;
     }
-    /* Support row: four tiles at 25% width each */
+    /* Set Details support row (4 tiles, 25% width each) with gap */
     .support-row {
       display: flex;
+      gap: 10px;
     }
     .support-row .tile {
-      flex: 0 0 25%;
+      flex: 0 0 calc(25% - 10px);
       box-sizing: border-box;
       padding: 10px;
     }
-    /* Styling for individual tiles */
+    /* General tile styling */
     .tile {
       background: #eaeaea;
       border-radius: 4px;
@@ -79,12 +81,13 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Sniffer input styling */
+    /* Break Sniffer input styling arranged on one line with titles above */
     #break-inputs {
       display: flex;
       flex-wrap: nowrap;
       gap: 10px;
       margin-bottom: 10px;
+      justify-content: center;
     }
     .input-group {
       display: flex;
@@ -115,6 +118,14 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+    }
+    /* Styling for break sniffer result boxes */
+    #break-tiles .tile {
+      margin: 5px;
+      padding: 10px;
+      background: #eaeaea;
+      border-radius: 4px;
+      text-align: center;
     }
     table {
       width: 100%;
@@ -169,7 +180,19 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-    /* Rookie image styling for proper aspect ratio */
+    /* Key Rookies: up to 3 tiles per row (33% width each with gap) */
+    #rookie-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #rookie-tiles .tile {
+      flex: 0 0 calc(33% - 10px);
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    /* Ensure rookie images maintain proper aspect ratio */
     .rookie-img {
       max-width: 100%;
       height: auto;
@@ -283,7 +306,7 @@
         document.querySelectorAll('#break-inputs input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
-        // Call onSelectionChange so that key rookies show on initial load
+        // Call onSelectionChange so that key rookies and break sniffer update on initial load
         onSelectionChange();
       } catch (error) {
         console.error("Error loading config.json:", error);
@@ -354,6 +377,7 @@
       updateSetDetails();
       updateBreakCaseCost();
       updateKeyRookies();
+      updateBreakSniffer();  // Ensure break sniffer updates on load
       if (!currentSet) {
         document.getElementById('details-text').textContent = '';
         document.getElementById('set-tiles').innerHTML = '';
@@ -372,7 +396,7 @@
     }
 
     // Update the Set Details section based on currentSet.
-    // Hero cards (2) appear on one line (50% each) and supporting cards (4) appear on the next line (25% each).
+    // Hero cards (2) appear on one line (50% each) and supporting cards (4) appear on the next line (25% each) with gaps.
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
