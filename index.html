@@ -36,16 +36,32 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
+    /* Container for all tiles in set details */
     .tile-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
       margin-top: 10px;
     }
-    .tile {
-      flex: 1 1 150px;
-      background: #eaeaea;
+    /* Hero row: two tiles at 50% width each */
+    .hero-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .hero-row .tile {
+      flex: 0 0 50%;
+      box-sizing: border-box;
       padding: 10px;
+    }
+    /* Support row: four tiles at 25% width each */
+    .support-row {
+      display: flex;
+    }
+    .support-row .tile {
+      flex: 0 0 25%;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    /* Styling for individual tiles */
+    .tile {
+      background: #eaeaea;
       border-radius: 4px;
       text-align: center;
     }
@@ -139,6 +155,13 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
+    /* Rookie image styling for proper aspect ratio */
+    .rookie-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
   </style>
 </head>
 <body>
@@ -170,7 +193,7 @@
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Tiles will be added here -->
+      <!-- Hero row and support row will be added here -->
     </div>
   </section>
 
@@ -246,6 +269,8 @@
         document.querySelectorAll('#break-inputs input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
+        // Call onSelectionChange so that key rookies show on initial load
+        onSelectionChange();
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
@@ -332,7 +357,8 @@
       }
     }
 
-    // Update the Set Details section based on currentSet
+    // Update the Set Details section based on currentSet.
+    // Hero cards (2) appear on one line (50% each) and supporting cards (4) appear on the next line (25% each).
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -346,39 +372,50 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. Each box contains ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       
-      // Build six tiles: two hero tiles and four supporting tiles
+      // Create separate containers for hero and support tiles
       tilesDiv.innerHTML = "";
+      const heroContainer = document.createElement('div');
+      heroContainer.className = 'hero-row';
+      const supportContainer = document.createElement('div');
+      supportContainer.className = 'support-row';
+      
+      // Create hero tiles: "Rookie %" and "Total Cards/Case"
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.textContent = "Rookie %: " + (currentSet.rookie_percentage || "N/A");
-      tilesDiv.appendChild(heroTile1);
+      heroContainer.appendChild(heroTile1);
       
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       const heroTile2 = document.createElement('div');
       heroTile2.className = 'tile hero';
       heroTile2.textContent = "Total Cards/Case: " + (totalCardsPerCase || "N/A");
-      tilesDiv.appendChild(heroTile2);
+      heroContainer.appendChild(heroTile2);
       
+      // Create supporting tiles: Boxes/Case, Packs/Box, Cards/Pack, Cards/Box
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.textContent = "Boxes/Case: " + (currentSet.boxes_per_case || "N/A");
-      tilesDiv.appendChild(tileBoxes);
+      supportContainer.appendChild(tileBoxes);
       
       const tilePacks = document.createElement('div');
       tilePacks.className = 'tile';
       tilePacks.textContent = "Packs/Box: " + (currentSet.packs_per_box || "N/A");
-      tilesDiv.appendChild(tilePacks);
+      supportContainer.appendChild(tilePacks);
       
       const tileCardsPack = document.createElement('div');
       tileCardsPack.className = 'tile';
       tileCardsPack.textContent = "Cards/Pack: " + (currentSet.cards_per_pack || "N/A");
-      tilesDiv.appendChild(tileCardsPack);
+      supportContainer.appendChild(tileCardsPack);
       
       const cardsPerBox = computeCardsPerBox(currentSet);
       const tileCardsBox = document.createElement('div');
       tileCardsBox.className = 'tile';
       tileCardsBox.textContent = "Cards/Box: " + (cardsPerBox || "N/A");
-      tilesDiv.appendChild(tileCardsBox);
+      supportContainer.appendChild(tileCardsBox);
+      
+      // Append both containers
+      tilesDiv.appendChild(heroContainer);
+      tilesDiv.appendChild(supportContainer);
     }
 
     // Helper: compute total cards per case = boxes_per_case * packs_per_box * cards_per_pack
@@ -400,7 +437,7 @@
 
     // Update Key Rookies section using the "Key Players" section from the config.
     // This function filters for players with type "rookie" whose setYear matches the selected set year.
-    // It then uses the "player", "image", and "team" fields.
+    // It uses the "player", "image", and "team" fields. For the team image, it looks up config.teamURLs.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -416,10 +453,10 @@
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            // Look up the team URL from config.teamURLs if available.
+            // Lookup team URL from config.teamURLs if available.
             const teamURL = config.teamURLs && config.teamURLs[player.team] ? config.teamURLs[player.team] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
-              <img src="${player.image}" alt="${player.player}" style="width:50px;height:50px;"><br>
+              <img class="rookie-img" src="${player.image}" alt="${player.player}"><br>
               ${ teamURL ? `<img src="${teamURL}" alt="${player.team}" style="width:50px;height:50px;"><br>` : "" }
               ${player.notes || ""}`;
             rookieContainer.appendChild(tile);
