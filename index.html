@@ -192,12 +192,26 @@
       box-sizing: border-box;
       padding: 10px;
     }
-    /* Ensure rookie images maintain proper aspect ratio */
+    /* Ensure rookie images maintain proper aspect ratio and are reduced by 50% */
     .rookie-img {
-      max-width: 100%;
+      max-width: 50%;
       height: auto;
       display: block;
-      margin: 0 auto;
+      margin: 0;
+    }
+    /* Team image in key rookies (displayed to left of the rookie image) */
+    .team-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 5px;
+    }
+    /* Container for key rookie images */
+    .rookie-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
   </style>
 </head>
@@ -396,7 +410,6 @@
     }
 
     // Update the Set Details section based on currentSet.
-    // If no set is selected, show an empty state message.
     // Hero cards (2) appear on one line (50% each) and supporting cards (4) appear on the next line (25% each) with gaps.
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
@@ -476,7 +489,7 @@
 
     // Update Key Rookies section using the "Key Players" section from the config.
     // This function filters for players with type "rookie" whose setYear matches the selected set year.
-    // It uses the "player", "image", and "team" fields. For the team image, it looks up config.teamURLs.
+    // It uses the "player", "image", and "Team" fields. It looks up the team image from config.images.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -492,12 +505,14 @@
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            // Lookup team URL from config.teamURLs if available.
-            const teamURL = config.teamURLs && config.teamURLs[player.team] ? config.teamURLs[player.team] : "";
+            // Look up the team image from the new "images" section using the player's Team field
+            const teamImage = config.images && config.images[player.Team] ? config.images[player.Team] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
-              <img class="rookie-img" src="${player.image}" alt="${player.player}"><br>
-              ${ teamURL ? `<img src="${teamURL}" alt="${player.team}" style="width:50px;height:50px;"><br>` : "" }
-              ${player.notes || ""}`;
+              <div class="rookie-image-container">
+                ${ teamImage ? `<img class="team-img" src="${teamImage}" alt="${player.Team}">` : "" }
+                <img class="rookie-img" src="${player.image}" alt="${player.player}" style="width:50%; height:auto;">
+              </div>
+              <br>${player.notes || ""}`;
             rookieContainer.appendChild(tile);
           });
         } else {
