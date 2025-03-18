@@ -161,6 +161,7 @@
       border-radius: 4px;
       text-align: center;
     }
+    /* We'll remove the canvas and use an SVG pie chart instead */
     #pieChart {
       width: 250px;
       height: 250px;
@@ -333,7 +334,8 @@
       <div class="tiles" id="break-tiles">
         <!-- Breaker boxes will appear here -->
       </div>
-      <canvas id="pieChart" width="250" height="250"></canvas>
+      <!-- Replace canvas with an SVG for the pie chart -->
+      <svg id="pieChart" width="250" height="250"></svg>
     </div>
     <!-- Table of team breakdown -->
     <table id="team-table">
@@ -378,11 +380,9 @@
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
-      config.sets.forEach(s => {
-        years.add(s.year);
-      });
+      config.sets.forEach(s => { years.add(s.year); });
       years = Array.from(years).sort();
-      // Set the default to the latest year available
+      // Set default to latest available year
       const defaultYear = years[years.length - 1];
       years.forEach(year => {
         const opt = document.createElement('option');
@@ -415,9 +415,7 @@
         }
         setNameSelect.appendChild(opt);
       });
-      if(!found) {
-        setNameSelect.value = "";
-      }
+      if (!found) { setNameSelect.value = ""; }
     }
 
     document.getElementById('setYearSelect').addEventListener('change', function() {
@@ -425,7 +423,7 @@
       onSelectionChange();
     });
     document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
-    document.getElementById('toggleNotes').addEventListener('click', function(e){
+    document.getElementById('toggleNotes').addEventListener('click', function(e) {
       e.preventDefault();
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
@@ -452,9 +450,7 @@
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
-        if (!isNaN(priceNum)) {
-          document.getElementById('caseCost').value = priceNum.toFixed(2);
-        }
+        if (!isNaN(priceNum)) { document.getElementById('caseCost').value = priceNum.toFixed(2); }
       }
     }
 
@@ -544,7 +540,6 @@
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
-            // For key rookies, add the "key-rookie-logo" class to increase team logo size
             const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
@@ -647,93 +642,53 @@
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
-      drawPieChart(data, markupAmount);
+      // Use the new SVG-based pie chart drawing function
+      drawPieChartSVG(data, markupAmount);
     }
 
     function drawEmptyPieChart() {
-      const canvas = document.getElementById('pieChart');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.font = "bold 16px Arial";
-      ctx.fillStyle = "#333";
-      const text = "No Data";
-      const textWidth = ctx.measureText(text).width;
-      ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2);
+      const svg = document.getElementById('pieChart');
+      svg.innerHTML = `<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333" font-family="Arial" font-weight="bold" font-size="16px">No Data</text>`;
     }
 
-    function drawPieChart(data, total) {
-      const canvas = document.getElementById('pieChart');
-      const ctx = canvas.getContext('2d');
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 20;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // New SVG-based pie chart drawing function
+    function drawPieChartSVG(data, total) {
+      const svg = document.getElementById('pieChart');
+      // Clear previous chart
+      while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+      
+      const centerX = 125, centerY = 125;
+      const radius = 105; // Slightly smaller than half width for padding
       
       if(total === 0) total = 1;
-      
-      ctx.save();
-      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-      ctx.shadowBlur = 8;
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
       
       let startAngle = 0;
       const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
       
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
-        const grad = ctx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius);
-        grad.addColorStop(0, colors[i % colors.length]);
-        grad.addColorStop(1, shadeColor(colors[i % colors.length], -20));
-        
-        ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
-        ctx.closePath();
-        ctx.fillStyle = grad;
-        ctx.fill();
-        ctx.strokeStyle = "#fff";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        startAngle += sliceAngle;
-      });
-      
-      ctx.restore();
-      
-      startAngle = 0;
-      data.forEach((d, i) => {
-        const sliceAngle = (d.value / total) * 2 * Math.PI;
-        const midAngle = startAngle + sliceAngle / 2;
-        const lineStartX = centerX + (radius + 5) * Math.cos(midAngle);
-        const lineStartY = centerY + (radius + 5) * Math.sin(midAngle);
-        const lineEndX = centerX + (radius + 30) * Math.cos(midAngle);
-        const lineEndY = centerY + (radius + 30) * Math.sin(midAngle);
-        ctx.beginPath();
-        ctx.moveTo(lineStartX, lineStartY);
-        ctx.lineTo(lineEndX, lineEndY);
-        ctx.strokeStyle = "#333";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.fillStyle = "#333";
-        ctx.font = "bold 14px Arial";
-        const labelText = d.label;
-        let textX = lineEndX;
-        if (Math.cos(midAngle) < 0) {
-          textX -= ctx.measureText(labelText).width + 5;
-        } else {
-          textX += 5;
-        }
-        ctx.fillText(labelText, textX, lineEndY + 5);
-        startAngle += sliceAngle;
+        const endAngle = startAngle + sliceAngle;
+        const x1 = centerX + radius * Math.cos(startAngle);
+        const y1 = centerY + radius * Math.sin(startAngle);
+        const x2 = centerX + radius * Math.cos(endAngle);
+        const y2 = centerY + radius * Math.sin(endAngle);
+        const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
+        const pathData = [
+          `M ${centerX} ${centerY}`,
+          `L ${x1} ${y1}`,
+          `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+          "Z"
+        ].join(" ");
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathData);
+        path.setAttribute("fill", colors[i % colors.length]);
+        path.setAttribute("stroke", "#fff");
+        path.setAttribute("stroke-width", "2");
+        svg.appendChild(path);
+        startAngle = endAngle;
       });
     }
-    
-    function shadeColor(color, percent) {
-      let f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent;
-      let R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
-      return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
-    }
-    
+
     loadConfig();
   </script>
 </body>
