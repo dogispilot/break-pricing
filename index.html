@@ -192,7 +192,7 @@
       box-sizing: border-box;
       padding: 10px;
     }
-    /* Ensure rookie images maintain proper aspect ratio and are reduced by 50% */
+    /* Ensure rookie images maintain proper aspect ratio and reduced by 50% */
     .rookie-img {
       max-width: 50%;
       height: auto;
@@ -309,12 +309,13 @@
     let config = null;
     let currentSet = null; // the set currently selected (matching both name and year)
 
+    // Fetch config.json on load
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
         config = await response.json();
         populateYearDropdown();
-        updateSetNameDropdown();
+        updateSetNameDropdown(); // populate set names for default year
         // Attach auto-update for break sniffer inputs
         document.querySelectorAll('#break-inputs input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
@@ -326,6 +327,7 @@
       }
     }
 
+    // Populate the year dropdown based on config.sets
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -346,14 +348,18 @@
       });
     }
 
+    // Update the set name dropdown based on the selected year
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
+      // Clear current options
       setNameSelect.innerHTML = "";
+      // Add default option
       const defaultOpt = document.createElement('option');
       defaultOpt.value = "";
       defaultOpt.textContent = "-- Select Set Name --";
       setNameSelect.appendChild(defaultOpt);
+      // Filter config.sets by the selected year and add unique set names
       const filteredSets = config.sets.filter(s => s.year === year);
       const uniqueNames = [...new Set(filteredSets.map(s => s.name))].sort();
       uniqueNames.forEach(name => {
@@ -364,6 +370,7 @@
       });
     }
 
+    // Event listeners for dropdowns and toggling notes
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
@@ -375,23 +382,28 @@
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
 
+    // When a selection changes, update the current set and details
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
+      // Find the matching set (if any)
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
       updateSetDetails();
       updateBreakCaseCost();
       updateKeyRookies();
       updateBreakSniffer();
-      // Show/hide the "Read Set Notes" link based on selection
-      document.getElementById('toggleNotes').style.display = currentSet ? 'inline' : 'none';
+      // Hide "Read Set Notes" if no set is selected
       if (!currentSet) {
+        document.getElementById('toggleNotes').style.display = 'none';
         document.getElementById('details-text').textContent = "Please select a set and year to get started.";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
+      } else {
+        document.getElementById('toggleNotes').style.display = 'inline';
       }
     }
 
+    // Update the cost input field in break sniffer if set price is available
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -401,6 +413,8 @@
       }
     }
 
+    // Update the Set Details section based on currentSet.
+    // Hero cards (2) appear on one line (50% each) and supporting cards (4) appear on the next line (25% each) with gaps.
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -414,12 +428,14 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. Each box contains ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       
+      // Create separate containers for hero and support tiles
       tilesDiv.innerHTML = "";
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
       
+      // Create hero tiles: "Rookie %" and "Total Cards/Case"
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.textContent = "Rookie %: " + (currentSet.rookie_percentage || "N/A");
@@ -431,6 +447,7 @@
       heroTile2.textContent = "Total Cards/Case: " + (totalCardsPerCase || "N/A");
       heroContainer.appendChild(heroTile2);
       
+      // Create supporting tiles: Boxes/Case, Packs/Box, Cards/Pack, Cards/Box
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.textContent = "Boxes/Case: " + (currentSet.boxes_per_case || "N/A");
@@ -452,10 +469,12 @@
       tileCardsBox.textContent = "Cards/Box: " + (cardsPerBox || "N/A");
       supportContainer.appendChild(tileCardsBox);
       
+      // Append both containers
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
 
+    // Helper: compute total cards per case = boxes_per_case * packs_per_box * cards_per_pack
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -464,6 +483,7 @@
       return boxes * packs * cards;
     }
 
+    // Helper: compute cards per box = packs_per_box * cards_per_pack
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
@@ -471,15 +491,16 @@
       return packs * cards;
     }
 
-    // Update Key Rookies section using the "Key Players" section.
-    // It filters players with type "rookie" whose setYear matches the selected set year.
-    // It uses the "player", "image", and "Team" fields. The team image is looked up from config.images.
+    // Update Key Rookies section using the "Key Players" section from the config.
+    // This function filters for players with type "rookie" whose setYear matches the selected set year.
+    // It uses the "player", "image", and "Team" fields. It looks up the team image from config.images.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
+      // Use the "Key Players" section (try both "Key Players" and keyPlayers)
       let keyPlayers = config["Key Players"] || config.keyPlayers;
-      console.log("Key Players Data:", keyPlayers);
+      console.log("Key Players Data:", keyPlayers);  // Debug output
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => 
           player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear
@@ -488,7 +509,7 @@
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            // Look up the team image from config.images using player's Team field
+            // Look up the team image from the new "images" section using the player's Team field.
             const teamImage = config.images && config.images[player.Team] ? config.images[player.Team] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
@@ -506,16 +527,15 @@
       }
     }
 
-    // Update Break Sniffer calculations. If no set is selected, display an empty state message.
+    // Update Break Sniffer calculations immediately when any input changes.
+    // If no set is selected, display an empty state message and an empty pie chart.
     function updateBreakSniffer() {
       if (!currentSet) {
         const breakTiles = document.getElementById('break-tiles');
         breakTiles.textContent = "Please select a set and year to get started.";
         const tbody = document.getElementById('team-table').querySelector('tbody');
         tbody.innerHTML = "";
-        const canvas = document.getElementById('pieChart');
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawEmptyPieChart();
         return;
       }
       const costCase = parseFloat(document.getElementById('caseCost').value);
@@ -585,6 +605,19 @@
       drawPieChart(data, markupAmount);
     }
 
+    // Draw an empty pie chart with a "No Data" message
+    function drawEmptyPieChart() {
+      const canvas = document.getElementById('pieChart');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = "bold 16px Arial";
+      ctx.fillStyle = "#333";
+      const text = "No Data";
+      const textWidth = ctx.measureText(text).width;
+      ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2);
+    }
+
+    // Improved Pie Chart drawing function
     function drawPieChart(data, total) {
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
@@ -593,6 +626,7 @@
       const radius = Math.min(centerX, centerY) - 20;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
+      // Prevent division by zero
       if(total === 0) total = 1;
       
       ctx.save();
