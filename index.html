@@ -520,27 +520,30 @@
 
     // Update Key Rookies section using the "Key Players" section from the config.
     // This function filters for players with type "rookie" whose setYear matches the selected set year.
-    // It uses the "player", "image", and "Team" fields. It looks up the team image from config.images["team images"].
+    // It uses the "player", "image", and "team" fields. It looks up the team image from config.images["team images"].
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
       // Use the "Key Players" section (try both "Key Players" and keyPlayers)
       let keyPlayers = config["Key Players"] || config.keyPlayers;
-      console.log("Key Players Data:", keyPlayers);  // Debug output
+      console.log("Key Players Data:", keyPlayers);
       if (keyPlayers && Array.isArray(keyPlayers)) {
-        const keyRookies = keyPlayers.filter(player => 
-          player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear
-        );
+        // Use either player.team or player.Team
+        const keyRookies = keyPlayers.filter(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
+        });
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            // Look up the team image from config.images["team images"] using the player's "Team" field.
-            const teamImage = config.images && config.images["team images"] && config.images["team images"][player.Team] ? config.images["team images"][player.Team] : "";
+            const teamKey = player.Team || player.team;
+            // Look up the team image from config.images["team images"]
+            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
-                ${ teamImage ? `<img class="team-img" src="${teamImage}" alt="${player.Team}">` : "" }
+                ${ teamImage ? `<img class="team-img" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
               <br>${player.notes || ""}`;
@@ -597,11 +600,12 @@
         
         // Check if the team has any key rookie using config.images["team images"]
         const keyPlayers = config["Key Players"] || config.keyPlayers;
-        let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player =>
-          player.type && player.type.toLowerCase() === 'rookie' &&
+        let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' &&
           player.setYear === selectedYear &&
-          player.Team === team
-        );
+          teamKey === team;
+        });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
         
