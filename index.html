@@ -399,17 +399,17 @@
     }
 
     // Update Key Rookies section using the "Key Players" section from the config.
-    // This function filters for players with type "rookie" for the selected set year.
+    // This function filters for players with type "rookie" and whose setYear matches the selected set year.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
-      // Try both "Key Players" and keyPlayers (in case of different casing)
+      // Use the "Key Players" section (try both "Key Players" and keyPlayers)
       let keyPlayers = config["Key Players"] || config.keyPlayers;
       console.log("Key Players Data:", keyPlayers);  // Debug output
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => 
-          player.type && player.type.toLowerCase() === 'rookie' && player.year === selectedYear
+          player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear
         );
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
@@ -574,7 +574,7 @@
     
     // Utility function to shade a color (negative percent darkens, positive lightens)
     function shadeColor(color, percent) {
-      let f = parseInt(color.slice(1),16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent;
+      let f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent;
       let R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
       return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
     }
