@@ -115,7 +115,7 @@
       font-weight: bold;
       text-align: center;
     }
-    /* Markup input group */
+    /* Markup input group: align input and price settings button */
     .markup-group {
       display: flex;
       align-items: center;
@@ -128,7 +128,7 @@
       width: 100px;
       padding: 5px;
     }
-    /* Price Settings menu */
+    /* Price Settings menu on a single line */
     #price-settings {
       display: none;
       flex-direction: row;
@@ -244,6 +244,11 @@
       object-fit: contain;
       margin-right: 5px;
       vertical-align: middle;
+    }
+    /* Increase team logos in key rookie tiles by 250% */
+    .key-rookie-logo {
+      width: 125px;
+      height: 125px;
     }
     .rookie-image-container {
       display: flex;
@@ -377,10 +382,8 @@
         years.add(s.year);
       });
       years = Array.from(years).sort();
-      const defaultYear = "2024-25";
-      if (!years.includes(defaultYear)) {
-        years.unshift(defaultYear);
-      }
+      // Set the default to the latest year available
+      const defaultYear = years[years.length - 1];
       years.forEach(year => {
         const opt = document.createElement('option');
         opt.value = year;
@@ -406,13 +409,13 @@
         const opt = document.createElement('option');
         opt.value = name;
         opt.textContent = name;
-        if (name === currentSelected) {
+        if(name === currentSelected) {
           opt.selected = true;
           found = true;
         }
         setNameSelect.appendChild(opt);
       });
-      if (!found) {
+      if(!found) {
         setNameSelect.value = "";
       }
     }
@@ -422,7 +425,7 @@
       onSelectionChange();
     });
     document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
-    document.getElementById('toggleNotes').addEventListener('click', function(e) {
+    document.getElementById('toggleNotes').addEventListener('click', function(e){
       e.preventDefault();
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
@@ -541,10 +544,11 @@
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
+            // For key rookies, add the "key-rookie-logo" class to increase team logo size
             const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
-                ${ teamImage ? `<img class="team-img" src="${teamImage}" alt="${teamKey}">` : "" }
+                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
               <br>${player.notes || ""}`;
@@ -729,7 +733,7 @@
       let R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
       return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
     }
-
+    
     loadConfig();
   </script>
 </body>
