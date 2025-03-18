@@ -379,6 +379,8 @@
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
+      // Save the current selection so it can be preserved if available
+      const currentSelected = setNameSelect.value;
       // Clear current options
       setNameSelect.innerHTML = "";
       // Add default option
@@ -389,12 +391,21 @@
       // Filter config.sets by the selected year and add unique set names
       const filteredSets = config.sets.filter(s => s.year === year);
       const uniqueNames = [...new Set(filteredSets.map(s => s.name))].sort();
+      let found = false;
       uniqueNames.forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
         opt.textContent = name;
+        if(name === currentSelected) {
+          opt.selected = true;
+          found = true;
+        }
         setNameSelect.appendChild(opt);
       });
+      // If the previously selected set is not available, leave the default selection.
+      if(!found) {
+        setNameSelect.value = "";
+      }
     }
 
     // Event listeners for dropdowns and toggling notes
@@ -520,7 +531,8 @@
 
     // Update Key Rookies section using the "Key Players" section from the config.
     // This function filters for players with type "rookie" whose setYear matches the selected set year.
-    // It uses the "player", "image", and "team" fields. It looks up the team image from config.images["team images"].
+    // It uses the "player", "image", and "Team" (or "team") fields.
+    // It looks up the team image from config.images["team images"].
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -529,7 +541,7 @@
       let keyPlayers = config["Key Players"] || config.keyPlayers;
       console.log("Key Players Data:", keyPlayers);
       if (keyPlayers && Array.isArray(keyPlayers)) {
-        // Use either player.team or player.Team
+        // Use either player.Team or player.team for the team name
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
           return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
@@ -603,8 +615,8 @@
         let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
           const teamKey = player.Team || player.team;
           return player.type && player.type.toLowerCase() === 'rookie' &&
-          player.setYear === selectedYear &&
-          teamKey === team;
+                 player.setYear === selectedYear &&
+                 teamKey === team;
         });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
