@@ -104,7 +104,7 @@
       margin-bottom: 10px;
       justify-content: center;
     }
-    /* Input group: labels now use a smaller font and are left aligned */
+    /* Input group: labels now smaller and left aligned above the input */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -260,6 +260,36 @@
       justify-content: center;
       gap: 5px;
     }
+    /* New Button Container in Set Details */
+    .button-container {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .lookup-button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #888;
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lookup-button img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    .glow-tcdb:hover {
+      box-shadow: 0 4px 12px rgba(200, 76, 25, 0.5);
+      transform: scale(1.05);
+    }
+    .glow-hockeychecklists:hover {
+      box-shadow: 0 4px 12px rgba(2, 30, 155, 0.5);
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -292,6 +322,15 @@
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
       <!-- Hero and support rows will be added here -->
+    </div>
+    <!-- New Buttons for TCDB and HockeyChecklists -->
+    <div class="button-container">
+      <button type="button" class="lookup-button glow-tcdb" onclick="openTcdbSearch()">
+        <img src="resources/tcdb.jpg" alt="TCDB Logo"> TCDB
+      </button>
+      <button type="button" class="lookup-button glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
+        <img src="resources/hockeychecklists.png" alt="HockeyChecklists Logo"> HockeyChecklists.com
+      </button>
     </div>
   </section>
 
@@ -337,10 +376,8 @@
       <div class="tiles" id="break-tiles">
         <!-- Breaker boxes will appear here -->
       </div>
-      <!-- Using SVG for the pie chart -->
       <svg id="pieChart" width="250" height="250"></svg>
     </div>
-    <!-- Table of team breakdown -->
     <table id="team-table">
       <thead>
         <tr>
@@ -422,7 +459,7 @@
       onSelectionChange();
     });
     document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
-    document.getElementById('toggleNotes').addEventListener('click', function(e) {
+    document.getElementById('toggleNotes').addEventListener('click', function(e){
       e.preventDefault();
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
@@ -652,15 +689,11 @@
     function drawPieChartSVG(data, total) {
       const svg = document.getElementById('pieChart');
       while (svg.firstChild) { svg.removeChild(svg.firstChild); }
-      
       const centerX = 125, centerY = 125;
       const radius = 105;
-      
       if(total === 0) total = 1;
-      
       let startAngle = 0;
       const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
-      
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
         const endAngle = startAngle + sliceAngle;
@@ -683,6 +716,27 @@
         svg.appendChild(path);
         startAngle = endAngle;
       });
+    }
+
+    // New functions for the buttons in the Set Details section
+    function openTcdbSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet;
+      window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
+    }
+
+    function openHockeyChecklistsSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet;
+      window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
 
     loadConfig();
