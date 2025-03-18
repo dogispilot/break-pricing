@@ -338,7 +338,7 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown(); // populate set names for default year
-        // Attach auto-update for break sniffer inputs
+        // Attach auto-update for break sniffer and price settings inputs
         document.querySelectorAll('#break-inputs input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
@@ -520,7 +520,7 @@
 
     // Update Key Rookies section using the "Key Players" section from the config.
     // This function filters for players with type "rookie" whose setYear matches the selected set year.
-    // It uses the "player", "image", and "Team" fields. It looks up the team image from config.images.
+    // It uses the "player", "image", and "Team" fields. It looks up the team image from config.images["team images"].
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -536,8 +536,8 @@
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
-            // Look up the team image from the "images" section using the player's "Team" field.
-            const teamImage = config.images && config.images[player.Team] ? config.images[player.Team] : "";
+            // Look up the team image from config.images["team images"] using the player's "Team" field.
+            const teamImage = config.images && config.images["team images"] && config.images["team images"][player.Team] ? config.images["team images"][player.Team] : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
                 ${ teamImage ? `<img class="team-img" src="${teamImage}" alt="${player.Team}">` : "" }
@@ -595,7 +595,7 @@
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase).toFixed(2) : "N/A";
         let distCostWithMarkup = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
         
-        // Check if the team has any key rookie
+        // Check if the team has any key rookie using config.images["team images"]
         const keyPlayers = config["Key Players"] || config.keyPlayers;
         let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player =>
           player.type && player.type.toLowerCase() === 'rookie' &&
@@ -605,9 +605,11 @@
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
         
+        // Look up team image from config.images["team images"]
+        const teamImage = config.images && config.images["team images"] && config.images["team images"][team] ? config.images["team images"][team] : "";
         tbody.innerHTML += `
           <tr${highlightStyle}>
-            <td>${ config.images && config.images[team] ? `<img src="${config.images[team]}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;">` : "" }${team}${keyEmoji}</td>
+            <td>${ teamImage ? `<img src="${teamImage}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;">` : "" }${team}${keyEmoji}</td>
             <td>${teamCards}</td>
             <td>${(distribution * 100).toFixed(2)}%</td>
             <td>${avgCardsCase}</td>
