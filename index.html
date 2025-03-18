@@ -192,7 +192,7 @@
       </label>
       <label>
         Markup:
-        <input type="number" id="markupValue" step="0.01" value="0">
+        <input type="number" id="markupValue" step="0.01" value="500">
       </label>
       <label>
         <input type="checkbox" id="markupToggle">
@@ -510,7 +510,9 @@
       const radius = Math.min(centerX, centerY) - 20;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Set up a drop shadow for a modern look
+      // Prevent division by zero
+      if(total === 0) total = 1;
+      
       ctx.save();
       ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
       ctx.shadowBlur = 8;
@@ -518,12 +520,10 @@
       ctx.shadowOffsetY = 2;
       
       let startAngle = 0;
-      // Refined color palette
       const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
       
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
-        // Create a radial gradient for the slice
         const grad = ctx.createRadialGradient(centerX, centerY, radius * 0.5, centerX, centerY, radius);
         grad.addColorStop(0, colors[i % colors.length]);
         grad.addColorStop(1, shadeColor(colors[i % colors.length], -20));
@@ -534,7 +534,6 @@
         ctx.closePath();
         ctx.fillStyle = grad;
         ctx.fill();
-        // White border around each slice
         ctx.strokeStyle = "#fff";
         ctx.lineWidth = 2;
         ctx.stroke();
@@ -543,7 +542,6 @@
       
       ctx.restore();
       
-      // Draw label lines and text
       startAngle = 0;
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
@@ -572,7 +570,6 @@
       });
     }
     
-    // Utility function to shade a color (negative percent darkens, positive lightens)
     function shadeColor(color, percent) {
       let f = parseInt(color.slice(1), 16), t = percent < 0 ? 0 : 255, p = percent < 0 ? percent * -1 : percent;
       let R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
