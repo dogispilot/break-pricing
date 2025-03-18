@@ -52,7 +52,7 @@
     .tile-container {
       margin-top: 10px;
     }
-    /* Set Details tiles: each tile shows a value on one line and a description below */
+    /* Set Details tiles: value on top, description on next line */
     .tile {
       background: #eaeaea;
       border-radius: 4px;
@@ -96,7 +96,7 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Sniffer input styling */
+    /* Break Sniffer inputs */
     #break-inputs {
       display: flex;
       flex-wrap: nowrap;
@@ -115,7 +115,7 @@
       font-weight: bold;
       text-align: center;
     }
-    /* Markup input group: align input and price settings button */
+    /* Markup input group */
     .markup-group {
       display: flex;
       align-items: center;
@@ -128,7 +128,7 @@
       width: 100px;
       padding: 5px;
     }
-    /* Price Settings menu on a single line */
+    /* Price Settings menu */
     #price-settings {
       display: none;
       flex-direction: row;
@@ -177,6 +177,7 @@
     th, td {
       padding: 8px;
       text-align: center;
+      vertical-align: middle;
     }
     .toggle-switch {
       display: inline-block;
@@ -219,7 +220,7 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-    /* Key Rookies: up to 3 per row (33% each with gap) */
+    /* Key Rookies section */
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -242,6 +243,7 @@
       height: 50px;
       object-fit: contain;
       margin-right: 5px;
+      vertical-align: middle;
     }
     .rookie-image-container {
       display: flex;
@@ -346,34 +348,28 @@
   </section>
 
   <script>
-    // Global config variable
     let config = null;
-    let currentSet = null; // the set currently selected (matching both name and year)
+    let currentSet = null;
 
-    // Fetch config.json on load
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
         config = await response.json();
         populateYearDropdown();
-        updateSetNameDropdown(); // populate set names for default year
-        // Attach auto-update for break sniffer and price settings inputs
+        updateSetNameDropdown();
         document.querySelectorAll('#break-inputs input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
-        // Attach event listener to toggle Price Settings menu
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
           ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
         });
-        // Call onSelectionChange so that key rookies and break sniffer update on initial load
         onSelectionChange();
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
     }
 
-    // Populate the year dropdown based on config.sets
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -394,11 +390,9 @@
       });
     }
 
-    // Update the set name dropdown based on the selected year
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
-      // Save current selection so it can be preserved if available
       const currentSelected = setNameSelect.value;
       setNameSelect.innerHTML = "";
       const defaultOpt = document.createElement('option');
@@ -423,7 +417,6 @@
       }
     }
 
-    // Event listeners for dropdowns and toggling notes
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
@@ -435,7 +428,6 @@
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
 
-    // When a selection changes, update current set and details
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -454,7 +446,6 @@
       }
     }
 
-    // Update break case cost if set price is available
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -464,7 +455,6 @@
       }
     }
 
-    // Update Set Details section with two-line tiles: value on top, description on bottom
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -484,38 +474,32 @@
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
       
-      // Hero tile for Rookie %
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
       heroContainer.appendChild(heroTile1);
       
-      // Hero tile for Total Cards/Case
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       const heroTile2 = document.createElement('div');
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
       
-      // Support tile for Boxes/Case
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
       supportContainer.appendChild(tileBoxes);
       
-      // Support tile for Packs/Box
       const tilePacks = document.createElement('div');
       tilePacks.className = 'tile';
       tilePacks.innerHTML = `<div class="tile-value">${currentSet.packs_per_box || "N/A"}</div><div class="tile-desc">Packs per Box</div>`;
       supportContainer.appendChild(tilePacks);
       
-      // Support tile for Cards/Pack
       const tileCardsPack = document.createElement('div');
       tileCardsPack.className = 'tile';
       tileCardsPack.innerHTML = `<div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div><div class="tile-desc">Cards per Pack</div>`;
       supportContainer.appendChild(tileCardsPack);
       
-      // Support tile for Cards/Box
       const cardsPerBox = computeCardsPerBox(currentSet);
       const tileCardsBox = document.createElement('div');
       tileCardsBox.className = 'tile';
@@ -526,7 +510,6 @@
       tilesDiv.appendChild(supportContainer);
     }
 
-    // Helper: compute total cards per case
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -535,7 +518,6 @@
       return boxes * packs * cards;
     }
 
-    // Helper: compute cards per box
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
@@ -543,7 +525,6 @@
       return packs * cards;
     }
 
-    // Update Key Rookies section using the "Key Players" section from config.
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -577,7 +558,6 @@
       }
     }
 
-    // Update Break Sniffer calculations
     function updateBreakSniffer() {
       if (!currentSet) {
         const breakTiles = document.getElementById('break-tiles');
@@ -629,7 +609,7 @@
         const teamImage = config.images && config.images["team images"] && config.images["team images"][team] ? config.images["team images"][team] : "";
         tbody.innerHTML += `
           <tr${highlightStyle}>
-            <td>${ teamImage ? `<img src="${teamImage}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;">` : "" }${team}${keyEmoji}</td>
+            <td>${ teamImage ? `<img src="${teamImage}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` : "" }${team}${keyEmoji}</td>
             <td>${teamCards}</td>
             <td>${(distribution * 100).toFixed(2)}%</td>
             <td>${avgCardsCase}</td>
@@ -666,7 +646,6 @@
       drawPieChart(data, markupAmount);
     }
 
-    // Draw an empty pie chart with a "No Data" message
     function drawEmptyPieChart() {
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
@@ -678,7 +657,6 @@
       ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2);
     }
 
-    // Improved Pie Chart drawing function
     function drawPieChart(data, total) {
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
@@ -751,7 +729,7 @@
       let R = f >> 16, G = f >> 8 & 0x00FF, B = f & 0x0000FF;
       return "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
     }
-    
+
     loadConfig();
   </script>
 </body>
