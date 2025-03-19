@@ -218,7 +218,7 @@
     .break-results-container {
       display: flex;
       flex-direction: column;
-      align-items: flex-start; /* Changed from center to flex-start */
+      align-items: flex-start;
       gap: 10px;
     }
     /* Break Sniffer results: updated to display tiles and pie chart side by side */
@@ -694,7 +694,7 @@
         const breakTiles = document.getElementById('break-tiles');
         breakTiles.textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
-        drawEmptyPieChart();
+        // Removed the "No Data" state for the pie chart.
         return;
       }
       const costCase = parseFloat(document.getElementById('caseCost').value);
