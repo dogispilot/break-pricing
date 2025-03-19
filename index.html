@@ -207,8 +207,6 @@
       display: none;
       margin-top: 10px;
     }
-    /* Increase spacing between fields in the Price Settings menu */
-    /* (Already handled by margin-bottom on .input-group in #price-settings) */
     /* New Button Container inside Price Lookup Menu */
     .button-container {
       display: flex;
@@ -808,7 +806,7 @@
         pieChartInstance.data.datasets[0].data = values;
         pieChartInstance.update();
       } else {
-        // Create new chart
+        // Create new chart with legend disabled
         pieChartInstance = new Chart(ctx, {
           type: 'pie',
           data: {
@@ -828,7 +826,7 @@
             },
             plugins: {
               legend: {
-                position: 'bottom',
+                display: false
               },
               tooltip: {
                 callbacks: {
