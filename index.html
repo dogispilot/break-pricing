@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Skunksniper.com</title>
+  <!-- Include Chart.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* Load custom fonts */
     @font-face {
@@ -110,7 +112,7 @@
     #break-controls-row {
       display: flex;
       gap: 20px;
-      align-items: center; /* Changed from flex-end to center */
+      align-items: center;
       flex-wrap: wrap;
     }
     .input-group {
@@ -254,10 +256,8 @@
       border-radius: 4px;
       text-align: center;
     }
-    /* Using SVG for the pie chart */
+    /* Using canvas for the pie chart */
     #pieChart {
-      width: 250px;
-      height: 250px;
       display: block;
     }
     table {
@@ -473,8 +473,8 @@
           <div class="tiles" id="break-tiles">
             <!-- Breaker boxes will appear here -->
           </div>
-          <!-- Modern 3D Pie Chart on right -->
-          <svg id="pieChart" width="250" height="250"></svg>
+          <!-- Cool animated Pie Chart using Chart.js on right -->
+          <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
     </div>
@@ -497,6 +497,7 @@
   <script>
     let config = null;
     let currentSet = null;
+    let pieChartInstance = null; // Global Chart.js instance
 
     async function loadConfig() {
       try {
@@ -712,7 +713,6 @@
         const breakTiles = document.getElementById('break-tiles');
         breakTiles.textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
-        // Removed the "No Data" state for the pie chart.
         return;
       }
       const costCase = parseFloat(document.getElementById('caseCost').value);
@@ -801,90 +801,64 @@
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
       
+      // Data for the pie chart
       const data = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
-      drawPieChartSVG(data, markupAmount);
+      // Update the Chart.js pie chart (it will animate changes)
+      updatePieChart(data);
     }
 
-    function drawEmptyPieChart() {
-      const svg = document.getElementById('pieChart');
-      svg.innerHTML = `<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333" font-family="Arial" font-weight="bold" font-size="16px">No Data</text>`;
-    }
-
-    function drawPieChartSVG(data, total) {
-      const svg = document.getElementById('pieChart');
-      while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+    // New function to create/update the pie chart using Chart.js
+    function updatePieChart(data) {
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const labels = data.map(d => d.label);
+      const values = data.map(d => d.value);
+      const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
       
-      // Create defs for gradients and drop shadow filter
-      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-      
-      // Drop shadow filter for 3D effect
-      const filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
-      filter.setAttribute("id", "dropShadow");
-      filter.innerHTML = '<feDropShadow dx="3" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.3" />';
-      defs.appendChild(filter);
-      
-      // Define gradients for each slice
-      const gradientColors = [
-        {start: "#8fd8a7", end: "#338a52"}, // for Profit slice (#66bb6a)
-        {start: "#ffd699", end: "#c67a1e"},  // for Whatnots slice (#ffa726)
-        {start: "#7ab3f9", end: "#157cd8"}   // for Business slice (#42a5f5)
-      ];
-      
-      for (let i = 0; i < 3; i++) {
-        const grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
-        grad.setAttribute("id", "grad" + i);
-        grad.setAttribute("x1", "0%");
-        grad.setAttribute("y1", "0%");
-        grad.setAttribute("x2", "0%");
-        grad.setAttribute("y2", "100%");
-        const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-        stop1.setAttribute("offset", "0%");
-        stop1.setAttribute("stop-color", gradientColors[i].start);
-        const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-        stop2.setAttribute("offset", "100%");
-        stop2.setAttribute("stop-color", gradientColors[i].end);
-        grad.appendChild(stop1);
-        grad.appendChild(stop2);
-        defs.appendChild(grad);
+      if (pieChartInstance) {
+        // Update existing chart data
+        pieChartInstance.data.labels = labels;
+        pieChartInstance.data.datasets[0].data = values;
+        pieChartInstance.update();
+      } else {
+        // Create new chart
+        pieChartInstance = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: values,
+              backgroundColor: backgroundColors,
+              borderColor: "#fff",
+              borderWidth: 2,
+            }]
+          },
+          options: {
+            responsive: false,
+            animation: {
+              animateRotate: true,
+              animateScale: true,
+            },
+            plugins: {
+              legend: {
+                position: 'bottom',
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    let label = context.label || '';
+                    let value = context.parsed;
+                    return label + ': $' + value.toFixed(2);
+                  }
+                }
+              }
+            }
+          }
+        });
       }
-      
-      svg.appendChild(defs);
-      
-      const centerX = 125, centerY = 125;
-      const radius = 105;
-      if(total === 0) total = 1;
-      let startAngle = 0;
-      // Original colors array kept for proportional calculations
-      const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
-      data.forEach((d, i) => {
-        const sliceAngle = (d.value / total) * 2 * Math.PI;
-        const endAngle = startAngle + sliceAngle;
-        const x1 = centerX + radius * Math.cos(startAngle);
-        const y1 = centerY + radius * Math.sin(startAngle);
-        const x2 = centerX + radius * Math.cos(endAngle);
-        const y2 = centerY + radius * Math.sin(endAngle);
-        const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
-        const pathData = [
-          `M ${centerX} ${centerY}`,
-          `L ${x1} ${y1}`,
-          `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-          "Z"
-        ].join(" ");
-        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        // Use gradient fill for 3D effect
-        path.setAttribute("d", pathData);
-        path.setAttribute("fill", `url(#grad${i % 3})`);
-        path.setAttribute("stroke", "#fff");
-        path.setAttribute("stroke-width", "2");
-        // Apply drop shadow filter
-        path.setAttribute("filter", "url(#dropShadow)");
-        svg.appendChild(path);
-        startAngle = endAngle;
-      });
     }
 
     // New button functions for additional sites inside Price Settings / Lookup Menu
