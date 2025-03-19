@@ -96,48 +96,33 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Sniffer inputs */
-    #break-inputs {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 10px;
+    /* BREAK SNIFFER - New Controls Layout */
+    .break-controls {
+      margin-bottom: 20px;
     }
-    /* Input group: labels smaller and left aligned above the input */
+    #break-controls-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
     .input-group {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      position: relative;
     }
     .input-group label {
       margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
       text-align: left;
-      width: 100%;
     }
-    /* Markup input group: align input and button inline */
     .markup-group {
       display: flex;
       align-items: center;
     }
     .markup-group input {
       margin-right: 10px;
-    }
-    #break-sniffer input[type="number"],
-    #break-sniffer input[type="checkbox"] {
-      width: 100px;
-      padding: 5px;
-    }
-    /* Price Settings menu on a single line */
-    #price-settings {
-      display: none;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin: 10px 0;
     }
     /* Uniform styling for all lookup buttons */
     .lookup-button {
@@ -161,6 +146,11 @@
       height: 24px;
       vertical-align: middle;
     }
+    /* Button group for toggles */
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
     /* Glow effects for hover on buttons */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
@@ -172,7 +162,8 @@
       transform: scale(1.05);
     }
     /* Price Settings Toggle Button with decreased font size */
-    #priceSettingsToggle {
+    #priceSettingsToggle,
+    #priceLookupToggle {
       background-color: #66bb6a;
       color: #fff;
       border: none;
@@ -180,26 +171,23 @@
       padding: 5px 10px;
       cursor: pointer;
       font-size: 0.8em;
+      height: 40px;
     }
-    /* New Button Container inside Price Settings */
-    .button-container {
+    /* Price Settings and Price Lookup hidden menus */
+    #price-settings,
+    #price-lookup-menu {
+      display: none;
       margin-top: 10px;
+    }
+    /* New Button Container inside Price Lookup Menu */
+    .button-container {
       display: flex;
       justify-content: center;
       gap: 10px;
-      width: 100%;
+      flex-wrap: wrap;
     }
-    /* Break Sniffer container: two columns using flex */
-    .break-sniffer-flex {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-    .break-controls {
-      flex: 1;
-    }
+    /* BREAK SNIFFER - Right Column */
     .break-results-container {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -372,21 +360,23 @@
   <section id="break-sniffer">
     <h2>Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left column: controls -->
+      <!-- Left Column: Controls -->
       <div class="break-controls">
-        <div id="break-inputs">
+        <div id="break-controls-row">
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
           <div class="input-group">
             <label for="markupValue">Markup</label>
-            <div class="markup-group">
-              <input type="number" id="markupValue" step="0.01" value="500">
-              <button id="priceSettingsToggle">Price Settings</button>
-            </div>
+            <input type="number" id="markupValue" step="0.01" value="500">
+          </div>
+          <div class="button-group">
+            <button id="priceSettingsToggle" type="button">Price Settings</button>
+            <button id="priceLookupToggle" type="button">Price Lookup</button>
           </div>
         </div>
+        <!-- Hidden Price Settings Menu -->
         <div id="price-settings">
           <div class="input-group">
             <label for="markupToggle">Use % markup</label>
@@ -400,7 +390,9 @@
             <label for="blendedTax">Blended tax (%)</label>
             <input type="number" id="blendedTax" step="0.1" value="5.1">
           </div>
-          <!-- New Button Container inside Price Settings -->
+        </div>
+        <!-- Hidden Price Lookup Menu -->
+        <div id="price-lookup-menu">
           <div class="button-container">
             <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
               <img src="resources/dacardworld.png" alt="Dacardworld Logo">
@@ -421,11 +413,11 @@
           </div>
         </div>
       </div>
-      <!-- Right column: results -->
+      <!-- Right Column: Break Sniffer Results -->
       <div class="break-results-container">
         <div id="break-results">
-          <!-- Breaker boxes and pie chart will appear here -->
           <div class="tiles" id="break-tiles">
+            <!-- Breaker boxes will appear here -->
           </div>
           <svg id="pieChart" width="250" height="250"></svg>
         </div>
@@ -457,12 +449,16 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
-        document.querySelectorAll('#break-inputs input, #price-settings input').forEach(input => {
+        document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
           ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
+        });
+        document.getElementById('priceLookupToggle').addEventListener('click', function() {
+          const pl = document.getElementById('price-lookup-menu');
+          pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'flex' : 'none';
         });
         onSelectionChange();
       } catch (error) {
@@ -771,7 +767,7 @@
       });
     }
 
-    // New button functions for additional sites inside Price Settings
+    // New button functions for additional sites inside Price Settings / Lookup Menu
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
