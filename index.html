@@ -99,10 +99,9 @@
     /* Break Sniffer inputs */
     #break-inputs {
       display: flex;
-      flex-wrap: nowrap;
+      flex-direction: column;
       gap: 10px;
       margin-bottom: 10px;
-      justify-content: center;
     }
     /* Input group: labels smaller and left aligned above the input */
     .input-group {
@@ -190,11 +189,28 @@
       gap: 10px;
       width: 100%;
     }
+    /* Break Sniffer container: two columns using flex */
+    .break-sniffer-flex {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .break-controls {
+      flex: 1;
+    }
+    .break-results-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
     /* Break Sniffer results */
     #break-results {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 10px;
       margin-bottom: 20px;
     }
     #break-tiles .tile {
@@ -355,57 +371,65 @@
   <!-- Section 4: Break Sniffer -->
   <section id="break-sniffer">
     <h2>Break Sniffer</h2>
-    <div id="break-inputs">
-      <div class="input-group">
-        <label for="caseCost">Cost of a case</label>
-        <input type="number" id="caseCost" step="0.01" value="1999.95">
-      </div>
-      <div class="input-group">
-        <label for="markupValue">Markup</label>
-        <div class="markup-group">
-          <input type="number" id="markupValue" step="0.01" value="500">
-          <button id="priceSettingsToggle">Price Settings</button>
+    <div class="break-sniffer-flex">
+      <!-- Left column: controls -->
+      <div class="break-controls">
+        <div id="break-inputs">
+          <div class="input-group">
+            <label for="caseCost">Cost of a case</label>
+            <input type="number" id="caseCost" step="0.01" value="1999.95">
+          </div>
+          <div class="input-group">
+            <label for="markupValue">Markup</label>
+            <div class="markup-group">
+              <input type="number" id="markupValue" step="0.01" value="500">
+              <button id="priceSettingsToggle">Price Settings</button>
+            </div>
+          </div>
+        </div>
+        <div id="price-settings">
+          <div class="input-group">
+            <label for="markupToggle">Use % markup</label>
+            <input type="checkbox" id="markupToggle">
+          </div>
+          <div class="input-group">
+            <label for="suppliesCost">Cost of supplies per team</label>
+            <input type="number" id="suppliesCost" step="0.01" value="1.00">
+          </div>
+          <div class="input-group">
+            <label for="blendedTax">Blended tax (%)</label>
+            <input type="number" id="blendedTax" step="0.1" value="5.1">
+          </div>
+          <!-- New Button Container inside Price Settings -->
+          <div class="button-container">
+            <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
+              <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+              Dacardworld.com
+            </button>
+            <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
+              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+              SteelCityCollectibles.com
+            </button>
+            <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
+              <img src="resources/ootb.png" alt="Out of the Box Logo">
+              Out of the Box
+            </button>
+            <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
+              <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+              Midwest Cards
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div id="price-settings">
-      <div class="input-group">
-        <label for="markupToggle">Use % markup</label>
-        <input type="checkbox" id="markupToggle">
+      <!-- Right column: results -->
+      <div class="break-results-container">
+        <div id="break-results">
+          <!-- Breaker boxes and pie chart will appear here -->
+          <div class="tiles" id="break-tiles">
+          </div>
+          <svg id="pieChart" width="250" height="250"></svg>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="suppliesCost">Cost of supplies per team</label>
-        <input type="number" id="suppliesCost" step="0.01" value="1.00">
-      </div>
-      <div class="input-group">
-        <label for="blendedTax">Blended tax (%)</label>
-        <input type="number" id="blendedTax" step="0.1" value="5.1">
-      </div>
-      <!-- New Button Container inside Price Settings -->
-      <div class="button-container">
-        <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
-          <img src="resources/dacardworld.png" alt="Dacardworld Logo">
-          Dacardworld.com
-        </button>
-        <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
-          <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
-          SteelCityCollectibles.com
-        </button>
-        <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
-          <img src="resources/ootb.png" alt="Out of the Box Logo">
-          Out of the Box
-        </button>
-        <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
-          <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
-          Midwest Cards
-        </button>
-      </div>
-    </div>
-    <div id="break-results">
-      <div class="tiles" id="break-tiles">
-        <!-- Breaker boxes will appear here -->
-      </div>
-      <svg id="pieChart" width="250" height="250"></svg>
     </div>
     <table id="team-table">
       <thead>
