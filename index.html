@@ -150,6 +150,12 @@
       cursor: pointer;
       font-size: 0.8em;
     }
+    /* NEW: Override lookup buttons inside Price Settings so text is dark on white */
+    #price-settings .lookup-button {
+      background: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+    }
     /* New Button Container inside Price Settings */
     .button-container {
       margin-top: 10px;
@@ -385,7 +391,7 @@
       <!-- New Button Container inside Price Settings -->
       <div class="button-container">
         <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
-          <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+          <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Dacardworld Logo">
           Dacardworld.com
         </button>
         <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
