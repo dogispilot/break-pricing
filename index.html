@@ -117,50 +117,12 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* iOS style toggle */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 50px;
-      height: 24px;
-      margin-left: 10px;
+    .markup-group {
+      display: flex;
+      align-items: center;
     }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-    }
-    input:checked + .slider {
-      background-color: #66bb6a;
-    }
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    .slider.round {
-      border-radius: 24px;
-    }
-    .slider.round:before {
-      border-radius: 50%;
+    .markup-group input {
+      margin-right: 10px;
     }
     /* Uniform styling for all lookup buttons */
     .lookup-button {
@@ -264,6 +226,83 @@
       text-align: center;
       vertical-align: middle;
     }
+    .toggle-switch {
+      display: inline-block;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #66bb6a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* Key Rookies section */
+    #rookie-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #rookie-tiles .tile {
+      flex: 0 0 calc(33% - 10px);
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    .rookie-img {
+      max-width: 50%;
+      height: auto;
+      display: block;
+      margin: 0;
+    }
+    .team-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    /* Increase team logos in key rookie tiles by 250% */
+    .key-rookie-logo {
+      width: 125px;
+      height: 125px;
+    }
+    .rookie-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
   </style>
 </head>
 <body>
@@ -328,8 +367,7 @@
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
           <div class="input-group">
-            <!-- Updated markup label includes a span to show the symbol -->
-            <label for="markupValue">Markup <span id="markupSymbol">[$]</span></label>
+            <label for="markupValue">Markup</label>
             <input type="number" id="markupValue" step="0.01" value="500">
           </div>
           <div class="button-group">
@@ -341,11 +379,7 @@
         <div id="price-settings">
           <div class="input-group">
             <label for="markupToggle">Use % markup</label>
-            <!-- iOS style toggle for markup mode -->
-            <label class="switch">
-              <input type="checkbox" id="markupToggle">
-              <span class="slider round"></span>
-            </label>
+            <input type="checkbox" id="markupToggle">
           </div>
           <div class="input-group">
             <label for="suppliesCost">Cost of supplies per team</label>
@@ -419,9 +453,6 @@
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
-        // Update the markup symbol when the markup toggle changes
-        document.getElementById('markupToggle').addEventListener('change', updateMarkupSymbol);
-        updateMarkupSymbol();
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
           ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
@@ -434,12 +465,6 @@
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
-    }
-
-    function updateMarkupSymbol() {
-      const usePercent = document.getElementById('markupToggle').checked;
-      const symbolSpan = document.getElementById('markupSymbol');
-      symbolSpan.textContent = usePercent ? '[%]' : '[$]';
     }
 
     function populateYearDropdown() {
