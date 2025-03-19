@@ -124,6 +124,12 @@
       font-size: 0.8em;
       text-align: left;
     }
+    /* New inline styling for Price Settings markup toggle */
+    #price-settings .input-group.inline {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
     .markup-group {
       display: flex;
       align-items: center;
@@ -418,19 +424,19 @@
         </div>
         <!-- Hidden Price Settings Menu -->
         <div id="price-settings">
-          <div class="input-group">
-            <label for="markupToggle">% Markup</label>
+          <div class="input-group inline">
+            <label for="markupToggle">Use % markup</label>
             <label class="toggle-switch">
               <input type="checkbox" id="markupToggle">
               <span class="slider"></span>
             </label>
           </div>
           <div class="input-group">
-            <label for="suppliesCost">Supplies per Team</label>
+            <label for="suppliesCost">Cost of supplies per team</label>
             <input type="number" id="suppliesCost" step="0.01" value="1.00">
           </div>
           <div class="input-group">
-            <label for="blendedTax">Blended Tax</label>
+            <label for="blendedTax">Blended tax (%)</label>
             <input type="number" id="blendedTax" step="0.1" value="5.1">
           </div>
         </div>
