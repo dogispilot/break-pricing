@@ -36,16 +36,6 @@
       margin: 0;
       font-size: 2em;
     }
-    /* Added style for the About link */
-    header a {
-      margin-left: auto;
-      font-size: 1.2em;
-      text-decoration: none;
-      color: #333;
-    }
-    header a:hover {
-      text-decoration: underline;
-    }
     header p {
       font-style: italic;
       margin: 0 0 0 60px;
@@ -203,18 +193,17 @@
       align-items: center;
       gap: 10px;
     }
-    /* Break Sniffer results */
+    /* Break Sniffer results: updated to display tiles and pie chart side by side */
     #break-results {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      gap: 10px;
+      gap: 20px;
       margin-bottom: 20px;
     }
     #break-tiles .tile {
       margin: 5px;
       padding: 10px;
-      background: #eaeaea;
       border-radius: 4px;
       text-align: center;
     }
@@ -321,7 +310,6 @@
   <header>
     <img src="resources/skunk.png" alt="Skunk logo">
     <h1>Skunksniper.com</h1>
-    <a href="about.html">About</a>
   </header>
   <p>Sniff out the best breaks</p>
 
@@ -427,9 +415,11 @@
       <!-- Right Column: Break Sniffer Results -->
       <div class="break-results-container">
         <div id="break-results">
+          <!-- Breaker boxes on left -->
           <div class="tiles" id="break-tiles">
             <!-- Breaker boxes will appear here -->
           </div>
+          <!-- Modern 3D Pie Chart on right -->
           <svg id="pieChart" width="250" height="250"></svg>
         </div>
       </div>
@@ -716,21 +706,35 @@
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       
+      // Update break tiles with new color scheme
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
+      
       const tileProfit = document.createElement('div');
       tileProfit.className = 'tile';
       tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
+      tileProfit.style.background = "#66bb6a";
+      tileProfit.style.color = "#fff";
+      tileProfit.style.borderRadius = "4px";
+      tileProfit.style.padding = "10px";
       breakTiles.appendChild(tileProfit);
       
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile';
       tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
+      tileWhatnots.style.background = "#ffa726";
+      tileWhatnots.style.color = "#fff";
+      tileWhatnots.style.borderRadius = "4px";
+      tileWhatnots.style.padding = "10px";
       breakTiles.appendChild(tileWhatnots);
       
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile';
       tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
+      tileBusiness.style.background = "#42a5f5";
+      tileBusiness.style.color = "#fff";
+      tileBusiness.style.borderRadius = "4px";
+      tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
       
       const data = [
@@ -749,10 +753,48 @@
     function drawPieChartSVG(data, total) {
       const svg = document.getElementById('pieChart');
       while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+      
+      // Create defs for gradients and drop shadow filter
+      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      
+      // Drop shadow filter for 3D effect
+      const filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+      filter.setAttribute("id", "dropShadow");
+      filter.innerHTML = '<feDropShadow dx="3" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.3" />';
+      defs.appendChild(filter);
+      
+      // Define gradients for each slice
+      const gradientColors = [
+        {start: "#8fd8a7", end: "#338a52"}, // for Profit slice (#66bb6a)
+        {start: "#ffd699", end: "#c67a1e"},  // for Whatnots slice (#ffa726)
+        {start: "#7ab3f9", end: "#157cd8"}   // for Business slice (#42a5f5)
+      ];
+      
+      for (let i = 0; i < 3; i++) {
+        const grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+        grad.setAttribute("id", "grad" + i);
+        grad.setAttribute("x1", "0%");
+        grad.setAttribute("y1", "0%");
+        grad.setAttribute("x2", "0%");
+        grad.setAttribute("y2", "100%");
+        const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop1.setAttribute("offset", "0%");
+        stop1.setAttribute("stop-color", gradientColors[i].start);
+        const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop2.setAttribute("offset", "100%");
+        stop2.setAttribute("stop-color", gradientColors[i].end);
+        grad.appendChild(stop1);
+        grad.appendChild(stop2);
+        defs.appendChild(grad);
+      }
+      
+      svg.appendChild(defs);
+      
       const centerX = 125, centerY = 125;
       const radius = 105;
       if(total === 0) total = 1;
       let startAngle = 0;
+      // Original colors array kept for proportional calculations
       const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
@@ -770,9 +812,12 @@
         ].join(" ");
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", pathData);
-        path.setAttribute("fill", colors[i % colors.length]);
+        // Use gradient fill for 3D effect
+        path.setAttribute("fill", `url(#grad${i % 3})`);
         path.setAttribute("stroke", "#fff");
         path.setAttribute("stroke-width", "2");
+        // Apply drop shadow filter
+        path.setAttribute("filter", "url(#dropShadow)");
         svg.appendChild(path);
         startAngle = endAngle;
       });
