@@ -110,7 +110,7 @@
     #break-controls-row {
       display: flex;
       gap: 20px;
-      align-items: flex-end;
+      align-items: center; /* Changed from flex-end to center */
       flex-wrap: wrap;
     }
     .input-group {
@@ -123,6 +123,12 @@
       font-weight: bold;
       font-size: 0.8em;
       text-align: left;
+    }
+    /* New inline styling for groups in #break-controls-row */
+    #break-controls-row .input-group.inline {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
     }
     /* New inline styling for Price Settings markup toggle */
     #price-settings .input-group.inline {
@@ -413,9 +419,7 @@
             <label for="markupValue">Markup <span id="markupUnit"></span></label>
             <input type="number" id="markupValue" step="0.01" value="500">
           </div>
-          <!-- Wrap the buttons in an input-group with a blank (invisible) label -->
-          <div class="input-group">
-            <label style="visibility:hidden;">Price Actions</label>
+          <div class="input-group inline">
             <div class="button-group">
               <button id="priceSettingsToggle" type="button">Price Settings</button>
               <button id="priceLookupToggle" type="button">Price Lookup</button>
@@ -871,8 +875,8 @@
           "Z"
         ].join(" ");
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute("d", pathData);
         // Use gradient fill for 3D effect
+        path.setAttribute("d", pathData);
         path.setAttribute("fill", `url(#grad${i % 3})`);
         path.setAttribute("stroke", "#fff");
         path.setAttribute("stroke-width", "2");
