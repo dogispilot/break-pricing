@@ -104,7 +104,7 @@
       margin-bottom: 10px;
       justify-content: center;
     }
-    /* Input group: labels now smaller and left aligned above the input */
+    /* Input group: labels smaller and left aligned above the input */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -140,6 +140,38 @@
       gap: 20px;
       margin: 10px 0;
     }
+    /* Uniform styling for all lookup buttons */
+    .lookup-button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 40px;
+      min-width: 150px;
+      box-sizing: border-box;
+    }
+    .lookup-button img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    /* Glow effects for hover on buttons */
+    .glow-dacardworld:hover,
+    .glow-steelcity:hover,
+    .glow-outofthebox:hover,
+    .glow-midwestcards:hover,
+    .glow-tcdb:hover,
+    .glow-hockeychecklists:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
     /* Price Settings Toggle Button with decreased font size */
     #priceSettingsToggle {
       background-color: #66bb6a;
@@ -150,12 +182,6 @@
       cursor: pointer;
       font-size: 0.8em;
     }
-    /* NEW: Override lookup buttons inside Price Settings so text is dark on white */
-    #price-settings .lookup-button {
-      background: #fff;
-      color: #333;
-      border: 1px solid #ccc;
-    }
     /* New Button Container inside Price Settings */
     .button-container {
       margin-top: 10px;
@@ -163,39 +189,6 @@
       justify-content: center;
       gap: 10px;
       width: 100%;
-    }
-    .lookup-button {
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      border: 1px solid #888;
-      border-radius: 6px;
-      background: transparent;
-      color: #fff;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .lookup-button img {
-      width: 24px;
-      height: 24px;
-      vertical-align: middle;
-    }
-    .glow-dacardworld:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transform: scale(1.05);
-    }
-    .glow-steelcity:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transform: scale(1.05);
-    }
-    .glow-outofthebox:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transform: scale(1.05);
-    }
-    .glow-midwestcards:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transform: scale(1.05);
     }
     /* Break Sniffer results */
     #break-results {
@@ -391,7 +384,7 @@
       <!-- New Button Container inside Price Settings -->
       <div class="button-container">
         <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
-          <img src="https://i.pinimg.com/280x280_RS/78/07/f6/7807f6a72b75f844ed54bc06b83c3bed.jpg" alt="Dacardworld Logo">
+          <img src="resources/dacardworld.png" alt="Dacardworld Logo">
           Dacardworld.com
         </button>
         <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
