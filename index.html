@@ -373,7 +373,7 @@
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
           <div class="input-group">
-            <label for="markupValue">Markup</label>
+            <label for="markupValue">Markup <span id="markupUnit"></span></label>
             <input type="number" id="markupValue" step="0.01" value="500">
           </div>
           <div class="button-group">
@@ -462,6 +462,10 @@
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
+        // Add listener for the markup toggle to update the unit label.
+        document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
+        // Set initial unit label
+        updateMarkupUnit();
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
           ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
@@ -474,6 +478,12 @@
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
+    }
+
+    function updateMarkupUnit() {
+      const isPercent = document.getElementById('markupToggle').checked;
+      const markupUnitSpan = document.getElementById('markupUnit');
+      markupUnitSpan.textContent = isPercent ? '[%]' : '[$]';
     }
 
     function populateYearDropdown() {
