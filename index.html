@@ -193,20 +193,16 @@
       align-items: center;
       gap: 10px;
     }
-    /* Break Sniffer results */
-    #break-results {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
+    /* Break Sniffer results tiles updated styling */
     #break-tiles .tile {
       margin: 5px;
-      padding: 10px;
-      background: #eaeaea;
-      border-radius: 4px;
+      padding: 15px;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border-radius: 8px;
       text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      font-family: 'BreakPricingFontBold', sans-serif;
+      font-size: 1.1em;
     }
     /* Using SVG for the pie chart */
     #pieChart {
@@ -527,6 +523,8 @@
         document.getElementById('details-text').textContent = "Please select a set and year to get started.";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
+        // Clear pie chart if no data
+        document.getElementById('pieChart').innerHTML = "";
       } else {
         document.getElementById('toggleNotes').style.display = 'inline';
       }
@@ -647,7 +645,7 @@
         const breakTiles = document.getElementById('break-tiles');
         breakTiles.textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
-        drawEmptyPieChart();
+        document.getElementById('pieChart').innerHTML = "";
         return;
       }
       const costCase = parseFloat(document.getElementById('caseCost').value);
@@ -730,38 +728,65 @@
       drawPieChartSVG(data, markupAmount);
     }
 
-    function drawEmptyPieChart() {
-      const svg = document.getElementById('pieChart');
-      svg.innerHTML = `<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333" font-family="Arial" font-weight="bold" font-size="16px">No Data</text>`;
-    }
-
     function drawPieChartSVG(data, total) {
       const svg = document.getElementById('pieChart');
       while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+      
+      // Define drop shadow filter for a modern look
+      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      const filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+      filter.setAttribute("id", "shadow");
+      filter.setAttribute("x", "-20%");
+      filter.setAttribute("y", "-20%");
+      filter.setAttribute("width", "140%");
+      filter.setAttribute("height", "140%");
+      const feDropShadow = document.createElementNS("http://www.w3.org/2000/svg", "feDropShadow");
+      feDropShadow.setAttribute("dx", "0");
+      feDropShadow.setAttribute("dy", "2");
+      feDropShadow.setAttribute("stdDeviation", "3");
+      feDropShadow.setAttribute("flood-color", "#000");
+      feDropShadow.setAttribute("flood-opacity", "0.2");
+      filter.appendChild(feDropShadow);
+      defs.appendChild(filter);
+      svg.appendChild(defs);
+      
       const centerX = 125, centerY = 125;
-      const radius = 105;
+      const outerRadius = 105;
+      const innerRadius = 60;  // Donut hole radius for a modern donut chart
+      
       if(total === 0) total = 1;
       let startAngle = 0;
-      const colors = ["#66bb6a", "#ffa726", "#42a5f5"];
+      // Modern Material palette for slices
+      const colors = ["#4CAF50", "#FF9800", "#2196F3"];
       data.forEach((d, i) => {
         const sliceAngle = (d.value / total) * 2 * Math.PI;
         const endAngle = startAngle + sliceAngle;
-        const x1 = centerX + radius * Math.cos(startAngle);
-        const y1 = centerY + radius * Math.sin(startAngle);
-        const x2 = centerX + radius * Math.cos(endAngle);
-        const y2 = centerY + radius * Math.sin(endAngle);
+        // Coordinates for outer arc
+        const x1 = centerX + outerRadius * Math.cos(startAngle);
+        const y1 = centerY + outerRadius * Math.sin(startAngle);
+        const x2 = centerX + outerRadius * Math.cos(endAngle);
+        const y2 = centerY + outerRadius * Math.sin(endAngle);
+        // Coordinates for inner arc
+        const x3 = centerX + innerRadius * Math.cos(endAngle);
+        const y3 = centerY + innerRadius * Math.sin(endAngle);
+        const x4 = centerX + innerRadius * Math.cos(startAngle);
+        const y4 = centerY + innerRadius * Math.sin(startAngle);
+        
         const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
         const pathData = [
-          `M ${centerX} ${centerY}`,
-          `L ${x1} ${y1}`,
-          `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+          `M ${x1} ${y1}`,
+          `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+          `L ${x3} ${y3}`,
+          `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4}`,
           "Z"
         ].join(" ");
+        
         const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         path.setAttribute("d", pathData);
         path.setAttribute("fill", colors[i % colors.length]);
         path.setAttribute("stroke", "#fff");
         path.setAttribute("stroke-width", "2");
+        path.setAttribute("filter", "url(#shadow)");
         svg.appendChild(path);
         startAngle = endAngle;
       });
