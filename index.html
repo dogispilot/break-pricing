@@ -126,26 +126,14 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* New inline styling for groups in #break-controls-row */
-    #break-controls-row .input-group.inline {
-      flex-direction: row;
-      align-items: center;
+    /* Removed inline styling for Price Settings inputs to ensure label is on top */
+    #price-settings .input-group {
+      margin-bottom: 10px;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 10px;
     }
-    /* New inline styling for Price Settings markup toggle */
-    #price-settings .input-group.inline {
-      flex-direction: row;
-      align-items: center;
-      gap: 10px;
-    }
-    .markup-group {
-      display: flex;
-      align-items: center;
-    }
-    .markup-group input {
-      margin-right: 10px;
-    }
-    /* Modern styling for number input fields (Break Sniffer & Price Settings) */
+    /* Uniform styling for number input fields (Break Sniffer & Price Settings) */
     .break-controls input[type="number"],
     #price-settings input[type="number"],
     #price-lookup-menu input[type="number"] {
@@ -220,9 +208,7 @@
       margin-top: 10px;
     }
     /* Increase spacing between fields in the Price Settings menu */
-    #price-settings .input-group {
-      margin-bottom: 20px;
-    }
+    /* (Already handled by margin-bottom on .input-group in #price-settings) */
     /* New Button Container inside Price Lookup Menu */
     .button-container {
       display: flex;
@@ -419,16 +405,14 @@
             <label for="markupValue">Markup <span id="markupUnit"></span></label>
             <input type="number" id="markupValue" step="0.01" value="500">
           </div>
-          <div class="input-group inline">
-            <div class="button-group">
-              <button id="priceSettingsToggle" type="button">Price Settings</button>
-              <button id="priceLookupToggle" type="button">Price Lookup</button>
-            </div>
+          <div class="input-group">
+            <button id="priceSettingsToggle" type="button">Price Settings</button>
+            <button id="priceLookupToggle" type="button">Price Lookup</button>
           </div>
         </div>
         <!-- Hidden Price Settings Menu -->
         <div id="price-settings">
-          <div class="input-group inline">
+          <div class="input-group">
             <label for="markupToggle">Use % markup</label>
             <label class="toggle-switch">
               <input type="checkbox" id="markupToggle">
