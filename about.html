@@ -1,119 +1,854 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PL5RQPB0MT"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PL5RQPB0MT');
-</script>
   <meta charset="UTF-8">
-  <title>About SkunkSniper.com</title>
-  <link rel="icon" type="image/png" href="/resources/calculator.png">
-  <!-- Import Google Fonts (if needed) -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <title>Skunksniper.com</title>
   <style>
-    /* Define local fonts */
+    /* Load custom fonts */
     @font-face {
-      font-family: 'SkunkFont';
+      font-family: 'BreakPricingFont';
       src: url('fonts/breakpricingfont.ttf') format('truetype');
-      font-weight: normal;
     }
     @font-face {
-      font-family: 'SkunkFontBold';
+      font-family: 'BreakPricingFontBold';
       src: url('fonts/breakpricingfont_bold.ttf') format('truetype');
-      font-weight: bold;
     }
-
     body {
-      font-family: 'SkunkFont', sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: #1e1e1e;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    /* Navigation styling */
-    nav.nav {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    nav.nav a {
-      color: #007bff;
-      text-decoration: none;
-      font-size: 1.1rem;
-      margin: 0 10px;
-      font-family: 'SkunkFontBold', sans-serif;
-    }
-    nav.nav a:hover {
-      text-decoration: underline;
+      font-family: 'BreakPricingFont', sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+      color: #333;
     }
     h1, h2 {
-      font-family: 'SkunkFontBold', sans-serif;
+      font-family: 'BreakPricingFontBold', sans-serif;
     }
-    h1 {
-      text-align: center;
+    header {
+      display: flex;
+      align-items: center;
       margin-bottom: 20px;
     }
-    p {
-      font-size: 1.2rem;
-      line-height: 1.5;
+    header img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
     }
-    a {
-      color: #007bff;
+    header h1 {
+      margin: 0;
+      font-size: 2em;
     }
-    /* Center the donation image and resize it */
-    .donation-image {
+    header p {
+      font-style: italic;
+      margin: 0 0 0 60px;
+      color: #666;
+    }
+    section {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    /* Container for all tiles */
+    .tile-container {
+      margin-top: 10px;
+    }
+    /* Set Details tiles: value on top, description on next line */
+    .tile {
+      background: #eaeaea;
+      border-radius: 4px;
       text-align: center;
-      margin-top: 20px;
+      padding: 10px;
     }
-    .donation-image img {
-      width: 65%;
+    .tile-value {
+      font-family: 'BreakPricingFontBold', sans-serif;
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+    .tile-desc {
+      font-size: 1em;
+    }
+    /* Hero row (2 tiles, 50% width each) and Support row (4 tiles, 25% width each) */
+    .hero-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .hero-row .tile {
+      flex: 0 0 calc(50% - 10px);
+      box-sizing: border-box;
+    }
+    .support-row {
+      display: flex;
+      gap: 10px;
+    }
+    .support-row .tile {
+      flex: 0 0 calc(25% - 10px);
+      box-sizing: border-box;
+    }
+    /* Other elements */
+    #set-selection select {
+      padding: 5px;
+      margin: 0 5px;
+    }
+    #set-notes {
+      display: none;
+      padding: 10px;
+      border: 1px dashed #aaa;
+      margin-top: 5px;
+    }
+    /* BREAK SNIFFER - New Controls Layout */
+    .break-controls {
+      margin-bottom: 20px;
+    }
+    #break-controls-row {
+      display: flex;
+      gap: 20px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .input-group label {
+      margin-bottom: 3px;
+      font-weight: bold;
+      font-size: 0.8em;
+      text-align: left;
+    }
+    .markup-group {
+      display: flex;
+      align-items: center;
+    }
+    .markup-group input {
+      margin-right: 10px;
+    }
+    /* Uniform styling for all lookup buttons */
+    .lookup-button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 40px;
+      min-width: 150px;
+      box-sizing: border-box;
+    }
+    .lookup-button img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    /* Button group for toggles */
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+    /* Glow effects for hover on buttons */
+    .glow-dacardworld:hover,
+    .glow-steelcity:hover,
+    .glow-outofthebox:hover,
+    .glow-midwestcards:hover,
+    .glow-tcdb:hover,
+    .glow-hockeychecklists:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
+    /* Price Settings Toggle Button with decreased font size */
+    #priceSettingsToggle,
+    #priceLookupToggle {
+      background-color: #66bb6a;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.8em;
+      height: 40px;
+    }
+    /* Price Settings and Price Lookup hidden menus */
+    #price-settings,
+    #price-lookup-menu {
+      display: none;
+      margin-top: 10px;
+    }
+    /* New Button Container inside Price Lookup Menu */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    /* BREAK SNIFFER - Right Column */
+    .break-results-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    /* Break Sniffer results tiles updated styling */
+    #break-tiles .tile {
+      margin: 5px;
+      padding: 15px;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      font-family: 'BreakPricingFontBold', sans-serif;
+      font-size: 1.1em;
+    }
+    /* Using SVG for the pie chart */
+    #pieChart {
+      width: 250px;
+      height: 250px;
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .toggle-switch {
+      display: inline-block;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #66bb6a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* Key Rookies section */
+    #rookie-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #rookie-tiles .tile {
+      flex: 0 0 calc(33% - 10px);
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    .rookie-img {
+      max-width: 50%;
       height: auto;
+      display: block;
+      margin: 0;
+    }
+    .team-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    /* Increase team logos in key rookie tiles by 250% */
+    .key-rookie-logo {
+      width: 125px;
+      height: 125px;
+    }
+    .rookie-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Navigation -->
-    <nav class="nav">
-      <a href="index.html">Home</a>
-        <a href="howitworks.html">How It Works</a>
+  <!-- Header -->
+  <header>
+    <img src="resources/skunk.png" alt="Skunk logo">
+    <h1>Skunksniper.com</h1>
+  </header>
+  <p>Sniff out the best breaks</p>
 
-      <a href="about.html">About</a>
-    </nav>
-    <h1>About SkunkSniper.com</h1>
-    <p>SkunkSniper.com was created in 2025 as an experimental project aimed at making sports card breaks more transparent.</p>
-    <h2>Why does this exist?</h2>
-    <p><strong>For collectors:</strong> Ensure you have a fair shot in breaks and quickly find the most valuable cards in any set. A simple checklist isn't enough—you need complete and clear information.</p>
-    <p><strong>For breakers:</strong> Price your sets with ease and provide full transparency to buyers. Quickly look up retail case prices and ensure your pricing is fair and accurate.</p>
-    <h2>Are other sports coming?</h2>
-    <p>Yes, we plan to expand beyond hockey. However, there’s no set timeline for adding other sports.</p>
-    <h2>Are you affiliated with anyone?</h2>
-    <p>No, SkunkSniper.com is an independent project with no affiliations. We don’t generate revenue, and all links provided are purely for the benefit of the card collecting community—there is no affiliate income.</a></p>
-    <h2>Support the project</h2>
-    <p>This is a self-funded initiative. If you’d like to support a cause we believe in, please consider donating to the <a href="https://give.ucsfbenioffchildrens.org/ways-to-give">UCSF Benioff Children's Hospital</a>.</p>
-    <div class="donation-image">
-      <a href="https://give.ucsfbenioffchildrens.org/ways-to-give">
-        <img src="resources/benioff.jpg" alt="Donate to UCSF Benioff Children's Hospital">
-      </a>
+  <!-- Section 1: Set and Year Selection -->
+  <section id="set-selection">
+    <p>
+      I want to explore 
+      <select id="setNameSelect">
+        <option value="">-- Select Set Name --</option>
+      </select>
+      for the years 
+      <select id="setYearSelect">
+        <!-- Populated by config -->
+      </select>
+    </p>
+  </section>
+
+  <!-- Section 2: Set Details -->
+  <section id="set-details">
+    <h2>Set Details</h2>
+    <div id="details-text"></div>
+    <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
+    <div id="set-notes"></div>
+    <div class="tile-container" id="set-tiles">
+      <!-- Hero and support rows will be added here -->
     </div>
-<h2>Where do you get the data?</h2>
-    <p>Data is sourced directly from <a href ='https://www.upperdeck.com'> Upper Deck </a> and <a href='https://www.breakninja.com'>Break Ninja</a>. We thank them both very much.</p>
-    <h2>Contact</h2>
-    <p>For any inquiries, feel free to reach out at <a href="mailto:cassidy.lavin@gmail.com">cassidy.lavin@gmail.com</a>.</p>
-  </div>
+    <!-- New Buttons for TCDB and HockeyChecklists -->
+    <div class="button-container">
+      <button type="button" class="lookup-button glow-tcdb" onclick="openTcdbSearch()">
+        <img src="resources/tcdb.jpg" alt="TCDB Logo"> TCDB
+      </button>
+      <button type="button" class="lookup-button glow-hockeychecklists" onclick="openHockeyChecklistsSearch()">
+        <img src="resources/hockeychecklists.png" alt="HockeyChecklists Logo"> HockeyChecklists.com
+      </button>
+    </div>
+  </section>
+
+  <!-- Section 3: Key Rookies -->
+  <section id="key-rookies">
+    <h2>Key Rookies</h2>
+    <div class="tile-container" id="rookie-tiles">
+      <!-- Key rookie tiles will be added here -->
+    </div>
+  </section>
+
+  <!-- Section 4: Break Sniffer -->
+  <section id="break-sniffer">
+    <h2>Break Sniffer</h2>
+    <div class="break-sniffer-flex">
+      <!-- Left Column: Controls -->
+      <div class="break-controls">
+        <div id="break-controls-row">
+          <div class="input-group">
+            <label for="caseCost">Cost of a case</label>
+            <input type="number" id="caseCost" step="0.01" value="1999.95">
+          </div>
+          <div class="input-group">
+            <label for="markupValue">Markup</label>
+            <input type="number" id="markupValue" step="0.01" value="500">
+          </div>
+          <div class="button-group">
+            <button id="priceSettingsToggle" type="button">Price Settings</button>
+            <button id="priceLookupToggle" type="button">Price Lookup</button>
+          </div>
+        </div>
+        <!-- Hidden Price Settings Menu -->
+        <div id="price-settings">
+          <div class="input-group">
+            <label for="markupToggle">Use % markup</label>
+            <input type="checkbox" id="markupToggle">
+          </div>
+          <div class="input-group">
+            <label for="suppliesCost">Cost of supplies per team</label>
+            <input type="number" id="suppliesCost" step="0.01" value="1.00">
+          </div>
+          <div class="input-group">
+            <label for="blendedTax">Blended tax (%)</label>
+            <input type="number" id="blendedTax" step="0.1" value="5.1">
+          </div>
+        </div>
+        <!-- Hidden Price Lookup Menu -->
+        <div id="price-lookup-menu">
+          <div class="button-container">
+            <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
+              <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+              Dacardworld.com
+            </button>
+            <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
+              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+              SteelCityCollectibles.com
+            </button>
+            <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
+              <img src="resources/ootb.png" alt="Out of the Box Logo">
+              Out of the Box
+            </button>
+            <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
+              <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+              Midwest Cards
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Right Column: Break Sniffer Results -->
+      <div class="break-results-container">
+        <div id="break-results">
+          <div class="tiles" id="break-tiles">
+            <!-- Breaker boxes will appear here -->
+          </div>
+          <svg id="pieChart" width="250" height="250"></svg>
+        </div>
+      </div>
+    </div>
+    <table id="team-table">
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th>Total Numbered Cards</th>
+          <th>Distribution (%)</th>
+          <th>Avg. Cards per Case</th>
+          <th>Distributed Cost + Markup</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Rows will be added here -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    let config = null;
+    let currentSet = null;
+
+    async function loadConfig() {
+      try {
+        const response = await fetch('config.json');
+        config = await response.json();
+        populateYearDropdown();
+        updateSetNameDropdown();
+        document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
+          input.addEventListener('input', updateBreakSniffer);
+        });
+        document.getElementById('priceSettingsToggle').addEventListener('click', function() {
+          const ps = document.getElementById('price-settings');
+          ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
+        });
+        document.getElementById('priceLookupToggle').addEventListener('click', function() {
+          const pl = document.getElementById('price-lookup-menu');
+          pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'flex' : 'none';
+        });
+        onSelectionChange();
+      } catch (error) {
+        console.error("Error loading config.json:", error);
+      }
+    }
+
+    function populateYearDropdown() {
+      const setYearSelect = document.getElementById('setYearSelect');
+      let years = new Set();
+      config.sets.forEach(s => { years.add(s.year); });
+      years = Array.from(years).sort();
+      const defaultYear = years[years.length - 1];
+      years.forEach(year => {
+        const opt = document.createElement('option');
+        opt.value = year;
+        opt.textContent = year;
+        if (year === defaultYear) opt.selected = true;
+        setYearSelect.appendChild(opt);
+      });
+    }
+
+    function updateSetNameDropdown() {
+      const year = document.getElementById('setYearSelect').value;
+      const setNameSelect = document.getElementById('setNameSelect');
+      const currentSelected = setNameSelect.value;
+      setNameSelect.innerHTML = "";
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = "";
+      defaultOpt.textContent = "-- Select Set Name --";
+      setNameSelect.appendChild(defaultOpt);
+      const filteredSets = config.sets.filter(s => s.year === year);
+      const uniqueNames = [...new Set(filteredSets.map(s => s.name))].sort();
+      let found = false;
+      uniqueNames.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        if(name === currentSelected) { opt.selected = true; found = true; }
+        setNameSelect.appendChild(opt);
+      });
+      if (!found) { setNameSelect.value = ""; }
+    }
+
+    document.getElementById('setYearSelect').addEventListener('change', function() {
+      updateSetNameDropdown();
+      onSelectionChange();
+    });
+    document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
+    document.getElementById('toggleNotes').addEventListener('click', function(e){
+      e.preventDefault();
+      const notesDiv = document.getElementById('set-notes');
+      notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
+    });
+
+    function onSelectionChange() {
+      const setName = document.getElementById('setNameSelect').value;
+      const setYear = document.getElementById('setYearSelect').value;
+      currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
+      updateSetDetails();
+      updateBreakCaseCost();
+      updateKeyRookies();
+      updateBreakSniffer();
+      if (!currentSet) {
+        document.getElementById('toggleNotes').style.display = 'none';
+        document.getElementById('details-text').textContent = "Please select a set and year to get started.";
+        document.getElementById('set-tiles').innerHTML = "";
+        document.getElementById('team-table').querySelector('tbody').innerHTML = "";
+        // Clear pie chart if no data
+        document.getElementById('pieChart').innerHTML = "";
+      } else {
+        document.getElementById('toggleNotes').style.display = 'inline';
+      }
+    }
+
+    function updateBreakCaseCost() {
+      if (currentSet && currentSet.price) {
+        const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
+        if (!isNaN(priceNum)) { document.getElementById('caseCost').value = priceNum.toFixed(2); }
+      }
+    }
+
+    function updateSetDetails() {
+      const detailsDiv = document.getElementById('details-text');
+      const notesDiv = document.getElementById('set-notes');
+      const tilesDiv = document.getElementById('set-tiles');
+      if (!currentSet) {
+        detailsDiv.textContent = "Please select a set and year to get started.";
+        notesDiv.textContent = "";
+        tilesDiv.innerHTML = "";
+        return;
+      }
+      detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. Each box contains ${currentSet.configuration}.`;
+      notesDiv.textContent = currentSet.notes || "No additional notes available.";
+      
+      tilesDiv.innerHTML = "";
+      const heroContainer = document.createElement('div');
+      heroContainer.className = 'hero-row';
+      const supportContainer = document.createElement('div');
+      supportContainer.className = 'support-row';
+      
+      const heroTile1 = document.createElement('div');
+      heroTile1.className = 'tile hero';
+      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
+      heroContainer.appendChild(heroTile1);
+      
+      const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
+      const heroTile2 = document.createElement('div');
+      heroTile2.className = 'tile hero';
+      heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
+      heroContainer.appendChild(heroTile2);
+      
+      const tileBoxes = document.createElement('div');
+      tileBoxes.className = 'tile';
+      tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
+      supportContainer.appendChild(tileBoxes);
+      
+      const tilePacks = document.createElement('div');
+      tilePacks.className = 'tile';
+      tilePacks.innerHTML = `<div class="tile-value">${currentSet.packs_per_box || "N/A"}</div><div class="tile-desc">Packs per Box</div>`;
+      supportContainer.appendChild(tilePacks);
+      
+      const tileCardsPack = document.createElement('div');
+      tileCardsPack.className = 'tile';
+      tileCardsPack.innerHTML = `<div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div><div class="tile-desc">Cards per Pack</div>`;
+      supportContainer.appendChild(tileCardsPack);
+      
+      const cardsPerBox = computeCardsPerBox(currentSet);
+      const tileCardsBox = document.createElement('div');
+      tileCardsBox.className = 'tile';
+      tileCardsBox.innerHTML = `<div class="tile-value">${cardsPerBox || "N/A"}</div><div class="tile-desc">Cards per Box</div>`;
+      supportContainer.appendChild(tileCardsBox);
+      
+      tilesDiv.appendChild(heroContainer);
+      tilesDiv.appendChild(supportContainer);
+    }
+
+    function computeTotalCardsPerCase(setObj) {
+      const boxes = parseFloat(setObj.boxes_per_case);
+      const packs = parseFloat(setObj.packs_per_box);
+      const cards = parseFloat(setObj.cards_per_pack);
+      if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
+      return boxes * packs * cards;
+    }
+
+    function computeCardsPerBox(setObj) {
+      const packs = parseFloat(setObj.packs_per_box);
+      const cards = parseFloat(setObj.cards_per_pack);
+      if (isNaN(packs) || isNaN(cards)) return null;
+      return packs * cards;
+    }
+
+    function updateKeyRookies() {
+      const rookieContainer = document.getElementById('rookie-tiles');
+      rookieContainer.innerHTML = "";
+      const selectedYear = document.getElementById('setYearSelect').value;
+      let keyPlayers = config["Key Players"] || config.keyPlayers;
+      console.log("Key Players Data:", keyPlayers);
+      if (keyPlayers && Array.isArray(keyPlayers)) {
+        const keyRookies = keyPlayers.filter(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
+        });
+        if (keyRookies.length > 0) {
+          keyRookies.forEach(player => {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            const teamKey = player.Team || player.team;
+            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
+            tile.innerHTML = `<strong>${player.player}</strong><br>
+              <div class="rookie-image-container">
+                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
+                <img class="rookie-img" src="${player.image}" alt="${player.player}">
+              </div>
+              <br>${player.notes || ""}`;
+            rookieContainer.appendChild(tile);
+          });
+        } else {
+          rookieContainer.textContent = "No key rookie players found for the selected year.";
+        }
+      } else {
+        rookieContainer.textContent = "No key players data available.";
+      }
+    }
+
+    function updateBreakSniffer() {
+      if (!currentSet) {
+        const breakTiles = document.getElementById('break-tiles');
+        breakTiles.textContent = "Please select a set and year to get started.";
+        document.getElementById('team-table').querySelector('tbody').innerHTML = "";
+        document.getElementById('pieChart').innerHTML = "";
+        return;
+      }
+      const costCase = parseFloat(document.getElementById('caseCost').value);
+      const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
+      const usePercent = document.getElementById('markupToggle').checked;
+      const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
+      const blendedTax = parseFloat(document.getElementById('blendedTax').value);
+      
+      let costWithMarkup = usePercent ? costCase * (1 + markupVal/100) : costCase + markupVal;
+      const whatnotsCut = costWithMarkup * 0.08;
+      
+      const teams = currentSet.cards;
+      const teamNames = Object.keys(teams);
+      const totalCards = teamNames.reduce((sum, team) => sum + teams[team], 0);
+      const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
+      
+      let totalCostOfBusiness = 0;
+      const tbody = document.getElementById('team-table').querySelector('tbody');
+      tbody.innerHTML = "";
+      
+      const selectedYear = document.getElementById('setYearSelect').value;
+      
+      teamNames.forEach(team => {
+        const teamCards = teams[team];
+        const distribution = teamCards / totalCards;
+        const distributedCost = costCase * distribution;
+        const transactionCost = distributedCost * (1 + blendedTax/100) * 0.029 + 0.30;
+        const costBusinessTeam = suppliesCost + transactionCost;
+        totalCostOfBusiness += costBusinessTeam;
+        const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase).toFixed(2) : "N/A";
+        let distCostWithMarkup = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
+        
+        const keyPlayers = config["Key Players"] || config.keyPlayers;
+        let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' &&
+                 player.setYear === selectedYear &&
+                 teamKey === team;
+        });
+        const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
+        const keyEmoji = hasKeyRookie ? ' 🔑' : '';
+        
+        const teamImage = config.images && config.images["team images"] && config.images["team images"][team] ? config.images["team images"][team] : "";
+        tbody.innerHTML += `
+          <tr${highlightStyle}>
+            <td>${ teamImage ? `<img src="${teamImage}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` : "" }${team}${keyEmoji}</td>
+            <td>${teamCards}</td>
+            <td>${(distribution * 100).toFixed(2)}%</td>
+            <td>${avgCardsCase}</td>
+            <td>$${distCostWithMarkup.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+      
+      const markupAmount = costWithMarkup - costCase;
+      const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
+      
+      const breakTiles = document.getElementById('break-tiles');
+      breakTiles.innerHTML = "";
+      const tileProfit = document.createElement('div');
+      tileProfit.className = 'tile';
+      tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
+      breakTiles.appendChild(tileProfit);
+      
+      const tileWhatnots = document.createElement('div');
+      tileWhatnots.className = 'tile';
+      tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
+      breakTiles.appendChild(tileWhatnots);
+      
+      const tileBusiness = document.createElement('div');
+      tileBusiness.className = 'tile';
+      tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
+      breakTiles.appendChild(tileBusiness);
+      
+      const data = [
+        { label: "Profit", value: breakersProfit },
+        { label: "Whatnots", value: whatnotsCut },
+        { label: "Business", value: totalCostOfBusiness }
+      ];
+      drawPieChartSVG(data, markupAmount);
+    }
+
+    function drawPieChartSVG(data, total) {
+      const svg = document.getElementById('pieChart');
+      while (svg.firstChild) { svg.removeChild(svg.firstChild); }
+      
+      // Define drop shadow filter for a modern look
+      const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      const filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+      filter.setAttribute("id", "shadow");
+      filter.setAttribute("x", "-20%");
+      filter.setAttribute("y", "-20%");
+      filter.setAttribute("width", "140%");
+      filter.setAttribute("height", "140%");
+      const feDropShadow = document.createElementNS("http://www.w3.org/2000/svg", "feDropShadow");
+      feDropShadow.setAttribute("dx", "0");
+      feDropShadow.setAttribute("dy", "2");
+      feDropShadow.setAttribute("stdDeviation", "3");
+      feDropShadow.setAttribute("flood-color", "#000");
+      feDropShadow.setAttribute("flood-opacity", "0.2");
+      filter.appendChild(feDropShadow);
+      defs.appendChild(filter);
+      svg.appendChild(defs);
+      
+      const centerX = 125, centerY = 125;
+      const outerRadius = 105;
+      const innerRadius = 60;  // Donut hole radius for a modern donut chart
+      
+      if(total === 0) total = 1;
+      let startAngle = 0;
+      // Modern Material palette for slices
+      const colors = ["#4CAF50", "#FF9800", "#2196F3"];
+      data.forEach((d, i) => {
+        const sliceAngle = (d.value / total) * 2 * Math.PI;
+        const endAngle = startAngle + sliceAngle;
+        // Coordinates for outer arc
+        const x1 = centerX + outerRadius * Math.cos(startAngle);
+        const y1 = centerY + outerRadius * Math.sin(startAngle);
+        const x2 = centerX + outerRadius * Math.cos(endAngle);
+        const y2 = centerY + outerRadius * Math.sin(endAngle);
+        // Coordinates for inner arc
+        const x3 = centerX + innerRadius * Math.cos(endAngle);
+        const y3 = centerY + innerRadius * Math.sin(endAngle);
+        const x4 = centerX + innerRadius * Math.cos(startAngle);
+        const y4 = centerY + innerRadius * Math.sin(startAngle);
+        
+        const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
+        const pathData = [
+          `M ${x1} ${y1}`,
+          `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+          `L ${x3} ${y3}`,
+          `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4}`,
+          "Z"
+        ].join(" ");
+        
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathData);
+        path.setAttribute("fill", colors[i % colors.length]);
+        path.setAttribute("stroke", "#fff");
+        path.setAttribute("stroke-width", "2");
+        path.setAttribute("filter", "url(#shadow)");
+        svg.appendChild(path);
+        startAngle = endAngle;
+      });
+    }
+
+    // New button functions for additional sites inside Price Settings / Lookup Menu
+    function openDacardworldSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
+    }
+    function openSteelCitySearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
+    }
+    function openOotbSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
+    }
+    function openMidwestCardsSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet + " hockey hobby case";
+      window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
+    }
+    function openTcdbSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet;
+      window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
+    }
+    function openHockeyChecklistsSearch() {
+      const selectedSet = document.getElementById("setNameSelect").value;
+      const selectedYear = document.getElementById("setYearSelect").value;
+      if (!selectedSet) { alert("Please select a set first."); return; }
+      if (!selectedYear) { alert("Please select a set year first."); return; }
+      const yearPrefix = selectedYear.split("-")[0];
+      const query = yearPrefix + " " + selectedSet;
+      window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
+    }
+
+    loadConfig();
+  </script>
 </body>
 </html>
