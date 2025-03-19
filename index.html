@@ -124,12 +124,25 @@
     .markup-group input {
       margin-right: 10px;
     }
-    /* Style for number input fields in the Break Sniffer section */
-    .break-controls input[type="number"] {
+    /* Modern styling for number input fields (Break Sniffer & Price Settings) */
+    .break-controls input[type="number"],
+    #price-settings input[type="number"],
+    #price-lookup-menu input[type="number"] {
       width: 80px;
-      height: 30px;
-      padding: 4px;
+      height: 24px;
+      padding: 2px 4px;
       margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      background: #fff;
+    }
+    .break-controls input[type="number"]:focus,
+    #price-settings input[type="number"]:focus,
+    #price-lookup-menu input[type="number"]:focus {
+      outline: none;
+      border-color: #66bb6a;
+      box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
     }
     /* Uniform styling for all lookup buttons */
     .lookup-button {
@@ -167,23 +180,27 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Price Settings Toggle Button with adjusted height */
+    /* Price Settings and Price Lookup buttons matching input height */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: #66bb6a;
       color: #fff;
       border: none;
       border-radius: 20px;
-      padding: 5px 10px;
+      padding: 2px 10px;
       cursor: pointer;
       font-size: 0.8em;
-      height: 30px; /* adjusted to match input height */
+      height: 24px;
     }
     /* Price Settings and Price Lookup hidden menus */
     #price-settings,
     #price-lookup-menu {
       display: none;
       margin-top: 10px;
+    }
+    /* Increase spacing between fields in the Price Settings menu */
+    #price-settings .input-group {
+      margin-bottom: 10px;
     }
     /* New Button Container inside Price Lookup Menu */
     .button-container {
