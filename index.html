@@ -226,6 +226,7 @@
       text-align: center;
       vertical-align: middle;
     }
+    /* iOS Style Toggle Switch */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -379,7 +380,10 @@
         <div id="price-settings">
           <div class="input-group">
             <label for="markupToggle">Use % markup</label>
-            <input type="checkbox" id="markupToggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="markupToggle">
+              <span class="slider"></span>
+            </label>
           </div>
           <div class="input-group">
             <label for="suppliesCost">Cost of supplies per team</label>
