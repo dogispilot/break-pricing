@@ -208,8 +208,12 @@
     #rookie-tiles .ebay-btn img {
       height: 30px !important;
     }
-    /* Override for team table: reduce the eBay button image in the first row by 50% (from 40px to 20px) */
-    #team-table tbody tr:first-child .ebay-btn img {
+    /* Override for team table: target the first column for the eBay button */
+    #team-table tbody tr td:first-child {
+      display: flex;
+      align-items: center;
+    }
+    #team-table tbody tr td:first-child .ebay-btn img {
       height: 20px !important;
     }
     /* Lookup buttons */
