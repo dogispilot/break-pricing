@@ -731,12 +731,18 @@
 
     // Updated Price Calculation Logic:
     // 1. Compute baseline = distributed cost + markup for each team.
-    // 2. For teams with a boost (boost > 0), add boost amount (baseline * boost/100) and accumulate the extra boost pool.
-    //    For non-boosted teams, keep the baseline.
-    // 3. Redistribute the boost extra pool evenly among non-boosted teams.
-    // 4. For teams with a discount (discount > 0), reduce the adjusted price by discount percentage and accumulate the discount pool.
-    // 5. Redistribute the discount pool evenly among teams that did not receive a discount.
-    // 6. Finally, normalize final prices so that the total equals the sum of the baseline prices.
+    // 2. For teams with a boost (boost > 0), compute:
+    //      adjusted = baseline + (baseline * boost/100)
+    //    Accumulate boostExtraPool = sum(boost amounts) across boosted teams.
+    // 3. For teams that are not boosted, subtract an equal share of the boostExtraPool:
+    //      adjusted = baseline - (boostExtraPool / number of non-boosted teams)
+    // 4. Apply Discounts:
+    //    For teams with a discount (discount > 0):
+    //      final = adjusted - (adjusted * discount/100)
+    //    Accumulate discountPool = sum(discount amounts) across discounted teams.
+    // 5. For teams that are not discounted, add an equal share of the discountPool:
+    //      final = adjusted + (discountPool / number of non-discount teams)
+    // 6. Set the final team price to final.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -793,21 +799,20 @@
         const boostInput = document.getElementById("boost-" + data.team);
         data.boost = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         if (data.boost > 0) {
+          // For a 90 boost, adjusted = baseline + (baseline * 0.9) = baseline * 1.9
           let boostAmount = data.baseline * (data.boost / 100);
           data.adjusted = data.baseline + boostAmount;
           boostExtraPool += boostAmount;
           boostedTeams.push(data);
         } else {
-          data.adjusted = data.baseline;
           nonBoostedTeams.push(data);
         }
       });
-      
-      // Redistribute boost extra pool among non-boosted teams
+      // For non-boosted teams, subtract the extra boost pool evenly.
       if (nonBoostedTeams.length > 0) {
         let boostShare = boostExtraPool / nonBoostedTeams.length;
         nonBoostedTeams.forEach(data => {
-          data.adjusted += boostShare;
+          data.adjusted = data.baseline - boostShare;
         });
       }
       
@@ -824,28 +829,23 @@
           discountPool += discountAmount;
           discountTeams.push(data);
         } else {
-          data.final = data.adjusted;
           nonDiscountTeams.push(data);
         }
       });
-      
-      // Redistribute discount pool among non-discount teams
+      // Redistribute discount pool among non-discount teams by adding it evenly.
       if (nonDiscountTeams.length > 0) {
         let discountShare = discountPool / nonDiscountTeams.length;
         nonDiscountTeams.forEach(data => {
-          data.final += discountShare;
+          data.final = data.adjusted + discountShare;
         });
       }
       
-      // Normalize final prices so the total equals the sum of the baseline prices
-      let totalBaseline = teamData.reduce((sum, data) => sum + data.baseline, 0);
-      let totalFinal = teamData.reduce((sum, data) => sum + data.final, 0);
-      let scaleFactor = totalBaseline / totalFinal;
+      // Set final team price
       teamData.forEach(data => {
-        data.teamPrice = data.final * scaleFactor;
+        data.teamPrice = data.final;
       });
       
-      // Build the table rows with updated discount column
+      // Build the table rows
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
