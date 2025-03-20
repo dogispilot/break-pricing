@@ -190,6 +190,20 @@
     input.discount-input {
       -moz-appearance: textfield;
     }
+    /* --------------------- NEW BUTTON STYLES --------------------- */
+    .ebay-btn, .nhl-btn {
+      background: none !important;
+      padding: 0 !important;
+      border: none !important;
+      display: inline !important;
+      text-decoration: none !important;
+    }
+    .ebay-btn img, .nhl-btn img {
+      height: 16px !important;
+      width: auto !important;
+      box-shadow: none !important;
+    }
+    /* --------------------- END NEW BUTTON STYLES --------------------- */
     /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
@@ -415,7 +429,7 @@
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
     <div class="tile-container" id="rookie-tiles">
-      <!-- Key rookie tiles will be added here -->
+      <!-- Key rookie tiles will be generated here -->
     </div>
   </section>
 
@@ -695,6 +709,26 @@
       return packs * cards;
     }
 
+    // --------------------- NEW FUNCTIONS FOR BUTTONS ---------------------
+    function openPlayerEbaySearch(playerName) {
+      const setName = document.getElementById("setNameSelect").value;
+      const setYear = document.getElementById("setYearSelect").value;
+      if (!setName || !setYear) { alert("Please select both a set and year."); return; }
+      const yearPrefix = setYear.split("-")[0];
+      const query = yearPrefix + " " + setName + " " + playerName;
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+    }
+    function openTeamSearch(teamName) {
+      const setName = document.getElementById("setNameSelect").value;
+      const setYear = document.getElementById("setYearSelect").value;
+      if (!setName || !setYear) { alert("Please select a set and year."); return; }
+      const yearPrefix = setYear.split("-")[0];
+      const query = yearPrefix + " " + setName + " " + teamName;
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+    }
+    // --------------------- END NEW FUNCTIONS ---------------------
+
+    // Updated Key Rookies function to add NHL and eBay buttons
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -710,15 +744,34 @@
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
-            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] 
-              ? config.images["team images"][teamKey] 
-              : "";
+            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
+            // Create a container for the rookie image and buttons
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
                 ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
               <br>${player.notes || ""}`;
+            // Create buttons container
+            const btnContainer = document.createElement('div');
+            btnContainer.style.display = "inline-flex";
+            btnContainer.style.gap = "4px";
+            btnContainer.style.marginTop = "8px";
+            // NHL button
+            const nhlLink = document.createElement("a");
+            nhlLink.href = player.profile_link;
+            nhlLink.target = "_blank";
+            nhlLink.className = "nhl-btn";
+            nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile">';
+            btnContainer.appendChild(nhlLink);
+            // eBay button
+            const ebayLink = document.createElement("a");
+            ebayLink.href = "javascript:void(0)";
+            ebayLink.className = "ebay-btn";
+            ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
+            ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay">';
+            btnContainer.appendChild(ebayLink);
+            tile.appendChild(btnContainer);
             rookieContainer.appendChild(tile);
           });
         } else {
@@ -897,7 +950,14 @@
                           : "";
         tbody.innerHTML += `
           <tr${highlightStyle}>
-            <td>${teamImage}${data.team}${keyEmoji}</td>
+            <td>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" style="color:#fff; text-decoration:none;">
+                ${teamImage}${data.team}${keyEmoji}
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay">
+              </a>
+            </td>
             <td>${data.teamCards}</td>
             <td>${(data.distribution * 100).toFixed(2)}%</td>
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
@@ -1052,6 +1112,15 @@
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
+    }
+    // New function for team ebay search (for table team name)
+    function openTeamSearch(teamName) {
+      const setName = document.getElementById("setNameSelect").value;
+      const setYear = document.getElementById("setYearSelect").value;
+      if (!setName || !setYear) { alert("Please select a set and year."); return; }
+      const yearPrefix = setYear.split("-")[0];
+      const query = yearPrefix + " " + setName + " " + teamName;
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
 
     loadConfig();
