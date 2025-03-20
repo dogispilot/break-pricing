@@ -126,9 +126,15 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* Removed inline styling for Price Settings inputs to ensure label is on top */
+    /* Inline styling for groups in break controls */
+    #break-controls-row .input-group.inline {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+    }
+    /* Price Settings menu input groups now have 15px spacing */
     #price-settings .input-group {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
@@ -174,11 +180,6 @@
       height: 24px;
       vertical-align: middle;
     }
-    /* Button group for toggles */
-    .button-group {
-      display: flex;
-      gap: 10px;
-    }
     /* Glow effects for hover on buttons */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
@@ -189,7 +190,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Price Settings and Price Lookup buttons matching input height */
+    /* Price Settings and Price Lookup buttons */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: #66bb6a;
@@ -403,7 +404,7 @@
             <label for="markupValue">Markup <span id="markupUnit"></span></label>
             <input type="number" id="markupValue" step="0.01" value="500">
           </div>
-          <div class="input-group">
+          <div class="input-group inline">
             <button id="priceSettingsToggle" type="button">Price Settings</button>
             <button id="priceLookupToggle" type="button">Price Lookup</button>
           </div>
