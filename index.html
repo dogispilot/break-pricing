@@ -178,7 +178,7 @@
       border-color: #66bb6a;
       box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
     }
-    /* Remove spinner arrows from boost and discount fields */
+    /* Remove spinner arrows from numeric fields */
     input.boost-input::-webkit-inner-spin-button,
     input.boost-input::-webkit-outer-spin-button,
     input.discount-input::-webkit-inner-spin-button,
@@ -502,8 +502,8 @@
           <th>Distribution (%)</th>
           <th>Avg. Cards per Case</th>
           <th>Distributed Cost + Markup</th>
-          <th>Boost (%)</th>
-          <th>Discount (%)</th>
+          <th>Boost</th>
+          <th>Discount</th>
           <th>Team Price</th>
         </tr>
       </thead>
@@ -729,15 +729,40 @@
       }
     }
 
+    // Toggle functions to show/hide numeric input when checkbox is toggled
+    function toggleBoostInput(team) {
+      const checkbox = document.getElementById("boost-checkbox-" + team);
+      const input = document.getElementById("boost-input-" + team);
+      if (checkbox.checked) {
+        input.style.display = "inline-block";
+      } else {
+        input.style.display = "none";
+        input.value = "";
+        updateBreakSniffer();
+      }
+    }
+
+    function toggleDiscountInput(team) {
+      const checkbox = document.getElementById("discount-checkbox-" + team);
+      const input = document.getElementById("discount-input-" + team);
+      if (checkbox.checked) {
+        input.style.display = "inline-block";
+      } else {
+        input.style.display = "none";
+        input.value = "";
+        updateBreakSniffer();
+      }
+    }
+
     // Updated Price Calculation Logic:
     // 1. Compute baseline = distributed cost + markup for each team.
-    // 2. For teams with a boost (boost > 0), compute:
+    // 2. For teams with a boost (checkbox ticked), compute:
     //      adjusted = baseline + (baseline * boost/100)
     //    Accumulate boostExtraPool = sum(boost amounts) across boosted teams.
     // 3. For teams that are not boosted, subtract an equal share of the boostExtraPool:
     //      adjusted = baseline - (boostExtraPool / number of non-boosted teams)
     // 4. Apply Discounts:
-    //    For teams with a discount (discount > 0):
+    //    For teams with a discount (checkbox ticked):
     //      final = adjusted - (adjusted * discount/100)
     //    Accumulate discountPool = sum(discount amounts) across discounted teams.
     // 5. For teams that are not discounted, add an equal share of the discountPool:
@@ -796,10 +821,14 @@
       const boostedTeams = [];
       const nonBoostedTeams = [];
       teamData.forEach(data => {
-        const boostInput = document.getElementById("boost-" + data.team);
-        data.boost = boostInput ? parseFloat(boostInput.value) || 0 : 0;
+        const boostCheckbox = document.getElementById("boost-checkbox-" + data.team);
+        let boostVal = 0;
+        if (boostCheckbox && boostCheckbox.checked) {
+          const boostInput = document.getElementById("boost-input-" + data.team);
+          boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
+        }
+        data.boost = boostVal;
         if (data.boost > 0) {
-          // For a 90 boost, adjusted = baseline + (baseline * 0.9) = baseline * 1.9
           let boostAmount = data.baseline * (data.boost / 100);
           data.adjusted = data.baseline + boostAmount;
           boostExtraPool += boostAmount;
@@ -821,8 +850,13 @@
       const discountTeams = [];
       const nonDiscountTeams = [];
       teamData.forEach(data => {
-        const discountInput = document.getElementById("discount-" + data.team);
-        data.discount = discountInput ? parseFloat(discountInput.value) || 0 : 0;
+        const discountCheckbox = document.getElementById("discount-checkbox-" + data.team);
+        let discountVal = 0;
+        if (discountCheckbox && discountCheckbox.checked) {
+          const discountInput = document.getElementById("discount-input-" + data.team);
+          discountVal = discountInput ? parseFloat(discountInput.value) || 0 : 0;
+        }
+        data.discount = discountVal;
         if (data.discount > 0) {
           let discountAmount = data.adjusted * (data.discount / 100);
           data.final = data.adjusted - discountAmount;
@@ -845,7 +879,7 @@
         data.teamPrice = data.final;
       });
       
-      // Build the table rows
+      // Build the table rows with new boost and discount controls
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -868,8 +902,20 @@
             <td>${(data.distribution * 100).toFixed(2)}%</td>
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
-            <td><input type="number" class="boost-input" id="boost-${data.team}" style="width:60px;" step="0.1" value="${data.boost || 0}" oninput="updateBreakSniffer()"></td>
-            <td><input type="number" class="discount-input" id="discount-${data.team}" style="width:60px;" step="0.1" value="${data.discount || 0}" oninput="updateBreakSniffer()"></td>
+            <td>
+              <label>
+                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" />
+                🚀
+              </label>
+              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; display:none;" step="0.1" oninput="updateBreakSniffer()">
+            </td>
+            <td>
+              <label>
+                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" />
+                ✂️
+              </label>
+              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; display:none;" step="0.1" oninput="updateBreakSniffer()">
+            </td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
         `;
