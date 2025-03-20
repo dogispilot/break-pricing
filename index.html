@@ -137,15 +137,12 @@
       gap: 10px;
       align-items: center;
     }
-    /* Updated Price Settings Menu:
-       Each setting is in its own column with the label on top and control directly beneath.
-       The groups are arranged in a row with a 15px gap and centered.
-    */
+    /* Updated Price Settings Menu: each group is a column with label on top */
     #price-settings {
       display: flex;
       gap: 15px;
       margin-top: 10px;
-      justify-content: center;
+      justify-content: flex-start; /* Left align the menu */
     }
     .price-setting-group {
       display: flex;
@@ -156,6 +153,11 @@
       margin-bottom: 5px;
       font-weight: bold;
       font-size: 0.8em;
+    }
+    /* Ensure the toggle switch is displayed as block with a top margin so it lines up with inputs */
+    .price-setting-group .toggle-switch {
+      display: block;
+      margin-top: 5px;
     }
     /* Uniform styling for number inputs */
     .break-controls input[type="number"],
@@ -285,7 +287,7 @@
       position: relative;
       width: 50px;
       height: 24px;
-      margin: 0; /* Removed left margin so it centers in its group */
+      margin: 0;
       vertical-align: middle;
     }
     .toggle-switch input {
@@ -431,7 +433,7 @@
             </div>
           </div>
         </div>
-        <!-- Updated Price Settings Menu: Each setting in its own column -->
+        <!-- Updated Price Settings Menu -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -714,12 +716,9 @@
       }
     }
 
-    // Updated boost calculation:
-    // For each team, let baseline = distributed cost + markup.
-    // Then desired_i = baseline_i * (1 + boost_i/100), where boost_i is the percentage entered.
-    // Then, to keep the total profit (sum of team prices) the same as the original total baseline,
-    // we compute totalBaseline = sum(baseline_i) and totalDesired = sum(desired_i).
-    // Finally, final team price = desired_i * (totalBaseline / totalDesired).
+    // Updated boost calculation: For each team, baseline = distributed cost + markup.
+    // desired = baseline × (1 + boost/100) for each team.
+    // Scale all desired prices so that their sum equals the total baseline.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -733,7 +732,6 @@
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
       
-      // Calculate overall costWithMarkup (not used directly in boost calculation, but for profit tile)
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
@@ -768,18 +766,16 @@
         });
       });
       
-      // Read boost values and compute desired prices
       let totalBaseline = teamData.reduce((sum, data) => sum + data.baseline, 0);
       let totalDesired = 0;
       teamData.forEach(data => {
-        // Use a boost input with class "boost-input" and step 0.1
         const boostInput = document.getElementById("boost-" + data.team);
         data.boost = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         data.desired = data.baseline * (1 + data.boost / 100);
         totalDesired += data.desired;
       });
       
-      // Compute final team prices by scaling the desired prices so that total equals totalBaseline.
+      // Scale desired prices so that total equals totalBaseline
       teamData.forEach(data => {
         data.teamPrice = data.desired * (totalBaseline / totalDesired);
       });
@@ -941,12 +937,4 @@
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
       if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
-      const yearPrefix = selectedYear.split("-")[0];
-      const query = yearPrefix + " " + selectedSet;
-      window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
-    }
-
-    loadConfig();
-  </script>
-</body>
-</html>
+   
