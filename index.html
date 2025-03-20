@@ -190,7 +190,7 @@
     input.discount-input {
       -moz-appearance: textfield;
     }
-    /* --------------------- NEW BUTTON STYLES --------------------- */
+    /* New button styles for eBay and NHL */
     .ebay-btn, .nhl-btn {
       background: none !important;
       padding: 0 !important;
@@ -203,7 +203,6 @@
       width: auto !important;
       box-shadow: none !important;
     }
-    /* --------------------- END NEW BUTTON STYLES --------------------- */
     /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
@@ -531,6 +530,15 @@
     let config = null;
     let currentSet = null;
     let pieChartInstance = null; // Global Chart.js instance
+    let breakSnifferTimeout;
+
+    // Debounced update function to prevent re-rendering on every keystroke
+    function debouncedUpdateBreakSniffer() {
+      clearTimeout(breakSnifferTimeout);
+      breakSnifferTimeout = setTimeout(() => {
+        updateBreakSniffer();
+      }, 300);
+    }
 
     async function loadConfig() {
       try {
@@ -539,7 +547,7 @@
         populateYearDropdown();
         updateSetNameDropdown();
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
-          input.addEventListener('input', updateBreakSniffer);
+          input.addEventListener('input', debouncedUpdateBreakSniffer);
         });
         // Listen for markup toggle changes
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
@@ -709,7 +717,7 @@
       return packs * cards;
     }
 
-    // --------------------- NEW FUNCTIONS FOR BUTTONS ---------------------
+    // New functions for eBay buttons in rookie cards and team table
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
@@ -726,7 +734,6 @@
       const query = yearPrefix + " " + setName + " " + teamName;
       window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
-    // --------------------- END NEW FUNCTIONS ---------------------
 
     // Updated Key Rookies function to add NHL and eBay buttons
     function updateKeyRookies() {
@@ -745,26 +752,22 @@
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
             const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
-            // Create a container for the rookie image and buttons
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
                 ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
               <br>${player.notes || ""}`;
-            // Create buttons container
             const btnContainer = document.createElement('div');
             btnContainer.style.display = "inline-flex";
             btnContainer.style.gap = "4px";
             btnContainer.style.marginTop = "8px";
-            // NHL button
             const nhlLink = document.createElement("a");
             nhlLink.href = player.profile_link;
             nhlLink.target = "_blank";
             nhlLink.className = "nhl-btn";
             nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile">';
             btnContainer.appendChild(nhlLink);
-            // eBay button
             const ebayLink = document.createElement("a");
             ebayLink.href = "javascript:void(0)";
             ebayLink.className = "ebay-btn";
@@ -791,7 +794,7 @@
       } else {
         input.style.display = "none";
         input.value = "";
-        updateBreakSniffer();
+        debouncedUpdateBreakSniffer();
       }
     }
 
@@ -803,8 +806,16 @@
       } else {
         input.style.display = "none";
         input.value = "";
-        updateBreakSniffer();
+        debouncedUpdateBreakSniffer();
       }
+    }
+
+    // Debounced update function defined earlier
+    function debouncedUpdateBreakSniffer() {
+      clearTimeout(breakSnifferTimeout);
+      breakSnifferTimeout = setTimeout(() => {
+        updateBreakSniffer();
+      }, 300);
     }
 
     // Updated Price Calculation Logic:
@@ -967,14 +978,14 @@
                 <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" ${data.boost > 0 ? 'checked' : ''}>
                 🚀
               </label>
-              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost > 0 ? data.boost : ''}" oninput="updateBreakSniffer()">
+              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost > 0 ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
             </td>
             <td>
               <label>
                 <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" ${data.discount > 0 ? 'checked' : ''}>
                 ✂️
               </label>
-              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount > 0 ? data.discount : ''}" oninput="updateBreakSniffer()">
+              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount > 0 ? data.discount : ''}" oninput="debouncedUpdateBreakSniffer()">
             </td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
@@ -1113,7 +1124,7 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-    // New function for team ebay search (for table team name)
+    // New function for team ebay search in table
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
