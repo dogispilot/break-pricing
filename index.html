@@ -61,7 +61,7 @@
     .tile-container {
       margin-top: 10px;
     }
-    /* Set Details tiles: value on top, description on next line */
+    /* Set Details tiles */
     .tile {
       background: #eaeaea;
       border-radius: 4px;
@@ -76,7 +76,7 @@
     .tile-desc {
       font-size: 1em;
     }
-    /* Hero row and support row */
+    /* Hero and Support rows */
     .hero-row {
       display: flex;
       gap: 10px;
@@ -126,32 +126,21 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* Combine markup input and boost buttons into one inline group */
-    #break-controls-row .input-group.inline {
-      flex-direction: row;
-      align-items: center;
-      gap: 10px;
-    }
-    /* Container for markup input */
-    .markup-container {
+    /* New structure for the Markup input group */
+    .input-inline {
       display: flex;
-      flex-direction: column;
-    }
-    /* Button group inline, centered with the markup input */
-    .button-group-inline {
-      margin-left: 20px;
-      display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 15px;
     }
-    /* Price Settings menu: add 15px gap between input-group children */
+    /* Price Settings menu: now on one line */
     #price-settings {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      align-items: center;
       gap: 15px;
       margin-top: 10px;
     }
-    /* Uniform styling for number input fields */
+    /* Uniform styling for number inputs */
     .break-controls input[type="number"],
     #price-settings input[type="number"],
     #price-lookup-menu input[type="number"] {
@@ -411,18 +400,19 @@
             <label for="caseCost">Cost of a case</label>
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
-          <div class="input-group inline">
-            <div class="markup-container">
-              <label for="markupValue">Markup <span id="markupUnit"></span></label>
+          <!-- Updated Markup Group -->
+          <div class="input-group">
+            <label for="markupValue">Markup <span id="markupUnit"></span></label>
+            <div class="input-inline">
               <input type="number" id="markupValue" step="0.01" value="500">
-            </div>
-            <div class="button-group-inline">
-              <button id="priceSettingsToggle" type="button">Price Settings</button>
-              <button id="priceLookupToggle" type="button">Price Lookup</button>
+              <div class="button-group-inline">
+                <button id="priceSettingsToggle" type="button">Price Settings</button>
+                <button id="priceLookupToggle" type="button">Price Lookup</button>
+              </div>
             </div>
           </div>
         </div>
-        <!-- Hidden Price Settings Menu -->
+        <!-- Hidden Price Settings Menu (inputs on same line with 15px gap) -->
         <div id="price-settings">
           <div class="input-group">
             <label for="markupToggle">Use % markup</label>
@@ -705,7 +695,7 @@
       }
     }
 
-    // Updated updateBreakSniffer function with boost and team price logic
+    // Updated updateBreakSniffer with boost and team price logic
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -727,9 +717,9 @@
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       
       let totalCostOfBusiness = 0;
-      const teamData = []; // array to store per-team data
+      const teamData = [];
       
-      // First pass: compute baseline distributed cost+markup per team and other values
+      // First pass: compute baseline distributed cost+markup per team
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -748,7 +738,7 @@
         });
       });
       
-      // Determine if exactly one team has a boost
+      // Process boost values for each team
       let boostedTeam = null;
       teamData.forEach(data => {
         const boostInput = document.getElementById("boost-" + data.team);
@@ -758,7 +748,6 @@
         }
       });
       
-      // If one team is boosted, adjust others proportionally
       if (boostedTeam) {
         const extra = boostedTeam.baseline * (boostedTeam.boost / 100);
         const othersBaselineSum = teamData.reduce((sum, data) => data.team !== boostedTeam.team ? sum + data.baseline : sum, 0);
@@ -766,12 +755,10 @@
           if (data.team === boostedTeam.team) {
             data.teamPrice = data.baseline + extra;
           } else {
-            // subtract a proportional share of extra from each other team's baseline
             data.teamPrice = data.baseline - (data.baseline / othersBaselineSum) * extra;
           }
         });
       } else {
-        // No boost: teamPrice equals baseline
         teamData.forEach(data => data.teamPrice = data.baseline);
       }
       
@@ -779,7 +766,6 @@
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
-        // Check if team has a key rookie for highlighting
         const keyPlayers = config["Key Players"] || config.keyPlayers;
         const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
           const teamKey = player.Team || player.team;
@@ -805,7 +791,6 @@
         `;
       });
       
-      // Finally, update the break tiles (if needed)
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
@@ -837,7 +822,6 @@
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
       
-      // Update the pie chart with overall profit breakdown
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
