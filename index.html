@@ -61,7 +61,7 @@
     .tile-container {
       margin-top: 10px;
     }
-    /* Set Details tiles: value on top, description on next line */
+    /* Set Details tiles */
     .tile {
       background: #eaeaea;
       border-radius: 4px;
@@ -76,7 +76,7 @@
     .tile-desc {
       font-size: 1em;
     }
-    /* Hero row (2 tiles, 50% width each) and Support row (4 tiles, 25% width each) */
+    /* Hero and Support rows */
     .hero-row {
       display: flex;
       gap: 10px;
@@ -105,7 +105,7 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* BREAK SNIFFER - New Controls Layout */
+    /* Break Controls Layout */
     .break-controls {
       margin-bottom: 20px;
     }
@@ -126,20 +126,32 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* Inline styling for groups in break controls */
+    /* Combine Markup input and buttons into one inline group */
     #break-controls-row .input-group.inline {
       flex-direction: row;
       align-items: center;
       gap: 10px;
     }
-    /* Price Settings menu input groups now have 15px spacing */
-    #price-settings .input-group {
-      margin-bottom: 15px;
+    /* The markup container (for the label and input) */
+    .markup-container {
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
     }
-    /* Uniform styling for number input fields (Break Sniffer & Price Settings) */
+    /* The button group inline: center vertically and add left margin */
+    .button-group-inline {
+      margin-left: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    /* Price Settings menu: add space between groups */
+    #price-settings {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    /* Uniform styling for number inputs */
     .break-controls input[type="number"],
     #price-settings input[type="number"],
     #price-lookup-menu input[type="number"] {
@@ -159,7 +171,7 @@
       border-color: #66bb6a;
       box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
     }
-    /* Uniform styling for all lookup buttons */
+    /* Lookup buttons use inherited font */
     .lookup-button {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -174,14 +186,14 @@
       gap: 8px;
       min-width: 150px;
       box-sizing: border-box;
-      font-family: inherit;  /* Ensure lookup buttons use the page's font */
+      font-family: inherit;
     }
     .lookup-button img {
       width: 24px;
       height: 24px;
       vertical-align: middle;
     }
-    /* Glow effects for hover on buttons */
+    /* Glow effects on hover */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
     .glow-outofthebox:hover,
@@ -203,32 +215,32 @@
       font-size: 0.8em;
       height: 24px;
     }
-    /* Price Settings and Price Lookup hidden menus */
+    /* Hidden menus */
     #price-settings,
     #price-lookup-menu {
       display: none;
       margin-top: 10px;
     }
-    /* New Button Container inside Price Lookup Menu */
+    /* Button Container inside Price Lookup Menu */
     .button-container {
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
     }
-    /* Specific styling for the Set Details button container */
+    /* Set Details button container */
     #set-details .button-container {
       justify-content: flex-start;
       margin-bottom: 20px;
     }
-    /* BREAK SNIFFER - Right Column */
+    /* Break Sniffer Right Column */
     .break-results-container {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
     }
-    /* Break Sniffer results: updated to display tiles and pie chart side by side */
+    /* Break Sniffer results layout */
     #break-results {
       display: flex;
       flex-direction: row;
@@ -242,7 +254,7 @@
       border-radius: 4px;
       text-align: center;
     }
-    /* Using canvas for the pie chart */
+    /* Pie chart canvas */
     #pieChart {
       display: block;
     }
@@ -259,7 +271,7 @@
       text-align: center;
       vertical-align: middle;
     }
-    /* iOS Style Toggle Switch */
+    /* iOS Toggle Switch */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -326,7 +338,6 @@
       margin-right: 5px;
       vertical-align: middle;
     }
-    /* Increase team logos in key rookie tiles by 250% */
     .key-rookie-logo {
       width: 125px;
       height: 125px;
@@ -340,7 +351,7 @@
   </style>
 </head>
 <body>
-  <!-- Header with About link added -->
+  <!-- Header -->
   <header>
     <img src="resources/skunk.png" alt="Skunk logo">
     <h1>Skunksniper.com</h1>
@@ -365,7 +376,6 @@
   <!-- Section 2: Set Details -->
   <section id="set-details">
     <h2>📝 Set Details</h2>
-    <!-- Moved Buttons for TCDB and HockeyChecklists -->
     <div class="button-container">
       <button type="button" class="lookup-button glow-tcdb" onclick="openTcdbSearch()">
         <img src="resources/tcdb.jpg" alt="TCDB Logo"> TCDB
@@ -378,7 +388,7 @@
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Hero and support rows will be added here -->
+      <!-- Hero and support rows -->
     </div>
   </section>
 
@@ -386,7 +396,7 @@
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
     <div class="tile-container" id="rookie-tiles">
-      <!-- Key rookie tiles will be added here -->
+      <!-- Key rookie tiles -->
     </div>
   </section>
 
@@ -401,13 +411,16 @@
             <label for="caseCost">Cost of a case</label>
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
-          <div class="input-group">
-            <label for="markupValue">Markup <span id="markupUnit"></span></label>
-            <input type="number" id="markupValue" step="0.01" value="500">
-          </div>
+          <!-- Combined markup and button group -->
           <div class="input-group inline">
-            <button id="priceSettingsToggle" type="button">Price Settings</button>
-            <button id="priceLookupToggle" type="button">Price Lookup</button>
+            <div class="markup-container">
+              <label for="markupValue">Markup <span id="markupUnit"></span></label>
+              <input type="number" id="markupValue" step="0.01" value="500">
+            </div>
+            <div class="button-group-inline">
+              <button id="priceSettingsToggle" type="button">Price Settings</button>
+              <button id="priceLookupToggle" type="button">Price Lookup</button>
+            </div>
           </div>
         </div>
         <!-- Hidden Price Settings Menu -->
@@ -453,11 +466,10 @@
       <!-- Right Column: Break Sniffer Results -->
       <div class="break-results-container">
         <div id="break-results">
-          <!-- Breaker boxes on left -->
           <div class="tiles" id="break-tiles">
-            <!-- Breaker boxes will appear here -->
+            <!-- Breaker boxes -->
           </div>
-          <!-- Cool animated Pie Chart using Chart.js on right -->
+          <!-- Pie Chart -->
           <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
@@ -473,7 +485,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Rows will be added here -->
+        <!-- Table rows -->
       </tbody>
     </table>
   </section>
@@ -492,9 +504,8 @@
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', updateBreakSniffer);
         });
-        // Add listener for the markup toggle to update the unit label.
+        // Listen for markup toggle changes
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
-        // Set initial unit label
         updateMarkupUnit();
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
@@ -754,7 +765,7 @@
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       
-      // Update break tiles with new color scheme
+      // Update break tiles
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
       
@@ -791,11 +802,9 @@
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
-      // Update the Chart.js pie chart (it will animate changes)
       updatePieChart(data);
     }
 
-    // New function to create/update the pie chart using Chart.js
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
@@ -803,12 +812,10 @@
       const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
       
       if (pieChartInstance) {
-        // Update existing chart data
         pieChartInstance.data.labels = labels;
         pieChartInstance.data.datasets[0].data = values;
         pieChartInstance.update();
       } else {
-        // Create new chart with legend disabled
         pieChartInstance = new Chart(ctx, {
           type: 'pie',
           data: {
@@ -827,9 +834,7 @@
               animateScale: true,
             },
             plugins: {
-              legend: {
-                display: false
-              },
+              legend: { display: false },
               tooltip: {
                 callbacks: {
                   label: function(context) {
@@ -845,12 +850,10 @@
       }
     }
 
-    // New button functions for additional sites inside Price Settings / Lookup Menu
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet) { alert("Please select a set first."); return; }
-      if (!selectedYear) { alert("Please select a set year first."); return; }
+      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
@@ -858,8 +861,7 @@
     function openSteelCitySearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet) { alert("Please select a set first."); return; }
-      if (!selectedYear) { alert("Please select a set year first."); return; }
+      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
@@ -867,8 +869,7 @@
     function openOotbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet) { alert("Please select a set first."); return; }
-      if (!selectedYear) { alert("Please select a set year first."); return; }
+      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
@@ -876,8 +877,7 @@
     function openMidwestCardsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet) { alert("Please select a set first."); return; }
-      if (!selectedYear) { alert("Please select a set year first."); return; }
+      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
@@ -885,8 +885,7 @@
     function openTcdbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet) { alert("Please select a set first."); return; }
-      if (!selectedYear) { alert("Please select a set year first."); return; }
+      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
@@ -894,8 +893,7 @@
     function openHockeyChecklistsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet) { alert("Please select a set first."); return; }
-      if (!selectedYear) { alert("Please select a set year first."); return; }
+      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
