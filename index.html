@@ -137,10 +137,7 @@
       gap: 10px;
       align-items: center;
     }
-    /* Updated Price Settings Menu:
-       Each setting is in its own column with the label on top and control directly beneath.
-       The groups are arranged in a row with a 15px gap and left aligned.
-    */
+    /* Updated Price Settings Menu */
     #price-settings {
       display: flex;
       gap: 15px;
@@ -161,7 +158,8 @@
     .break-controls input[type="number"],
     #price-settings input[type="number"],
     #price-lookup-menu input[type="number"],
-    .boost-input {
+    .boost-input,
+    .discount-input {
       width: 80px;
       height: 24px;
       padding: 2px 4px;
@@ -174,7 +172,8 @@
     .break-controls input[type="number"]:focus,
     #price-settings input[type="number"]:focus,
     #price-lookup-menu input[type="number"]:focus,
-    .boost-input:focus {
+    .boost-input:focus,
+    .discount-input:focus {
       outline: none;
       border-color: #66bb6a;
       box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
@@ -285,7 +284,7 @@
       position: relative;
       width: 50px;
       height: 24px;
-      margin: 0; /* Removed left margin so it centers in its group */
+      margin: 0;
       vertical-align: middle;
     }
     .toggle-switch input {
@@ -431,7 +430,7 @@
             </div>
           </div>
         </div>
-        <!-- Updated Price Settings Menu: Each setting in its own column -->
+        <!-- Updated Price Settings Menu -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -482,7 +481,7 @@
         </div>
       </div>
     </div>
-    <!-- Updated Table Header with Boost and Team Price Columns -->
+    <!-- Updated Table Header with Boost, Discount, and Team Price Columns -->
     <table id="team-table">
       <thead>
         <tr>
@@ -492,6 +491,7 @@
           <th>Avg. Cards per Case</th>
           <th>Distributed Cost + Markup</th>
           <th>Boost (%)</th>
+          <th>Discount (%)</th>
           <th>Team Price</th>
         </tr>
       </thead>
@@ -607,7 +607,9 @@
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
-        if (!isNaN(priceNum)) { document.getElementById('caseCost').value = priceNum.toFixed(2); }
+        if (!isNaN(priceNum)) { 
+          document.getElementById('caseCost').value = priceNum.toFixed(2); 
+        }
       }
     }
 
@@ -686,7 +688,6 @@
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
       let keyPlayers = config["Key Players"] || config.keyPlayers;
-      console.log("Key Players Data:", keyPlayers);
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
@@ -697,7 +698,9 @@
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
-            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
+            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] 
+              ? config.images["team images"][teamKey] 
+              : "";
             tile.innerHTML = `<strong>${player.player}</strong><br>
               <div class="rookie-image-container">
                 ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
@@ -714,12 +717,14 @@
       }
     }
 
-    // Updated boost calculation:
-    // For each team, let baseline = distributed cost + markup.
-    // Then desired_i = baseline_i * (1 + boost_i/100), where boost_i is the percentage entered.
-    // Then, to keep the total profit (sum of team prices) the same as the original total baseline,
-    // we compute totalBaseline = sum(baseline_i) and totalDesired = sum(desired_i).
-    // Finally, final team price = desired_i * (totalBaseline / totalDesired).
+    // Updated Price Calculation Logic:
+    // 1. Compute baseline = distributed cost + markup for each team.
+    // 2. For teams with a boost (boost > 0), add boost amount (baseline * boost/100) and accumulate the extra boost pool.
+    //    For non-boosted teams, keep the baseline.
+    // 3. Redistribute the boost extra pool evenly among non-boosted teams.
+    // 4. For teams with a discount (discount > 0), reduce the adjusted price by discount percentage and accumulate the discount pool.
+    // 5. Redistribute the discount pool evenly among teams that did not receive a discount.
+    // 6. Finally, normalize final prices so that the total equals the sum of the baseline prices.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -733,7 +738,7 @@
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
       
-      // Calculate overall costWithMarkup (not used directly in boost calculation, but for profit tile)
+      // Calculate overall costWithMarkup (for profit calculation)
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
@@ -768,23 +773,67 @@
         });
       });
       
-      // Read boost values and compute desired prices
-      let totalBaseline = teamData.reduce((sum, data) => sum + data.baseline, 0);
-      let totalDesired = 0;
+      // Apply Boosts
+      let boostExtraPool = 0;
+      const boostedTeams = [];
+      const nonBoostedTeams = [];
       teamData.forEach(data => {
-        // Use a boost input with class "boost-input" and step 0.1
         const boostInput = document.getElementById("boost-" + data.team);
         data.boost = boostInput ? parseFloat(boostInput.value) || 0 : 0;
-        data.desired = data.baseline * (1 + data.boost / 100);
-        totalDesired += data.desired;
+        if (data.boost > 0) {
+          let boostAmount = data.baseline * (data.boost / 100);
+          data.adjusted = data.baseline + boostAmount;
+          boostExtraPool += boostAmount;
+          boostedTeams.push(data);
+        } else {
+          data.adjusted = data.baseline;
+          nonBoostedTeams.push(data);
+        }
       });
       
-      // Compute final team prices by scaling the desired prices so that total equals totalBaseline.
+      // Redistribute boost extra pool among non-boosted teams
+      if (nonBoostedTeams.length > 0) {
+        let boostShare = boostExtraPool / nonBoostedTeams.length;
+        nonBoostedTeams.forEach(data => {
+          data.adjusted += boostShare;
+        });
+      }
+      
+      // Apply Discounts
+      let discountPool = 0;
+      const discountTeams = [];
+      const nonDiscountTeams = [];
       teamData.forEach(data => {
-        data.teamPrice = data.desired * (totalBaseline / totalDesired);
+        const discountInput = document.getElementById("discount-" + data.team);
+        data.discount = discountInput ? parseFloat(discountInput.value) || 0 : 0;
+        if (data.discount > 0) {
+          let discountAmount = data.adjusted * (data.discount / 100);
+          data.final = data.adjusted - discountAmount;
+          discountPool += discountAmount;
+          discountTeams.push(data);
+        } else {
+          data.final = data.adjusted;
+          nonDiscountTeams.push(data);
+        }
       });
       
-      // Build the table rows
+      // Redistribute discount pool among non-discount teams
+      if (nonDiscountTeams.length > 0) {
+        let discountShare = discountPool / nonDiscountTeams.length;
+        nonDiscountTeams.forEach(data => {
+          data.final += discountShare;
+        });
+      }
+      
+      // Normalize final prices so the total equals the sum of the baseline prices
+      let totalBaseline = teamData.reduce((sum, data) => sum + data.baseline, 0);
+      let totalFinal = teamData.reduce((sum, data) => sum + data.final, 0);
+      let scaleFactor = totalBaseline / totalFinal;
+      teamData.forEach(data => {
+        data.teamPrice = data.final * scaleFactor;
+      });
+      
+      // Build the table rows with updated discount column
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -808,6 +857,7 @@
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
             <td><input type="number" class="boost-input" id="boost-${data.team}" style="width:60px;" step="0.1" value="${data.boost || 0}" oninput="updateBreakSniffer()"></td>
+            <td><input type="number" class="discount-input" id="discount-${data.team}" style="width:60px;" step="0.1" value="${data.discount || 0}" oninput="updateBreakSniffer()"></td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
         `;
