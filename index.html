@@ -98,6 +98,11 @@
     #set-selection select {
       padding: 5px;
       margin: 0 5px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: underline;
+      color: green;
+      cursor: pointer;
     }
     #set-notes {
       display: none;
@@ -148,10 +153,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;  /* Reduced gap between label and input */
+      gap: 2px;
     }
     .price-setting-group label {
-      margin: 0;  /* Remove extra margins */
+      margin: 0;
       font-weight: bold;
       font-size: 0.8em;
     }
@@ -200,9 +205,8 @@
       text-decoration: none !important;
     }
     .ebay-btn img, .nhl-btn img {
-      height: 40px !important;  /* default size for buttons */
+      height: 40px !important;
       width: auto !important;
-      /* Remove any previous shadow */
       box-shadow: none !important;
     }
     /* Reduce size by 50% for buttons in key rookies tiles */
@@ -394,9 +398,9 @@
       width: 50px;
       height: 50px;
       object-fit: contain;
-      margin-right: -10px; /* negative margin for overlap */
+      margin-right: -10px;
       vertical-align: middle;
-      opacity: 0.8; /* add transparency */
+      opacity: 0.8;
     }
     .key-rookie-logo {
       /* Additional styles for team logo if needed */
@@ -411,7 +415,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0px; /* reduced gap to allow overlap */
+      gap: 0px;
     }
   </style>
 </head>
@@ -434,7 +438,7 @@
       for the years 
       <select id="setYearSelect">
         <!-- Populated by config -->
-      </select>
+      </select>.
     </p>
   </section>
 
