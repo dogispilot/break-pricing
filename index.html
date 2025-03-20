@@ -200,9 +200,19 @@
       text-decoration: none !important;
     }
     .ebay-btn img, .nhl-btn img {
-      height: 40px !important;  /* increased from 16px to 40px (250% increase) */
+      height: 40px !important;  /* default size for buttons */
       width: auto !important;
+      /* Remove any previous shadow */
       box-shadow: none !important;
+    }
+    /* Reduce size by 50% for buttons in key rookies tiles */
+    #rookie-tiles .nhl-btn img,
+    #rookie-tiles .ebay-btn img {
+      height: 20px !important;
+    }
+    /* For the team table, reduce the size of the eBay button in the first row only */
+    #team-table tbody tr:first-child .ebay-btn img {
+      height: 15px !important;
     }
     /* Lookup buttons */
     .lookup-button {
@@ -225,6 +235,10 @@
       width: 24px;
       height: 24px;
       vertical-align: middle;
+    }
+    /* Add subtle shadow to all buttons for a clickable look */
+    button, .lookup-button, .nhl-btn, .ebay-btn, #priceSettingsToggle, #priceLookupToggle {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     /* Glow effects on hover */
     .glow-dacardworld:hover,
@@ -385,7 +399,7 @@
       opacity: 0.8; /* add transparency */
     }
     .key-rookie-logo {
-      /* This class is used on the team image; additional styles can go here if needed */
+      /* Additional styles for team logo if needed */
     }
     /* New class for rookie notes under the name */
     .rookie-notes {
