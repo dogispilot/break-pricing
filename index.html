@@ -132,7 +132,7 @@
       align-items: center;
       gap: 15px;
     }
-    /* Price Settings menu: now on one line */
+    /* Price Settings menu: inputs arranged in a row with 15px gap */
     #price-settings {
       display: flex;
       flex-direction: row;
@@ -412,7 +412,7 @@
             </div>
           </div>
         </div>
-        <!-- Hidden Price Settings Menu (inputs on same line with 15px gap) -->
+        <!-- Hidden Price Settings Menu: inputs arranged in a row -->
         <div id="price-settings">
           <div class="input-group">
             <label for="markupToggle">Use % markup</label>
@@ -463,7 +463,7 @@
         </div>
       </div>
     </div>
-    <!-- Updated table header with Boost and Team Price columns -->
+    <!-- Updated Table Header with Boost and Team Price Columns -->
     <table id="team-table">
       <thead>
         <tr>
@@ -695,7 +695,8 @@
       }
     }
 
-    // Updated updateBreakSniffer with boost and team price logic
+    // Updated boost calculation: if a team is boosted, its new price is baseline*(1+boost/100)
+    // and the extra is subtracted proportionally from the other teams so that the total remains the same.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -708,7 +709,10 @@
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
       
-      let costWithMarkup = usePercent ? costCase * (1 + markupVal/100) : costCase + markupVal;
+      let costWithMarkup = usePercent 
+        ? costCase * (1 + markupVal / 100)
+        : costCase + (markupVal * (costCase / costCase)); // fallback calculation
+      
       const whatnotsCut = costWithMarkup * 0.08;
       
       const teams = currentSet.cards;
@@ -719,16 +723,19 @@
       let totalCostOfBusiness = 0;
       const teamData = [];
       
-      // First pass: compute baseline distributed cost+markup per team
+      // Compute baseline for each team: distributed cost + markup
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
         const distributedCost = costCase * distribution;
-        const transactionCost = distributedCost * (1 + blendedTax/100) * 0.029 + 0.30;
+        const transactionCost = distributedCost * (1 + blendedTax / 100) * 0.029 + 0.30;
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        const baseline = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
+        // Baseline is defined as the distributed cost+markup for each team
+        const baseline = usePercent 
+          ? distributedCost * (1 + markupVal / 100)
+          : distributedCost + (markupVal * distribution);
         teamData.push({
           team,
           teamCards,
@@ -738,7 +745,7 @@
         });
       });
       
-      // Process boost values for each team
+      // Check for a boost on a single team
       let boostedTeam = null;
       teamData.forEach(data => {
         const boostInput = document.getElementById("boost-" + data.team);
@@ -748,13 +755,17 @@
         }
       });
       
+      const totalBaseline = teamData.reduce((sum, data) => sum + data.baseline, 0);
+      
       if (boostedTeam) {
+        // Compute extra amount from boost: baseline * (boost/100)
         const extra = boostedTeam.baseline * (boostedTeam.boost / 100);
+        // Boosted team's new price:
+        boostedTeam.teamPrice = boostedTeam.baseline * (1 + boostedTeam.boost / 100);
+        // Adjust other teams so that total remains the same:
         const othersBaselineSum = teamData.reduce((sum, data) => data.team !== boostedTeam.team ? sum + data.baseline : sum, 0);
         teamData.forEach(data => {
-          if (data.team === boostedTeam.team) {
-            data.teamPrice = data.baseline + extra;
-          } else {
+          if (data.team !== boostedTeam.team) {
             data.teamPrice = data.baseline - (data.baseline / othersBaselineSum) * extra;
           }
         });
@@ -762,7 +773,7 @@
         teamData.forEach(data => data.teamPrice = data.baseline);
       }
       
-      // Build the table rows
+      // Build table rows
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
