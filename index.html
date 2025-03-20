@@ -879,7 +879,7 @@
         data.teamPrice = data.final;
       });
       
-      // Build the table rows with new boost and discount controls
+      // Build the table rows with boost and discount controls preserved
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -904,17 +904,17 @@
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
               <label>
-                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" />
+                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" ${data.boost > 0 ? 'checked' : ''}>
                 🚀
               </label>
-              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; display:none;" step="0.1" oninput="updateBreakSniffer()">
+              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost}" oninput="updateBreakSniffer()">
             </td>
             <td>
               <label>
-                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" />
+                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" ${data.discount > 0 ? 'checked' : ''}>
                 ✂️
               </label>
-              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; display:none;" step="0.1" oninput="updateBreakSniffer()">
+              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount}" oninput="updateBreakSniffer()">
             </td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
