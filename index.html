@@ -149,6 +149,12 @@
       flex-direction: column;
       align-items: center;
     }
+    /* New rule for the toggle-switch group to align inline */
+    .price-setting-group.toggle-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 5px;
+    }
     .price-setting-group label {
       margin-bottom: 5px;
       font-weight: bold;
@@ -469,7 +475,7 @@
         </div>
         <!-- Updated Price Settings Menu -->
         <div id="price-settings">
-          <div class="price-setting-group">
+          <div class="price-setting-group toggle-group">
             <label for="markupToggle">Use % markup</label>
             <label class="toggle-switch">
               <input type="checkbox" id="markupToggle">
@@ -523,13 +529,13 @@
       <thead>
         <tr>
           <th>Team</th>
-          <th>Total Numbered Cards</th>
-          <th>Distribution (%)</th>
+          <th>Total #'d Cards</th>
+          <th>Distribution</th>
           <th>Avg. Cards per Case</th>
-          <th>Distributed Cost + Markup</th>
+          <th>Cost + Markup</th>
           <th>Boost</th>
           <th>Discount</th>
-          <th>Team Price</th>
+          <th>Price</th>
         </tr>
       </thead>
       <tbody>
@@ -680,7 +686,7 @@
       
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
-      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
+      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Set Rookie Percentage</div>`;
       heroContainer.appendChild(heroTile1);
       
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
