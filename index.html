@@ -61,7 +61,7 @@
     .tile-container {
       margin-top: 10px;
     }
-    /* Set Details tiles */
+    /* Set Details tiles: value on top, description on next line */
     .tile {
       background: #eaeaea;
       border-radius: 4px;
@@ -76,7 +76,7 @@
     .tile-desc {
       font-size: 1em;
     }
-    /* Hero and Support rows */
+    /* Hero row and support row */
     .hero-row {
       display: flex;
       gap: 10px;
@@ -126,32 +126,32 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* Combine Markup input and buttons into one inline group */
+    /* Combine markup input and boost buttons into one inline group */
     #break-controls-row .input-group.inline {
       flex-direction: row;
       align-items: center;
       gap: 10px;
     }
-    /* The markup container (for the label and input) */
+    /* Container for markup input */
     .markup-container {
       display: flex;
       flex-direction: column;
     }
-    /* The button group inline: center vertically and add left margin */
+    /* Button group inline, centered with the markup input */
     .button-group-inline {
       margin-left: 20px;
       display: flex;
       gap: 10px;
       align-items: center;
     }
-    /* Price Settings menu: add space between groups */
+    /* Price Settings menu: add 15px gap between input-group children */
     #price-settings {
       display: flex;
       flex-direction: column;
       gap: 15px;
       margin-top: 10px;
     }
-    /* Uniform styling for number inputs */
+    /* Uniform styling for number input fields */
     .break-controls input[type="number"],
     #price-settings input[type="number"],
     #price-lookup-menu input[type="number"] {
@@ -171,7 +171,7 @@
       border-color: #66bb6a;
       box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
     }
-    /* Lookup buttons use inherited font */
+    /* Lookup buttons inherit page font */
     .lookup-button {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -254,7 +254,7 @@
       border-radius: 4px;
       text-align: center;
     }
-    /* Pie chart canvas */
+    /* Pie Chart canvas */
     #pieChart {
       display: block;
     }
@@ -388,7 +388,7 @@
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Hero and support rows -->
+      <!-- Hero and support rows will be added here -->
     </div>
   </section>
 
@@ -396,7 +396,7 @@
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
     <div class="tile-container" id="rookie-tiles">
-      <!-- Key rookie tiles -->
+      <!-- Key rookie tiles will be added here -->
     </div>
   </section>
 
@@ -411,7 +411,6 @@
             <label for="caseCost">Cost of a case</label>
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
-          <!-- Combined markup and button group -->
           <div class="input-group inline">
             <div class="markup-container">
               <label for="markupValue">Markup <span id="markupUnit"></span></label>
@@ -467,13 +466,14 @@
       <div class="break-results-container">
         <div id="break-results">
           <div class="tiles" id="break-tiles">
-            <!-- Breaker boxes -->
+            <!-- Breaker boxes will appear here -->
           </div>
           <!-- Pie Chart -->
           <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
     </div>
+    <!-- Updated table header with Boost and Team Price columns -->
     <table id="team-table">
       <thead>
         <tr>
@@ -482,10 +482,12 @@
           <th>Distribution (%)</th>
           <th>Avg. Cards per Case</th>
           <th>Distributed Cost + Markup</th>
+          <th>Boost (%)</th>
+          <th>Team Price</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Table rows -->
+        <!-- Table rows will be generated here -->
       </tbody>
     </table>
   </section>
@@ -703,10 +705,10 @@
       }
     }
 
+    // Updated updateBreakSniffer function with boost and team price logic
     function updateBreakSniffer() {
       if (!currentSet) {
-        const breakTiles = document.getElementById('break-tiles');
-        breakTiles.textContent = "Please select a set and year to get started.";
+        document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
@@ -725,11 +727,9 @@
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       
       let totalCostOfBusiness = 0;
-      const tbody = document.getElementById('team-table').querySelector('tbody');
-      tbody.innerHTML = "";
+      const teamData = []; // array to store per-team data
       
-      const selectedYear = document.getElementById('setYearSelect').value;
-      
+      // First pass: compute baseline distributed cost+markup per team and other values
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -737,38 +737,79 @@
         const transactionCost = distributedCost * (1 + blendedTax/100) * 0.029 + 0.30;
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
-        const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase).toFixed(2) : "N/A";
-        let distCostWithMarkup = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
-        
+        const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
+        const baseline = usePercent ? distributedCost * (1 + markupVal/100) : distributedCost + (markupVal * distribution);
+        teamData.push({
+          team,
+          teamCards,
+          distribution,
+          avgCardsCase,
+          baseline
+        });
+      });
+      
+      // Determine if exactly one team has a boost
+      let boostedTeam = null;
+      teamData.forEach(data => {
+        const boostInput = document.getElementById("boost-" + data.team);
+        data.boost = boostInput ? parseFloat(boostInput.value) || 0 : 0;
+        if (data.boost !== 0) {
+          boostedTeam = data;
+        }
+      });
+      
+      // If one team is boosted, adjust others proportionally
+      if (boostedTeam) {
+        const extra = boostedTeam.baseline * (boostedTeam.boost / 100);
+        const othersBaselineSum = teamData.reduce((sum, data) => data.team !== boostedTeam.team ? sum + data.baseline : sum, 0);
+        teamData.forEach(data => {
+          if (data.team === boostedTeam.team) {
+            data.teamPrice = data.baseline + extra;
+          } else {
+            // subtract a proportional share of extra from each other team's baseline
+            data.teamPrice = data.baseline - (data.baseline / othersBaselineSum) * extra;
+          }
+        });
+      } else {
+        // No boost: teamPrice equals baseline
+        teamData.forEach(data => data.teamPrice = data.baseline);
+      }
+      
+      // Build the table rows
+      const tbody = document.getElementById('team-table').querySelector('tbody');
+      tbody.innerHTML = "";
+      teamData.forEach(data => {
+        // Check if team has a key rookie for highlighting
         const keyPlayers = config["Key Players"] || config.keyPlayers;
-        let hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
+        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
           const teamKey = player.Team || player.team;
           return player.type && player.type.toLowerCase() === 'rookie' &&
-                 player.setYear === selectedYear &&
-                 teamKey === team;
+                 player.setYear === document.getElementById('setYearSelect').value &&
+                 teamKey === data.team;
         });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
-        
-        const teamImage = config.images && config.images["team images"] && config.images["team images"][team] ? config.images["team images"][team] : "";
+        const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
+                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
+                          : "";
         tbody.innerHTML += `
           <tr${highlightStyle}>
-            <td>${ teamImage ? `<img src="${teamImage}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` : "" }${team}${keyEmoji}</td>
-            <td>${teamCards}</td>
-            <td>${(distribution * 100).toFixed(2)}%</td>
-            <td>${avgCardsCase}</td>
-            <td>$${distCostWithMarkup.toFixed(2)}</td>
+            <td>${teamImage}${data.team}${keyEmoji}</td>
+            <td>${data.teamCards}</td>
+            <td>${(data.distribution * 100).toFixed(2)}%</td>
+            <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
+            <td>$${data.baseline.toFixed(2)}</td>
+            <td><input type="number" id="boost-${data.team}" style="width:60px;" step="0.1" value="${data.boost || 0}" oninput="updateBreakSniffer()"></td>
+            <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
         `;
       });
       
+      // Finally, update the break tiles (if needed)
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
-      
-      // Update break tiles
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
-      
       const tileProfit = document.createElement('div');
       tileProfit.className = 'tile';
       tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
@@ -796,13 +837,13 @@
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
       
-      // Data for the pie chart
-      const data = [
+      // Update the pie chart with overall profit breakdown
+      const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
-      updatePieChart(data);
+      updatePieChart(pieData);
     }
 
     function updatePieChart(data) {
