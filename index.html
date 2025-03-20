@@ -98,11 +98,6 @@
     #set-selection select {
       padding: 5px;
       margin: 0 5px;
-      font-size: 1.2em;
-      font-weight: bold;
-      text-decoration: underline;
-      color: green;
-      cursor: pointer;
     }
     #set-notes {
       display: none;
@@ -153,10 +148,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
     }
     .price-setting-group label {
-      margin: 0;
+      margin-bottom: 5px;
       font-weight: bold;
       font-size: 0.8em;
     }
@@ -205,18 +199,9 @@
       text-decoration: none !important;
     }
     .ebay-btn img, .nhl-btn img {
-      height: 40px !important;
+      height: 40px !important;  /* increased from 16px to 40px (250% increase) */
       width: auto !important;
       box-shadow: none !important;
-    }
-    /* Reduce size by 50% for buttons in key rookies tiles */
-    #rookie-tiles .nhl-btn img,
-    #rookie-tiles .ebay-btn img {
-      height: 20px !important;
-    }
-    /* For the team table, reduce the size of the eBay button in the first row only */
-    #team-table tbody tr:first-child .ebay-btn img {
-      height: 15px !important;
     }
     /* Lookup buttons */
     .lookup-button {
@@ -239,10 +224,6 @@
       width: 24px;
       height: 24px;
       vertical-align: middle;
-    }
-    /* Add subtle shadow to all buttons for a clickable look */
-    button, .lookup-button, .nhl-btn, .ebay-btn, #priceSettingsToggle, #priceLookupToggle {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     /* Glow effects on hover */
     .glow-dacardworld:hover,
@@ -398,12 +379,12 @@
       width: 50px;
       height: 50px;
       object-fit: contain;
-      margin-right: -10px;
+      margin-right: -10px; /* negative margin for overlap */
       vertical-align: middle;
-      opacity: 0.8;
+      opacity: 0.8; /* add transparency */
     }
     .key-rookie-logo {
-      /* Additional styles for team logo if needed */
+      /* This class is used on the team image; additional styles can go here if needed */
     }
     /* New class for rookie notes under the name */
     .rookie-notes {
@@ -415,7 +396,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0px;
+      gap: 0px; /* reduced gap to allow overlap */
     }
   </style>
 </head>
@@ -438,7 +419,7 @@
       for the years 
       <select id="setYearSelect">
         <!-- Populated by config -->
-      </select>.
+      </select>
     </p>
   </section>
 
