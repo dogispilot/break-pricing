@@ -126,7 +126,7 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* Markup input group updated */
+    /* Markup input group */
     .input-inline {
       display: flex;
       align-items: center;
@@ -137,27 +137,25 @@
       gap: 10px;
       align-items: center;
     }
-    /* Price Settings menu restructured into two rows */
+    /* Updated Price Settings Menu:
+       Each setting is now in a column (group) with the label on top and the control underneath.
+       The three groups are arranged in a row with 15px horizontal gap and centered.
+    */
     #price-settings {
-      margin-top: 10px;
-    }
-    #price-settings .row {
       display: flex;
       gap: 15px;
+      margin-top: 10px;
       justify-content: center;
     }
-    #price-settings .labels-row {
-      margin-bottom: 5px;
+    .price-setting-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    #price-settings .label-item {
-      flex: 1;
-      text-align: center;
+    .price-setting-group label {
+      margin-bottom: 5px;
       font-weight: bold;
       font-size: 0.8em;
-    }
-    #price-settings .inputs-row .input-item {
-      flex: 1;
-      text-align: center;
     }
     /* Uniform styling for number inputs */
     .break-controls input[type="number"],
@@ -179,7 +177,7 @@
       border-color: #66bb6a;
       box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
     }
-    /* Lookup buttons inherit page font */
+    /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -431,26 +429,22 @@
             </div>
           </div>
         </div>
-        <!-- Updated Price Settings Menu (Two rows: labels and inputs) -->
+        <!-- Updated Price Settings Menu -->
         <div id="price-settings">
-          <div class="row labels-row">
-            <div class="label-item">Use % markup</div>
-            <div class="label-item">Cost of supplies per team</div>
-            <div class="label-item">Blended tax (%)</div>
+          <div class="price-setting-group">
+            <label for="markupToggle">Use % markup</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="markupToggle">
+              <span class="slider"></span>
+            </label>
           </div>
-          <div class="row inputs-row">
-            <div class="input-item">
-              <label class="toggle-switch">
-                <input type="checkbox" id="markupToggle">
-                <span class="slider"></span>
-              </label>
-            </div>
-            <div class="input-item">
-              <input type="number" id="suppliesCost" step="0.01" value="1.00">
-            </div>
-            <div class="input-item">
-              <input type="number" id="blendedTax" step="0.1" value="5.1">
-            </div>
+          <div class="price-setting-group">
+            <label for="suppliesCost">Cost of supplies per team</label>
+            <input type="number" id="suppliesCost" step="0.01" value="1.00">
+          </div>
+          <div class="price-setting-group">
+            <label for="blendedTax">Blended tax (%)</label>
+            <input type="number" id="blendedTax" step="0.1" value="5.1">
           </div>
         </div>
         <!-- Hidden Price Lookup Menu -->
@@ -718,8 +712,8 @@
       }
     }
 
-    // Boost Calculation: for a boosted team, new price = baseline × (1 + boost/100)
-    // and the extra is subtracted proportionally from the other teams so that total remains constant.
+    // Boost Calculation: For a boosted team, teamPrice = baseline × (1 + boost/100).
+    // Extra amount is subtracted proportionally from other teams so that the total remains constant.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -746,7 +740,7 @@
       let totalCostOfBusiness = 0;
       const teamData = [];
       
-      // Compute baseline distributed cost+markup for each team
+      // Compute baseline distributed cost + markup for each team.
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -767,7 +761,7 @@
         });
       });
       
-      // Check for boost
+      // Process boost values.
       let boostedTeam = null;
       teamData.forEach(data => {
         const boostInput = document.getElementById("boost-" + data.team);
@@ -790,7 +784,7 @@
         teamData.forEach(data => data.teamPrice = data.baseline);
       }
       
-      // Build the table rows
+      // Build table rows
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
