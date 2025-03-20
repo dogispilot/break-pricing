@@ -199,7 +199,7 @@
       text-decoration: none !important;
     }
     .ebay-btn img, .nhl-btn img {
-      height: 16px !important;
+      height: 40px !important;  /* increased from 16px to 40px (250% increase) */
       width: auto !important;
       box-shadow: none !important;
     }
@@ -379,18 +379,24 @@
       width: 50px;
       height: 50px;
       object-fit: contain;
-      margin-right: 5px;
+      margin-right: -10px; /* negative margin for overlap */
       vertical-align: middle;
+      opacity: 0.8; /* add transparency */
     }
     .key-rookie-logo {
-      width: 125px;
-      height: 125px;
+      /* This class is used on the team image; additional styles can go here if needed */
+    }
+    /* New class for rookie notes under the name */
+    .rookie-notes {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 5px;
     }
     .rookie-image-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 0px; /* reduced gap to allow overlap */
     }
   </style>
 </head>
@@ -747,7 +753,7 @@
       window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
 
-    // Updated Key Rookies function to add NHL and eBay buttons
+    // Updated Key Rookies function to add NHL and eBay buttons and adjust layout
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -764,12 +770,13 @@
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
             const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
-            tile.innerHTML = `<strong>${player.player}</strong><br>
+            // Place the rookie notes under the name and above the image container.
+            tile.innerHTML = `<strong>${player.player}</strong>
+              <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
                 ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
-              </div>
-              <br>${player.notes || ""}`;
+              </div>`;
             const btnContainer = document.createElement('div');
             btnContainer.style.display = "inline-flex";
             btnContainer.style.gap = "4px";
@@ -823,19 +830,6 @@
     }
 
     // Updated Price Calculation Logic:
-    // 1. Compute baseline = distributed cost + markup for each team.
-    // 2. For teams with a boost (checkbox ticked), compute:
-    //      adjusted = baseline + (baseline * boost/100)
-    //    Accumulate boostExtraPool = sum(boost amounts) across boosted teams.
-    // 3. For teams that are not boosted, subtract an equal share of the boostExtraPool:
-    //      adjusted = baseline - (boostExtraPool / number of non-boosted teams)
-    // 4. Apply Discounts:
-    //    For teams with a discount (checkbox ticked):
-    //      final = adjusted - (adjusted * discount/100)
-    //    Accumulate discountPool = sum(discount amounts) across discounted teams.
-    // 5. For teams that are not discounted, add an equal share of the discountPool:
-    //      final = adjusted + (discountPool / number of non-discount teams)
-    // 6. Set the final team price to final.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
