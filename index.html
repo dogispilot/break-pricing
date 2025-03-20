@@ -203,6 +203,15 @@
       width: auto !important;
       box-shadow: none !important;
     }
+    /* Override for key rookie tiles: reduce NHL and eBay button images by 25% (from 40px to 30px) */
+    #rookie-tiles .nhl-btn img,
+    #rookie-tiles .ebay-btn img {
+      height: 30px !important;
+    }
+    /* Override for team table: reduce the eBay button image in the first row by 50% (from 40px to 20px) */
+    #team-table tbody tr:first-child .ebay-btn img {
+      height: 20px !important;
+    }
     /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
