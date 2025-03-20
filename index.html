@@ -138,8 +138,8 @@
       align-items: center;
     }
     /* Updated Price Settings Menu:
-       Each setting is now in a column (group) with the label on top and the control underneath.
-       The three groups are arranged in a row with 15px horizontal gap and centered.
+       Each setting is in its own column with the label on top and control directly beneath.
+       The groups are arranged in a row with a 15px gap and centered.
     */
     #price-settings {
       display: flex;
@@ -160,7 +160,8 @@
     /* Uniform styling for number inputs */
     .break-controls input[type="number"],
     #price-settings input[type="number"],
-    #price-lookup-menu input[type="number"] {
+    #price-lookup-menu input[type="number"],
+    .boost-input {
       width: 80px;
       height: 24px;
       padding: 2px 4px;
@@ -172,7 +173,8 @@
     }
     .break-controls input[type="number"]:focus,
     #price-settings input[type="number"]:focus,
-    #price-lookup-menu input[type="number"]:focus {
+    #price-lookup-menu input[type="number"]:focus,
+    .boost-input:focus {
       outline: none;
       border-color: #66bb6a;
       box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
@@ -283,7 +285,7 @@
       position: relative;
       width: 50px;
       height: 24px;
-      margin-left: 5px;
+      margin: 0; /* Removed left margin so it centers in its group */
       vertical-align: middle;
     }
     .toggle-switch input {
@@ -429,7 +431,7 @@
             </div>
           </div>
         </div>
-        <!-- Updated Price Settings Menu -->
+        <!-- Updated Price Settings Menu: Each setting in its own column -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -712,24 +714,29 @@
       }
     }
 
-    // Boost Calculation: For a boosted team, teamPrice = baseline × (1 + boost/100).
-    // Extra amount is subtracted proportionally from other teams so that the total remains constant.
+    // Updated boost calculation:
+    // For each team, let baseline = distributed cost + markup.
+    // Then desired_i = baseline_i * (1 + boost_i/100), where boost_i is the percentage entered.
+    // Then, to keep the total profit (sum of team prices) the same as the original total baseline,
+    // we compute totalBaseline = sum(baseline_i) and totalDesired = sum(desired_i).
+    // Finally, final team price = desired_i * (totalBaseline / totalDesired).
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
+      
       const costCase = parseFloat(document.getElementById('caseCost').value);
       const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
       const usePercent = document.getElementById('markupToggle').checked;
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
       
+      // Calculate overall costWithMarkup (not used directly in boost calculation, but for profit tile)
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
-        : costCase + (markupVal * (costCase / costCase)); // fallback
-      
+        : costCase + markupVal; 
       const whatnotsCut = costWithMarkup * 0.08;
       
       const teams = currentSet.cards;
@@ -740,7 +747,7 @@
       let totalCostOfBusiness = 0;
       const teamData = [];
       
-      // Compute baseline distributed cost + markup for each team.
+      // Compute baseline for each team
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -761,30 +768,23 @@
         });
       });
       
-      // Process boost values.
-      let boostedTeam = null;
+      // Read boost values and compute desired prices
+      let totalBaseline = teamData.reduce((sum, data) => sum + data.baseline, 0);
+      let totalDesired = 0;
       teamData.forEach(data => {
+        // Use a boost input with class "boost-input" and step 0.1
         const boostInput = document.getElementById("boost-" + data.team);
         data.boost = boostInput ? parseFloat(boostInput.value) || 0 : 0;
-        if (data.boost !== 0) {
-          boostedTeam = data;
-        }
+        data.desired = data.baseline * (1 + data.boost / 100);
+        totalDesired += data.desired;
       });
       
-      if (boostedTeam) {
-        const extra = boostedTeam.baseline * (boostedTeam.boost / 100);
-        boostedTeam.teamPrice = boostedTeam.baseline * (1 + boostedTeam.boost / 100);
-        const othersBaselineSum = teamData.reduce((sum, data) => data.team !== boostedTeam.team ? sum + data.baseline : sum, 0);
-        teamData.forEach(data => {
-          if (data.team !== boostedTeam.team) {
-            data.teamPrice = data.baseline - (data.baseline / othersBaselineSum) * extra;
-          }
-        });
-      } else {
-        teamData.forEach(data => data.teamPrice = data.baseline);
-      }
+      // Compute final team prices by scaling the desired prices so that total equals totalBaseline.
+      teamData.forEach(data => {
+        data.teamPrice = data.desired * (totalBaseline / totalDesired);
+      });
       
-      // Build table rows
+      // Build the table rows
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -807,7 +807,7 @@
             <td>${(data.distribution * 100).toFixed(2)}%</td>
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
-            <td><input type="number" id="boost-${data.team}" style="width:60px;" step="0.1" value="${data.boost || 0}" oninput="updateBreakSniffer()"></td>
+            <td><input type="number" class="boost-input" id="boost-${data.team}" style="width:60px;" step="0.1" value="${data.boost || 0}" oninput="updateBreakSniffer()"></td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
         `;
