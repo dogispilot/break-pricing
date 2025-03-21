@@ -206,25 +206,30 @@
       font-family: 'BreakPricingFont', sans-serif;
     }
     /* New button styles for eBay and NHL */
-    .ebay-btn, .nhl-btn {
+    .ebay-btn {
       background: none !important;
       padding: 0 !important;
       border: none !important;
-      display: inline !important;
+      display: flex !important;
+      justify-content: flex-start;
       text-decoration: none !important;
-       max-width: 75%;
+      max-width: 75%;
+      height: auto;
+    }
+    .nhl-btn {
+      background: none !important;
+      padding: 0 !important;
+      border: none !important;
+      display: flex !important;
+      justify-content: flex-end;
+      text-decoration: none !important;
+      max-width: 75%;
       height: auto;
     }
     .ebay-btn img, .nhl-btn img {
       max-width: 75%;
       height: auto;
       box-shadow: none !important;
-    }
-   .nhl-btn img {
-      align-self: flex-end !important;
-    }
-   .ebay-btn img {
-      align-self: flex-start !important;
     }
     /* Team table first column styling */
     #team-table tbody tr td:first-child {
@@ -839,7 +844,7 @@
               </div>`;
             const btnContainer = document.createElement('div');
             btnContainer.style.display = "inline-flex";
-            btnContainer.style.gap = "4px";
+            btnContainer.style.gap = "15px";  /* Updated gap from 4px to 15px */
             btnContainer.style.marginTop = "8px";
             const nhlLink = document.createElement("a");
             nhlLink.href = player.profile_link;
