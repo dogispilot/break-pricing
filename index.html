@@ -127,19 +127,19 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* For groups that are in a price-setting context */
+    /* Price settings groups */
     .price-setting-group {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      margin-bottom: 10px;
+      margin-bottom: 0px;
     }
     .price-setting-group label {
-      margin-bottom: 3px; /* set same as others */
+      margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
     }
-    /* Input-inline container to align input fields horizontally */
+    /* Use an input-inline container to ensure groups line up */
     .input-inline {
       display: flex;
       align-items: center;
@@ -193,73 +193,19 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Existing boost/discount inputs override */
+    /* Boost and discount inputs */
     .boost-input,
     .discount-input {
       width: 60px;
     }
-    /* Button group inline for Price Settings/Lookup buttons */
+    /* Button group inline */
     .button-group-inline {
       display: inline-flex;
       gap: 10px;
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* New button styles for eBay and NHL */
-    .ebay-btn, .nhl-btn {
-      background: none !important;
-      padding: 0 !important;
-      border: none !important;
-      display: inline !important;
-      text-decoration: none !important;
-    }
-    .ebay-btn img, .nhl-btn img {
- max-width: 50%;
-      height: auto;
-      box-shadow: none !important;
-    }
-    }
-    /* Team table first column styling */
-    #team-table tbody tr td:first-child {
-      display: flex;
-      align-items: center;
-    }
-    #team-table tbody tr td:first-child .ebay-btn img {
-      height: 20px !important;
-    }
-    /* Lookup buttons */
-    .lookup-button {
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background: #fff;
-      color: #333;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-width: 150px;
-      box-sizing: border-box;
-      font-family: 'BreakPricingFont', sans-serif;
-    }
-    .lookup-button img {
-      width: 24px;
-      height: 24px;
-      vertical-align: middle;
-    }
-    /* Glow effects on hover */
-    .glow-dacardworld:hover,
-    .glow-steelcity:hover,
-    .glow-outofthebox:hover,
-    .glow-midwestcards:hover,
-    .glow-tcdb:hover,
-    .glow-hockeychecklists:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      transform: scale(1.05);
-    }
-    /* Price Settings and Price Lookup buttons remain unchanged */
+    /* Price Settings/Lookup buttons */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: #66bb6a;
@@ -272,7 +218,7 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* Price Settings and Price Lookup menus – now positioned absolutely below the break controls */
+    /* Price Settings and Price Lookup menus – positioned absolutely below break controls */
     #price-settings, #price-lookup-menu {
       position: absolute;
       top: 100%;
@@ -290,7 +236,7 @@
       font-family: 'BreakPricingFont', sans-serif;
       z-index: 10;
     }
-    /* Button Container inside Price Lookup Menu remains unchanged */
+    /* Button Container inside Price Lookup Menu */
     .button-container {
       display: flex;
       justify-content: center;
@@ -390,7 +336,38 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-    /* Key Rookies section */
+    /* Lookup buttons */
+    .lookup-button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 150px;
+      box-sizing: border-box;
+      font-family: 'BreakPricingFont', sans-serif;
+    }
+    .lookup-button img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+    }
+    .glow-dacardworld:hover,
+    .glow-steelcity:hover,
+    .glow-outofthebox:hover,
+    .glow-midwestcards:hover,
+    .glow-tcdb:hover,
+    .glow-hockeychecklists:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+    }
+    /* Team Rookies section */
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -431,6 +408,12 @@
       align-items: center;
       justify-content: center;
       gap: 0px;
+    }
+    /* ---------------------------------------------------------------------- */
+    /* NEW: Align the markup toggle group label with other groups */
+    #price-settings .price-setting-group:first-child label:first-child {
+      /* Add left margin to shift "Use % markup" label into alignment */
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -491,7 +474,7 @@
       <!-- Left Column: Controls wrapped in a container for positioning menus -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
-          <!-- Cost of a case group: wrapped in an input-inline to match markup group -->
+          <!-- Cost of a case group -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <div class="input-inline">
@@ -517,7 +500,7 @@
             </div>
           </div>
         </div>
-        <!-- Price Settings Menu (positioned absolutely and centered) -->
+        <!-- Price Settings Menu -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -574,7 +557,7 @@
         </div>
       </div>
     </div>
-    <!-- Table for Break Sniffer Results -->
+    <!-- Team Table -->
     <table id="team-table">
       <thead>
         <tr>
