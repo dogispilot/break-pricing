@@ -99,9 +99,8 @@
       font-size: 1.5em;
     }
     #set-selection select {
-      width: fit-content;
-      max-width: none;
-      white-space: nowrap;
+      /* Remove fixed width so that JS can adjust it */
+      width: auto;
       display: inline-block;
       font-weight: bold;
       text-decoration: underline;
@@ -615,7 +614,26 @@
     </table>
   </section>
 
+  <!-- Hidden span used to measure text width of the selected option -->
+  <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap; font-size: inherit; font-weight: bold; text-decoration: underline; font-family: inherit;"></span>
+
   <script>
+    // Function to update the width of a select element based on its selected text
+    function updateSelectWidth(selectElement) {
+      var selectedText = selectElement.options[selectElement.selectedIndex].text;
+      var hiddenSpan = document.getElementById('hiddenSelectText');
+      hiddenSpan.textContent = selectedText;
+      // Add a few extra pixels for padding (adjust as necessary)
+      var newWidth = hiddenSpan.offsetWidth + 10;
+      selectElement.style.width = newWidth + "px";
+    }
+
+    // Update widths for both select elements
+    function updateAllSelectWidths() {
+      updateSelectWidth(document.getElementById('setNameSelect'));
+      updateSelectWidth(document.getElementById('setYearSelect'));
+    }
+
     // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
@@ -648,8 +666,17 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
+        // Update select widths after options are populated
+        updateAllSelectWidths();
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', debouncedUpdateBreakSniffer);
+        });
+        // Update width on change events
+        document.getElementById('setNameSelect').addEventListener('change', function() {
+          updateSelectWidth(this);
+        });
+        document.getElementById('setYearSelect').addEventListener('change', function() {
+          updateSelectWidth(this);
         });
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
@@ -725,7 +752,7 @@
       updateBreakSniffer();
       if (!currentSet) {
         document.getElementById('toggleNotes').style.display = 'none';
-        // Removed empty state message for details section
+        // Remove empty state text for details section.
         document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
