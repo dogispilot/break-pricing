@@ -335,7 +335,7 @@
       width: 50px;
       height: 24px;
       margin: 0;
-      vertical-align: middle; /* remove invalid "center" usage */
+      vertical-align: middle;
     }
     .toggle-switch input {
       opacity: 0;
@@ -398,7 +398,7 @@
       z-index: 1;
     }
     .key-rookie-logo {
-      /* This class is used on the team image; additional styles can go here if needed */
+      /* Additional styles if needed */
     }
     /* New class for rookie notes under the name */
     .rookie-notes {
@@ -416,7 +416,7 @@
     /* ---------------------------------------------------------------------- */
     /* OVERRIDES to force consistent vertical alignment between toggle & inputs */
     /* ---------------------------------------------------------------------- */
-    /* 1) Force same height & line-height for toggles and numeric inputs */
+    /* 1) Force same height & line-height for toggles and numeric inputs in price settings */
     .price-setting-group input[type="number"],
     .price-setting-group .toggle-switch {
       height: 24px !important;
@@ -425,27 +425,33 @@
       padding: 0 !important;
       box-sizing: border-box;
     }
-    /* 2) Slightly reduce label’s bottom margin if needed */
+    /* 2) Slightly reduce label’s bottom margin for price settings */
     .price-setting-group label {
-      margin-bottom: 4px !important; /* smaller gap above toggle/input */
+      margin-bottom: 4px !important;
     }
     /* 3) Make sure the toggle’s slider is fully contained in 24px */
     .toggle-switch {
-      width: 50px;       /* match your desired toggle width */
+      width: 50px;
       vertical-align: middle;
     }
     .toggle-switch .slider {
-      top: 0; 
+      top: 0;
       bottom: 0;
       margin: auto;              /* center slider vertically */
-      height: 24px !important;   /* match container height */
+      height: 24px !important;
     }
     .toggle-switch .slider:before {
-      top: auto;                 /* no extra space at top */
-      bottom: 3px;               /* keep the circle inside the slider */
+      top: auto;
+      bottom: 3px;
       height: 18px;
       width: 18px;
-      margin: 0;                 /* remove default spacing */
+      margin: 0;
+    }
+    /* 4) Ensure the cost of a case (and similar inputs in break controls) match the same styling */
+    .break-controls .input-group input[type="number"] {
+      margin: 0 !important;
+      height: 24px !important;
+      line-height: 24px !important;
     }
   </style>
 </head>
