@@ -389,14 +389,18 @@
       height: auto;
       display: block;
       margin: 0;
+      position: relative;
+      z-index: 2;
     }
     .team-img {
-     max-width: 50%;
+      max-width: 50%;
       height: auto;
       object-fit: contain;
       margin-right: -60px; /* negative margin for overlap */
       vertical-align: middle;
       opacity: 0.7; /* add transparency */
+      position: relative;
+      z-index: 1;
     }
     .key-rookie-logo {
       /* This class is used on the team image; additional styles can go here if needed */
@@ -1151,3 +1155,4 @@
   </script>
 </body>
 </html>
+
