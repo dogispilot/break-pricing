@@ -99,7 +99,9 @@
       font-size: 1.5em;
     }
     #set-selection select {
-      width: auto;
+      width: fit-content;
+      max-width: none;
+      white-space: nowrap;
       display: inline-block;
       font-weight: bold;
       text-decoration: underline;
@@ -142,7 +144,7 @@
       margin-bottom: 0px;
     }
     .price-setting-group label {
-      margin-bottom: 3px; /* set same as others */
+      margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
     }
@@ -851,7 +853,7 @@
               </div>`;
             const btnContainer = document.createElement('div');
             btnContainer.style.display = "inline-flex";
-            btnContainer.style.gap = "15px";  /* Updated gap from 4px to 15px */
+            btnContainer.style.gap = "15px";
             btnContainer.style.marginTop = "8px";
             const nhlLink = document.createElement("a");
             nhlLink.href = player.profile_link;
