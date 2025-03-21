@@ -725,7 +725,8 @@
       updateBreakSniffer();
       if (!currentSet) {
         document.getElementById('toggleNotes').style.display = 'none';
-        document.getElementById('details-text').textContent = "Please select a set and year to get started.";
+        // Removed empty state message for details section
+        document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
       } else {
@@ -747,7 +748,7 @@
       const notesDiv = document.getElementById('set-notes');
       const tilesDiv = document.getElementById('set-tiles');
       if (!currentSet) {
-        detailsDiv.textContent = "Please select a set and year to get started.";
+        detailsDiv.textContent = "";
         notesDiv.textContent = "";
         tilesDiv.innerHTML = "";
         return;
