@@ -134,6 +134,7 @@
       align-items: flex-start;
       margin-bottom: 0px;
       height: 100%
+      width: 30% 
     }
     .price-setting-group label {
       margin-bottom: 3px; /* set same as others */
@@ -161,7 +162,7 @@
       outline: none;
       text-align: center;
       height: 100%;
-      width: 100%;
+      width: 100px;
       padding: 0;
       font-size: 1em;
       font-family: inherit;
@@ -840,7 +841,7 @@
               </div>`;
             const btnContainer = document.createElement('div');
             btnContainer.style.display = "inline-flex";
-            btnContainer.style.gap = "0px";  // remove container gap
+            btnContainer.style.gap = "4px";
             btnContainer.style.marginTop = "8px";
             const nhlLink = document.createElement("a");
             nhlLink.href = player.profile_link;
@@ -853,8 +854,6 @@
             ebayLink.className = "ebay-btn";
             ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
             ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay">';
-            // Add a left margin of 15px to the eBay image to ensure exactly 15px between the two images.
-            ebayLink.firstElementChild.style.marginLeft = "15px";
             btnContainer.appendChild(ebayLink);
             tile.appendChild(btnContainer);
             rookieContainer.appendChild(tile);
