@@ -135,9 +135,15 @@
       margin-bottom: 10px;
     }
     .price-setting-group label {
-      margin-bottom: 5px;
+      margin-bottom: 3px; /* set same as others */
       font-weight: bold;
       font-size: 0.8em;
+    }
+    /* Input-inline container to align input fields horizontally */
+    .input-inline {
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
     /* Input-wrapper for fields with prefix/suffix */
     .input-wrapper {
@@ -208,14 +214,10 @@
       text-decoration: none !important;
     }
     .ebay-btn img, .nhl-btn img {
-      height: 40px !important;
-      width: auto !important;
+ max-width: 50%;
+      height: auto;
       box-shadow: none !important;
     }
-    /* Override for key rookie tiles: reduce NHL and eBay button images */
-    #rookie-tiles .nhl-btn img,
-    #rookie-tiles .ebay-btn img {
-      height: 30px !important;
     }
     /* Team table first column styling */
     #team-table tbody tr td:first-child {
@@ -489,15 +491,17 @@
       <!-- Left Column: Controls wrapped in a container for positioning menus -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
-          <!-- Cost of a case with a $ prefix -->
+          <!-- Cost of a case group: wrapped in an input-inline to match markup group -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="caseCost" step="0.01" value="1999.95">
+            <div class="input-inline">
+              <div class="input-wrapper">
+                <span class="input-prefix">$</span>
+                <input type="number" id="caseCost" step="0.01" value="1999.95">
+              </div>
             </div>
           </div>
-          <!-- Updated Markup Group with prefix/suffix for markup -->
+          <!-- Markup group -->
           <div class="input-group price-setting-group">
             <label for="markupValue">Markup</label>
             <div class="input-inline">
@@ -537,7 +541,7 @@
             </div>
           </div>
         </div>
-        <!-- Price Lookup Menu (positioned similarly) -->
+        <!-- Price Lookup Menu -->
         <div id="price-lookup-menu">
           <div class="button-container">
             <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
@@ -570,7 +574,7 @@
         </div>
       </div>
     </div>
-    <!-- Updated Table Header with Boost, Discount, and Team Price Columns -->
+    <!-- Table for Break Sniffer Results -->
     <table id="team-table">
       <thead>
         <tr>
@@ -787,7 +791,6 @@
       return packs * cards;
     }
 
-    // New functions for eBay buttons in rookie cards and team table
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
@@ -805,7 +808,6 @@
       window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
 
-    // Updated Key Rookies function to add NHL and eBay buttons and adjust layout
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
