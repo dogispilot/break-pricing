@@ -126,69 +126,70 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* Markup input group */
-    .input-inline {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .button-group-inline {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    /* Updated Price Settings Menu */
-    #price-settings {
-      display: flex;
-      gap: 15px;
-      margin-top: 10px;
-      justify-content: flex-start;
-    }
+    /* For groups that are in a price-setting context */
     .price-setting-group {
       display: flex;
-      flex-direction: column; /* label above, toggle/input below */
+      flex-direction: column;
       align-items: flex-start;
+      margin-bottom: 10px;
     }
     .price-setting-group label {
       margin-bottom: 5px;
       font-weight: bold;
       font-size: 0.8em;
     }
-    /* Uniform styling for number inputs */
-    .break-controls input[type="number"],
-    #price-settings input[type="number"],
-    #price-lookup-menu input[type="number"],
-    .boost-input,
-    .discount-input {
-      width: 80px;
-      height: 24px;
-      padding: 2px 4px;
-      margin: 5px 0;
+    /* Input-wrapper for fields with prefix/suffix */
+    .input-wrapper {
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
       border: 1px solid #ccc;
-      border-radius: 4px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 6px;
+      overflow: hidden;
       background: #fff;
     }
-    .break-controls input[type="number"]:focus,
-    #price-settings input[type="number"]:focus,
-    #price-lookup-menu input[type="number"]:focus,
-    .boost-input:focus,
-    .discount-input:focus {
+    .input-wrapper input[type="number"] {
+      border: none;
       outline: none;
-      border-color: #66bb6a;
-      box-shadow: 0 0 4px rgba(102, 187, 106, 0.5);
+      text-align: center;
+      height: 100%;
+      width: 100%;
+      padding: 0;
+      font-size: 1em;
+      font-family: inherit;
     }
-    /* Remove spinner arrows from numeric fields */
-    input.boost-input::-webkit-inner-spin-button,
-    input.boost-input::-webkit-outer-spin-button,
-    input.discount-input::-webkit-inner-spin-button,
-    input.discount-input::-webkit-outer-spin-button {
+    .input-wrapper .input-prefix,
+    .input-wrapper .input-suffix {
+      padding: 0 8px;
+      background-color: #eee;
+      font-size: 1em;
+      font-family: inherit;
+      color: #333;
+      white-space: nowrap;
+    }
+    /* Modern input styling for other number inputs */
+    input[type="number"] {
+      height: 36px !important;
+      line-height: 36px !important;
+      font-size: 1em;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 0 8px;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    input.boost-input,
-    input.discount-input {
+    input[type="number"] {
       -moz-appearance: textfield;
+    }
+    /* Existing boost/discount inputs override */
+    .boost-input,
+    .discount-input {
+      width: 60px;
+      /* Their height will be updated by the general rule above */
     }
     /* New button styles for eBay and NHL */
     .ebay-btn, .nhl-btn {
@@ -199,16 +200,16 @@
       text-decoration: none !important;
     }
     .ebay-btn img, .nhl-btn img {
-      height: 40px !important;  /* increased from 16px to 40px (250% increase) */
+      height: 40px !important;
       width: auto !important;
       box-shadow: none !important;
     }
-    /* Override for key rookie tiles: reduce NHL and eBay button images by 25% (from 40px to 30px) */
+    /* Override for key rookie tiles: reduce NHL and eBay button images */
     #rookie-tiles .nhl-btn img,
     #rookie-tiles .ebay-btn img {
       height: 30px !important;
     }
-    /* Override for team table: target the first column for the eBay button */
+    /* Team table first column styling */
     #team-table tbody tr td:first-child {
       display: flex;
       align-items: center;
@@ -248,7 +249,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Price Settings and Price Lookup buttons */
+    /* Price Settings and Price Lookup buttons remain unchanged */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: #66bb6a;
@@ -316,19 +317,18 @@
       text-align: center;
       vertical-align: middle;
     }
-    /* New rule for first column of team table */
+    /* Team table first column header/style */
     #team-table th:first-child,
     #team-table td:first-child {
       text-align: left;
       color: #333;
       background-color: #fff;
     }
-    /* Override team link inline style so names are dark */
     #team-table td:first-child a {
       color: #333 !important;
       text-decoration: none;
     }
-    /* iOS Toggle Switch */
+    /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -391,16 +391,13 @@
       max-width: 50%;
       height: auto;
       object-fit: contain;
-      margin-right: -60px; /* negative margin for overlap */
+      margin-right: -60px;
       vertical-align: middle;
-      opacity: 0.7; /* add transparency */
+      opacity: 0.7;
       position: relative;
       z-index: 1;
     }
-    .key-rookie-logo {
-      /* Additional styles if needed */
-    }
-    /* New class for rookie notes under the name */
+    .key-rookie-logo { }
     .rookie-notes {
       font-size: 0.9em;
       color: #555;
@@ -410,48 +407,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0px; /* reduced gap to allow overlap */
-    }
-
-    /* ---------------------------------------------------------------------- */
-    /* OVERRIDES to force consistent vertical alignment between toggle & inputs */
-    /* ---------------------------------------------------------------------- */
-    /* 1) Force same height & line-height for toggles and numeric inputs in price settings */
-    .price-setting-group input[type="number"],
-    .price-setting-group .toggle-switch {
-      height: 24px !important;
-      line-height: 24px !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      box-sizing: border-box;
-    }
-    /* 2) Slightly reduce label’s bottom margin for price settings */
-    .price-setting-group label {
-      margin-bottom: 4px !important;
-    }
-    /* 3) Make sure the toggle’s slider is fully contained in 24px */
-    .toggle-switch {
-      width: 50px;
-      vertical-align: middle;
-    }
-    .toggle-switch .slider {
-      top: 0;
-      bottom: 0;
-      margin: auto;              /* center slider vertically */
-      height: 24px !important;
-    }
-    .toggle-switch .slider:before {
-      top: auto;
-      bottom: 3px;
-      height: 18px;
-      width: 18px;
-      margin: 0;
-    }
-    /* 4) Ensure the cost of a case (and similar inputs in break controls) match the same styling */
-    .break-controls .input-group input[type="number"] {
-      margin: 0 !important;
-      height: 24px !important;
-      line-height: 24px !important;
+      gap: 0px;
     }
   </style>
 </head>
@@ -512,15 +468,23 @@
       <!-- Left Column: Controls -->
       <div class="break-controls">
         <div id="break-controls-row">
+          <!-- Cost of a case with a $ prefix -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
-            <input type="number" id="caseCost" step="0.01" value="1999.95">
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="caseCost" step="0.01" value="1999.95">
+            </div>
           </div>
-          <!-- Updated Markup Group -->
+          <!-- Updated Markup Group with prefix/suffix for markup -->
           <div class="input-group price-setting-group">
-            <label for="markupValue">Markup <span id="markupUnit"></span></label>
+            <label for="markupValue">Markup</label>
             <div class="input-inline">
-              <input type="number" id="markupValue" step="0.01" value="500">
+              <div class="input-wrapper" style="width:120px;">
+                <span class="input-prefix markup-prefix" style="display: none;">$</span>
+                <input type="number" id="markupValue" step="0.01" value="500">
+                <span class="input-suffix markup-suffix" style="display: none;">%</span>
+              </div>
               <div class="button-group-inline">
                 <button id="priceSettingsToggle" type="button">Price Settings</button>
                 <button id="priceLookupToggle" type="button">Price Lookup</button>
@@ -530,6 +494,7 @@
         </div>
         <!-- Updated Price Settings Menu -->
         <div id="price-settings">
+          <!-- Use % markup toggle remains unchanged -->
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
             <label class="toggle-switch">
@@ -537,13 +502,21 @@
               <span class="slider"></span>
             </label>
           </div>
+          <!-- Supplies per team with $ prefix -->
           <div class="price-setting-group">
-            <label for="suppliesCost">Supplies per team [$]</label>
-            <input type="number" id="suppliesCost" step="0.01" value="1.00">
+            <label for="suppliesCost">Supplies per team</label>
+            <div class="input-wrapper" style="width:80px;">
+              <span class="input-prefix">$</span>
+              <input type="number" id="suppliesCost" step="0.01" value="1.00">
+            </div>
           </div>
+          <!-- Blended tax with % suffix -->
           <div class="price-setting-group">
-            <label for="blendedTax">Blended tax (%)</label>
-            <input type="number" id="blendedTax" step="0.1" value="5.1">
+            <label for="blendedTax">Blended tax</label>
+            <div class="input-wrapper" style="width:80px;">
+              <input type="number" id="blendedTax" step="0.1" value="5.1">
+              <span class="input-suffix">%</span>
+            </div>
           </div>
         </div>
         <!-- Hidden Price Lookup Menu -->
@@ -600,6 +573,21 @@
   </section>
 
   <script>
+    // Toggle markup prefix/suffix based on markup toggle state.
+    function updateMarkupUnit() {
+      const isPercent = document.getElementById('markupToggle').checked;
+      // For markup input, show the $ prefix when not using percent and % suffix when using percent.
+      const prefix = document.querySelector('.markup-prefix');
+      const suffix = document.querySelector('.markup-suffix');
+      if (isPercent) {
+        prefix.style.display = 'none';
+        suffix.style.display = 'inline';
+      } else {
+        prefix.style.display = 'inline';
+        suffix.style.display = 'none';
+      }
+    }
+    
     let config = null;
     let currentSet = null;
     let pieChartInstance = null; // Global Chart.js instance
@@ -637,12 +625,6 @@
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
-    }
-
-    function updateMarkupUnit() {
-      const isPercent = document.getElementById('markupToggle').checked;
-      const markupUnitSpan = document.getElementById('markupUnit');
-      markupUnitSpan.textContent = isPercent ? '[%]' : '[$]';
     }
 
     function populateYearDropdown() {
@@ -825,7 +807,6 @@
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
             const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
-            // Place the rookie notes under the name and above the image container.
             tile.innerHTML = `<strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
@@ -898,7 +879,6 @@
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
       
-      // Calculate overall costWithMarkup (for profit calculation)
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
@@ -912,7 +892,6 @@
       let totalCostOfBusiness = 0;
       const teamData = [];
       
-      // Compute baseline for each team
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -933,7 +912,6 @@
         });
       });
       
-      // Apply Boosts
       let boostExtraPool = 0;
       const boostedTeams = [];
       const nonBoostedTeams = [];
@@ -954,7 +932,6 @@
           nonBoostedTeams.push(data);
         }
       });
-      // For non-boosted teams, subtract the extra boost pool evenly.
       if (nonBoostedTeams.length > 0) {
         let boostShare = boostExtraPool / nonBoostedTeams.length;
         nonBoostedTeams.forEach(data => {
@@ -962,7 +939,6 @@
         });
       }
       
-      // Apply Discounts
       let discountPool = 0;
       const discountTeams = [];
       const nonDiscountTeams = [];
@@ -983,7 +959,6 @@
           nonDiscountTeams.push(data);
         }
       });
-      // Redistribute discount pool among non-discount teams by adding it evenly.
       if (nonDiscountTeams.length > 0) {
         let discountShare = discountPool / nonDiscountTeams.length;
         nonDiscountTeams.forEach(data => {
@@ -991,12 +966,10 @@
         });
       }
       
-      // Set final team price
       teamData.forEach(data => {
         data.teamPrice = data.final;
       });
       
-      // Build the table rows with boost and discount controls preserved
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -1177,7 +1150,6 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-    // New function for team ebay search in table
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
