@@ -99,7 +99,7 @@
       font-size: 1.5em;
     }
     #set-selection select {
-      /* Remove fixed width so that JS can adjust it */
+      /* Let JS adjust the width based on the selected text */
       width: auto;
       display: inline-block;
       font-weight: bold;
@@ -112,6 +112,13 @@
       -moz-appearance: none;
       appearance: none;
       font-size: inherit;
+    }
+    /* Hide set notes by default */
+    #set-notes {
+      display: none;
+      padding: 10px;
+      border: 1px dashed #aaa;
+      margin-top: 5px;
     }
     /* Break Controls Layout */
     .break-controls-container {
