@@ -146,7 +146,7 @@
     }
     .price-setting-group {
       display: flex;
-      flex-direction: column;
+      flex-direction: column; /* label above, toggle/input below */
       align-items: flex-start;
     }
     .price-setting-group label {
@@ -335,7 +335,7 @@
       width: 50px;
       height: 24px;
       margin: 0;
-      vertical-align: middle;
+      vertical-align: middle; /* remove invalid "center" usage */
     }
     .toggle-switch input {
       opacity: 0;
@@ -343,13 +343,9 @@
       height: 0;
     }
     .slider {
-      vertical-align: middle;
       position: absolute;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background-color: #ccc;
       transition: .4s;
       border-radius: 24px;
@@ -416,6 +412,41 @@
       justify-content: center;
       gap: 0px; /* reduced gap to allow overlap */
     }
+
+    /* ---------------------------------------------------------------------- */
+    /* OVERRIDES to force consistent vertical alignment between toggle & inputs */
+    /* ---------------------------------------------------------------------- */
+    /* 1) Force same height & line-height for toggles and numeric inputs */
+    .price-setting-group input[type="number"],
+    .price-setting-group .toggle-switch {
+      height: 24px !important;
+      line-height: 24px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box;
+    }
+    /* 2) Slightly reduce label’s bottom margin if needed */
+    .price-setting-group label {
+      margin-bottom: 4px !important; /* smaller gap above toggle/input */
+    }
+    /* 3) Make sure the toggle’s slider is fully contained in 24px */
+    .toggle-switch {
+      width: 50px;       /* match your desired toggle width */
+      vertical-align: middle;
+    }
+    .toggle-switch .slider {
+      top: 0; 
+      bottom: 0;
+      margin: auto;              /* center slider vertically */
+      height: 24px !important;   /* match container height */
+    }
+    .toggle-switch .slider:before {
+      top: auto;                 /* no extra space at top */
+      bottom: 3px;               /* keep the circle inside the slider */
+      height: 18px;
+      width: 18px;
+      margin: 0;                 /* remove default spacing */
+    }
   </style>
 </head>
 <body>
@@ -480,7 +511,7 @@
             <input type="number" id="caseCost" step="0.01" value="1999.95">
           </div>
           <!-- Updated Markup Group -->
-          <div class="input-group">
+          <div class="input-group price-setting-group">
             <label for="markupValue">Markup <span id="markupUnit"></span></label>
             <div class="input-inline">
               <input type="number" id="markupValue" step="0.01" value="500">
