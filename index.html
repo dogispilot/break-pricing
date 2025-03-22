@@ -624,7 +624,7 @@
           <div class="tiles" id="break-tiles">
             <!-- Breaker boxes will appear here -->
           </div>
-          <!-- Pie Chart -->
+          <!-- 3D Donut Chart -->
           <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
@@ -1141,29 +1141,32 @@
       updatePieChart(pieData);
     }
 
+    // Updated 3D Donut Chart with high-contrast, accessible colors and a drop-shadow for a 3D effect.
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
-      const labels = data.map(d => d.label);
-      const values = data.map(d => d.value);
-      const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
+      // Accessible, high-contrast colors
+      const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
       
+      // Use a doughnut chart with a 50% cutout to simulate a donut chart.
       if (pieChartInstance) {
-        pieChartInstance.data.labels = labels;
-        pieChartInstance.data.datasets[0].data = values;
+        pieChartInstance.data.labels = data.map(d => d.label);
+        pieChartInstance.data.datasets[0].data = data.map(d => d.value);
+        pieChartInstance.data.datasets[0].backgroundColor = backgroundColors;
         pieChartInstance.update();
       } else {
         pieChartInstance = new Chart(ctx, {
-          type: 'pie',
+          type: 'doughnut',
           data: {
-            labels: labels,
+            labels: data.map(d => d.label),
             datasets: [{
-              data: values,
+              data: data.map(d => d.value),
               backgroundColor: backgroundColors,
               borderColor: "#fff",
               borderWidth: 2,
             }]
           },
           options: {
+            cutout: '50%', // creates the donut hole
             responsive: false,
             animation: {
               animateRotate: true,
@@ -1181,7 +1184,21 @@
                 }
               }
             }
-          }
+          },
+          plugins: [{
+            id: 'shadowPlugin',
+            beforeDraw: (chart) => {
+              const ctx = chart.ctx;
+              ctx.save();
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+              ctx.shadowBlur = 10;
+              ctx.shadowOffsetX = 3;
+              ctx.shadowOffsetY = 3;
+            },
+            afterDraw: (chart) => {
+              chart.ctx.restore();
+            }
+          }]
         });
       }
     }
