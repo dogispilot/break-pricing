@@ -214,7 +214,9 @@
     }
     /* Existing boost input override */
     .boost-input {
-      width: 60px;
+      width: 100%;
+      border: none;
+      text-align: center;
     }
     /* Button group inline for Price Settings/Lookup buttons */
     .button-group-inline {
@@ -1031,7 +1033,10 @@
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
-              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px;" step="0.1" value="${data.boost ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
+              <div class="input-wrapper" style="width:60px;">
+                <input type="number" class="boost-input" id="boost-input-${data.team}" step="0.1" value="${data.boost ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
+                <span class="input-suffix">%</span>
+              </div>
             </td>
             <td style="${priceStyle}">$${data.teamPrice.toFixed(2)}${emoji}</td>
           </tr>
