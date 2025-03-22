@@ -57,58 +57,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Container for all tiles */
-    .tile-container {
-      margin-top: 10px;
-    }
-    /* Set Details tiles */
-    .tile {
-      background: #eaeaea;
-      border-radius: 4px;
-      text-align: center;
-      padding: 10px;
-    }
-    .tile-value {
-      font-family: 'BreakPricingFontBold', sans-serif;
-      margin-bottom: 5px;
-    }
-    .tile-desc {
-      font-size: 1em;
-    }
-    /* Break Tiles Styling */
-    .break-tile {
-      max-width: 150px;
-      margin-bottom: 15px;
-      text-align: center;
-      padding: 10px;
-    }
-    .break-tile .tile-value {
-      font-size: 3em;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .break-tile .tile-label {
-      font-size: 1em;
-    }
-    /* Hero and Support rows */
-    .hero-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .hero-row .tile {
-      flex: 0 0 calc(50% - 10px);
-      box-sizing: border-box;
-    }
-    .support-row {
-      display: flex;
-      gap: 10px;
-    }
-    .support-row .tile {
-      flex: 0 0 calc(25% - 10px);
-      box-sizing: border-box;
-    }
-    /* Set selection styling */
+    /* Set and Year Selection */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
@@ -130,44 +79,50 @@
       appearance: none;
       font-size: inherit;
     }
-    /* Hide set notes by default */
+    /* Set Details */
     #set-notes {
       display: none;
       padding: 10px;
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
+    .tile-container {
+      margin-top: 10px;
+    }
+    .tile {
+      background: #eaeaea;
+      border-radius: 4px;
+      text-align: center;
+      padding: 10px;
+    }
+    .tile-value {
+      font-family: 'BreakPricingFontBold', sans-serif;
+      margin-bottom: 5px;
+    }
+    .tile-desc {
+      font-size: 1em;
+    }
     /* Break Sniffer Layout */
     .break-sniffer-flex {
       display: flex;
       gap: 20px;
     }
-    /* Left column: Controls & Donut Chart */
+    /* Left column: Controls and Donut Chart */
     .controls-column {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-    /* Right column: Break Tiles and Bubble Chart */
+    /* Right column: Bubble Chart (breaker tiles hidden) */
     .results-column {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-    /* Controls */
-    .break-controls-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .break-controls-row {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .price-buttons-row {
+    /* Controls & Buttons */
+    .break-controls-container, .break-controls-row, .price-buttons-row {
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -194,7 +149,6 @@
       font-size: 1.2em;
       font-weight: bold;
     }
-    /* Input groups and wrappers (unchanged) */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -279,26 +233,17 @@
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    .ebay-btn {
+    .ebay-btn, .nhl-btn {
       background: none !important;
       padding: 0 !important;
       border: none !important;
       display: flex !important;
-      justify-content: flex-start;
       text-decoration: none !important;
       max-width: 75%;
       height: auto;
     }
-    .nhl-btn {
-      background: none !important;
-      padding: 0 !important;
-      border: none !important;
-      display: flex !important;
-      justify-content: flex-end;
-      text-decoration: none !important;
-      max-width: 75%;
-      height: auto;
-    }
+    .ebay-btn { justify-content: flex-start; }
+    .nhl-btn { justify-content: flex-end; }
     .ebay-btn img, .nhl-btn img {
       max-width: 75%;
       height: auto;
@@ -317,7 +262,87 @@
       width: auto;
       vertical-align: middle;
     }
-    /* Rookie tiles images */
+    .empty-pill-button {
+      background-color: transparent;
+      color: #333;
+      border: 1px solid #333;
+      border-radius: 20px;
+      padding: 2px 10px;
+      cursor: pointer;
+      font-size: 0.8em;
+      height: 24px;
+      font-family: 'BreakPricingFont', sans-serif;
+      margin-left: 5px;
+    }
+    /* Hide breaker tiles for now */
+    #break-tiles {
+      display: none;
+    }
+    /* Donut Chart Container */
+    .donut-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Bubble Chart Styling */
+    #bubbleChart {
+      display: block;
+      margin: 0 auto;
+    }
+    /* iOS Toggle Switch (unchanged) */
+    .toggle-switch {
+      display: inline-block;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin: 0;
+      vertical-align: middle;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #66bb6a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* Rookie Tiles */
+    #rookie-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #rookie-tiles .tile {
+      flex: 0 0 calc(33% - 10px);
+      box-sizing: border-box;
+      padding: 10px;
+    }
     .rookie-team-img {
       max-width: 50%;
       height: auto;
@@ -334,7 +359,18 @@
       position: relative;
       z-index: 3;
     }
-    /* Table styling */
+    .rookie-notes {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .rookie-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0px;
+    }
+    /* Table Styling */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -401,110 +437,6 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
       width: 120px;
-    }
-    .empty-pill-button {
-      background-color: transparent;
-      color: #333;
-      border: 1px solid #333;
-      border-radius: 20px;
-      padding: 2px 10px;
-      cursor: pointer;
-      font-size: 0.8em;
-      height: 24px;
-      font-family: 'BreakPricingFont', sans-serif;
-      margin-left: 5px;
-    }
-    /* Donut chart container: move it up a bit */
-    .donut-container {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      margin-top: 0;
-    }
-    /* iOS Toggle Switch (unchanged) */
-    .toggle-switch {
-      display: inline-block;
-      position: relative;
-      width: 50px;
-      height: 24px;
-      margin: 0;
-      vertical-align: middle;
-    }
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #66bb6a;
-    }
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    #rookie-tiles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    #rookie-tiles .tile {
-      flex: 0 0 calc(33% - 10px);
-      box-sizing: border-box;
-      padding: 10px;
-    }
-    .rookie-img {
-      max-width: 50%;
-      height: auto;
-      margin: 0;
-      margin-left: -60px;
-      position: relative;
-      z-index: 3;
-    }
-    .team-img {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-      margin-right: 5px;
-      vertical-align: middle;
-      opacity: 0.7;
-      position: relative;
-      z-index: 1;
-    }
-    .key-rookie-logo { }
-    .rookie-notes {
-      font-size: 0.9em;
-      color: #555;
-      margin-bottom: 5px;
-    }
-    .rookie-image-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0px;
-    }
-    /* Bubble Chart Styling */
-    #bubbleChart {
-      display: block;
-      margin: 0 auto;
     }
   </style>
 </head>
@@ -637,14 +569,9 @@
           </div>
         </div>
       </div>
-      <!-- Right Column: Break Tiles and Bubble Chart -->
+      <!-- Right Column: Bubble Chart (breaker tiles hidden) -->
       <div class="results-column">
-        <div class="break-tiles-container">
-          <div id="break-tiles">
-            <!-- Break tiles will be generated here -->
-          </div>
-        </div>
-        <canvas id="bubbleChart" width="400" height="300"></canvas>
+        <canvas id="bubbleChart" width="500" height="500"></canvas>
       </div>
     </div>
     <table id="team-table">
@@ -961,7 +888,6 @@
     }
     function updateBreakSniffer() {
       if (!currentSet) {
-        document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
@@ -1004,6 +930,7 @@
         const boostInput = document.getElementById("boost-input-" + data.team);
         let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         data.boost = boostVal;
+        // Use a fixed base radius change (smaller variation)
         if (data.boost > 0) {
           data.teamPrice = data.baseline + (data.baseline * (data.boost / 100));
         } else if (data.boost < 0) {
@@ -1075,52 +1002,34 @@
       });
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
-      const breakTiles = document.getElementById('break-tiles');
-      breakTiles.innerHTML = "";
-      
-      const tileProfit = document.createElement('div');
-      tileProfit.className = 'tile break-tile';
-      tileProfit.innerHTML = `<div class="tile-value">$${breakersProfit.toFixed(2)}</div><div class="tile-label">Breaker's Profit</div>`;
-      tileProfit.style.background = "#2E7D32";
-      tileProfit.style.color = "#fff";
-      breakTiles.appendChild(tileProfit);
-      
-      const tileWhatnots = document.createElement('div');
-      tileWhatnots.className = 'tile break-tile';
-      tileWhatnots.innerHTML = `<div class="tile-value">$${whatnotsCut.toFixed(2)}</div><div class="tile-label">Whatnots Cut</div>`;
-      tileWhatnots.style.background = "#EF6C00";
-      tileWhatnots.style.color = "#fff";
-      breakTiles.appendChild(tileWhatnots);
-      
-      const tileBusiness = document.createElement('div');
-      tileBusiness.className = 'tile break-tile';
-      tileBusiness.innerHTML = `<div class="tile-value">$${totalCostOfBusiness.toFixed(2)}</div><div class="tile-label">Cost of Business</div>`;
-      tileBusiness.style.background = "#1565C0";
-      tileBusiness.style.color = "#fff";
-      breakTiles.appendChild(tileBusiness);
-      
-      updateBubbleChart(teamData);
-      
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
       updatePieChart(pieData);
+      updateBubbleChart(teamData);
     }
-    // Updated bubble chart function with improved styling.
+    // Updated bubble chart: larger canvas; each bubble always displays team image and team name.
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // Create bubble data points. Use a reduced boost scaling factor.
+      // Use a fixed base radius with only a slight variation for boost
+      const baseRadius = 30;
       const bubbleData = teamData.map(data => {
-        const r = Math.max(5, Math.abs(data.boost) * 1 + 5); // reduced scale factor
-        return { x: data.distribution * 100, y: data.teamPrice, r: r, boost: data.boost, logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || "" };
+        const r = baseRadius + (data.boost * 0.5); // small variation
+        return { 
+          x: data.distribution * 100, 
+          y: data.teamPrice, 
+          r: Math.max(20, r), 
+          team: data.team,
+          logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
+        };
       });
-      // Set bubble colors: white for neutral, green for boost, red for discount.
+      // Determine bubble color based on boost: neutral white, boost green, discount red.
       const bubbleColors = bubbleData.map(data => {
-        if (data.boost === 0) return "#ffffff";
-        else if (data.boost > 0) return "#66bb6a";
-        else return "#ff6666";
+        if (teamData.find(t => t.team === data.team).boost > 0) return "#66bb6a";
+        else if (teamData.find(t => t.team === data.team).boost < 0) return "#ff6666";
+        else return "#ffffff";
       });
       if (bubbleChartInstance) {
         bubbleChartInstance.data.datasets[0].data = bubbleData;
@@ -1159,15 +1068,24 @@
               const ctx = chart.ctx;
               chart.getDatasetMeta(0).data.forEach((element, index) => {
                 const dataPoint = bubbleData[index];
+                // Draw team logo
                 if (dataPoint.logo) {
                   const img = new Image();
                   img.src = dataPoint.logo;
                   const x = element.x;
                   const y = element.y;
-                  // Set image size relative to the bubble radius (50% of outerRadius)
+                  // Set image size to 50% of bubble radius
                   const size = element.outerRadius * 0.5;
-                  ctx.drawImage(img, x - size/2, y - size/2, size, size);
+                  ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
                 }
+                // Draw team name below image
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText(dataPoint.team, element.x, element.y + element.outerRadius * 0.1);
+                ctx.restore();
               });
             }
           }]
@@ -1178,7 +1096,6 @@
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
-      // Plugin to draw extra text inside each slice
       const doughnutInfoPlugin = {
         id: 'doughnutInfoPlugin',
         afterDraw(chart, args, options) {
@@ -1187,7 +1104,6 @@
             const dataset = chart.data.datasets[0];
             const label = chart.data.labels[index];
             const value = dataset.data[index];
-            // Calculate center angle and radius for text placement
             const { x, y, outerRadius, innerRadius, startAngle, endAngle } = arc;
             const midAngle = (startAngle + endAngle) / 2;
             const textRadius = innerRadius + (outerRadius - innerRadius) / 2;
