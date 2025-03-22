@@ -108,7 +108,7 @@
       color: #1a1a1a;
     }
     #set-selection select {
-      width: auto;
+      width: auto; /* Let it size automatically by default. */
       display: inline-block;
       font-family: 'BreakPricingFont', sans-serif;
       font-weight: 900;
@@ -510,6 +510,11 @@
       justify-content: center;
       gap: 0px;
     }
+
+    /* Row highlight for key rookie teams */
+    .key-rookie-row {
+      background-color: #fffeb3; /* A soft yellow highlight */
+    }
   </style>
 </head>
 <body>
@@ -681,18 +686,24 @@
       const selectedText = selectElement.options[selectElement.selectedIndex].text;
       const hiddenSpan = document.getElementById('hiddenSelectText');
       const computedStyles = window.getComputedStyle(selectElement);
+
+      // Match the select's font style so measurement is accurate
       hiddenSpan.style.fontSize = computedStyles.fontSize;
       hiddenSpan.style.fontWeight = computedStyles.fontWeight;
       hiddenSpan.style.fontFamily = computedStyles.fontFamily;
       hiddenSpan.style.textDecoration = computedStyles.textDecoration;
+
       hiddenSpan.textContent = selectedText;
       const textWidth = hiddenSpan.getBoundingClientRect().width;
-      selectElement.style.width = (textWidth + 0) + "px";
+      // Add a small padding to avoid cutting off arrows, etc.
+      selectElement.style.width = (textWidth + 10) + "px";
     }
 
     function updateAllSelectWidths() {
-      updateSelectWidth(document.getElementById('setNameSelect'));
-      updateSelectWidth(document.getElementById('setYearSelect'));
+      const nameSelect = document.getElementById('setNameSelect');
+      const yearSelect = document.getElementById('setYearSelect');
+      if (nameSelect) updateSelectWidth(nameSelect);
+      if (yearSelect) updateSelectWidth(yearSelect);
     }
 
     // Toggle markup prefix vs suffix
@@ -734,6 +745,7 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
+        // We will still call it here...
         updateAllSelectWidths();
 
         // Listen for changes in the break controls
@@ -784,6 +796,11 @@
         console.error("Error loading config.json:", error);
       }
     }
+
+    // Ensure width adjustments after full page load (prevents extra space):
+    window.addEventListener('load', () => {
+      setTimeout(updateAllSelectWidths, 0);
+    });
 
     // Populate the year dropdown
     function populateYearDropdown() {
@@ -997,7 +1014,11 @@
               <strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
-                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
+                ${
+                  teamImage 
+                  ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">`
+                  : ""
+                }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
             `;
@@ -1096,18 +1117,18 @@
         data.boost = 0;
         data.discount = 0;
 
-        // If input is > 0
         if (value > 0) {
-          // If toggle is checked => discount, otherwise => boost
           if (toggleElem && toggleElem.checked) {
+            // discount
             data.discount = value;
           } else {
+            // boost
             data.boost = value;
           }
         }
       });
 
-      // Compute the adjusted and final prices
+      // Compute the adjusted prices after boosts
       let boostExtraPool = 0;
       const boostedTeams = [];
       const nonBoostedTeams = [];
@@ -1128,6 +1149,7 @@
         });
       }
 
+      // Compute final prices after discounts
       let discountPool = 0;
       const discountTeams = [];
       const nonDiscountTeams = [];
@@ -1152,6 +1174,23 @@
         data.teamPrice = data.final;
       });
 
+      // Identify the teams with key rookies for highlight
+      const keyPlayers = config["Key Players"] || config.keyPlayers;
+      const selectedYear = document.getElementById('setYearSelect').value;
+      let keyRookieTeams = new Set();
+      if (keyPlayers && Array.isArray(keyPlayers)) {
+        keyPlayers.forEach(player => {
+          if (
+            player.type &&
+            player.type.toLowerCase() === 'rookie' &&
+            player.setYear === selectedYear &&
+            (player.Team || player.team)
+          ) {
+            keyRookieTeams.add(player.Team || player.team);
+          }
+        });
+      }
+
       // Rebuild the table
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
@@ -1167,16 +1206,23 @@
           toggleColor = (data.boost > 0) ? 'green' : 'blue';
         }
 
+        // If team is associated with a key rookie, highlight row + add key emoji
+        const isKeyRookieTeam = keyRookieTeams.has(data.team);
+        const rowClass = isKeyRookieTeam ? 'key-rookie-row' : '';
+        const teamDisplayName = isKeyRookieTeam 
+            ? `${data.team} 🔑` 
+            : data.team;
+
         tbody.innerHTML += `
-          <tr>
+          <tr class="${rowClass}">
             <td>
               <a href="javascript:void(0)" 
                  onclick="openTeamSearch('${data.team}')"
                  style="color:#333; text-decoration:none;">
                 ${
                   config.images 
-                    && config.images["team images"] 
-                    && config.images["team images"][data.team] 
+                  && config.images["team images"] 
+                  && config.images["team images"][data.team] 
                     ? `<img src="${config.images["team images"][data.team]}" 
                               alt="${data.team}"
                               style="width:30px;height:30px;
@@ -1185,7 +1231,7 @@
                                      vertical-align:middle;">`
                     : ""
                 }
-                ${data.team}
+                ${teamDisplayName}
               </a>
               <a href="javascript:void(0)" 
                  onclick="openTeamSearch('${data.team}')" 
@@ -1386,6 +1432,18 @@
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
+    }
+
+    // Example: open eBay search for a particular player
+    function openPlayerEbaySearch(player) {
+      const query = player + " rookie card";
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query), "_blank");
+    }
+
+    // Example: open eBay search for a particular team
+    function openTeamSearch(team) {
+      const query = team + " hockey cards";
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query), "_blank");
     }
 
     // Load config once page is ready
