@@ -94,7 +94,7 @@
       flex: 0 0 calc(25% - 10px);
       box-sizing: border-box;
     }
-    /* Updated styling for set selection inputs and sentence */
+    /* Set selection styling */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
@@ -123,7 +123,7 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Sniffer Layout */
+    /* Break Sniffer Layout: Three columns */
     .break-sniffer-flex {
       display: flex;
       gap: 20px;
@@ -133,24 +133,30 @@
     .break-tiles-container {
       flex: 1;
     }
-    /* Left column: Break controls */
+    /* Left column: Controls and price buttons */
     .break-controls-container {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    /* Row for the initial controls (cost, markup input) */
     .break-controls-row {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    /* New row for the Price Settings/Price Lookup buttons */
     .price-buttons-row {
       display: flex;
+      flex-direction: column;
       gap: 10px;
     }
-    /* Input groups and wrappers remain unchanged */
+    /* Remove absolute positioning from menus so they flow naturally */
+    #price-settings, #price-lookup-menu {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    /* Input groups and wrappers (unchanged) */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -273,7 +279,7 @@
       width: auto;
       vertical-align: middle;
     }
-    /* New CSS class for rookie team images (larger, with opacity) */
+    /* New CSS class for rookie team images (with opacity) */
     .rookie-team-img {
       max-width: 50%;
       height: auto;
@@ -282,7 +288,7 @@
       position: relative;
       z-index: 1;
     }
-    /* Update the player image in rookie tiles so it overlaps the team image */
+    /* Player image in rookie tiles overlaps team image */
     .rookie-img {
       max-width: 50%;
       height: auto;
@@ -370,22 +376,12 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
+    /* Remove absolute positioning from menus */
     #price-settings, #price-lookup-menu {
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
       display: none;
-      gap: 15px;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: 'BreakPricingFont', sans-serif;
-      z-index: 10;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
     }
     .button-container {
       display: flex;
@@ -397,7 +393,7 @@
       justify-content: flex-start;
       margin-bottom: 20px;
     }
-    /* New layout for break sniffer results: three columns */
+    /* Layout for break sniffer: three columns */
     .donut-container {
       flex: 1;
       display: flex;
@@ -407,7 +403,6 @@
     .break-tiles-container {
       flex: 1;
     }
-    /* Break Sniffer Right Column now removed; layout is via three columns in .break-sniffer-flex */
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
@@ -498,7 +493,6 @@
     <a href="about.html">About</a>
   </header>
   <p>Sniff out the best breaks</p>
-
   <!-- Section 1: Set and Year Selection -->
   <section id="set-selection">
     <p>
@@ -512,7 +506,6 @@
       </select>
     </p>
   </section>
-
   <!-- Section 2: Set Details -->
   <section id="set-details">
     <h2>📝 Set Details</h2>
@@ -531,7 +524,6 @@
       <!-- Hero and support rows will be added here -->
     </div>
   </section>
-
   <!-- Section 3: Key Rookies -->
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
@@ -539,12 +531,11 @@
       <!-- Key rookie tiles will be generated here -->
     </div>
   </section>
-
   <!-- Section 4: Break Sniffer -->
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Break Controls -->
+      <!-- Left Column: Controls -->
       <div class="break-controls-container">
         <div class="break-controls-row">
           <div class="input-group">
@@ -646,12 +637,8 @@
       </tbody>
     </table>
   </section>
-
-  <!-- Hidden span used to measure select width -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
-
   <script>
-    // Global sorting variables
     let currentSortColumn = null;
     let currentSortDirection = 1;
     function sortTable(key) {
@@ -862,7 +849,8 @@
       if (!setName || !setYear) { alert("Please select both a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
@@ -870,7 +858,8 @@
       if (!setName || !setYear) { alert("Please select a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
@@ -880,14 +869,16 @@
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
-          return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
+          return player.type && player.type.toLowerCase() === 'rookie' &&
+                 player.setYear === selectedYear && teamKey;
         });
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
-            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
+            const teamImage = config.images && config.images["team images"] && 
+                              config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
             tile.innerHTML = `<strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
