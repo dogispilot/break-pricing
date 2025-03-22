@@ -137,17 +137,26 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Sniffer Layout: Three columns */
+    /* Break Sniffer Layout */
     .break-sniffer-flex {
       display: flex;
       gap: 20px;
     }
-    .break-controls-container,
-    .donut-container,
-    .break-tiles-container {
+    /* Left column: Controls & Donut Chart */
+    .controls-column {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-    /* Left column: Controls and price buttons */
+    /* Right column: Break Tiles and Bubble Chart */
+    .results-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    /* Controls */
     .break-controls-container {
       display: flex;
       flex-direction: column;
@@ -163,7 +172,6 @@
       flex-direction: column;
       gap: 10px;
     }
-    /* Fixed width for price buttons (120px) */
     .price-buttons-row button {
       width: 120px;
     }
@@ -408,7 +416,6 @@
     }
     /* Donut chart container: move it up a bit */
     .donut-container {
-      flex: 1;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -497,7 +504,7 @@
     /* Bubble Chart Styling */
     #bubbleChart {
       display: block;
-      margin: 20px auto;
+      margin: 0 auto;
     }
   </style>
 </head>
@@ -551,92 +558,95 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls -->
-      <div class="break-controls-container">
-        <div class="break-controls-row">
-          <div class="input-group">
-            <label for="caseCost" id="caseCostLabel">Cost of a case</label>
-            <div class="input-inline">
+      <!-- Left Column: Controls & Donut Chart -->
+      <div class="controls-column">
+        <div class="break-controls-container">
+          <div class="break-controls-row">
+            <div class="input-group">
+              <label for="caseCost" id="caseCostLabel">Cost of a case</label>
+              <div class="input-inline">
+                <div class="input-wrapper" style="width:120px;">
+                  <span class="input-prefix">$</span>
+                  <input type="number" id="caseCost" step="0.01" value="1999.95">
+                </div>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="markupValue">Markup</label>
               <div class="input-wrapper" style="width:120px;">
-                <span class="input-prefix">$</span>
-                <input type="number" id="caseCost" step="0.01" value="1999.95">
+                <span class="input-prefix markup-prefix" style="display: none;">$</span>
+                <input type="number" id="markupValue" step="0.01" value="500">
+                <span class="input-suffix markup-suffix" style="display: none;">%</span>
               </div>
             </div>
           </div>
-          <div class="input-group">
-            <label for="markupValue">Markup</label>
-            <div class="input-wrapper" style="width:120px;">
-              <span class="input-prefix markup-prefix" style="display: none;">$</span>
-              <input type="number" id="markupValue" step="0.01" value="500">
-              <span class="input-suffix markup-suffix" style="display: none;">%</span>
+          <div class="price-buttons-row">
+            <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
+            <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
+          </div>
+          <!-- Price Settings Dialog -->
+          <div id="price-settings">
+            <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
+            <div class="price-setting-group">
+              <label for="markupToggle">Use % markup</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="markupToggle">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="price-setting-group">
+              <label for="suppliesCost">Supplies per team</label>
+              <div class="input-wrapper" style="width:80px;">
+                <span class="input-prefix">$</span>
+                <input type="number" id="suppliesCost" step="0.01" value="1.00">
+              </div>
+            </div>
+            <div class="price-setting-group">
+              <label for="blendedTax">Blended tax</label>
+              <div class="input-wrapper" style="width:80px;">
+                <input type="number" id="blendedTax" step="0.1" value="5.1">
+                <span class="input-suffix">%</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="price-buttons-row">
-          <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
-          <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
-        </div>
-        <!-- Price Settings Dialog -->
-        <div id="price-settings">
-          <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
-          <div class="price-setting-group">
-            <label for="markupToggle">Use % markup</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="markupToggle">
-              <span class="slider"></span>
-            </label>
-          </div>
-          <div class="price-setting-group">
-            <label for="suppliesCost">Supplies per team</label>
-            <div class="input-wrapper" style="width:80px;">
-              <span class="input-prefix">$</span>
-              <input type="number" id="suppliesCost" step="0.01" value="1.00">
+          <!-- Price Lookup Dialog -->
+          <div id="price-lookup-menu">
+            <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
+            <div class="button-container">
+              <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
+                <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+                Dacardworld.com
+              </button>
+              <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
+                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+                SteelCityCollectibles.com
+              </button>
+              <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
+                <img src="resources/ootb.png" alt="Out of the Box Logo">
+                Out of the Box
+              </button>
+              <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
+                <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+                Midwest Cards
+              </button>
             </div>
           </div>
-          <div class="price-setting-group">
-            <label for="blendedTax">Blended tax</label>
-            <div class="input-wrapper" style="width:80px;">
-              <input type="number" id="blendedTax" step="0.1" value="5.1">
-              <span class="input-suffix">%</span>
-            </div>
-          </div>
-        </div>
-        <!-- Price Lookup Dialog -->
-        <div id="price-lookup-menu">
-          <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
-          <div class="button-container">
-            <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
-              <img src="resources/dacardworld.png" alt="Dacardworld Logo">
-              Dacardworld.com
-            </button>
-            <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
-              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
-              SteelCityCollectibles.com
-            </button>
-            <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
-              <img src="resources/ootb.png" alt="Out of the Box Logo">
-              Out of the Box
-            </button>
-            <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
-              <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
-              Midwest Cards
-            </button>
+          <!-- Donut Chart -->
+          <div class="donut-container">
+            <canvas id="pieChart" width="250" height="250"></canvas>
           </div>
         </div>
       </div>
-      <!-- Middle Column: Donut Chart -->
-      <div class="donut-container">
-        <canvas id="pieChart" width="250" height="250"></canvas>
-      </div>
-      <!-- Right Column: Break Tiles -->
-      <div class="break-tiles-container">
-        <div id="break-tiles">
-          <!-- Break tiles will be generated here -->
+      <!-- Right Column: Breaker Tiles and Bubble Chart -->
+      <div class="results-column">
+        <div class="break-tiles-container">
+          <div id="break-tiles">
+            <!-- Break tiles will be generated here -->
+          </div>
         </div>
+        <canvas id="bubbleChart" width="400" height="300"></canvas>
       </div>
     </div>
-    <!-- New Bubble Chart Canvas -->
-    <canvas id="bubbleChart" width="400" height="300"></canvas>
     <table id="team-table">
       <thead>
         <tr>
@@ -986,7 +996,8 @@
           teamCards,
           distribution,
           avgCardsCase,
-          baseline
+          baseline,
+          boost: 0 // default value
         });
       });
       teamData.forEach(data => {
@@ -1066,24 +1077,28 @@
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
+      
       const tileProfit = document.createElement('div');
       tileProfit.className = 'tile break-tile';
       tileProfit.innerHTML = `<div class="tile-value">$${breakersProfit.toFixed(2)}</div><div class="tile-label">Breaker's Profit</div>`;
       tileProfit.style.background = "#2E7D32";
       tileProfit.style.color = "#fff";
       breakTiles.appendChild(tileProfit);
+      
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile break-tile';
       tileWhatnots.innerHTML = `<div class="tile-value">$${whatnotsCut.toFixed(2)}</div><div class="tile-label">Whatnots Cut</div>`;
       tileWhatnots.style.background = "#EF6C00";
       tileWhatnots.style.color = "#fff";
       breakTiles.appendChild(tileWhatnots);
+      
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile break-tile';
       tileBusiness.innerHTML = `<div class="tile-value">$${totalCostOfBusiness.toFixed(2)}</div><div class="tile-label">Cost of Business</div>`;
       tileBusiness.style.background = "#1565C0";
       tileBusiness.style.color = "#fff";
       breakTiles.appendChild(tileBusiness);
+      
       updateBubbleChart(teamData);
       const pieData = [
         { label: "Profit", value: breakersProfit },
@@ -1092,23 +1107,23 @@
       ];
       updatePieChart(pieData);
     }
-    // Function to update the bubble chart based on teamData
+    // Function to update the bubble chart next to breaker tiles.
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
+      // Create bubble data points. Use a smaller scale for boost effect.
       const bubbleData = teamData.map(data => {
-        // x: distribution percentage, y: team price, r: bubble radius
-        const r = Math.max(5, Math.abs(data.boost) * 2 + 5);
-        return { x: data.distribution * 100, y: data.teamPrice, r: r };
-      });
-      // Set colors: green if boosted, red if discounted, gray if neutral
-      const bubbleColors = teamData.map(data => {
-        if (data.boost > 0) return "#66bb6a";
-        else if (data.boost < 0) return "#ff6666";
-        else return "#999999";
+        const r = Math.max(5, Math.abs(data.boost) * 1 + 5); // reduced scale factor
+        // Get team logo URL if available
+        const logo = config.images && config.images["team images"] && config.images["team images"][data.team] ? config.images["team images"][data.team] : "";
+        return { x: data.distribution * 100, y: data.teamPrice, r: r, logo: logo };
       });
       if (bubbleChartInstance) {
         bubbleChartInstance.data.datasets[0].data = bubbleData;
-        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleColors;
+        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleData.map(data => {
+          if (data.r > 10 && data.r !== 5) return "#66bb6a"; // boosted green
+          else if (data.r < 10) return "#ff6666"; // discounted red
+          else return "#999999"; // neutral gray
+        });
         bubbleChartInstance.update();
       } else {
         bubbleChartInstance = new Chart(ctx, {
@@ -1117,7 +1132,11 @@
             datasets: [{
               label: 'Team Data',
               data: bubbleData,
-              pointBackgroundColor: bubbleColors,
+              pointBackgroundColor: bubbleData.map(data => {
+                if (data.r > 10 && data.r !== 5) return "#66bb6a";
+                else if (data.r < 10) return "#ff6666";
+                else return "#999999";
+              }),
               pointBorderColor: "#fff",
               pointBorderWidth: 1
             }]
@@ -1136,7 +1155,26 @@
             plugins: {
               legend: { display: false }
             }
-          }
+          },
+          plugins: [{
+            id: 'bubbleLogoPlugin',
+            afterDatasetsDraw: (chart) => {
+              const ctx = chart.ctx;
+              chart.getDatasetMeta(0).data.forEach((element, index) => {
+                const dataPoint = bubbleData[index];
+                if (dataPoint.logo) {
+                  const img = new Image();
+                  img.src = dataPoint.logo;
+                  // Draw the image in the center of the bubble.
+                  const x = element.x;
+                  const y = element.y;
+                  // Set the image dimensions relative to the bubble radius (e.g., 60% of r)
+                  const size = element.outerRadius * 0.6;
+                  ctx.drawImage(img, x - size/2, y - size/2, size, size);
+                }
+              });
+            }
+          }]
         });
       }
     }
