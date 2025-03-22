@@ -643,9 +643,8 @@
       
       // Measure the text width accurately
       var textWidth = hiddenSpan.getBoundingClientRect().width;
-      // Add extra pixels to account for the dropdown arrow and any slight padding
-      var newWidth = textWidth + 0;
-      selectElement.style.width = newWidth + "px";
+      // Set the width of the select element to the measured text width
+      selectElement.style.width = textWidth + "px";
     }
 
     // Update widths for both select elements
@@ -653,6 +652,9 @@
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
+
+    // Run updateAllSelectWidths when the window loads
+    window.addEventListener('load', updateAllSelectWidths);
 
     // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
