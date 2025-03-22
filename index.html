@@ -415,8 +415,9 @@
     }
 
     /*
-      Combined Boost/Discount iOS Toggle styling
-      REMOVED background-color here so inline JS style can change it to green/red/grey
+      Combined Boost/Discount iOS Toggle styling.
+
+      We do NOT set background-color here. Instead, we have .off/.boost/.discount below.
     */
     .ios-toggle {
       display: inline-flex;
@@ -425,10 +426,12 @@
       width: 60px;
       height: 30px;
       border-radius: 15px;
-      /* background-color: grey;  <-- REMOVED so JS inline style can apply! */
       cursor: pointer;
       transition: background-color 0.4s;
     }
+    /* No background-color on the base .ios-toggle! */
+
+    /* Move the slider if checked */
     .ios-toggle input {
       position: absolute;
       opacity: 0;
@@ -445,11 +448,9 @@
       background-color: white;
       transition: transform 0.4s;
     }
-    /* Move the slider if checked */
     .ios-toggle input:checked + .toggle-slider {
       transform: translateX(30px);
     }
-
     .ios-toggle .toggle-label {
       font-size: 16px;
       z-index: 1;
@@ -464,6 +465,17 @@
       margin-left: auto;
     }
 
+    /* Add our 3 new states: off, boost, discount */
+    .ios-toggle.off {
+      background-color: grey;
+    }
+    .ios-toggle.boost {
+      background-color: green;
+    }
+    .ios-toggle.discount {
+      background-color: red;
+    }
+
     /* Keep toggle + input on same line */
     .boost-toggle-container {
       display: inline-flex;
@@ -472,9 +484,6 @@
     }
 
     /* Key Rookies section */
-    #key-rookies {
-      margin-bottom: 20px;
-    }
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -738,8 +747,8 @@
       }, 300);
     }
 
-    // The toggle background color is determined by the final logic in updateBreakSniffer(),
-    // so here we simply recalc after any user change (input or toggle).
+    // The toggle background color is determined by separate CSS classes
+    // We'll simply recalc after any user change (input or toggle).
     function updateToggleBackground(team) {
       debouncedUpdateBreakSniffer();
     }
@@ -751,7 +760,6 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
-        // We will still call it here...
         updateAllSelectWidths();
 
         // Listen for changes in the break controls
@@ -803,7 +811,7 @@
       }
     }
 
-    // Ensure width adjustments after full page load (prevents extra space):
+    // Ensure width adjustments after full page load
     window.addEventListener('load', () => {
       setTimeout(updateAllSelectWidths, 0);
     });
@@ -1123,8 +1131,8 @@
         data.boost = 0;
         data.discount = 0;
 
+        // If we have a value, check if toggle is on => discount, else => boost
         if (value > 0) {
-          // If checkbox is checked => discount, else => boost
           if (toggleElem && toggleElem.checked) {
             data.discount = value;
           } else {
@@ -1205,11 +1213,11 @@
         const currentInput = document.getElementById("boost-input-" + data.team);
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
 
-        // Decide the toggle color:
-        // Grey if 0, Green if data.boost > 0, Red if data.discount > 0
-        let toggleColor = 'grey';
+        // We'll assign .off (grey), .boost (green), or .discount (red) classes
+        // after we know if it's a boost or discount
+        let toggleClass = "off";
         if (currentValue > 0) {
-          toggleColor = (data.boost > 0) ? 'green' : 'red';
+          toggleClass = (data.boost > 0) ? "boost" : "discount";
         }
 
         // If team is associated with a key rookie, highlight row + add key emoji
@@ -1219,6 +1227,7 @@
             ? `${data.team} 🔑` 
             : data.team;
 
+        // Build a table row
         tbody.innerHTML += `
           <tr class="${rowClass}">
             <td>
@@ -1231,7 +1240,7 @@
                   && config.images["team images"][data.team] 
                     ? `<img src="${config.images["team images"][data.team]}" 
                               alt="${data.team}"
-                              style="width:30px;height:30px;
+                              style="width:40px;height:40px;
                                      object-fit:contain;
                                      margin-right:5px;
                                      vertical-align:middle;">`
@@ -1252,9 +1261,8 @@
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
               <div class="boost-toggle-container">
-                <label class="ios-toggle" 
-                       id="ios-toggle-${data.team}"
-                       style="background-color: ${toggleColor};">
+                <label class="ios-toggle ${toggleClass}"
+                       id="ios-toggle-${data.team}">
                   <span class="toggle-label toggle-rocket">🚀</span>
                   <input type="checkbox"
                          id="boost-toggle-${data.team}"
