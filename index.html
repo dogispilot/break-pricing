@@ -212,9 +212,8 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Existing boost/discount inputs override */
-    .boost-input,
-    .discount-input {
+    /* Existing boost input override */
+    .boost-input {
       width: 60px;
     }
     /* Button group inline for Price Settings/Lookup buttons */
@@ -257,12 +256,12 @@
       border: none !important;
       display: inline-block;
       width: auto; 
-              vertical-align: middle;
+      vertical-align: middle;
     }
     .table-ebay-btn img {
       max-height: 25px;
       width: auto;
-              vertical-align: middle;
+      vertical-align: middle;
     }
     /* Table styling */
     table {
@@ -611,7 +610,6 @@
           <th>Avg. Cards per Case</th>
           <th>Cost + Markup</th>
           <th>Boost</th>
-          <th>Discount</th>
           <th>Team Price</th>
         </tr>
       </thead>
@@ -927,30 +925,6 @@
       }
     }
 
-    function toggleBoostInput(team) {
-      const checkbox = document.getElementById("boost-checkbox-" + team);
-      const input = document.getElementById("boost-input-" + team);
-      if (checkbox.checked) {
-        input.style.display = "inline-block";
-      } else {
-        input.style.display = "none";
-        input.value = "";
-        debouncedUpdateBreakSniffer();
-      }
-    }
-
-    function toggleDiscountInput(team) {
-      const checkbox = document.getElementById("discount-checkbox-" + team);
-      const input = document.getElementById("discount-input-" + team);
-      if (checkbox.checked) {
-        input.style.display = "inline-block";
-      } else {
-        input.style.display = "none";
-        input.value = "";
-        debouncedUpdateBreakSniffer();
-      }
-    }
-
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -997,62 +971,18 @@
         });
       });
       
-      let boostExtraPool = 0;
-      const boostedTeams = [];
-      const nonBoostedTeams = [];
+      // For each team, apply boost (or discount if negative)
       teamData.forEach(data => {
-        const boostCheckbox = document.getElementById("boost-checkbox-" + data.team);
-        let boostVal = 0;
-        if (boostCheckbox && boostCheckbox.checked) {
-          const boostInput = document.getElementById("boost-input-" + data.team);
-          boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
-        }
+        const boostInput = document.getElementById("boost-input-" + data.team);
+        let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         data.boost = boostVal;
         if (data.boost > 0) {
-          let boostAmount = data.baseline * (data.boost / 100);
-          data.adjusted = data.baseline + boostAmount;
-          boostExtraPool += boostAmount;
-          boostedTeams.push(data);
+          data.teamPrice = data.baseline + (data.baseline * (data.boost / 100));
+        } else if (data.boost < 0) {
+          data.teamPrice = data.baseline - (data.baseline * (Math.abs(data.boost) / 100));
         } else {
-          nonBoostedTeams.push(data);
+          data.teamPrice = data.baseline;
         }
-      });
-      if (nonBoostedTeams.length > 0) {
-        let boostShare = boostExtraPool / nonBoostedTeams.length;
-        nonBoostedTeams.forEach(data => {
-          data.adjusted = data.baseline - boostShare;
-        });
-      }
-      
-      let discountPool = 0;
-      const discountTeams = [];
-      const nonDiscountTeams = [];
-      teamData.forEach(data => {
-        const discountCheckbox = document.getElementById("discount-checkbox-" + data.team);
-        let discountVal = 0;
-        if (discountCheckbox && discountCheckbox.checked) {
-          const discountInput = document.getElementById("discount-input-" + data.team);
-          discountVal = discountInput ? parseFloat(discountInput.value) || 0 : 0;
-        }
-        data.discount = discountVal;
-        if (data.discount > 0) {
-          let discountAmount = data.adjusted * (data.discount / 100);
-          data.final = data.adjusted - discountAmount;
-          discountPool += discountAmount;
-          discountTeams.push(data);
-        } else {
-          nonDiscountTeams.push(data);
-        }
-      });
-      if (nonDiscountTeams.length > 0) {
-        let discountShare = discountPool / nonDiscountTeams.length;
-        nonDiscountTeams.forEach(data => {
-          data.final = data.adjusted + discountShare;
-        });
-      }
-      
-      teamData.forEach(data => {
-        data.teamPrice = data.final;
       });
       
       const tbody = document.getElementById('team-table').querySelector('tbody');
@@ -1070,6 +1000,16 @@
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
                           ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
                           : "";
+        // Determine the style and emoji based on boost value
+        let priceStyle = "";
+        let emoji = "";
+        if(data.boost > 0) {
+          priceStyle = 'background-color:#66bb6a; color:#fff;';
+          emoji = ' 🚀';
+        } else if(data.boost < 0) {
+          priceStyle = 'background-color:#ff6666; color:#fff;';
+          emoji = ' ✂️';
+        }
         tbody.innerHTML += `
           <tr${highlightStyle}>
             <td>
@@ -1085,20 +1025,9 @@
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
-              <label>
-                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" ${data.boost > 0 ? 'checked' : ''}>
-                🚀
-              </label>
-              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost > 0 ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
+              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px;" step="0.1" value="${data.boost ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
             </td>
-            <td>
-              <label>
-                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" ${data.discount > 0 ? 'checked' : ''}>
-                ✂️
-              </label>
-              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount > 0 ? data.discount : ''}" oninput="debouncedUpdateBreakSniffer()">
-            </td>
-            <td>$${data.teamPrice.toFixed(2)}</td>
+            <td style="${priceStyle}">$${data.teamPrice.toFixed(2)}${emoji}</td>
           </tr>
         `;
       });
@@ -1234,14 +1163,6 @@
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
-    }
-    function openTeamSearch(teamName) {
-      const setName = document.getElementById("setNameSelect").value;
-      const setYear = document.getElementById("setYearSelect").value;
-      if (!setName || !setYear) { alert("Please select a set and year."); return; }
-      const yearPrefix = setYear.split("-")[0];
-      const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
 
     loadConfig();
