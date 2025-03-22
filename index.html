@@ -57,7 +57,58 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Set and Year Selection */
+    /* Container for all tiles */
+    .tile-container {
+      margin-top: 10px;
+    }
+    /* Set Details tiles */
+    .tile {
+      background: #eaeaea;
+      border-radius: 4px;
+      text-align: center;
+      padding: 10px;
+    }
+    .tile-value {
+      font-family: 'BreakPricingFontBold', sans-serif;
+      margin-bottom: 5px;
+    }
+    .tile-desc {
+      font-size: 1em;
+    }
+    /* Break Tiles Styling */
+    .break-tile {
+      max-width: 150px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 10px;
+    }
+    .break-tile .tile-value {
+      font-size: 3em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .break-tile .tile-label {
+      font-size: 1em;
+    }
+    /* Hero and Support rows */
+    .hero-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .hero-row .tile {
+      flex: 0 0 calc(50% - 10px);
+      box-sizing: border-box;
+    }
+    .support-row {
+      display: flex;
+      gap: 10px;
+    }
+    .support-row .tile {
+      flex: 0 0 calc(25% - 10px);
+      box-sizing: border-box;
+    }
+    /* Set selection styling */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
@@ -79,54 +130,40 @@
       appearance: none;
       font-size: inherit;
     }
-    /* Set Details */
+    /* Hide set notes by default */
     #set-notes {
       display: none;
       padding: 10px;
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    .tile-container {
-      margin-top: 10px;
-    }
-    .tile {
-      background: #eaeaea;
-      border-radius: 4px;
-      text-align: center;
-      padding: 10px;
-    }
-    .tile-value {
-      font-family: 'BreakPricingFontBold', sans-serif;
-      margin-bottom: 5px;
-    }
-    .tile-desc {
-      font-size: 1em;
-    }
-    /* Break Sniffer Layout */
+    /* Break Sniffer Layout: Three columns */
     .break-sniffer-flex {
       display: flex;
       gap: 20px;
     }
-    /* Left column: Controls, Price Dialogs, Breaker Tiles */
-    .controls-column {
+    .break-controls-container,
+    .donut-container,
+    .break-tiles-container {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
     }
-    /* Right column: Bubble Chart */
-    .results-column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    /* Controls & Buttons */
-    .break-controls-container, .break-controls-row, .price-buttons-row {
+    /* Left column: Controls and price buttons */
+    .break-controls-container {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+    .break-controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .price-buttons-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    /* Fixed width for price buttons (120px) */
     .price-buttons-row button {
       width: 120px;
     }
@@ -149,6 +186,7 @@
       font-size: 1.2em;
       font-weight: bold;
     }
+    /* Input groups and wrappers (unchanged) */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -233,17 +271,26 @@
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    .ebay-btn, .nhl-btn {
+    .ebay-btn {
       background: none !important;
       padding: 0 !important;
       border: none !important;
       display: flex !important;
+      justify-content: flex-start;
       text-decoration: none !important;
       max-width: 75%;
       height: auto;
     }
-    .ebay-btn { justify-content: flex-start; }
-    .nhl-btn { justify-content: flex-end; }
+    .nhl-btn {
+      background: none !important;
+      padding: 0 !important;
+      border: none !important;
+      display: flex !important;
+      justify-content: flex-end;
+      text-decoration: none !important;
+      max-width: 75%;
+      height: auto;
+    }
     .ebay-btn img, .nhl-btn img {
       max-width: 75%;
       height: auto;
@@ -262,99 +309,7 @@
       width: auto;
       vertical-align: middle;
     }
-    .empty-pill-button {
-      background-color: transparent;
-      color: #333;
-      border: 1px solid #333;
-      border-radius: 20px;
-      padding: 2px 10px;
-      cursor: pointer;
-      font-size: 0.8em;
-      height: 24px;
-      font-family: 'BreakPricingFont', sans-serif;
-      margin-left: 5px;
-    }
-    /* Breaker Tiles: restored and smaller */
-    #break-tiles {
-      display: block;
-    }
-    .break-tile {
-      max-width: 100px;
-      margin-bottom: 10px;
-      text-align: center;
-      padding: 5px;
-    }
-    .break-tile .tile-value {
-      font-size: 1.5em;
-      font-weight: bold;
-      margin-bottom: 2px;
-    }
-    .break-tile .tile-label {
-      font-size: 0.8em;
-    }
-    /* Donut Chart removed */
-    .donut-container {
-      display: none;
-    }
-    /* Bubble Chart Styling */
-    #bubbleChart {
-      display: block;
-      margin: 0 auto;
-    }
-    /* iOS Toggle Switch (unchanged) */
-    .toggle-switch {
-      display: inline-block;
-      position: relative;
-      width: 50px;
-      height: 24px;
-      margin: 0;
-      vertical-align: middle;
-    }
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .slider {
-      background-color: #66bb6a;
-    }
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-    /* Rookie Tiles */
-    #rookie-tiles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    #rookie-tiles .tile {
-      flex: 0 0 calc(33% - 10px);
-      box-sizing: border-box;
-      padding: 10px;
-    }
+    /* Rookie tiles images */
     .rookie-team-img {
       max-width: 50%;
       height: auto;
@@ -371,18 +326,7 @@
       position: relative;
       z-index: 3;
     }
-    .rookie-notes {
-      font-size: 0.9em;
-      color: #555;
-      margin-bottom: 5px;
-    }
-    .rookie-image-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0px;
-    }
-    /* Table Styling – DO NOT modify team image styling in table */
+    /* Table styling */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -450,6 +394,106 @@
       font-family: 'BreakPricingFont', sans-serif;
       width: 120px;
     }
+    .empty-pill-button {
+      background-color: transparent;
+      color: #333;
+      border: 1px solid #333;
+      border-radius: 20px;
+      padding: 2px 10px;
+      cursor: pointer;
+      font-size: 0.8em;
+      height: 24px;
+      font-family: 'BreakPricingFont', sans-serif;
+      margin-left: 5px;
+    }
+    /* Donut chart container: move it up a bit */
+    .donut-container {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 0;
+    }
+    /* iOS Toggle Switch (unchanged) */
+    .toggle-switch {
+      display: inline-block;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin: 0;
+      vertical-align: middle;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #66bb6a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    #rookie-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #rookie-tiles .tile {
+      flex: 0 0 calc(33% - 10px);
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    .rookie-img {
+      max-width: 50%;
+      height: auto;
+      margin: 0;
+      margin-left: -60px;
+      position: relative;
+      z-index: 3;
+    }
+    .team-img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      margin-right: 5px;
+      vertical-align: middle;
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+    }
+    .key-rookie-logo { }
+    .rookie-notes {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .rookie-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0px;
+    }
   </style>
 </head>
 <body>
@@ -502,86 +546,88 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls, Price Dialogs, and Breaker Tiles -->
-      <div class="controls-column">
-        <div class="break-controls-container">
-          <div class="break-controls-row">
-            <div class="input-group">
-              <label for="caseCost" id="caseCostLabel">Cost of a case</label>
-              <div class="input-inline">
-                <div class="input-wrapper" style="width:120px;">
-                  <span class="input-prefix">$</span>
-                  <input type="number" id="caseCost" step="0.01" value="1999.95">
-                </div>
-              </div>
-            </div>
-            <div class="input-group">
-              <label for="markupValue">Markup</label>
+      <!-- Left Column: Controls -->
+      <div class="break-controls-container">
+        <div class="break-controls-row">
+          <div class="input-group">
+            <label for="caseCost" id="caseCostLabel">Cost of a case</label>
+            <div class="input-inline">
               <div class="input-wrapper" style="width:120px;">
-                <span class="input-prefix markup-prefix" style="display: none;">$</span>
-                <input type="number" id="markupValue" step="0.01" value="500">
-                <span class="input-suffix markup-suffix" style="display: none;">%</span>
-              </div>
-            </div>
-          </div>
-          <div class="price-buttons-row">
-            <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
-            <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
-          </div>
-          <!-- Price Settings Dialog -->
-          <div id="price-settings">
-            <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
-            <div class="price-setting-group">
-              <label for="markupToggle">Use % markup</label>
-              <label class="toggle-switch">
-                <input type="checkbox" id="markupToggle">
-                <span class="slider"></span>
-              </label>
-            </div>
-            <div class="price-setting-group">
-              <label for="suppliesCost">Supplies per team</label>
-              <div class="input-wrapper" style="width:80px;">
                 <span class="input-prefix">$</span>
-                <input type="number" id="suppliesCost" step="0.01" value="1.00">
-              </div>
-            </div>
-            <div class="price-setting-group">
-              <label for="blendedTax">Blended tax</label>
-              <div class="input-wrapper" style="width:80px;">
-                <input type="number" id="blendedTax" step="0.1" value="5.1">
-                <span class="input-suffix">%</span>
+                <input type="number" id="caseCost" step="0.01" value="1999.95">
               </div>
             </div>
           </div>
-          <!-- Price Lookup Dialog -->
-          <div id="price-lookup-menu">
-            <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
-            <div class="button-container">
-              <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
-                <img src="resources/dacardworld.png" alt="Dacardworld Logo">
-                Dacardworld.com
-              </button>
-              <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
-                <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
-                SteelCityCollectibles.com
-              </button>
-              <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
-                <img src="resources/ootb.png" alt="Out of the Box Logo">
-                Out of the Box
-              </button>
-              <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
-                <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
-                Midwest Cards
-              </button>
+          <div class="input-group">
+            <label for="markupValue">Markup</label>
+            <div class="input-wrapper" style="width:120px;">
+              <span class="input-prefix markup-prefix" style="display: none;">$</span>
+              <input type="number" id="markupValue" step="0.01" value="500">
+              <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
-          <!-- Breaker Tiles (smaller) placed below price lookup -->
-          <div id="break-tiles"></div>
+        </div>
+        <div class="price-buttons-row">
+          <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
+          <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
+        </div>
+        <!-- Price Settings Dialog -->
+        <div id="price-settings">
+          <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
+          <div class="price-setting-group">
+            <label for="markupToggle">Use % markup</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="markupToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="price-setting-group">
+            <label for="suppliesCost">Supplies per team</label>
+            <div class="input-wrapper" style="width:80px;">
+              <span class="input-prefix">$</span>
+              <input type="number" id="suppliesCost" step="0.01" value="1.00">
+            </div>
+          </div>
+          <div class="price-setting-group">
+            <label for="blendedTax">Blended tax</label>
+            <div class="input-wrapper" style="width:80px;">
+              <input type="number" id="blendedTax" step="0.1" value="5.1">
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Price Lookup Dialog -->
+        <div id="price-lookup-menu">
+          <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
+          <div class="button-container">
+            <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
+              <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+              Dacardworld.com
+            </button>
+            <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
+              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+              SteelCityCollectibles.com
+            </button>
+            <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
+              <img src="resources/ootb.png" alt="Out of the Box Logo">
+              Out of the Box
+            </button>
+            <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
+              <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+              Midwest Cards
+            </button>
+          </div>
         </div>
       </div>
-      <!-- Right Column: Bubble Chart -->
-      <div class="results-column">
-        <canvas id="bubbleChart" width="600" height="600"></canvas>
+      <!-- Middle Column: Donut Chart -->
+      <div class="donut-container">
+        <canvas id="pieChart" width="250" height="250"></canvas>
+      </div>
+      <!-- Right Column: Break Tiles -->
+      <div class="break-tiles-container">
+        <div id="break-tiles">
+          <!-- Break tiles will be generated here -->
+        </div>
       </div>
     </div>
     <table id="team-table">
@@ -608,7 +654,6 @@
   <script>
     let currentSortColumn = null;
     let currentSortDirection = 1;
-    let bubbleChartInstance = null;
     function sortTable(key) {
       if (currentSortColumn === key) {
         currentSortDirection *= -1;
@@ -644,7 +689,7 @@
     }
     let config = null;
     let currentSet = null;
-    let pieChartInstance = null; // not used now
+    let pieChartInstance = null;
     let breakSnifferTimeout;
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
@@ -668,7 +713,7 @@
         });
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
-        // Position dialogs next to buttons
+        // Updated click handlers to position dialogs next to the button
         document.getElementById('priceSettingsToggle').addEventListener('click', function(e) {
           const btnRect = this.getBoundingClientRect();
           const ps = document.getElementById('price-settings');
@@ -738,6 +783,7 @@
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
+      // Update dynamic labels
       if (currentSet) {
         document.getElementById('caseCostLabel').textContent =
           `Cost of a ${currentSet.year} ${currentSet.name} case`;
@@ -897,6 +943,7 @@
     }
     function updateBreakSniffer() {
       if (!currentSet) {
+        document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
@@ -931,15 +978,13 @@
           teamCards,
           distribution,
           avgCardsCase,
-          baseline,
-          boost: 0 // default boost value
+          baseline
         });
       });
       teamData.forEach(data => {
         const boostInput = document.getElementById("boost-input-" + data.team);
         let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         data.boost = boostVal;
-        // Use a fixed small variation for bubble size
         if (data.boost > 0) {
           data.teamPrice = data.baseline + (data.baseline * (data.boost / 100));
         } else if (data.boost < 0) {
@@ -1011,112 +1056,93 @@
       });
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
-      // Prepare pie data (if needed)
+      const breakTiles = document.getElementById('break-tiles');
+      breakTiles.innerHTML = "";
+      const tileProfit = document.createElement('div');
+      tileProfit.className = 'tile break-tile';
+      tileProfit.innerHTML = `<div class="tile-value">$${breakersProfit.toFixed(2)}</div><div class="tile-label">Breaker's Profit</div>`;
+      tileProfit.style.background = "#2E7D32";
+      tileProfit.style.color = "#fff";
+      breakTiles.appendChild(tileProfit);
+      const tileWhatnots = document.createElement('div');
+      tileWhatnots.className = 'tile break-tile';
+      tileWhatnots.innerHTML = `<div class="tile-value">$${whatnotsCut.toFixed(2)}</div><div class="tile-label">Whatnots Cut</div>`;
+      tileWhatnots.style.background = "#EF6C00";
+      tileWhatnots.style.color = "#fff";
+      breakTiles.appendChild(tileWhatnots);
+      const tileBusiness = document.createElement('div');
+      tileBusiness.className = 'tile break-tile';
+      tileBusiness.innerHTML = `<div class="tile-value">$${totalCostOfBusiness.toFixed(2)}</div><div class="tile-label">Cost of Business</div>`;
+      tileBusiness.style.background = "#1565C0";
+      tileBusiness.style.color = "#fff";
+      breakTiles.appendChild(tileBusiness);
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
-      updatePieChart(pieData); // Note: donut chart is hidden
-      updateBubbleChart(teamData);
+      updatePieChart(pieData);
     }
-    // Updated bubble chart function
-    function updateBubbleChart(teamData) {
-      const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // Use a fixed base radius with very little variation
-      const baseRadius = 30;
-      const bubbleData = teamData.map(data => {
-        const r = baseRadius; // fixed size for consistency
-        return { 
-          x: data.distribution * 100, 
-          y: data.teamPrice, 
-          r: r, 
-          team: data.team,
-          logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
-        };
-      });
-      // Determine bubble color based on boost:
-      // boost = 0: white; boost > 0: green; boost < 0: red.
-      const bubbleColors = teamData.map(data => {
-        if (data.boost > 0) return "#66bb6a";
-        else if (data.boost < 0) return "#ff6666";
-        else return "#ffffff";
-      });
-      if (bubbleChartInstance) {
-        bubbleChartInstance.data.datasets[0].data = bubbleData;
-        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleColors;
-        bubbleChartInstance.update();
+    // Updated 3D Donut Chart with exploding effect and transparent divider lines.
+    function updatePieChart(data) {
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
+      if (pieChartInstance) {
+        pieChartInstance.data.labels = data.map(d => d.label);
+        pieChartInstance.data.datasets[0].data = data.map(d => d.value);
+        pieChartInstance.data.datasets[0].backgroundColor = backgroundColors;
+        pieChartInstance.data.datasets[0].offset = 10;
+        pieChartInstance.data.datasets[0].borderColor = "transparent";
+        pieChartInstance.update();
       } else {
-        bubbleChartInstance = new Chart(ctx, {
-          type: 'bubble',
+        pieChartInstance = new Chart(ctx, {
+          type: 'doughnut',
           data: {
+            labels: data.map(d => d.label),
             datasets: [{
-              label: 'Team Data',
-              data: bubbleData,
-              pointBackgroundColor: bubbleColors,
-              pointBorderColor: "#333",
-              pointBorderWidth: 1
+              data: data.map(d => d.value),
+              backgroundColor: backgroundColors,
+              borderColor: "transparent",
+              borderWidth: 2,
+              offset: 10
             }]
           },
           options: {
-            scales: {
-              x: {
-                title: { display: true, text: 'Distribution (%)' },
-                ticks: { beginAtZero: true }
-              },
-              y: {
-                title: { display: true, text: 'Team Price ($)' },
-                ticks: { beginAtZero: true }
-              }
+            cutout: '50%',
+            responsive: false,
+            animation: {
+              animateRotate: true,
+              animateScale: true,
             },
             plugins: {
-              legend: { display: false }
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    let label = context.label || '';
+                    let value = context.parsed;
+                    return label + ': $' + value.toFixed(2);
+                  }
+                }
+              }
             }
           },
           plugins: [{
-            id: 'bubbleLogoPlugin',
-            afterDatasetsDraw: (chart) => {
+            id: 'shadowPlugin',
+            beforeDraw: (chart) => {
               const ctx = chart.ctx;
-              chart.getDatasetMeta(0).data.forEach((element, index) => {
-                const dataPoint = bubbleData[index];
-                // Draw team logo if available
-                if (dataPoint.logo) {
-                  const img = new Image();
-                  img.src = dataPoint.logo;
-                  // Wait for image to load, then draw synchronously
-                  img.onload = function() {
-                    const x = element.x;
-                    const y = element.y;
-                    const size = element.outerRadius * 0.8;
-                    ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
-                    // Draw team name below image
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'top';
-                    ctx.fillStyle = '#000';
-                    ctx.font = 'bold 14px sans-serif';
-                    ctx.fillText(dataPoint.team, x, y + element.outerRadius * 0.1);
-                    ctx.restore();
-                  };
-                } else {
-                  // If no logo, just draw team name
-                  ctx.save();
-                  ctx.textAlign = 'center';
-                  ctx.textBaseline = 'middle';
-                  ctx.fillStyle = '#000';
-                  ctx.font = 'bold 14px sans-serif';
-                  ctx.fillText(dataPoint.team, element.x, element.y);
-                  ctx.restore();
-                }
-              });
+              ctx.save();
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+              ctx.shadowBlur = 10;
+              ctx.shadowOffsetX = 3;
+              ctx.shadowOffsetY = 3;
+            },
+            afterDraw: (chart) => {
+              chart.ctx.restore();
             }
           }]
         });
       }
-    }
-    // Dummy updatePieChart function (donut chart is hidden)
-    function updatePieChart(data) {
-      // This function remains but the canvas is hidden via CSS.
     }
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
