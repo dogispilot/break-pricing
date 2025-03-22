@@ -247,13 +247,34 @@
       height: auto;
       box-shadow: none !important;
     }
-    /* Team table first column styling */
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    /* Updated Team column styling to inherit row background and maintain consistent border */
+    #team-table th:first-child,
+    #team-table td:first-child {
+      text-align: left;
+      color: #333;
+      background-color: inherit;
+    }
     #team-table tbody tr td:first-child {
       display: flex;
       align-items: center;
     }
-    #team-table tbody tr td:first-child .ebay-btn img {
-      height: 20px !important;
+    #team-table td:first-child a {
+      color: #333 !important;
+      text-decoration: none;
     }
     /* Lookup buttons */
     .lookup-button {
@@ -354,30 +375,6 @@
     /* Pie Chart canvas */
     #pieChart {
       display: block;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 8px;
-      text-align: center;
-      vertical-align: middle;
-    }
-    /* Team table first column header/style */
-    #team-table th:first-child,
-    #team-table td:first-child {
-      text-align: left;
-      color: #333;
-      background-color: #fff;
-    }
-    #team-table td:first-child a {
-      color: #333 !important;
-      text-decoration: none;
     }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
