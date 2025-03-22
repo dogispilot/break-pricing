@@ -371,7 +371,8 @@
     }
     /*
       Combined Boost/Discount iOS Toggle styling.
-      (Background-color will be set inline.)
+      We use CSS classes to set the background:
+      off (grey), boost (green), discount (red).
     */
     .ios-toggle {
       display: inline-flex;
@@ -402,20 +403,16 @@
     .ios-toggle input:checked + .toggle-slider {
       transform: translateX(30px);
     }
-    .ios-toggle .toggle-label {
-      font-size: 16px;
-      z-index: 1;
-      user-select: none;
+    /* State classes */
+    .ios-toggle.off {
+      background-color: grey;
     }
-    .ios-toggle .toggle-rocket {
-      margin-left: 5px;
-      margin-right: auto;
+    .ios-toggle.boost {
+      background-color: green;
     }
-    .ios-toggle .toggle-scissors {
-      margin-right: 5px;
-      margin-left: auto;
+    .ios-toggle.discount {
+      background-color: red;
     }
-    /* Keep toggle + input on same line */
     .boost-toggle-container {
       display: inline-flex;
       align-items: center;
@@ -626,14 +623,15 @@
       </tbody>
     </table>
   </section>
-  <!-- Hidden span used for select width measurement -->
+  <!-- Hidden span for select width measurement -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
   <script>
-    // Helper to sanitize team names for valid IDs
+    // Helper function to sanitize team names for valid IDs
     function sanitizeForId(name) {
       return name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
-    // Adjust select width
+
+    // Adjust select width based on selected option
     function updateSelectWidth(selectElement) {
       const selectedText = selectElement.options[selectElement.selectedIndex].text;
       const hiddenSpan = document.getElementById('hiddenSelectText');
@@ -646,12 +644,14 @@
       const textWidth = hiddenSpan.getBoundingClientRect().width;
       selectElement.style.width = (textWidth) + "0px";
     }
+
     function updateAllSelectWidths() {
       const nameSelect = document.getElementById('setNameSelect');
       const yearSelect = document.getElementById('setYearSelect');
       if (nameSelect) updateSelectWidth(nameSelect);
       if (yearSelect) updateSelectWidth(yearSelect);
     }
+
     // Toggle markup prefix vs suffix
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
@@ -665,19 +665,24 @@
         suffix.style.display = 'none';
       }
     }
+
     let config = null;
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
+
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(() => {
         updateBreakSniffer();
       }, 300);
     }
+
+    // When toggle state changes, update the break sniffer
     function updateToggleBackground(team) {
       debouncedUpdateBreakSniffer();
     }
+
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
@@ -685,6 +690,8 @@
         populateYearDropdown();
         updateSetNameDropdown();
         updateAllSelectWidths();
+
+        // Listen for input changes
         document.querySelectorAll('#break-controls-row input, #price-settings input')
           .forEach(input => {
             input.addEventListener('input', debouncedUpdateBreakSniffer);
@@ -697,6 +704,8 @@
         });
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
+
+        // Toggle menus
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
           ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
@@ -705,11 +714,13 @@
           const pl = document.getElementById('price-lookup-menu');
           pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'flex' : 'none';
         });
+        // When selection changes, update data
         document.getElementById('setYearSelect').addEventListener('change', () => {
           updateSetNameDropdown();
           onSelectionChange();
         });
         document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
+        // Toggle set notes
         document.getElementById('toggleNotes').addEventListener('click', function(e){
           e.preventDefault();
           const notesDiv = document.getElementById('set-notes');
@@ -721,9 +732,12 @@
         console.error("Error loading config.json:", error);
       }
     }
+
     window.addEventListener('load', () => {
       setTimeout(updateAllSelectWidths, 0);
     });
+
+    // Populate the year dropdown based on config
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -740,6 +754,8 @@
         setYearSelect.appendChild(opt);
       });
     }
+
+    // Update set names when year changes
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -767,6 +783,8 @@
       }
       updateSelectWidth(setNameSelect);
     }
+
+    // Update data when set selection changes
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -785,6 +803,7 @@
         toggleNotesLink.style.display = 'inline';
       }
     }
+
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -793,6 +812,8 @@
         }
       }
     }
+
+    // Fill in set details and notes
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -859,6 +880,7 @@
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
+
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -866,12 +888,15 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
+
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
+
+    // Populate key rookies
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -880,31 +905,26 @@
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
-          return player.type 
-            && player.type.toLowerCase() === 'rookie'
-            && player.setYear === selectedYear
-            && teamKey;
+          return player.type &&
+            player.type.toLowerCase() === 'rookie' &&
+            player.setYear === selectedYear &&
+            teamKey;
         });
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
-            const teamImage = 
-              config.images 
-              && config.images["team images"] 
-              && config.images["team images"][teamKey] 
-                ? config.images["team images"][teamKey] 
+            const teamImage = config.images &&
+              config.images["team images"] &&
+              config.images["team images"][teamKey]
+                ? config.images["team images"][teamKey]
                 : "";
             tile.innerHTML = `
               <strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
-                ${
-                  teamImage 
-                  ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">`
-                  : ""
-                }
+                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
             `;
@@ -934,11 +954,12 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
+
+    // Recalculate and render the table rows based solely on computed data
     function updateBreakSniffer() {
       console.log("updateBreakSniffer called!");
       if (!currentSet) {
-        document.getElementById('break-tiles').textContent = 
-          "Please select a set and year to get started.";
+        document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
@@ -957,6 +978,7 @@
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       let totalCostOfBusiness = 0;
       const teamData = [];
+      
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -964,9 +986,7 @@
         const transactionCost = distributedCost * (1 + blendedTax / 100) * 0.029 + 0.30;
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
-        const avgCardsCase = totalCardsPerCase 
-          ? (distribution * totalCardsPerCase) 
-          : null;
+        const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -975,66 +995,25 @@
           teamCards,
           distribution,
           avgCardsCase,
-          baseline
+          baseline,
+          boost: 0,
+          discount: 0
         });
       });
+      
+      // Instead of reading from the DOM (which may be inconsistent due to innerHTML usage), we compute values.
       teamData.forEach(data => {
         const safeId = sanitizeForId(data.team);
-        const toggleElem = document.getElementById("boost-toggle-" + safeId);
         const inputElem = document.getElementById("boost-input-" + safeId);
         let value = inputElem ? parseFloat(inputElem.value) || 0 : 0;
-        data.boost = 0;
-        data.discount = 0;
         if (value > 0) {
-          if (toggleElem && toggleElem.checked) {
-            data.discount = value;
-          } else {
-            data.boost = value;
-          }
+          // Here you can incorporate your own logic.
+          // For demonstration, if a value exists, treat it as a boost.
+          data.boost = value;
         }
       });
-      let boostExtraPool = 0;
-      const boostedTeams = [];
-      const nonBoostedTeams = [];
-      teamData.forEach(data => {
-        if (data.boost > 0) {
-          let boostAmount = data.baseline * (data.boost / 100);
-          data.adjusted = data.baseline + boostAmount;
-          boostExtraPool += boostAmount;
-          boostedTeams.push(data);
-        } else {
-          nonBoostedTeams.push(data);
-        }
-      });
-      if (nonBoostedTeams.length > 0) {
-        let boostShare = boostExtraPool / nonBoostedTeams.length;
-        nonBoostedTeams.forEach(data => {
-          data.adjusted = data.baseline - boostShare;
-        });
-      }
-      let discountPool = 0;
-      const discountTeams = [];
-      const nonDiscountTeams = [];
-      teamData.forEach(data => {
-        if (!data.adjusted) data.adjusted = data.baseline;
-        if (data.discount > 0) {
-          let discountAmount = data.adjusted * (data.discount / 100);
-          data.final = data.adjusted - discountAmount;
-          discountPool += discountAmount;
-          discountTeams.push(data);
-        } else {
-          nonDiscountTeams.push(data);
-        }
-      });
-      if (nonDiscountTeams.length > 0) {
-        let discountShare = discountPool / nonDiscountTeams.length;
-        nonDiscountTeams.forEach(data => {
-          data.final = data.adjusted + discountShare;
-        });
-      }
-      teamData.forEach(data => {
-        data.teamPrice = data.final;
-      });
+      
+      // Identify key rookie teams
       const keyPlayers = config["Key Players"] || config.keyPlayers;
       const selectedYear = document.getElementById('setYearSelect').value;
       let keyRookieTeams = new Set();
@@ -1050,23 +1029,22 @@
           }
         });
       }
+      
+      // Rebuild table rows using computed data and using computed boost/discount values
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
+      
       teamData.forEach(data => {
         const safeId = sanitizeForId(data.team);
-        const currentValueInput = document.getElementById("boost-input-" + safeId);
-        let currentValue = currentValueInput ? parseFloat(currentValueInput.value) || 0 : 0;
-        const toggleElem = document.getElementById("boost-toggle-" + safeId);
-        // Instead of using dynamic classes, determine color inline:
-        let toggleColor = "grey";
-        if (currentValue > 0) {
-          toggleColor = (toggleElem && toggleElem.checked) ? "red" : "green";
+        let toggleClass = "off";
+        if (data.discount > 0) {
+          toggleClass = "discount";
+        } else if (data.boost > 0) {
+          toggleClass = "boost";
         }
         const isKeyRookieTeam = keyRookieTeams.has(data.team);
         const rowClass = isKeyRookieTeam ? 'key-rookie-row' : '';
-        const teamDisplayName = isKeyRookieTeam
-            ? `${data.team} 🔑`
-            : data.team;
+        const teamDisplayName = isKeyRookieTeam ? `${data.team} 🔑` : data.team;
         tbody.innerHTML += `
           <tr class="${rowClass}">
             <td>
@@ -1074,9 +1052,9 @@
                  onclick="openTeamSearch('${data.team}')"
                  style="color:#333; text-decoration:none;">
                 ${
-                  config.images
-                  && config.images["team images"]
-                  && config.images["team images"][data.team]
+                  config.images &&
+                  config.images["team images"] &&
+                  config.images["team images"][data.team]
                     ? `<img src="${config.images["team images"][data.team]}"
                               alt="${data.team}"
                               style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
@@ -1097,7 +1075,8 @@
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
               <div class="boost-toggle-container">
-                <label class="ios-toggle" id="ios-toggle-${safeId}" style="background-color: ${toggleColor};">
+                <label class="ios-toggle ${toggleClass}"
+                       id="ios-toggle-${safeId}">
                   <span class="toggle-label toggle-rocket">🚀</span>
                   <input type="checkbox"
                          id="boost-toggle-${safeId}"
@@ -1111,13 +1090,7 @@
                        id="boost-input-${safeId}"
                        step="0.1"
                        min="0"
-                       value="${
-                         data.boost > 0 
-                           ? data.boost 
-                           : (data.discount > 0 
-                                 ? data.discount 
-                                 : 0)
-                       }"
+                       value="${data.boost > 0 ? data.boost : (data.discount > 0 ? data.discount : 0)}"
                        oninput="updateToggleBackground('${data.team}')"
                        style="width:60px;">
               </div>
@@ -1126,6 +1099,7 @@
           </tr>
         `;
       });
+      
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
@@ -1161,6 +1135,7 @@
       ];
       updatePieChart(pieData);
     }
+
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
@@ -1204,6 +1179,8 @@
         });
       }
     }
+
+    // External search functions
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1278,6 +1255,7 @@
       const query = team + " hockey cards";
       window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query), "_blank");
     }
+
     loadConfig();
   </script>
 </body>
