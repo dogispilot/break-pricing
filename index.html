@@ -94,14 +94,13 @@
       flex: 0 0 calc(25% - 10px);
       box-sizing: border-box;
     }
-    /* Updated styling for set selection inputs and sentence */
+    /* Set and year selection styling – extra bold and dark */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
       color: #1a1a1a;
     }
     #set-selection select {
-      /* Let JS adjust the width based on the selected text */
       width: auto;
       display: inline-block;
       font-family: 'BreakPricingFont', sans-serif;
@@ -146,25 +145,22 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* For groups that are in a price-setting context */
     .price-setting-group {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
     .price-setting-group label {
       margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
     }
-    /* Input-inline container to align input fields horizontally */
     .input-inline {
       display: flex;
       align-items: center;
       gap: 15px;
     }
-    /* Input-wrapper for fields with prefix/suffix */
     .input-wrapper {
       display: inline-flex;
       align-items: center;
@@ -193,7 +189,6 @@
       color: #333;
       white-space: nowrap;
     }
-    /* Modern input styling for number inputs */
     input[type="number"] {
       height: 36px !important;
       line-height: 36px !important;
@@ -212,15 +207,12 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Existing boost/discount inputs override removed */
-    /* Button group inline for Price Settings/Lookup buttons */
     .button-group-inline {
       display: inline-flex;
       gap: 10px;
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* New button styles for eBay and NHL */
     .ebay-btn {
       background: none !important;
       padding: 0 !important;
@@ -246,19 +238,16 @@
       height: auto;
       box-shadow: none !important;
     }
-    /* New style for the eBay button used in the team table */
     .table-ebay-btn {
       background: none !important;
       padding: 0 !important;
       border: none !important;
       display: inline-block;
-      width: auto; 
     }
     .table-ebay-btn img {
-      max-width: 25%;  /* scaled down to about 25% of its original size */
+      max-width: 25%;
       height: auto;
     }
-    /* Table styling */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -272,7 +261,6 @@
       text-align: center;
       vertical-align: middle;
     }
-    /* Updated Team column styling to inherit row background and maintain consistent border */
     #team-table th:first-child,
     #team-table td:first-child {
       text-align: left;
@@ -287,7 +275,6 @@
       color: #333 !important;
       text-decoration: none;
     }
-    /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -309,7 +296,6 @@
       height: 24px;
       vertical-align: middle;
     }
-    /* Glow effects on hover */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
     .glow-outofthebox:hover,
@@ -319,7 +305,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Updated Price Settings and Price Lookup buttons styling for an empty pill look */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: transparent;
@@ -332,7 +317,6 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* Price Settings and Price Lookup menus – now positioned absolutely below the break controls */
     #price-settings, #price-lookup-menu {
       position: absolute;
       top: 100%;
@@ -350,26 +334,22 @@
       font-family: 'BreakPricingFont', sans-serif;
       z-index: 10;
     }
-    /* Button Container inside Price Lookup Menu remains unchanged */
     .button-container {
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
     }
-    /* Set Details button container */
     #set-details .button-container {
       justify-content: flex-start;
       margin-bottom: 20px;
     }
-    /* Break Sniffer Right Column */
     .break-results-container {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
     }
-    /* Break Sniffer results layout */
     #break-results {
       display: flex;
       flex-direction: row;
@@ -383,11 +363,9 @@
       border-radius: 4px;
       text-align: center;
     }
-    /* Pie Chart canvas */
     #pieChart {
       display: block;
     }
-    /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -401,31 +379,13 @@
       width: 0;
       height: 0;
     }
-    .slider {
+    .toggle-switch .slider {
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #ccc;
+      background-color: grey;  /* default grey */
       transition: .4s;
       border-radius: 24px;
-    }
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    /* For boost toggle: green background when in rocket mode, purple when in scissors mode */
-    .boost-switch input:checked + .slider {
-      background-color: green;
-    }
-    .boost-switch input:not(:checked) + .slider {
-      background-color: purple;
     }
     /* Boost toggle container styling */
     .boost-toggle-container {
@@ -480,7 +440,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0px;
+      gap: 0;
     }
   </style>
 </head>
@@ -492,7 +452,6 @@
     <a href="about.html">About</a>
   </header>
   <p>Sniff out the best breaks</p>
-
   <!-- Section 1: Set and Year Selection -->
   <section id="set-selection">
     <p>
@@ -506,7 +465,6 @@
       </select>
     </p>
   </section>
-
   <!-- Section 2: Set Details -->
   <section id="set-details">
     <h2>📝 Set Details</h2>
@@ -525,7 +483,6 @@
       <!-- Hero and support rows will be added here -->
     </div>
   </section>
-
   <!-- Section 3: Key Rookies -->
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
@@ -533,7 +490,6 @@
       <!-- Key rookie tiles will be generated here -->
     </div>
   </section>
-
   <!-- Section 4: Break Sniffer -->
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
@@ -541,7 +497,6 @@
       <!-- Left Column: Controls wrapped in a container for positioning menus -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
-          <!-- Cost of a case group: wrapped in an input-inline to match markup group -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <div class="input-inline">
@@ -551,7 +506,6 @@
               </div>
             </div>
           </div>
-          <!-- Markup group -->
           <div class="input-group price-setting-group">
             <label for="markupValue">Markup</label>
             <div class="input-inline">
@@ -567,7 +521,7 @@
             </div>
           </div>
         </div>
-        <!-- Price Settings Menu (positioned absolutely and centered) -->
+        <!-- Price Settings Menu -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -642,12 +596,12 @@
       </tbody>
     </table>
   </section>
-
-  <!-- Hidden span used to measure text width of the selected option -->
+  <!-- Hidden span used to measure text width -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
-
   <script>
-    // Updated function to adjust the select width accurately
+    // Global storage for boost/discount values per team
+    let boostValues = {};
+
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
@@ -664,7 +618,6 @@
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
-    // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -732,7 +685,6 @@
         setYearSelect.appendChild(opt);
       });
     }
-    // Updated function to update the set name dropdown and adjust width accordingly
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -913,24 +865,28 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-    // Update the boost toggle UI for a given team based on the input value
+    // Update the boost toggle UI and persist its value
     function updateBoostToggleUI(team) {
       var container = document.getElementById("boost-toggle-container-" + team);
       var inputElem = document.getElementById("boost-discount-input-" + team);
       var toggleElem = document.getElementById("boost-discount-toggle-" + team);
+      // Persist current input value
+      boostValues[team] = inputElem.value;
       var value = parseFloat(inputElem.value) || 0;
+      var slider = toggleElem.parentElement.querySelector('.slider');
       if (value <= 0) {
         container.classList.add("disabled");
         toggleElem.checked = false;
+        slider.style.backgroundColor = "grey";
       } else {
         container.classList.remove("disabled");
-        // Default to rocket (boost) if active
-        if (!toggleElem.checked) {
-          toggleElem.checked = true;
+        if (toggleElem.checked) {
+          slider.style.backgroundColor = "green";
+        } else {
+          slider.style.backgroundColor = "purple";
         }
       }
     }
-    // Combined boost/discount is applied in updateBreakSniffer:
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -971,7 +927,7 @@
           baseline
         });
       });
-      // For each team, read the combined boost/discount value.
+      // For each team, read the combined boost/discount value
       teamData.forEach(data => {
         var inputElem = document.getElementById("boost-discount-input-" + data.team);
         var toggleElem = document.getElementById("boost-discount-toggle-" + data.team);
@@ -1023,7 +979,7 @@
                   <span class="slider"></span>
                 </label>
                 <span class="toggle-icon toggle-scissors">✂️</span>
-                <input type="number" id="boost-discount-input-${data.team}" class="boost-discount-input" min="0" value="0" oninput="updateBoostToggleUI('${data.team}'); updateBreakSniffer();" style="width:60px;">
+                <input type="number" id="boost-discount-input-${data.team}" class="boost-discount-input" min="0" value="${boostValues[data.team] !== undefined ? boostValues[data.team] : 0}" oninput="updateBoostToggleUI('${data.team}'); updateBreakSniffer();" style="width:60px;">
               </div>
             </td>
             <td>$${data.final.toFixed(2)}</td>
