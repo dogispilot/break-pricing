@@ -864,20 +864,25 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-    // Update the boost toggle UI and persist its value
+    // Updated boost toggle function
     function updateBoostToggleUI(team) {
       var container = document.getElementById("boost-toggle-container-" + team);
       var inputElem = document.getElementById("boost-discount-input-" + team);
       var toggleElem = document.getElementById("boost-discount-toggle-" + team);
-      boostValues[team] = inputElem.value;
-      var value = parseFloat(inputElem.value) || 0;
       var slider = toggleElem.parentElement.querySelector('.slider');
+      var value = parseFloat(inputElem.value) || 0;
+      
+      // If no boost value, disable the toggle and set background grey.
       if (value <= 0) {
         container.classList.add("disabled");
+        toggleElem.disabled = true;
         toggleElem.checked = false;
         slider.style.backgroundColor = "grey";
       } else {
         container.classList.remove("disabled");
+        toggleElem.disabled = false;
+        // Do not force toggle.checked here—allow the user to click.
+        // Update slider background based on the current state:
         if (toggleElem.checked) {
           slider.style.backgroundColor = "green";
         } else {
