@@ -265,7 +265,7 @@
       width: auto;
       vertical-align: middle;
     }
-    /* New CSS class for rookie team images */
+    /* New CSS class for rookie team images (larger) */
     .rookie-team-img {
       max-width: 50%;
       height: auto;
@@ -1148,17 +1148,20 @@
       updatePieChart(pieData);
     }
 
-    // Updated 3D Donut Chart with high-contrast, accessible colors and a drop-shadow for a 3D effect.
+    // Updated 3D Donut Chart with exploding effect and transparent divider lines.
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       // Accessible, high-contrast colors
       const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
       
-      // Use a doughnut chart with a 50% cutout to simulate a donut chart.
       if (pieChartInstance) {
         pieChartInstance.data.labels = data.map(d => d.label);
         pieChartInstance.data.datasets[0].data = data.map(d => d.value);
         pieChartInstance.data.datasets[0].backgroundColor = backgroundColors;
+        // Apply the exploding effect by offsetting slices
+        pieChartInstance.data.datasets[0].offset = 10;
+        // Make divider lines transparent
+        pieChartInstance.data.datasets[0].borderColor = "transparent";
         pieChartInstance.update();
       } else {
         pieChartInstance = new Chart(ctx, {
@@ -1168,8 +1171,9 @@
             datasets: [{
               data: data.map(d => d.value),
               backgroundColor: backgroundColors,
-              borderColor: "#fff",
+              borderColor: "transparent",  // transparent dividers
               borderWidth: 2,
+              offset: 10  // exploding effect
             }]
           },
           options: {
@@ -1260,7 +1264,7 @@
     }
     
     // Function to reset all boost inputs to 0 and update the table.
-    // The event parameter is used to stop propagation so that it doesn't trigger a column sort.
+    // The event parameter stops propagation so the column sort isn't triggered.
     function resetBoosts(event) {
       if (event) event.stopPropagation();
       document.querySelectorAll('.boost-input').forEach(function(input) {
