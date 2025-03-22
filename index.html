@@ -101,7 +101,6 @@
       color: #1a1a1a;
     }
     #set-selection select {
-      /* Let JS adjust the width based on the selected text */
       width: auto;
       display: inline-block;
       font-family: 'BreakPricingFont', sans-serif;
@@ -329,7 +328,7 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* Price Settings and Price Lookup menus – now positioned absolutely below the break controls */
+    /* Price Settings and Price Lookup menus – positioned absolutely below the break controls */
     #price-settings, #price-lookup-menu {
       position: absolute;
       top: 100%;
@@ -428,7 +427,7 @@
       margin-right: 5px;
       margin-left: auto;
     }
-    /* New rule: ensure the boost toggle and its input are on the same line */
+    /* Ensure the boost toggle and its input are on the same line */
     .boost-toggle-container {
       display: inline-flex;
       align-items: center;
@@ -561,7 +560,7 @@
             </div>
           </div>
         </div>
-        <!-- Price Settings Menu (positioned absolutely and centered) -->
+        <!-- Price Settings Menu -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -641,34 +640,23 @@
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
 
   <script>
-    // Updated function to adjust the select width accurately
+    // Adjust select width accurately
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
-      
-      // Copy computed styles from the select element to the hidden span
       var computedStyles = window.getComputedStyle(selectElement);
       hiddenSpan.style.fontSize = computedStyles.fontSize;
       hiddenSpan.style.fontWeight = computedStyles.fontWeight;
       hiddenSpan.style.fontFamily = computedStyles.fontFamily;
       hiddenSpan.style.textDecoration = computedStyles.textDecoration;
-      
       hiddenSpan.textContent = selectedText;
-      
-      // Measure the text width accurately
       var textWidth = hiddenSpan.getBoundingClientRect().width;
-      // Add extra pixels to account for the dropdown arrow and any slight padding
-      var newWidth = textWidth + 0;
-      selectElement.style.width = newWidth + "px";
+      selectElement.style.width = (textWidth + 0) + "px";
     }
-
-    // Update widths for both select elements
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
-
-    // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -686,15 +674,15 @@
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
-
+    
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(() => {
         updateBreakSniffer();
       }, 300);
     }
-
-    // The updateToggleBackground function now only updates the toggle’s background color.
+    
+    // Now, when the toggle state or input changes, update the toggle background then recalc.
     function updateToggleBackground(team) {
       var inputElem = document.getElementById("boost-input-" + team);
       var toggleLabel = document.getElementById("ios-toggle-" + team);
@@ -703,27 +691,22 @@
       if (val === 0) {
         toggleLabel.style.backgroundColor = 'grey';
       } else {
-        if (toggleCheckbox.checked) {
-          toggleLabel.style.backgroundColor = 'green';
-        } else {
-          toggleLabel.style.backgroundColor = 'blue';
-        }
+        toggleLabel.style.backgroundColor = toggleCheckbox.checked ? 'green' : 'blue';
       }
-      // Do not re-render the table here to avoid snapping.
+      // Recalculate table after changes.
+      debouncedUpdateBreakSniffer();
     }
-
+    
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
-        // Update select widths after options are populated
         updateAllSelectWidths();
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', debouncedUpdateBreakSniffer);
         });
-        // Update width on change events
         document.getElementById('setNameSelect').addEventListener('change', function() {
           updateSelectWidth(this);
         });
@@ -745,7 +728,7 @@
         console.error("Error loading config.json:", error);
       }
     }
-
+    
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -760,8 +743,7 @@
         setYearSelect.appendChild(opt);
       });
     }
-
-    // Update the set name dropdown and adjust width accordingly.
+    
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -784,7 +766,7 @@
       if (!found) { setNameSelect.value = ""; }
       updateSelectWidth(setNameSelect);
     }
-
+    
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
@@ -795,7 +777,7 @@
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
-
+    
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -813,7 +795,7 @@
         document.getElementById('toggleNotes').style.display = 'inline';
       }
     }
-
+    
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -822,7 +804,7 @@
         }
       }
     }
-
+    
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -877,7 +859,7 @@
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
-
+    
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -885,21 +867,22 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
-
+    
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
-
+    
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
       if (!setName || !setYear) { alert("Please select both a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
@@ -907,9 +890,10 @@
       if (!setName || !setYear) { alert("Please select a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
-
+    
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -958,9 +942,8 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-
-    // The updateBreakSniffer function now re-renders the table rows.
-    // For each team, it computes the boost/discount values and the proper toggle background.
+    
+    // Recalculate the table: update boost/discount values and rebuild rows.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -1070,10 +1053,8 @@
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
-        // Get the current boost value from the input, if available.
         var currentInput = document.getElementById("boost-input-" + data.team);
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
-        // Determine the toggle background color:
         let toggleColor = 'grey';
         if (currentValue > 0) {
           toggleColor = (data.boost > 0) ? 'green' : 'blue';
@@ -1082,7 +1063,9 @@
           <tr>
             <td>
               <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" style="color:#333; text-decoration:none;">
-                ${ config.images && config.images["team images"] && config.images["team images"][data.team] ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` : "" }
+                ${ config.images && config.images["team images"] && config.images["team images"][data.team] 
+                   ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` 
+                   : "" }
                 ${data.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="table-ebay-btn" style="margin-left:5px;">
@@ -1147,13 +1130,12 @@
       ];
       updatePieChart(pieData);
     }
-
+    
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
       const values = data.map(d => d.value);
       const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
-      
       if (pieChartInstance) {
         pieChartInstance.data.labels = labels;
         pieChartInstance.data.datasets[0].data = values;
@@ -1192,7 +1174,7 @@
         });
       }
     }
-
+    
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1241,7 +1223,7 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-
+    
     loadConfig();
   </script>
 </body>
