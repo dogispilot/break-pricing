@@ -70,11 +70,15 @@
     }
     .tile-value {
       font-family: 'BreakPricingFontBold', sans-serif;
-      font-size: 2em;
       margin-bottom: 5px;
     }
     .tile-desc {
       font-size: 1em;
+    }
+    /* Override for break tile numbers */
+    .break-tiles-container .tile .tile-value {
+      font-size: 3em;
+      font-weight: bold;
     }
     /* Hero and Support rows */
     .hero-row {
@@ -149,7 +153,11 @@
       flex-direction: column;
       gap: 10px;
     }
-    /* Remove absolute positioning from menus so they flow naturally */
+    /* Set a fixed width (120px) for price buttons (matching markup input) */
+    .price-buttons-row button {
+      width: 120px;
+    }
+    /* Remove absolute positioning from menus */
     #price-settings, #price-lookup-menu {
       display: none;
       flex-direction: column;
@@ -279,7 +287,7 @@
       width: auto;
       vertical-align: middle;
     }
-    /* New CSS class for rookie team images (with opacity) */
+    /* Rookie tiles images */
     .rookie-team-img {
       max-width: 50%;
       height: auto;
@@ -288,7 +296,6 @@
       position: relative;
       z-index: 1;
     }
-    /* Player image in rookie tiles overlaps team image */
     .rookie-img {
       max-width: 50%;
       height: auto;
@@ -363,6 +370,7 @@
       font-size: 0.8em;
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
+      width: 120px;
     }
     .empty-pill-button {
       background-color: transparent;
@@ -393,15 +401,17 @@
       justify-content: flex-start;
       margin-bottom: 20px;
     }
-    /* Layout for break sniffer: three columns */
+    /* Break sniffer right column (tiles) */
+    .break-tiles-container {
+      flex: 1;
+    }
+    /* Donut chart container: move it up a bit by reducing top margin */
     .donut-container {
       flex: 1;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-    }
-    .break-tiles-container {
-      flex: 1;
+      margin-top: 0;
     }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
