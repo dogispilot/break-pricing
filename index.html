@@ -635,12 +635,12 @@
       </tbody>
     </table>
   </section>
-
+  
   <!-- Hidden span used to measure text width of the selected option -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
-
+  
   <script>
-    // Adjust select width accurately
+    // Adjust select width accurately.
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
@@ -682,7 +682,7 @@
       }, 300);
     }
     
-    // Now, when the toggle state or input changes, update the toggle background then recalc.
+    // When the toggle state or input changes, update the toggle background (swapped colors)
     function updateToggleBackground(team) {
       var inputElem = document.getElementById("boost-input-" + team);
       var toggleLabel = document.getElementById("ios-toggle-" + team);
@@ -691,9 +691,11 @@
       if (val === 0) {
         toggleLabel.style.backgroundColor = 'grey';
       } else {
-        toggleLabel.style.backgroundColor = toggleCheckbox.checked ? 'green' : 'blue';
+        // Now, when checkbox is checked (slider moves right over scissors), use blue (discount).
+        // When unchecked (slider remains over rocket), use green (boost).
+        toggleLabel.style.backgroundColor = toggleCheckbox.checked ? 'blue' : 'green';
       }
-      // Recalculate table after changes.
+      // Recalculate table on toggle change.
       debouncedUpdateBreakSniffer();
     }
     
@@ -943,7 +945,7 @@
       }
     }
     
-    // Recalculate the table: update boost/discount values and rebuild rows.
+    // Recalculate the table rows.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -990,7 +992,7 @@
         });
       });
       
-      // For each team, update boost/discount based on the combined control.
+      // Update boost/discount values from the combined control.
       teamData.forEach(data => {
         var toggleElem = document.getElementById("boost-toggle-" + data.team);
         var inputElem = document.getElementById("boost-input-" + data.team);
@@ -999,9 +1001,9 @@
         data.discount = 0;
         if (value > 0) {
           if (toggleElem && toggleElem.checked) {
-            data.boost = value;
+            data.discount = value; // When toggle is checked, discount is ON.
           } else {
-            data.discount = value;
+            data.boost = value;    // When unchecked, boost is ON.
           }
         }
       });
@@ -1055,6 +1057,7 @@
       teamData.forEach(data => {
         var currentInput = document.getElementById("boost-input-" + data.team);
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
+        // Determine toggle color based on current input and boost/discount values.
         let toggleColor = 'grey';
         if (currentValue > 0) {
           toggleColor = (data.boost > 0) ? 'green' : 'blue';
@@ -1080,7 +1083,7 @@
               <div class="boost-toggle-container">
                 <label class="ios-toggle" id="ios-toggle-${data.team}" style="background-color: ${toggleColor};">
                   <span class="toggle-label toggle-rocket">🚀</span>
-                  <input type="checkbox" id="boost-toggle-${data.team}" onchange="updateToggleBackground('${data.team}')" ${data.boost > 0 ? 'checked' : ''} />
+                  <input type="checkbox" id="boost-toggle-${data.team}" onchange="updateToggleBackground('${data.team}')" ${data.discount > 0 ? 'checked' : ''} />
                   <span class="toggle-slider"></span>
                   <span class="toggle-label toggle-scissors">✂️</span>
                 </label>
