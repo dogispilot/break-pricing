@@ -3682,7 +3682,7 @@
     ],
     "images": {
         "team images": {
-            "Anaheim Ducks": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+            "Anaheim Ducks": "teams/images/ducks.svg",
             "Arizona Coyotes": "https://assets.nhle.com/logos/nhl/svg/ARI_dark.svg",
             "Boston Bruins": "https://assets.nhle.com/logos/nhl/svg/BOS_dark.svg",
             "Buffalo Sabres": "https://assets.nhle.com/logos/nhl/svg/BUF_dark.svg",
