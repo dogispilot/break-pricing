@@ -94,7 +94,7 @@
       flex: 0 0 calc(25% - 10px);
       box-sizing: border-box;
     }
-    /* Set and Year Selection styling */
+    /* Set and Year Selection styling – extra bold and dark */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
@@ -247,8 +247,8 @@
       margin-right: 30px;
     }
     .table-ebay-btn img {
-      max-width: 25%;
-      height: auto;
+      width: auto;
+      height: 75%;
     }
     table {
       width: 100%;
@@ -263,7 +263,7 @@
       text-align: center;
       vertical-align: middle;
     }
-    /* New simplified team cell styling */
+    /* Simplified team cell styling */
     .team-cell {
       display: inline-flex;
       align-items: center;
@@ -391,10 +391,6 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-    }
-    .boost-toggle-container.disabled {
-      opacity: 0.5;
-      pointer-events: none;
     }
     .boost-toggle-container .toggle-icon {
       font-size: 1.2em;
@@ -596,7 +592,9 @@
   </section>
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
   <script>
+    // Global storage for boost/discount values per team
     let boostValues = {};
+    
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
@@ -609,10 +607,12 @@
       var textWidth = hiddenSpan.getBoundingClientRect().width;
       selectElement.style.width = textWidth + "px";
     }
+    
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
+    
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -625,14 +625,17 @@
         suffix.style.display = 'none';
       }
     }
+    
     let config = null;
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
+    
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(() => { updateBreakSniffer(); }, 300);
     }
+    
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
@@ -659,6 +662,7 @@
         console.error("Error loading config.json:", error);
       }
     }
+    
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -673,6 +677,7 @@
         setYearSelect.appendChild(opt);
       });
     }
+    
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -695,16 +700,20 @@
       if (!found) { setNameSelect.value = ""; }
       updateSelectWidth(setNameSelect);
     }
+    
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
     });
+    
     document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
+    
     document.getElementById('toggleNotes').addEventListener('click', function(e){
       e.preventDefault();
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
+    
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -722,6 +731,7 @@
         document.getElementById('toggleNotes').style.display = 'inline';
       }
     }
+    
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -730,6 +740,7 @@
         }
       }
     }
+    
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -776,6 +787,7 @@
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
+    
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -783,30 +795,36 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
+    
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
+    
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
       if (!setName || !setYear) { alert("Please select both a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" +
+                  encodeURIComponent(query) +
                   "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
+    
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
       if (!setName || !setYear) { alert("Please select a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" +
+                  encodeURIComponent(query) +
                   "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
+    
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -857,25 +875,29 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
+    
+    // Updated boost toggle function
     function updateBoostToggleUI(team) {
       var container = document.getElementById("boost-toggle-container-" + team);
       var inputElem = document.getElementById("boost-discount-input-" + team);
       var toggleElem = document.getElementById("boost-discount-toggle-" + team);
       var slider = toggleElem.parentElement.querySelector('.slider');
+      
+      // Update global boost value so it's preserved on re-render
+      boostValues[team] = inputElem.value;
       var value = parseFloat(inputElem.value) || 0;
       
       if (value <= 0) {
-        container.classList.add("disabled");
         toggleElem.disabled = true;
         toggleElem.checked = false;
         slider.style.backgroundColor = "grey";
       } else {
-        container.classList.remove("disabled");
         toggleElem.disabled = false;
-        // Leave toggleElem.checked as is so the user can switch modes.
+        // Let user change the toggle state
         slider.style.backgroundColor = toggleElem.checked ? "green" : "purple";
       }
     }
+    
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -916,6 +938,7 @@
           baseline
         });
       });
+      
       teamData.forEach(data => {
         var inputElem = document.getElementById("boost-discount-input-" + data.team);
         var toggleElem = document.getElementById("boost-discount-toggle-" + data.team);
@@ -926,17 +949,17 @@
           data.final = data.baseline;
         }
       });
+      
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
         const keyPlayers = config["Key Players"] || config.keyPlayers;
-        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) &&
-          keyPlayers.some(player => {
-            const teamKey = player.Team || player.team;
-            return player.type && player.type.toLowerCase() === 'rookie' &&
-                   player.setYear === document.getElementById('setYearSelect').value &&
-                   teamKey === data.team;
-          });
+        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' &&
+                 player.setYear === document.getElementById('setYearSelect').value &&
+                 teamKey === data.team;
+        });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
@@ -974,6 +997,7 @@
           </tr>
         `;
       });
+      
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
@@ -1009,6 +1033,7 @@
       ];
       updatePieChart(pieData);
     }
+    
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
@@ -1052,6 +1077,7 @@
         });
       }
     }
+    
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1060,6 +1086,7 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
     }
+    
     function openSteelCitySearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1068,6 +1095,7 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
     }
+    
     function openOotbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1076,6 +1104,7 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
     }
+    
     function openMidwestCardsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1084,6 +1113,7 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
     }
+    
     function openTcdbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1092,6 +1122,7 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
     }
+    
     function openHockeyChecklistsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1100,6 +1131,7 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
+    
     loadConfig();
   </script>
 </body>
