@@ -153,7 +153,7 @@
       flex-direction: column;
       gap: 10px;
     }
-    /* Set a fixed width (120px) for price buttons (matching markup input) */
+    /* Set fixed width for price buttons (same as markup input, 120px) */
     .price-buttons-row button {
       width: 120px;
     }
@@ -384,35 +384,6 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Remove absolute positioning from menus */
-    #price-settings, #price-lookup-menu {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    #set-details .button-container {
-      justify-content: flex-start;
-      margin-bottom: 20px;
-    }
-    /* Break sniffer right column (tiles) */
-    .break-tiles-container {
-      flex: 1;
-    }
-    /* Donut chart container: move it up a bit by reducing top margin */
-    .donut-container {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      margin-top: 0;
-    }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
@@ -536,7 +507,8 @@
   </section>
   <!-- Section 3: Key Rookies -->
   <section id="key-rookies">
-    <h2>🔑 Key Rookies</h2>
+    <!-- The header below will update dynamically -->
+    <h2 id="keyRookiesHeader">🔑 Key Rookies</h2>
     <div class="tile-container" id="rookie-tiles">
       <!-- Key rookie tiles will be generated here -->
     </div>
@@ -549,7 +521,8 @@
       <div class="break-controls-container">
         <div class="break-controls-row">
           <div class="input-group">
-            <label for="caseCost">Cost of a case</label>
+            <!-- The label will update dynamically -->
+            <label for="caseCost" id="caseCostLabel">Cost of a case</label>
             <div class="input-inline">
               <div class="input-wrapper" style="width:120px;">
                 <span class="input-prefix">$</span>
@@ -773,6 +746,18 @@
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
+      // Update dynamic labels
+      if (currentSet) {
+        // Update cost label dynamically
+        document.getElementById('caseCostLabel').textContent =
+          `Cost of a ${currentSet.year} ${currentSet.name} case`;
+        // Update key rookies header dynamically
+        document.getElementById('keyRookiesHeader').textContent =
+          `🔑 ${currentSet.year} Key Rookies`;
+      } else {
+        document.getElementById('caseCostLabel').textContent = "Cost of a case";
+        document.getElementById('keyRookiesHeader').textContent = "🔑 Key Rookies";
+      }
       updateSetDetails();
       updateBreakCaseCost();
       updateKeyRookies();
