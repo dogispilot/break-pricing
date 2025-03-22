@@ -494,6 +494,11 @@
       justify-content: center;
       gap: 0px;
     }
+    /* Bubble Chart Styling */
+    #bubbleChart {
+      display: block;
+      margin: 20px auto;
+    }
   </style>
 </head>
 <body>
@@ -630,6 +635,8 @@
         </div>
       </div>
     </div>
+    <!-- New Bubble Chart Canvas -->
+    <canvas id="bubbleChart" width="400" height="300"></canvas>
     <table id="team-table">
       <thead>
         <tr>
@@ -654,6 +661,7 @@
   <script>
     let currentSortColumn = null;
     let currentSortDirection = 1;
+    let bubbleChartInstance = null;
     function sortTable(key) {
       if (currentSortColumn === key) {
         currentSortDirection *= -1;
@@ -713,7 +721,7 @@
         });
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
-        // Updated click handlers to position dialogs next to the button
+        // Position dialogs next to buttons
         document.getElementById('priceSettingsToggle').addEventListener('click', function(e) {
           const btnRect = this.getBoundingClientRect();
           const ps = document.getElementById('price-settings');
@@ -1076,6 +1084,7 @@
       tileBusiness.style.background = "#1565C0";
       tileBusiness.style.color = "#fff";
       breakTiles.appendChild(tileBusiness);
+      updateBubbleChart(teamData);
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
@@ -1083,7 +1092,55 @@
       ];
       updatePieChart(pieData);
     }
-    // Updated 3D Donut Chart with exploding effect and transparent divider lines.
+    // Function to update the bubble chart based on teamData
+    function updateBubbleChart(teamData) {
+      const ctx = document.getElementById('bubbleChart').getContext('2d');
+      const bubbleData = teamData.map(data => {
+        // x: distribution percentage, y: team price, r: bubble radius
+        const r = Math.max(5, Math.abs(data.boost) * 2 + 5);
+        return { x: data.distribution * 100, y: data.teamPrice, r: r };
+      });
+      // Set colors: green if boosted, red if discounted, gray if neutral
+      const bubbleColors = teamData.map(data => {
+        if (data.boost > 0) return "#66bb6a";
+        else if (data.boost < 0) return "#ff6666";
+        else return "#999999";
+      });
+      if (bubbleChartInstance) {
+        bubbleChartInstance.data.datasets[0].data = bubbleData;
+        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleColors;
+        bubbleChartInstance.update();
+      } else {
+        bubbleChartInstance = new Chart(ctx, {
+          type: 'bubble',
+          data: {
+            datasets: [{
+              label: 'Team Data',
+              data: bubbleData,
+              pointBackgroundColor: bubbleColors,
+              pointBorderColor: "#fff",
+              pointBorderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              x: {
+                title: { display: true, text: 'Distribution (%)' },
+                ticks: { beginAtZero: true }
+              },
+              y: {
+                title: { display: true, text: 'Team Price ($)' },
+                ticks: { beginAtZero: true }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+    }
+    // Pie chart update remains unchanged
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
