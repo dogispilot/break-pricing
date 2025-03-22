@@ -328,6 +328,19 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
+    /* New empty pill button style for the Reset button in Boost header */
+    .empty-pill-button {
+      background-color: transparent;
+      color: #333;
+      border: 1px solid #333;
+      border-radius: 20px;
+      padding: 2px 10px;
+      cursor: pointer;
+      font-size: 0.8em;
+      height: 24px;
+      font-family: 'BreakPricingFont', sans-serif;
+      margin-left: 5px;
+    }
     /* Price Settings and Price Lookup menus – now positioned absolutely below the break controls */
     #price-settings, #price-lookup-menu {
       position: absolute;
@@ -615,7 +628,7 @@
           <th>Distribution</th>
           <th>Avg. Cards per Case</th>
           <th>Cost + Markup</th>
-          <th>Boost</th>
+          <th>Boost <button class="empty-pill-button" onclick="resetBoosts()">Reset</button></th>
           <th>Team Price</th>
         </tr>
       </thead>
@@ -1174,6 +1187,14 @@
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
+    }
+    
+    // Function to reset all boost inputs to 0 and update the table
+    function resetBoosts() {
+      document.querySelectorAll('.boost-input').forEach(function(input) {
+        input.value = 0;
+      });
+      updateBreakSniffer();
     }
 
     loadConfig();
