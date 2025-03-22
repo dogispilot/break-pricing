@@ -101,7 +101,6 @@
       color: #1a1a1a;
     }
     #set-selection select {
-      /* Let JS adjust the width based on the selected text */
       width: auto;
       display: inline-block;
       font-family: 'BreakPricingFont', sans-serif;
@@ -124,26 +123,32 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Controls Layout */
-    .break-controls-container {
-      position: relative;
-      flex: 1;
-    }
-    /* New break sniffer flex container */
+    /* Break Sniffer Layout */
     .break-sniffer-flex {
       display: flex;
       gap: 20px;
     }
-    .break-results-container {
-      flex: 2;
+    .break-controls-container,
+    .donut-container,
+    .break-tiles-container {
+      flex: 1;
     }
-    /* Arrange break results side by side */
-    #break-results {
+    /* Left column: Break controls */
+    .break-controls-container {
       display: flex;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
+      flex-direction: column;
+      gap: 10px;
+    }
+    /* Row for the initial controls (cost, markup input) */
+    .break-controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    /* New row for the Price Settings/Price Lookup buttons */
+    .price-buttons-row {
+      display: flex;
+      gap: 10px;
     }
     /* Input groups and wrappers remain unchanged */
     .input-group {
@@ -277,7 +282,7 @@
       position: relative;
       z-index: 1;
     }
-    /* Update the player image in rookie tiles to overlap the team image */
+    /* Update the player image in rookie tiles so it overlaps the team image */
     .rookie-img {
       max-width: 50%;
       height: auto;
@@ -392,28 +397,18 @@
       justify-content: flex-start;
       margin-bottom: 20px;
     }
-    .break-results-container {
+    /* New layout for break sniffer results: three columns */
+    .donut-container {
+      flex: 1;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    #break-results {
-      display: flex;
-      gap: 20px;
       align-items: center;
       justify-content: center;
-      width: 100%;
     }
-    #break-tiles .tile {
-      margin: 5px;
-      padding: 10px;
-      border-radius: 4px;
-      text-align: center;
+    .break-tiles-container {
+      flex: 1;
     }
-    #pieChart {
-      display: block;
-    }
+    /* Break Sniffer Right Column now removed; layout is via three columns in .break-sniffer-flex */
+    /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -549,9 +544,9 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls -->
+      <!-- Left Column: Break Controls -->
       <div class="break-controls-container">
-        <div class="break-controls" id="break-controls-row">
+        <div class="break-controls-row">
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <div class="input-inline">
@@ -561,21 +556,20 @@
               </div>
             </div>
           </div>
-          <div class="input-group price-setting-group">
+          <div class="input-group">
             <label for="markupValue">Markup</label>
-            <div class="input-inline">
-              <div class="input-wrapper" style="width:120px;">
-                <span class="input-prefix markup-prefix" style="display: none;">$</span>
-                <input type="number" id="markupValue" step="0.01" value="500">
-                <span class="input-suffix markup-suffix" style="display: none;">%</span>
-              </div>
-              <div class="button-group-inline">
-                <button id="priceSettingsToggle" type="button">Price Settings</button>
-                <button id="priceLookupToggle" type="button">Price Lookup</button>
-              </div>
+            <div class="input-wrapper" style="width:120px;">
+              <span class="input-prefix markup-prefix" style="display: none;">$</span>
+              <input type="number" id="markupValue" step="0.01" value="500">
+              <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
         </div>
+        <div class="price-buttons-row">
+          <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
+          <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
+        </div>
+        <!-- Price Settings Menu -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -599,6 +593,7 @@
             </div>
           </div>
         </div>
+        <!-- Price Lookup Menu -->
         <div id="price-lookup-menu">
           <div class="button-container">
             <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
@@ -620,14 +615,14 @@
           </div>
         </div>
       </div>
-      <!-- Right Column: Break Results -->
-      <div class="break-results-container">
-        <div id="break-results">
-          <div class="tiles" id="break-tiles">
-            <!-- Breaker boxes will appear here -->
-          </div>
-          <!-- 3D Donut Chart -->
-          <canvas id="pieChart" width="250" height="250"></canvas>
+      <!-- Middle Column: Donut Chart -->
+      <div class="donut-container">
+        <canvas id="pieChart" width="250" height="250"></canvas>
+      </div>
+      <!-- Right Column: Break Tiles -->
+      <div class="break-tiles-container">
+        <div id="break-tiles">
+          <!-- Break tiles will be generated here -->
         </div>
       </div>
     </div>
@@ -659,7 +654,6 @@
     // Global sorting variables
     let currentSortColumn = null;
     let currentSortDirection = 1;
-
     function sortTable(key) {
       if (currentSortColumn === key) {
         currentSortDirection *= -1;
@@ -669,7 +663,6 @@
       }
       updateBreakSniffer();
     }
-
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
@@ -682,13 +675,11 @@
       var textWidth = hiddenSpan.getBoundingClientRect().width;
       selectElement.style.width = textWidth + "px";
     }
-
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
     window.addEventListener('load', updateAllSelectWidths);
-
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -696,17 +687,14 @@
       prefix.style.display = isPercent ? 'none' : 'inline';
       suffix.style.display = isPercent ? 'inline' : 'none';
     }
-    
     let config = null;
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
-
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(updateBreakSniffer, 300);
     }
-
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
@@ -738,7 +726,6 @@
         console.error("Error loading config.json:", error);
       }
     }
-
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -753,7 +740,6 @@
         setYearSelect.appendChild(opt);
       });
     }
-
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -776,7 +762,6 @@
       if (!found) { setNameSelect.value = ""; }
       updateSelectWidth(setNameSelect);
     }
-
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
@@ -787,7 +772,6 @@
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
-
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -805,7 +789,6 @@
         document.getElementById('toggleNotes').style.display = 'inline';
       }
     }
-
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -814,7 +797,6 @@
         }
       }
     }
-
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -827,49 +809,40 @@
       }
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
-      
       tilesDiv.innerHTML = "";
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
-      
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
       heroContainer.appendChild(heroTile1);
-      
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       const heroTile2 = document.createElement('div');
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
-      
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
       supportContainer.appendChild(tileBoxes);
-      
       const tilePacks = document.createElement('div');
       tilePacks.className = 'tile';
       tilePacks.innerHTML = `<div class="tile-value">${currentSet.packs_per_box || "N/A"}</div><div class="tile-desc">Packs per Box</div>`;
       supportContainer.appendChild(tilePacks);
-      
       const tileCardsPack = document.createElement('div');
       tileCardsPack.className = 'tile';
       tileCardsPack.innerHTML = `<div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div><div class="tile-desc">Cards per Pack</div>`;
       supportContainer.appendChild(tileCardsPack);
-      
       const cardsPerBox = computeCardsPerBox(currentSet);
       const tileCardsBox = document.createElement('div');
       tileCardsBox.className = 'tile';
       tileCardsBox.innerHTML = `<div class="tile-value">${cardsPerBox || "N/A"}</div><div class="tile-desc">Cards per Box</div>`;
       supportContainer.appendChild(tileCardsBox);
-      
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
-
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -877,14 +850,12 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
-
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
-
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
@@ -901,7 +872,6 @@
       const query = yearPrefix + " " + setName + " " + teamName;
       window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
-
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -950,33 +920,27 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
-      
       const costCase = parseFloat(document.getElementById('caseCost').value);
       const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
       const usePercent = document.getElementById('markupToggle').checked;
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
-      
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
       const whatnotsCut = costWithMarkup * 0.08;
-      
       const teams = currentSet.cards;
       const teamNames = Object.keys(teams);
       const totalCards = teamNames.reduce((sum, team) => sum + teams[team], 0);
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
-      
       let totalCostOfBusiness = 0;
       const teamData = [];
-      
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -996,7 +960,6 @@
           baseline
         });
       });
-      
       teamData.forEach(data => {
         const boostInput = document.getElementById("boost-input-" + data.team);
         let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
@@ -1009,7 +972,6 @@
           data.teamPrice = data.baseline;
         }
       });
-      
       if (currentSortColumn) {
         teamData.sort((a, b) => {
           let valA = a[currentSortColumn];
@@ -1023,7 +985,6 @@
           }
         });
       }
-      
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -1047,8 +1008,6 @@
         } else if(data.boost < 0) {
           priceStyle = 'background-color:#EF6C00; color:#fff;';
           emoji = ' ✂️';
-        } else {
-          priceStyle = '';
         }
         tbody.innerHTML += `
           <tr${highlightStyle}>
@@ -1074,7 +1033,6 @@
           </tr>
         `;
       });
-      
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
@@ -1087,7 +1045,6 @@
       tileProfit.style.borderRadius = "4px";
       tileProfit.style.padding = "10px";
       breakTiles.appendChild(tileProfit);
-      
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile';
       tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
@@ -1096,7 +1053,6 @@
       tileWhatnots.style.borderRadius = "4px";
       tileWhatnots.style.padding = "10px";
       breakTiles.appendChild(tileWhatnots);
-      
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile';
       tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
@@ -1105,7 +1061,6 @@
       tileBusiness.style.borderRadius = "4px";
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
-      
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
@@ -1113,12 +1068,10 @@
       ];
       updatePieChart(pieData);
     }
-
     // Updated 3D Donut Chart with exploding effect and transparent divider lines.
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
-      
       if (pieChartInstance) {
         pieChartInstance.data.labels = data.map(d => d.label);
         pieChartInstance.data.datasets[0].data = data.map(d => d.value);
@@ -1176,7 +1129,6 @@
         });
       }
     }
-
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1225,7 +1177,6 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-    
     function resetBoosts(event) {
       if (event) event.stopPropagation();
       document.querySelectorAll('.boost-input').forEach(function(input) {
@@ -1233,7 +1184,6 @@
       });
       updateBreakSniffer();
     }
-
     loadConfig();
   </script>
 </body>
