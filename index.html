@@ -57,13 +57,51 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Set and Year Selection */
+    /* Container for all tiles */
+    .tile-container {
+      margin-top: 10px;
+    }
+    /* Set Details tiles */
+    .tile {
+      background: #eaeaea;
+      border-radius: 4px;
+      text-align: center;
+      padding: 10px;
+    }
+    .tile-value {
+      font-family: 'BreakPricingFontBold', sans-serif;
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+    .tile-desc {
+      font-size: 1em;
+    }
+    /* Hero and Support rows */
+    .hero-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .hero-row .tile {
+      flex: 0 0 calc(50% - 10px);
+      box-sizing: border-box;
+    }
+    .support-row {
+      display: flex;
+      gap: 10px;
+    }
+    .support-row .tile {
+      flex: 0 0 calc(25% - 10px);
+      box-sizing: border-box;
+    }
+    /* Updated styling for set selection inputs and sentence */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
       color: #1a1a1a;
     }
     #set-selection select {
+      /* Let JS adjust the width based on the selected text */
       width: auto;
       display: inline-block;
       font-family: 'BreakPricingFont', sans-serif;
@@ -79,14 +117,14 @@
       appearance: none;
       font-size: inherit;
     }
-    /* Set Notes */
+    /* Hide set notes by default */
     #set-notes {
       display: none;
       padding: 10px;
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
-    /* Break Controls */
+    /* Break Controls Layout */
     .break-controls-container {
       position: relative;
     }
@@ -106,23 +144,27 @@
       margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
+      text-align: left;
     }
+    /* For groups that are in a price-setting context */
     .price-setting-group {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      margin-bottom: 0;
+      margin-bottom: 0px;
     }
     .price-setting-group label {
       margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
     }
+    /* Input-inline container to align input fields horizontally */
     .input-inline {
       display: flex;
       align-items: center;
       gap: 15px;
     }
+    /* Input-wrapper for fields with prefix/suffix */
     .input-wrapper {
       display: inline-flex;
       align-items: center;
@@ -151,9 +193,10 @@
       color: #333;
       white-space: nowrap;
     }
+    /* Modern input styling for number inputs */
     input[type="number"] {
-      height: 36px;
-      line-height: 36px;
+      height: 36px !important;
+      line-height: 36px !important;
       font-size: 1em;
       text-align: center;
       border: 1px solid #ccc;
@@ -169,13 +212,86 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
+    /* Existing boost/discount inputs override */
+    .boost-input,
+    .discount-input {
+      width: 60px;
+    }
+    /* Button group inline for Price Settings/Lookup buttons */
     .button-group-inline {
       display: inline-flex;
       gap: 10px;
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* Lookup Buttons */
+    /* New button styles for eBay and NHL */
+    .ebay-btn {
+      background: none !important;
+      padding: 0 !important;
+      border: none !important;
+      display: flex !important;
+      justify-content: flex-start;
+      text-decoration: none !important;
+      max-width: 75%;
+      height: auto;
+    }
+    .nhl-btn {
+      background: none !important;
+      padding: 0 !important;
+      border: none !important;
+      display: flex !important;
+      justify-content: flex-end;
+      text-decoration: none !important;
+      max-width: 75%;
+      height: auto;
+    }
+    .ebay-btn img, .nhl-btn img {
+      max-width: 75%;
+      height: auto;
+      box-shadow: none !important;
+    }
+    /* New style for the eBay button used in the team table */
+    .table-ebay-btn {
+      background: none !important;
+      padding: 0 !important;
+      border: none !important;
+      display: inline-block;
+      width: auto; 
+    }
+    .table-ebay-btn img {
+      max-width: 25%;  /* 25% of the size compared to the key rookie ebay button */
+      height: auto;
+    }
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    /* Updated Team column styling to inherit row background and maintain consistent border */
+    #team-table th:first-child,
+    #team-table td:first-child {
+      text-align: left;
+      color: #333;
+      background-color: inherit;
+    }
+    #team-table tbody tr td:first-child {
+      display: flex;
+      align-items: center;
+    }
+    #team-table td:first-child a {
+      color: #333 !important;
+      text-decoration: none;
+    }
+    /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -197,6 +313,7 @@
       height: 24px;
       vertical-align: middle;
     }
+    /* Glow effects on hover */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
     .glow-outofthebox:hover,
@@ -206,7 +323,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Price Settings / Lookup Toggle Buttons */
+    /* Updated Price Settings and Price Lookup buttons styling for an empty pill look */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: transparent;
@@ -219,71 +336,68 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* Markup Toggle (classic iOS style) */
-    .ios-toggle {
-      display: inline-block;
-      position: relative;
-      width: 50px;
-      height: 24px;
-      vertical-align: middle;
-    }
-    .ios-toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .ios-toggle .slider {
+    /* Price Settings and Price Lookup menus – now positioned absolutely below the break controls */
+    #price-settings, #price-lookup-menu {
       position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
-    }
-    /* Team Table */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 8px;
-      text-align: center;
-      vertical-align: middle;
-    }
-    /* Simplified team cell styling */
-    .team-cell {
-      display: inline-flex;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      gap: 15px;
+      flex-direction: row;
       align-items: center;
-      gap: 5px;
-      white-space: nowrap;
+      justify-content: center;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: 'BreakPricingFont', sans-serif;
+      z-index: 10;
     }
-    .team-cell a {
-      color: #333;
-      text-decoration: none;
-      white-space: nowrap;
+    /* Button Container inside Price Lookup Menu remains unchanged */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
     }
-    .table-ebay-btn {
-      background: none;
-      padding: 0;
-      border: none;
-      display: inline-block;
-      margin-left: 5px;
-      margin-right: 30px;
+    /* Set Details button container */
+    #set-details .button-container {
+      justify-content: flex-start;
+      margin-bottom: 20px;
     }
-    .table-ebay-btn img {
-      max-width: 25%;
-      height: auto;
+    /* Break Sniffer Right Column */
+    .break-results-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
     }
-    /* Boost Toggle (for team table) */
+    /* Break Sniffer results layout */
+    #break-results {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    #break-tiles .tile {
+      margin: 5px;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    /* Pie Chart canvas */
+    #pieChart {
+      display: block;
+    }
+    /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
       position: relative;
       width: 50px;
       height: 24px;
+      margin: 0;
       vertical-align: middle;
     }
     .toggle-switch input {
@@ -291,23 +405,32 @@
       width: 0;
       height: 0;
     }
-    .toggle-switch .slider {
+    .slider {
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: grey;
+      background-color: #ccc;
       transition: .4s;
       border-radius: 24px;
     }
-    .boost-toggle-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
     }
-    .boost-toggle-container .toggle-icon {
-      font-size: 1.2em;
+    input:checked + .slider {
+      background-color: #66bb6a;
     }
-    /* Key Rookies Section */
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    /* Key Rookies section */
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -323,6 +446,7 @@
       max-width: 50%;
       height: auto;
       display: block;
+      margin: 0;
       position: relative;
       z-index: 2;
     }
@@ -336,6 +460,7 @@
       position: relative;
       z-index: 1;
     }
+    .key-rookie-logo { }
     .rookie-notes {
       font-size: 0.9em;
       color: #555;
@@ -345,7 +470,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0;
+      gap: 0px;
     }
   </style>
 </head>
@@ -357,6 +482,7 @@
     <a href="about.html">About</a>
   </header>
   <p>Sniff out the best breaks</p>
+
   <!-- Section 1: Set and Year Selection -->
   <section id="set-selection">
     <p>
@@ -370,6 +496,7 @@
       </select>
     </p>
   </section>
+
   <!-- Section 2: Set Details -->
   <section id="set-details">
     <h2>📝 Set Details</h2>
@@ -388,6 +515,7 @@
       <!-- Hero and support rows will be added here -->
     </div>
   </section>
+
   <!-- Section 3: Key Rookies -->
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
@@ -395,13 +523,15 @@
       <!-- Key rookie tiles will be generated here -->
     </div>
   </section>
+
   <!-- Section 4: Break Sniffer -->
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls -->
+      <!-- Left Column: Controls wrapped in a container for positioning menus -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
+          <!-- Cost of a case group: wrapped in an input-inline to match markup group -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <div class="input-inline">
@@ -411,6 +541,7 @@
               </div>
             </div>
           </div>
+          <!-- Markup group -->
           <div class="input-group price-setting-group">
             <label for="markupValue">Markup</label>
             <div class="input-inline">
@@ -426,12 +557,11 @@
             </div>
           </div>
         </div>
-        <!-- Price Settings Menu -->
+        <!-- Price Settings Menu (positioned absolutely and centered) -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
-            <!-- Markup toggle with its own class -->
-            <label class="ios-toggle">
+            <label class="toggle-switch">
               <input type="checkbox" id="markupToggle">
               <span class="slider"></span>
             </label>
@@ -479,11 +609,12 @@
           <div class="tiles" id="break-tiles">
             <!-- Breaker boxes will appear here -->
           </div>
+          <!-- Pie Chart -->
           <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
     </div>
-    <!-- Team Table – Rendered once; updated in place -->
+    <!-- Table for Break Sniffer Results -->
     <table id="team-table">
       <thead>
         <tr>
@@ -493,37 +624,48 @@
           <th>Avg. Cards per Case</th>
           <th>Cost + Markup</th>
           <th>Boost</th>
+          <th>Discount</th>
           <th>Team Price</th>
         </tr>
       </thead>
       <tbody>
-        <!-- Table rows will be rendered once by renderTeamTable() -->
+        <!-- Table rows will be generated here -->
       </tbody>
     </table>
   </section>
+
+  <!-- Hidden span used to measure text width of the selected option -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
+
   <script>
-    // Global storage for boost values (per team)
-    let boostValues = {};
-    
+    // Updated function to adjust the select width accurately
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
+      
+      // Copy computed styles from the select element to the hidden span
       var computedStyles = window.getComputedStyle(selectElement);
       hiddenSpan.style.fontSize = computedStyles.fontSize;
       hiddenSpan.style.fontWeight = computedStyles.fontWeight;
       hiddenSpan.style.fontFamily = computedStyles.fontFamily;
       hiddenSpan.style.textDecoration = computedStyles.textDecoration;
+      
       hiddenSpan.textContent = selectedText;
+      
+      // Measure the text width accurately
       var textWidth = hiddenSpan.getBoundingClientRect().width;
-      selectElement.style.width = textWidth + "px";
+      // Add extra pixels to account for the dropdown arrow and any slight padding
+      var newWidth = textWidth + 0;
+      selectElement.style.width = newWidth + "px";
     }
-    
+
+    // Update widths for both select elements
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
-    
+
+    // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -541,24 +683,32 @@
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
-    
+
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
-      breakSnifferTimeout = setTimeout(() => { updateBreakSniffer(); }, 300);
+      breakSnifferTimeout = setTimeout(() => {
+        updateBreakSniffer();
+      }, 300);
     }
-    
+
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
-        renderTeamTable(); // Render the team table once
+        // Update select widths after options are populated
         updateAllSelectWidths();
-        document.querySelectorAll('#break-controls-row input, #price-settings input')
-          .forEach(input => { input.addEventListener('input', debouncedUpdateBreakSniffer); });
-        document.getElementById('setNameSelect').addEventListener('change', function() { updateSelectWidth(this); });
-        document.getElementById('setYearSelect').addEventListener('change', function() { updateSelectWidth(this); });
+        document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
+          input.addEventListener('input', debouncedUpdateBreakSniffer);
+        });
+        // Update width on change events
+        document.getElementById('setNameSelect').addEventListener('change', function() {
+          updateSelectWidth(this);
+        });
+        document.getElementById('setYearSelect').addEventListener('change', function() {
+          updateSelectWidth(this);
+        });
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
@@ -574,7 +724,7 @@
         console.error("Error loading config.json:", error);
       }
     }
-    
+
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -589,7 +739,8 @@
         setYearSelect.appendChild(opt);
       });
     }
-    
+
+    // Updated function to update the set name dropdown and adjust width accordingly
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -610,9 +761,10 @@
         setNameSelect.appendChild(opt);
       });
       if (!found) { setNameSelect.value = ""; }
+      // Update the width based on the current selected option
       updateSelectWidth(setNameSelect);
     }
-    
+
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
@@ -623,7 +775,7 @@
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
-    
+
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -634,15 +786,15 @@
       updateBreakSniffer();
       if (!currentSet) {
         document.getElementById('toggleNotes').style.display = 'none';
+        // Remove empty state text for details section.
         document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
-        // Clear team table if needed
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
       } else {
         document.getElementById('toggleNotes').style.display = 'inline';
       }
     }
-    
+
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -651,7 +803,7 @@
         }
       }
     }
-    
+
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -664,9 +816,49 @@
       }
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
-      // (Tiles rendering omitted for brevity)
+      
+      tilesDiv.innerHTML = "";
+      const heroContainer = document.createElement('div');
+      heroContainer.className = 'hero-row';
+      const supportContainer = document.createElement('div');
+      supportContainer.className = 'support-row';
+      
+      const heroTile1 = document.createElement('div');
+      heroTile1.className = 'tile hero';
+      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
+      heroContainer.appendChild(heroTile1);
+      
+      const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
+      const heroTile2 = document.createElement('div');
+      heroTile2.className = 'tile hero';
+      heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
+      heroContainer.appendChild(heroTile2);
+      
+      const tileBoxes = document.createElement('div');
+      tileBoxes.className = 'tile';
+      tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
+      supportContainer.appendChild(tileBoxes);
+      
+      const tilePacks = document.createElement('div');
+      tilePacks.className = 'tile';
+      tilePacks.innerHTML = `<div class="tile-value">${currentSet.packs_per_box || "N/A"}</div><div class="tile-desc">Packs per Box</div>`;
+      supportContainer.appendChild(tilePacks);
+      
+      const tileCardsPack = document.createElement('div');
+      tileCardsPack.className = 'tile';
+      tileCardsPack.innerHTML = `<div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div><div class="tile-desc">Cards per Pack</div>`;
+      supportContainer.appendChild(tileCardsPack);
+      
+      const cardsPerBox = computeCardsPerBox(currentSet);
+      const tileCardsBox = document.createElement('div');
+      tileCardsBox.className = 'tile';
+      tileCardsBox.innerHTML = `<div class="tile-value">${cardsPerBox || "N/A"}</div><div class="tile-desc">Cards per Box</div>`;
+      supportContainer.appendChild(tileCardsBox);
+      
+      tilesDiv.appendChild(heroContainer);
+      tilesDiv.appendChild(supportContainer);
     }
-    
+
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -674,91 +866,111 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
-    
+
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
-    
+
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
       if (!setName || !setYear) { alert("Please select both a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" +
-                  encodeURIComponent(query) +
-                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
-    
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
       if (!setName || !setYear) { alert("Please select a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" +
-                  encodeURIComponent(query) +
-                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
-    
-    function renderTeamTable() {
-      const tbody = document.getElementById('team-table').querySelector('tbody');
-      tbody.innerHTML = "";
-      if (!currentSet) return;
-      const teams = currentSet.cards;
-      Object.keys(teams).forEach(team => {
-        let row = document.createElement("tr");
-        // Team cell
-        let teamCell = document.createElement("td");
-        teamCell.innerHTML = `<div class="team-cell">
-            ${config.images && config.images["team images"] && config.images["team images"][team] ? `<img src="${config.images["team images"][team]}" alt="${team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` : ""}
-            <a href="javascript:void(0)" onclick="openTeamSearch('${team}')" class="team-name">${team}</a>
-            <a href="javascript:void(0)" onclick="openTeamSearch('${team}')" class="table-ebay-btn"><img src="resources/ebay_button.png" alt="eBay"></a>
-          </div>`;
-        row.appendChild(teamCell);
-        // Create cells with IDs for in-place updating
-        let teamCardsCell = document.createElement("td");
-        teamCardsCell.id = "team-cards-" + team;
-        row.appendChild(teamCardsCell);
-        
-        let distCell = document.createElement("td");
-        distCell.id = "distribution-" + team;
-        row.appendChild(distCell);
-        
-        let avgCell = document.createElement("td");
-        avgCell.id = "avg-cards-" + team;
-        row.appendChild(avgCell);
-        
-        let baselineCell = document.createElement("td");
-        baselineCell.id = "baseline-" + team;
-        row.appendChild(baselineCell);
-        
-        // Boost cell – use fixed boost toggle elements
-        let boostCell = document.createElement("td");
-        boostCell.innerHTML = `<div class="boost-toggle-container" id="boost-toggle-container-${team}">
-                <span class="toggle-icon toggle-rocket">🚀</span>
-                <label class="toggle-switch boost-switch">
-                  <input type="checkbox" id="boost-discount-toggle-${team}" onchange="updateBoostToggleUI('${team}'); updateBreakSniffer();">
-                  <span class="slider"></span>
-                </label>
-                <span class="toggle-icon toggle-scissors">✂️</span>
-                <input type="number" id="boost-discount-input-${team}" class="boost-discount-input" min="0" value="0" onchange="updateBoostToggleUI('${team}'); updateBreakSniffer();" style="width:60px;">
+
+    function updateKeyRookies() {
+      const rookieContainer = document.getElementById('rookie-tiles');
+      rookieContainer.innerHTML = "";
+      const selectedYear = document.getElementById('setYearSelect').value;
+      let keyPlayers = config["Key Players"] || config.keyPlayers;
+      if (keyPlayers && Array.isArray(keyPlayers)) {
+        const keyRookies = keyPlayers.filter(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
+        });
+        if (keyRookies.length > 0) {
+          keyRookies.forEach(player => {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            const teamKey = player.Team || player.team;
+            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
+            tile.innerHTML = `<strong>${player.player}</strong>
+              <div class="rookie-notes">${player.notes || ""}</div>
+              <div class="rookie-image-container">
+                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
+                <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>`;
-        row.appendChild(boostCell);
-        
-        let finalPriceCell = document.createElement("td");
-        finalPriceCell.id = "final-price-" + team;
-        row.appendChild(finalPriceCell);
-        
-        tbody.appendChild(row);
-      });
+            const btnContainer = document.createElement('div');
+            btnContainer.style.display = "inline-flex";
+            btnContainer.style.gap = "15px";
+            btnContainer.style.marginTop = "8px";
+            const nhlLink = document.createElement("a");
+            nhlLink.href = player.profile_link;
+            nhlLink.target = "_blank";
+            nhlLink.className = "nhl-btn";
+            nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile">';
+            btnContainer.appendChild(nhlLink);
+            const ebayLink = document.createElement("a");
+            ebayLink.href = "javascript:void(0)";
+            ebayLink.className = "ebay-btn";
+            ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
+            ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay">';
+            btnContainer.appendChild(ebayLink);
+            tile.appendChild(btnContainer);
+            rookieContainer.appendChild(tile);
+          });
+        } else {
+          rookieContainer.textContent = "No key rookie players found for the selected year.";
+        }
+      } else {
+        rookieContainer.textContent = "No key players data available.";
+      }
     }
-    
+
+    function toggleBoostInput(team) {
+      const checkbox = document.getElementById("boost-checkbox-" + team);
+      const input = document.getElementById("boost-input-" + team);
+      if (checkbox.checked) {
+        input.style.display = "inline-block";
+      } else {
+        input.style.display = "none";
+        input.value = "";
+        debouncedUpdateBreakSniffer();
+      }
+    }
+
+    function toggleDiscountInput(team) {
+      const checkbox = document.getElementById("discount-checkbox-" + team);
+      const input = document.getElementById("discount-input-" + team);
+      if (checkbox.checked) {
+        input.style.display = "inline-block";
+      } else {
+        input.style.display = "none";
+        input.value = "";
+        debouncedUpdateBreakSniffer();
+      }
+    }
+
     function updateBreakSniffer() {
-      if (!currentSet) return;
+      if (!currentSet) {
+        document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
+        document.getElementById('team-table').querySelector('tbody').innerHTML = "";
+        return;
+      }
+      
       const costCase = parseFloat(document.getElementById('caseCost').value);
       const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
       const usePercent = document.getElementById('markupToggle').checked;
@@ -769,12 +981,14 @@
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
       const whatnotsCut = costWithMarkup * 0.08;
+      
       const teams = currentSet.cards;
       const teamNames = Object.keys(teams);
       const totalCards = teamNames.reduce((sum, team) => sum + teams[team], 0);
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
+      
       let totalCostOfBusiness = 0;
-      let teamData = {};
+      const teamData = [];
       
       teamNames.forEach(team => {
         const teamCards = teams[team];
@@ -787,40 +1001,166 @@
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
-        teamData[team] = { teamCards, distribution, avgCardsCase, baseline };
+        teamData.push({
+          team,
+          teamCards,
+          distribution,
+          avgCardsCase,
+          baseline
+        });
       });
       
-      // Update each team row in-place
-      Object.keys(teamData).forEach(team => {
-        var inputElem = document.getElementById("boost-discount-input-" + team);
-        var toggleElem = document.getElementById("boost-discount-toggle-" + team);
-        let boostVal = parseFloat(inputElem.value) || 0;
-        let final;
-        if (boostVal > 0) {
-          final = toggleElem.checked ? teamData[team].baseline * (1 + boostVal/100) : teamData[team].baseline * (1 - boostVal/100);
-        } else {
-          final = teamData[team].baseline;
+      let boostExtraPool = 0;
+      const boostedTeams = [];
+      const nonBoostedTeams = [];
+      teamData.forEach(data => {
+        const boostCheckbox = document.getElementById("boost-checkbox-" + data.team);
+        let boostVal = 0;
+        if (boostCheckbox && boostCheckbox.checked) {
+          const boostInput = document.getElementById("boost-input-" + data.team);
+          boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         }
-        
-        // Update cell values
-        document.getElementById("team-cards-" + team).innerText = currentSet.cards[team];
-        document.getElementById("distribution-" + team).innerText = (teamData[team].distribution * 100).toFixed(2) + "%";
-        document.getElementById("avg-cards-" + team).innerText = teamData[team].avgCardsCase !== null ? teamData[team].avgCardsCase.toFixed(2) : "N/A";
-        document.getElementById("baseline-" + team).innerText = "$" + teamData[team].baseline.toFixed(2);
-        document.getElementById("final-price-" + team).innerText = "$" + final.toFixed(2);
-        
-        // Update boost toggle slider background
-        updateBoostToggleUI(team);
+        data.boost = boostVal;
+        if (data.boost > 0) {
+          let boostAmount = data.baseline * (data.boost / 100);
+          data.adjusted = data.baseline + boostAmount;
+          boostExtraPool += boostAmount;
+          boostedTeams.push(data);
+        } else {
+          nonBoostedTeams.push(data);
+        }
+      });
+      if (nonBoostedTeams.length > 0) {
+        let boostShare = boostExtraPool / nonBoostedTeams.length;
+        nonBoostedTeams.forEach(data => {
+          data.adjusted = data.baseline - boostShare;
+        });
+      }
+      
+      let discountPool = 0;
+      const discountTeams = [];
+      const nonDiscountTeams = [];
+      teamData.forEach(data => {
+        const discountCheckbox = document.getElementById("discount-checkbox-" + data.team);
+        let discountVal = 0;
+        if (discountCheckbox && discountCheckbox.checked) {
+          const discountInput = document.getElementById("discount-input-" + data.team);
+          discountVal = discountInput ? parseFloat(discountInput.value) || 0 : 0;
+        }
+        data.discount = discountVal;
+        if (data.discount > 0) {
+          let discountAmount = data.adjusted * (data.discount / 100);
+          data.final = data.adjusted - discountAmount;
+          discountPool += discountAmount;
+          discountTeams.push(data);
+        } else {
+          nonDiscountTeams.push(data);
+        }
+      });
+      if (nonDiscountTeams.length > 0) {
+        let discountShare = discountPool / nonDiscountTeams.length;
+        nonDiscountTeams.forEach(data => {
+          data.final = data.adjusted + discountShare;
+        });
+      }
+      
+      teamData.forEach(data => {
+        data.teamPrice = data.final;
       });
       
-      // Optionally update pie chart etc. (omitted for brevity)
+      const tbody = document.getElementById('team-table').querySelector('tbody');
+      tbody.innerHTML = "";
+      teamData.forEach(data => {
+        const keyPlayers = config["Key Players"] || config.keyPlayers;
+        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
+          const teamKey = player.Team || player.team;
+          return player.type && player.type.toLowerCase() === 'rookie' &&
+                 player.setYear === document.getElementById('setYearSelect').value &&
+                 teamKey === data.team;
+        });
+        const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
+        const keyEmoji = hasKeyRookie ? ' 🔑' : '';
+        const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
+                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
+                          : "";
+        tbody.innerHTML += `
+          <tr${highlightStyle}>
+            <td>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" style="color:#333; text-decoration:none;">
+                ${teamImage}${data.team}${keyEmoji}
+              </a>
+              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="table-ebay-btn" style="margin-left:5px;">
+                <img src="resources/ebay_button.png" alt="eBay">
+              </a>
+            </td>
+            <td>${data.teamCards}</td>
+            <td>${(data.distribution * 100).toFixed(2)}%</td>
+            <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
+            <td>$${data.baseline.toFixed(2)}</td>
+            <td>
+              <label>
+                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" ${data.boost > 0 ? 'checked' : ''}>
+                🚀
+              </label>
+              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost > 0 ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
+            </td>
+            <td>
+              <label>
+                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" ${data.discount > 0 ? 'checked' : ''}>
+                ✂️
+              </label>
+              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount > 0 ? data.discount : ''}" oninput="debouncedUpdateBreakSniffer()">
+            </td>
+            <td>$${data.teamPrice.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+      
+      const markupAmount = costWithMarkup - costCase;
+      const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
+      const breakTiles = document.getElementById('break-tiles');
+      breakTiles.innerHTML = "";
+      const tileProfit = document.createElement('div');
+      tileProfit.className = 'tile';
+      tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
+      tileProfit.style.background = "#66bb6a";
+      tileProfit.style.color = "#fff";
+      tileProfit.style.borderRadius = "4px";
+      tileProfit.style.padding = "10px";
+      breakTiles.appendChild(tileProfit);
+      
+      const tileWhatnots = document.createElement('div');
+      tileWhatnots.className = 'tile';
+      tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
+      tileWhatnots.style.background = "#ffa726";
+      tileWhatnots.style.color = "#fff";
+      tileWhatnots.style.borderRadius = "4px";
+      tileWhatnots.style.padding = "10px";
+      breakTiles.appendChild(tileWhatnots);
+      
+      const tileBusiness = document.createElement('div');
+      tileBusiness.className = 'tile';
+      tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
+      tileBusiness.style.background = "#42a5f5";
+      tileBusiness.style.color = "#fff";
+      tileBusiness.style.borderRadius = "4px";
+      tileBusiness.style.padding = "10px";
+      breakTiles.appendChild(tileBusiness);
+      
+      const pieData = [
+        { label: "Profit", value: breakersProfit },
+        { label: "Whatnots", value: whatnotsCut },
+        { label: "Business", value: totalCostOfBusiness }
+      ];
+      updatePieChart(pieData);
     }
-    
+
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
       const values = data.map(d => d.value);
       const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
+      
       if (pieChartInstance) {
         pieChartInstance.data.labels = labels;
         pieChartInstance.data.datasets[0].data = values;
@@ -839,7 +1179,10 @@
           },
           options: {
             responsive: false,
-            animation: { animateRotate: true, animateScale: true },
+            animation: {
+              animateRotate: true,
+              animateScale: true,
+            },
             plugins: {
               legend: { display: false },
               tooltip: {
@@ -856,7 +1199,7 @@
         });
       }
     }
-    
+
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -865,7 +1208,6 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
     }
-    
     function openSteelCitySearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -874,7 +1216,6 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
     }
-    
     function openOotbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -883,7 +1224,6 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
     }
-    
     function openMidwestCardsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -892,7 +1232,6 @@
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
     }
-    
     function openTcdbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -901,7 +1240,6 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
     }
-    
     function openHockeyChecklistsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -910,7 +1248,15 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-    
+    function openTeamSearch(teamName) {
+      const setName = document.getElementById("setNameSelect").value;
+      const setYear = document.getElementById("setYearSelect").value;
+      if (!setName || !setYear) { alert("Please select a set and year."); return; }
+      const yearPrefix = setYear.split("-")[0];
+      const query = yearPrefix + " " + setName + " " + teamName;
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+    }
+
     loadConfig();
   </script>
 </body>
