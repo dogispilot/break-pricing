@@ -247,8 +247,8 @@
       margin-right: 30px;
     }
     .table-ebay-btn img {
-      width: auto;
-      height: 75%;
+      max-width: 25%;
+      height: auto;
     }
     table {
       width: 100%;
@@ -387,6 +387,29 @@
       transition: .4s;
       border-radius: 24px;
     }
+    /* Markup toggle: new class for classic iOS style */
+    .ios-toggle {
+      display: inline-block;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      margin: 0;
+      vertical-align: middle;
+    }
+    .ios-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .ios-toggle .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    /* Boost toggle container for table */
     .boost-toggle-container {
       display: inline-flex;
       align-items: center;
@@ -520,7 +543,8 @@
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
-            <label class="toggle-switch">
+            <!-- Markup toggle now uses its own class "ios-toggle" -->
+            <label class="ios-toggle">
               <input type="checkbox" id="markupToggle">
               <span class="slider"></span>
             </label>
@@ -876,14 +900,12 @@
       }
     }
     
-    // Updated boost toggle function
+    // Updated boost toggle function for table; markup toggle is separate (class ios-toggle)
     function updateBoostToggleUI(team) {
       var container = document.getElementById("boost-toggle-container-" + team);
       var inputElem = document.getElementById("boost-discount-input-" + team);
       var toggleElem = document.getElementById("boost-discount-toggle-" + team);
       var slider = toggleElem.parentElement.querySelector('.slider');
-      
-      // Update global boost value so it's preserved on re-render
       boostValues[team] = inputElem.value;
       var value = parseFloat(inputElem.value) || 0;
       
@@ -893,7 +915,6 @@
         slider.style.backgroundColor = "grey";
       } else {
         toggleElem.disabled = false;
-        // Let user change the toggle state
         slider.style.backgroundColor = toggleElem.checked ? "green" : "purple";
       }
     }
