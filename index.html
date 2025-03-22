@@ -127,14 +127,25 @@
     /* Break Controls Layout */
     .break-controls-container {
       position: relative;
+      flex: 1;
     }
-    .break-controls {
-      margin-bottom: 20px;
+    /* New break sniffer flex container */
+    .break-sniffer-flex {
+      display: flex;
+      gap: 20px;
+    }
+    .break-results-container {
+      flex: 2;
+    }
+    /* Arrange break results side by side */
+    #break-results {
       display: flex;
       gap: 20px;
       align-items: center;
-      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
     }
+    /* Input groups and wrappers remain unchanged */
     .input-group {
       display: flex;
       flex-direction: column;
@@ -146,25 +157,22 @@
       font-size: 0.8em;
       text-align: left;
     }
-    /* For groups that are in a price-setting context */
     .price-setting-group {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
     .price-setting-group label {
       margin-bottom: 3px;
       font-weight: bold;
       font-size: 0.8em;
     }
-    /* Input-inline container to align input fields horizontally */
     .input-inline {
       display: flex;
       align-items: center;
       gap: 15px;
     }
-    /* Input-wrapper for fields with prefix/suffix */
     .input-wrapper {
       display: inline-flex;
       align-items: center;
@@ -193,7 +201,6 @@
       color: #333;
       white-space: nowrap;
     }
-    /* Modern input styling for number inputs */
     input[type="number"] {
       height: 36px !important;
       line-height: 36px !important;
@@ -212,20 +219,17 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Existing boost input override */
     .boost-input {
       width: 100%;
       border: none;
       text-align: center;
     }
-    /* Button group inline for Price Settings/Lookup buttons */
     .button-group-inline {
       display: inline-flex;
       gap: 10px;
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* New button styles for eBay and NHL */
     .ebay-btn {
       background: none !important;
       padding: 0 !important;
@@ -251,13 +255,12 @@
       height: auto;
       box-shadow: none !important;
     }
-    /* New style for the eBay button used in the team table */
     .table-ebay-btn {
       background: none !important;
       padding: 0 !important;
       border: none !important;
       display: inline-block;
-      width: auto; 
+      width: auto;
       vertical-align: middle;
     }
     .table-ebay-btn img {
@@ -274,7 +277,7 @@
       position: relative;
       z-index: 1;
     }
-    /* Update the player image in rookie tiles so it overlaps the team image */
+    /* Update the player image in rookie tiles to overlap the team image */
     .rookie-img {
       max-width: 50%;
       height: auto;
@@ -297,16 +300,13 @@
       text-align: center;
       vertical-align: middle;
     }
-    /* Ensure table headers have pointer cursor and disable text selection */
     th {
       cursor: pointer;
       user-select: none;
     }
-    /* Left-align the Team column */
     #team-table td:first-child {
       text-align: left;
     }
-    /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
       font-size: 0.9rem;
@@ -328,12 +328,10 @@
       height: 24px;
       vertical-align: middle;
     }
-    /* Override for Out of the Box button image to preserve aspect ratio */
     .glow-outofthebox img {
       max-height: 24px;
       width: auto;
     }
-    /* Glow effects on hover */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
     .glow-outofthebox:hover,
@@ -343,7 +341,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Updated Price Settings and Price Lookup buttons styling for an empty pill look */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: transparent;
@@ -356,7 +353,6 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* New empty pill button style for the Reset button in Boost header */
     .empty-pill-button {
       background-color: transparent;
       color: #333;
@@ -369,7 +365,6 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Price Settings and Price Lookup menus – now positioned absolutely below the break controls */
     #price-settings, #price-lookup-menu {
       position: absolute;
       top: 100%;
@@ -387,32 +382,28 @@
       font-family: 'BreakPricingFont', sans-serif;
       z-index: 10;
     }
-    /* Button Container inside Price Lookup Menu remains unchanged */
     .button-container {
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
     }
-    /* Set Details button container */
     #set-details .button-container {
       justify-content: flex-start;
       margin-bottom: 20px;
     }
-    /* Break Sniffer Right Column */
     .break-results-container {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
     }
-    /* Break Sniffer results layout */
     #break-results {
       display: flex;
-      flex-direction: row;
-      align-items: center;
       gap: 20px;
-      margin-bottom: 20px;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
     #break-tiles .tile {
       margin: 5px;
@@ -420,11 +411,9 @@
       border-radius: 4px;
       text-align: center;
     }
-    /* Pie Chart canvas */
     #pieChart {
       display: block;
     }
-    /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -463,7 +452,6 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-    /* Key Rookies section */
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -483,7 +471,6 @@
       position: relative;
       z-index: 3;
     }
-    /* The team images in the table retain their smaller size */
     .team-img {
       width: 40px;
       height: 40px;
@@ -562,10 +549,9 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls wrapped in a container for positioning menus -->
+      <!-- Left Column: Controls -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
-          <!-- Cost of a case group: wrapped in an input-inline to match markup group -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <div class="input-inline">
@@ -575,7 +561,6 @@
               </div>
             </div>
           </div>
-          <!-- Markup group -->
           <div class="input-group price-setting-group">
             <label for="markupValue">Markup</label>
             <div class="input-inline">
@@ -591,7 +576,6 @@
             </div>
           </div>
         </div>
-        <!-- Price Settings Menu (positioned absolutely and centered) -->
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -615,7 +599,6 @@
             </div>
           </div>
         </div>
-        <!-- Price Lookup Menu -->
         <div id="price-lookup-menu">
           <div class="button-container">
             <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
@@ -637,7 +620,7 @@
           </div>
         </div>
       </div>
-      <!-- Right Column: Break Sniffer Results -->
+      <!-- Right Column: Break Results -->
       <div class="break-results-container">
         <div id="break-results">
           <div class="tiles" id="break-tiles">
@@ -648,7 +631,6 @@
         </div>
       </div>
     </div>
-    <!-- Table for Break Sniffer Results -->
     <table id="team-table">
       <thead>
         <tr>
@@ -670,17 +652,15 @@
     </table>
   </section>
 
-  <!-- Hidden span used to measure text width of the selected option -->
+  <!-- Hidden span used to measure select width -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
 
   <script>
     // Global sorting variables
     let currentSortColumn = null;
-    let currentSortDirection = 1; // 1 for ascending, -1 for descending
+    let currentSortDirection = 1;
 
-    // Function to sort table based on column key
     function sortTable(key) {
-      // Toggle sort direction if same column is clicked
       if (currentSortColumn === key) {
         currentSortDirection *= -1;
       } else {
@@ -690,47 +670,31 @@
       updateBreakSniffer();
     }
 
-    // Updated function to adjust the select width accurately
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
-      
-      // Copy computed styles from the select element to the hidden span
       var computedStyles = window.getComputedStyle(selectElement);
       hiddenSpan.style.fontSize = computedStyles.fontSize;
       hiddenSpan.style.fontWeight = computedStyles.fontWeight;
       hiddenSpan.style.fontFamily = computedStyles.fontFamily;
       hiddenSpan.style.textDecoration = computedStyles.textDecoration;
-      
       hiddenSpan.textContent = selectedText;
-      
-      // Measure the text width accurately
       var textWidth = hiddenSpan.getBoundingClientRect().width;
-      // Set the width of the select element to the measured text width
       selectElement.style.width = textWidth + "px";
     }
 
-    // Update widths for both select elements
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
-
-    // Run updateAllSelectWidths when the window loads
     window.addEventListener('load', updateAllSelectWidths);
 
-    // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
       const suffix = document.querySelector('.markup-suffix');
-      if (isPercent) {
-        prefix.style.display = 'none';
-        suffix.style.display = 'inline';
-      } else {
-        prefix.style.display = 'inline';
-        suffix.style.display = 'none';
-      }
+      prefix.style.display = isPercent ? 'none' : 'inline';
+      suffix.style.display = isPercent ? 'inline' : 'none';
     }
     
     let config = null;
@@ -740,9 +704,7 @@
 
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
-      breakSnifferTimeout = setTimeout(() => {
-        updateBreakSniffer();
-      }, 300);
+      breakSnifferTimeout = setTimeout(updateBreakSniffer, 300);
     }
 
     async function loadConfig() {
@@ -751,12 +713,10 @@
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
-        // Update select widths after options are populated
         updateAllSelectWidths();
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', debouncedUpdateBreakSniffer);
         });
-        // Update width on change events
         document.getElementById('setNameSelect').addEventListener('change', function() {
           updateSelectWidth(this);
         });
@@ -794,7 +754,6 @@
       });
     }
 
-    // Updated function to update the set name dropdown and adjust width accordingly
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -815,7 +774,6 @@
         setNameSelect.appendChild(opt);
       });
       if (!found) { setNameSelect.value = ""; }
-      // Update the width based on the current selected option
       updateSelectWidth(setNameSelect);
     }
 
@@ -840,7 +798,6 @@
       updateBreakSniffer();
       if (!currentSet) {
         document.getElementById('toggleNotes').style.display = 'none';
-        // Remove empty state text for details section.
         document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
@@ -1040,7 +997,6 @@
         });
       });
       
-      // For each team, apply boost (or discount if negative)
       teamData.forEach(data => {
         const boostInput = document.getElementById("boost-input-" + data.team);
         let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
@@ -1054,15 +1010,12 @@
         }
       });
       
-      // If a sort column is set, sort the teamData array.
       if (currentSortColumn) {
         teamData.sort((a, b) => {
           let valA = a[currentSortColumn];
           let valB = b[currentSortColumn];
-          // Handle null values
           if (valA === null) valA = -Infinity;
           if (valB === null) valB = -Infinity;
-          // Compare strings or numbers appropriately
           if (typeof valA === "string") {
             return valA.localeCompare(valB) * currentSortDirection;
           } else {
@@ -1086,15 +1039,16 @@
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
                           ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="team-img" style="margin-right:5px;vertical-align:middle;">`
                           : "";
-        // Determine the style and emoji based on boost value
         let priceStyle = "";
         let emoji = "";
         if(data.boost > 0) {
-          priceStyle = 'background-color:#66bb6a; color:#fff;';
+          priceStyle = 'background-color:#2E7D32; color:#fff;';
           emoji = ' 🚀';
         } else if(data.boost < 0) {
-          priceStyle = 'background-color:#ff6666; color:#fff;';
+          priceStyle = 'background-color:#EF6C00; color:#fff;';
           emoji = ' ✂️';
+        } else {
+          priceStyle = '';
         }
         tbody.innerHTML += `
           <tr${highlightStyle}>
@@ -1128,7 +1082,7 @@
       const tileProfit = document.createElement('div');
       tileProfit.className = 'tile';
       tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
-      tileProfit.style.background = "#66bb6a";
+      tileProfit.style.background = "#2E7D32";
       tileProfit.style.color = "#fff";
       tileProfit.style.borderRadius = "4px";
       tileProfit.style.padding = "10px";
@@ -1137,7 +1091,7 @@
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile';
       tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
-      tileWhatnots.style.background = "#ffa726";
+      tileWhatnots.style.background = "#EF6C00";
       tileWhatnots.style.color = "#fff";
       tileWhatnots.style.borderRadius = "4px";
       tileWhatnots.style.padding = "10px";
@@ -1146,7 +1100,7 @@
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile';
       tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
-      tileBusiness.style.background = "#42a5f5";
+      tileBusiness.style.background = "#1565C0";
       tileBusiness.style.color = "#fff";
       tileBusiness.style.borderRadius = "4px";
       tileBusiness.style.padding = "10px";
@@ -1163,16 +1117,13 @@
     // Updated 3D Donut Chart with exploding effect and transparent divider lines.
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
-      // Accessible, high-contrast colors
       const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
       
       if (pieChartInstance) {
         pieChartInstance.data.labels = data.map(d => d.label);
         pieChartInstance.data.datasets[0].data = data.map(d => d.value);
         pieChartInstance.data.datasets[0].backgroundColor = backgroundColors;
-        // Apply the exploding effect by offsetting slices
         pieChartInstance.data.datasets[0].offset = 10;
-        // Make divider lines transparent
         pieChartInstance.data.datasets[0].borderColor = "transparent";
         pieChartInstance.update();
       } else {
@@ -1183,13 +1134,13 @@
             datasets: [{
               data: data.map(d => d.value),
               backgroundColor: backgroundColors,
-              borderColor: "transparent",  // transparent dividers
+              borderColor: "transparent",
               borderWidth: 2,
-              offset: 10  // exploding effect
+              offset: 10
             }]
           },
           options: {
-            cutout: '50%', // creates the donut hole
+            cutout: '50%',
             responsive: false,
             animation: {
               animateRotate: true,
@@ -1275,8 +1226,6 @@
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
     
-    // Function to reset all boost inputs to 0 and update the table.
-    // The event parameter stops propagation so the column sort isn't triggered.
     function resetBoosts(event) {
       if (event) event.stopPropagation();
       document.querySelectorAll('.boost-input').forEach(function(input) {
