@@ -1072,7 +1072,7 @@
 
     // Recalculate and render the table rows
     function updateBreakSniffer() {
-      console.log("updateBreakSniffer called!"); // Debug message
+      console.log("updateBreakSniffer called!");
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = 
           "Please select a set and year to get started.";
@@ -1129,7 +1129,6 @@
 
       // Check the toggle & input for each team
       teamData.forEach(data => {
-        // Use sanitized ID
         const safeId = sanitizeForId(data.team);
         const toggleElem = document.getElementById("boost-toggle-" + safeId);
         const inputElem = document.getElementById("boost-input-" + safeId);
@@ -1137,7 +1136,6 @@
         data.boost = 0;
         data.discount = 0;
 
-        // If we have a value, check if toggle is on => discount, else => boost
         if (value > 0) {
           if (toggleElem && toggleElem.checked) {
             data.discount = value;
@@ -1219,14 +1217,13 @@
         const safeId = sanitizeForId(data.team);
         const currentValueInput = document.getElementById("boost-input-" + safeId);
         let currentValue = currentValueInput ? parseFloat(currentValueInput.value) || 0 : 0;
-
-        // We'll assign .off (grey), .boost (green), or .discount (red) classes
+        const toggleElem = document.getElementById("boost-toggle-" + safeId);
         let toggleClass = "off";
         if (currentValue > 0) {
-          toggleClass = (data.boost > 0) ? "boost" : "discount";
+          // Directly check the toggle's checked state: checked = discount (red), unchecked = boost (green)
+          toggleClass = toggleElem && toggleElem.checked ? "discount" : "boost";
         }
 
-        // If team is associated with a key rookie, highlight row + add key emoji
         const isKeyRookieTeam = keyRookieTeams.has(data.team);
         const rowClass = isKeyRookieTeam ? 'key-rookie-row' : '';
         const teamDisplayName = isKeyRookieTeam
