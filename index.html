@@ -247,8 +247,8 @@
       margin-right: 30px;
     }
     .table-ebay-btn img {
-      max-width: 25%;
-      height: auto;
+      width: auto;
+      max-height: 30px;
     }
     table {
       width: 100%;
@@ -387,7 +387,7 @@
       transition: .4s;
       border-radius: 24px;
     }
-    /* Markup toggle: new class for classic iOS style */
+    /* Markup toggle in price settings gets its own class */
     .ios-toggle {
       display: inline-block;
       position: relative;
@@ -543,7 +543,7 @@
         <div id="price-settings">
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
-            <!-- Markup toggle now uses its own class "ios-toggle" -->
+            <!-- Markup toggle now uses its own class -->
             <label class="ios-toggle">
               <input type="checkbox" id="markupToggle">
               <span class="slider"></span>
@@ -900,12 +900,14 @@
       }
     }
     
-    // Updated boost toggle function for table; markup toggle is separate (class ios-toggle)
+    // Updated boost toggle function for table
     function updateBoostToggleUI(team) {
       var container = document.getElementById("boost-toggle-container-" + team);
       var inputElem = document.getElementById("boost-discount-input-" + team);
       var toggleElem = document.getElementById("boost-discount-toggle-" + team);
       var slider = toggleElem.parentElement.querySelector('.slider');
+      
+      // Persist the boost value
       boostValues[team] = inputElem.value;
       var value = parseFloat(inputElem.value) || 0;
       
@@ -915,6 +917,10 @@
         slider.style.backgroundColor = "grey";
       } else {
         toggleElem.disabled = false;
+        // Default to boost (checked) if not manually changed yet
+        if (!toggleElem.hasAttribute("data-changed")) {
+          toggleElem.checked = true;
+        }
         slider.style.backgroundColor = toggleElem.checked ? "green" : "purple";
       }
     }
@@ -1007,11 +1013,11 @@
               <div class="boost-toggle-container" id="boost-toggle-container-${data.team}">
                 <span class="toggle-icon toggle-rocket">🚀</span>
                 <label class="toggle-switch boost-switch">
-                  <input type="checkbox" id="boost-discount-toggle-${data.team}" onchange="updateBoostToggleUI('${data.team}'); updateBreakSniffer();">
+                  <input type="checkbox" id="boost-discount-toggle-${data.team}" onchange="this.setAttribute('data-changed','true'); updateBoostToggleUI('${data.team}'); updateBreakSniffer();">
                   <span class="slider"></span>
                 </label>
                 <span class="toggle-icon toggle-scissors">✂️</span>
-                <input type="number" id="boost-discount-input-${data.team}" class="boost-discount-input" min="0" value="${boostValues[data.team] !== undefined ? boostValues[data.team] : 0}" oninput="updateBoostToggleUI('${data.team}'); updateBreakSniffer();" style="width:60px;">
+                <input type="number" id="boost-discount-input-${data.team}" class="boost-discount-input" min="0" value="${boostValues[data.team] !== undefined ? boostValues[data.team] : 0}" oninput="updateBoostToggleUI('${data.team}'); debouncedUpdateBreakSniffer();" style="width:60px;">
               </div>
             </td>
             <td>$${data.final.toFixed(2)}</td>
