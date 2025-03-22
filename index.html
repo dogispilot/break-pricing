@@ -467,6 +467,49 @@
       align-items: center;
       gap: 10px;
     }
+
+    /* Key Rookies section */
+    #rookie-tiles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #rookie-tiles .tile {
+      flex: 0 0 calc(33% - 10px);
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    .rookie-img {
+      max-width: 50%;
+      height: auto;
+      display: block;
+      margin: 0;
+      position: relative;
+      z-index: 2;
+    }
+    .team-img {
+      max-width: 50%;
+      height: auto;
+      object-fit: contain;
+      margin-right: -60px;
+      vertical-align: middle;
+      opacity: 0.7;
+      position: relative;
+      z-index: 1;
+    }
+    .key-rookie-logo { }
+    .rookie-notes {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    .rookie-image-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0px;
+    }
   </style>
 </head>
 <body>
@@ -1157,10 +1200,9 @@
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
 
         // Decide the toggle color
-        // Grey if 0, green if boost > 0, red if discount > 0
         let toggleColor = 'grey';
         if (currentValue > 0) {
-          toggleColor = data.boost > 0 ? 'green' : 'red';
+          toggleColor = data.boost > 0 ? 'green' : 'blue';
         }
 
         tbody.innerHTML += `
@@ -1275,7 +1317,7 @@
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
       const values = data.map(d => d.value);
-      const backgroundColors = ["#66bb6a", "#ffa726", "#ff5252"]; /* or red for discount if you prefer  #ff5252 */
+      const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
 
       if (pieChartInstance) {
         pieChartInstance.data.labels = labels;
@@ -1384,6 +1426,7 @@
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
 
+    // Start
     loadConfig();
   </script>
 </body>
