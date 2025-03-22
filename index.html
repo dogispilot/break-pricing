@@ -416,8 +416,7 @@
 
     /*
       Combined Boost/Discount iOS Toggle styling.
-
-      We do NOT set background-color here. Instead, we have .off/.boost/.discount below.
+      We do NOT set background-color here. Instead, we rely on .off/.boost/.discount.
     */
     .ios-toggle {
       display: inline-flex;
@@ -429,9 +428,6 @@
       cursor: pointer;
       transition: background-color 0.4s;
     }
-    /* No background-color on the base .ios-toggle! */
-
-    /* Move the slider if checked */
     .ios-toggle input {
       position: absolute;
       opacity: 0;
@@ -465,7 +461,7 @@
       margin-left: auto;
     }
 
-    /* Add our 3 new states: off, boost, discount */
+    /* State classes to color the toggle */
     .ios-toggle.off {
       background-color: grey;
     }
@@ -484,6 +480,9 @@
     }
 
     /* Key Rookies section */
+    #key-rookies {
+      margin-bottom: 20px;
+    }
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -696,6 +695,12 @@
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
 
   <script>
+    // A helper function to sanitize team names for valid IDs
+    // by replacing all non-alphanumeric characters with hyphens.
+    function sanitizeForId(name) {
+      return name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
+
     // Sizing for the select elements
     function updateSelectWidth(selectElement) {
       const selectedText = selectElement.options[selectElement.selectedIndex].text;
@@ -747,8 +752,6 @@
       }, 300);
     }
 
-    // The toggle background color is determined by separate CSS classes
-    // We'll simply recalc after any user change (input or toggle).
     function updateToggleBackground(team) {
       debouncedUpdateBreakSniffer();
     }
@@ -1069,6 +1072,7 @@
 
     // Recalculate and render the table rows
     function updateBreakSniffer() {
+      console.log("updateBreakSniffer called!"); // Debug message
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = 
           "Please select a set and year to get started.";
@@ -1125,8 +1129,10 @@
 
       // Check the toggle & input for each team
       teamData.forEach(data => {
-        const toggleElem = document.getElementById("boost-toggle-" + data.team);
-        const inputElem = document.getElementById("boost-input-" + data.team);
+        // Use sanitized ID
+        const safeId = sanitizeForId(data.team);
+        const toggleElem = document.getElementById("boost-toggle-" + safeId);
+        const inputElem = document.getElementById("boost-input-" + safeId);
         let value = inputElem ? parseFloat(inputElem.value) || 0 : 0;
         data.boost = 0;
         data.discount = 0;
@@ -1210,11 +1216,11 @@
       tbody.innerHTML = "";
 
       teamData.forEach(data => {
-        const currentInput = document.getElementById("boost-input-" + data.team);
-        let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
+        const safeId = sanitizeForId(data.team);
+        const currentValueInput = document.getElementById("boost-input-" + safeId);
+        let currentValue = currentValueInput ? parseFloat(currentValueInput.value) || 0 : 0;
 
         // We'll assign .off (grey), .boost (green), or .discount (red) classes
-        // after we know if it's a boost or discount
         let toggleClass = "off";
         if (currentValue > 0) {
           toggleClass = (data.boost > 0) ? "boost" : "discount";
@@ -1223,24 +1229,23 @@
         // If team is associated with a key rookie, highlight row + add key emoji
         const isKeyRookieTeam = keyRookieTeams.has(data.team);
         const rowClass = isKeyRookieTeam ? 'key-rookie-row' : '';
-        const teamDisplayName = isKeyRookieTeam 
-            ? `${data.team} 🔑` 
+        const teamDisplayName = isKeyRookieTeam
+            ? `${data.team} 🔑`
             : data.team;
 
-        // Build a table row
         tbody.innerHTML += `
           <tr class="${rowClass}">
             <td>
-              <a href="javascript:void(0)" 
+              <a href="javascript:void(0)"
                  onclick="openTeamSearch('${data.team}')"
                  style="color:#333; text-decoration:none;">
                 ${
-                  config.images 
-                  && config.images["team images"] 
-                  && config.images["team images"][data.team] 
-                    ? `<img src="${config.images["team images"][data.team]}" 
+                  config.images
+                  && config.images["team images"]
+                  && config.images["team images"][data.team]
+                    ? `<img src="${config.images["team images"][data.team]}"
                               alt="${data.team}"
-                              style="width:40px;height:40px;
+                              style="width:30px;height:30px;
                                      object-fit:contain;
                                      margin-right:5px;
                                      vertical-align:middle;">`
@@ -1248,9 +1253,9 @@
                 }
                 ${teamDisplayName}
               </a>
-              <a href="javascript:void(0)" 
-                 onclick="openTeamSearch('${data.team}')" 
-                 class="table-ebay-btn" 
+              <a href="javascript:void(0)"
+                 onclick="openTeamSearch('${data.team}')"
+                 class="table-ebay-btn"
                  style="margin-left:5px;">
                 <img src="resources/ebay_button.png" alt="eBay">
               </a>
@@ -1262,10 +1267,10 @@
             <td>
               <div class="boost-toggle-container">
                 <label class="ios-toggle ${toggleClass}"
-                       id="ios-toggle-${data.team}">
+                       id="ios-toggle-${safeId}">
                   <span class="toggle-label toggle-rocket">🚀</span>
                   <input type="checkbox"
-                         id="boost-toggle-${data.team}"
+                         id="boost-toggle-${safeId}"
                          onchange="updateToggleBackground('${data.team}')"
                          ${data.discount > 0 ? 'checked' : ''} />
                   <span class="toggle-slider"></span>
@@ -1273,7 +1278,7 @@
                 </label>
                 <input type="number"
                        class="boost-input"
-                       id="boost-input-${data.team}"
+                       id="boost-input-${safeId}"
                        step="0.1"
                        min="0"
                        value="${
