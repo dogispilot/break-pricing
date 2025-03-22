@@ -107,14 +107,14 @@
       display: flex;
       gap: 20px;
     }
-    /* Left column: Controls and Donut Chart */
+    /* Left column: Controls, Price Dialogs, Breaker Tiles */
     .controls-column {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-    /* Right column: Bubble Chart (breaker tiles hidden) */
+    /* Right column: Bubble Chart */
     .results-column {
       flex: 1;
       display: flex;
@@ -274,15 +274,27 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Hide breaker tiles for now */
+    /* Breaker Tiles: restored and smaller */
     #break-tiles {
-      display: none;
+      display: block;
     }
-    /* Donut Chart Container */
+    .break-tile {
+      max-width: 100px;
+      margin-bottom: 10px;
+      text-align: center;
+      padding: 5px;
+    }
+    .break-tile .tile-value {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+    .break-tile .tile-label {
+      font-size: 0.8em;
+    }
+    /* Donut Chart removed */
     .donut-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: none;
     }
     /* Bubble Chart Styling */
     #bubbleChart {
@@ -370,7 +382,7 @@
       justify-content: center;
       gap: 0px;
     }
-    /* Table Styling */
+    /* Table Styling – DO NOT modify team image styling in table */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -490,7 +502,7 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls & Donut Chart -->
+      <!-- Left Column: Controls, Price Dialogs, and Breaker Tiles -->
       <div class="controls-column">
         <div class="break-controls-container">
           <div class="break-controls-row">
@@ -563,15 +575,13 @@
               </button>
             </div>
           </div>
-          <!-- Donut Chart -->
-          <div class="donut-container">
-            <canvas id="pieChart" width="250" height="250"></canvas>
-          </div>
+          <!-- Breaker Tiles (smaller) placed below price lookup -->
+          <div id="break-tiles"></div>
         </div>
       </div>
-      <!-- Right Column: Bubble Chart (breaker tiles hidden) -->
+      <!-- Right Column: Bubble Chart -->
       <div class="results-column">
-        <canvas id="bubbleChart" width="500" height="500"></canvas>
+        <canvas id="bubbleChart" width="600" height="600"></canvas>
       </div>
     </div>
     <table id="team-table">
@@ -634,7 +644,7 @@
     }
     let config = null;
     let currentSet = null;
-    let pieChartInstance = null;
+    let pieChartInstance = null; // not used now
     let breakSnifferTimeout;
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
@@ -728,7 +738,6 @@
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
-      // Update dynamic labels
       if (currentSet) {
         document.getElementById('caseCostLabel').textContent =
           `Cost of a ${currentSet.year} ${currentSet.name} case`;
@@ -930,7 +939,7 @@
         const boostInput = document.getElementById("boost-input-" + data.team);
         let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         data.boost = boostVal;
-        // Use a fixed base radius change (smaller variation)
+        // Use a fixed small variation for bubble size
         if (data.boost > 0) {
           data.teamPrice = data.baseline + (data.baseline * (data.boost / 100));
         } else if (data.boost < 0) {
@@ -1002,33 +1011,35 @@
       });
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
+      // Prepare pie data (if needed)
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
         { label: "Business", value: totalCostOfBusiness }
       ];
-      updatePieChart(pieData);
+      updatePieChart(pieData); // Note: donut chart is hidden
       updateBubbleChart(teamData);
     }
-    // Updated bubble chart: larger canvas; each bubble always displays team image and team name.
+    // Updated bubble chart function
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // Use a fixed base radius with only a slight variation for boost
+      // Use a fixed base radius with very little variation
       const baseRadius = 30;
       const bubbleData = teamData.map(data => {
-        const r = baseRadius + (data.boost * 0.5); // small variation
+        const r = baseRadius; // fixed size for consistency
         return { 
           x: data.distribution * 100, 
           y: data.teamPrice, 
-          r: Math.max(20, r), 
+          r: r, 
           team: data.team,
           logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
         };
       });
-      // Determine bubble color based on boost: neutral white, boost green, discount red.
-      const bubbleColors = bubbleData.map(data => {
-        if (teamData.find(t => t.team === data.team).boost > 0) return "#66bb6a";
-        else if (teamData.find(t => t.team === data.team).boost < 0) return "#ff6666";
+      // Determine bubble color based on boost:
+      // boost = 0: white; boost > 0: green; boost < 0: red.
+      const bubbleColors = teamData.map(data => {
+        if (data.boost > 0) return "#66bb6a";
+        else if (data.boost < 0) return "#ff6666";
         else return "#ffffff";
       });
       if (bubbleChartInstance) {
@@ -1068,115 +1079,44 @@
               const ctx = chart.ctx;
               chart.getDatasetMeta(0).data.forEach((element, index) => {
                 const dataPoint = bubbleData[index];
-                // Draw team logo
+                // Draw team logo if available
                 if (dataPoint.logo) {
                   const img = new Image();
                   img.src = dataPoint.logo;
-                  const x = element.x;
-                  const y = element.y;
-                  // Set image size to 50% of bubble radius
-                  const size = element.outerRadius * 0.5;
-                  ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
+                  // Wait for image to load, then draw synchronously
+                  img.onload = function() {
+                    const x = element.x;
+                    const y = element.y;
+                    const size = element.outerRadius * 0.8;
+                    ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
+                    // Draw team name below image
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'top';
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 14px sans-serif';
+                    ctx.fillText(dataPoint.team, x, y + element.outerRadius * 0.1);
+                    ctx.restore();
+                  };
+                } else {
+                  // If no logo, just draw team name
+                  ctx.save();
+                  ctx.textAlign = 'center';
+                  ctx.textBaseline = 'middle';
+                  ctx.fillStyle = '#000';
+                  ctx.font = 'bold 14px sans-serif';
+                  ctx.fillText(dataPoint.team, element.x, element.y);
+                  ctx.restore();
                 }
-                // Draw team name below image
-                ctx.save();
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'top';
-                ctx.fillStyle = '#000';
-                ctx.font = 'bold 12px sans-serif';
-                ctx.fillText(dataPoint.team, element.x, element.y + element.outerRadius * 0.1);
-                ctx.restore();
               });
             }
           }]
         });
       }
     }
-    // Updated donut chart with extra info drawn in each slice.
+    // Dummy updatePieChart function (donut chart is hidden)
     function updatePieChart(data) {
-      const ctx = document.getElementById('pieChart').getContext('2d');
-      const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
-      const doughnutInfoPlugin = {
-        id: 'doughnutInfoPlugin',
-        afterDraw(chart, args, options) {
-          const ctx = chart.ctx;
-          chart.getDatasetMeta(0).data.forEach((arc, index) => {
-            const dataset = chart.data.datasets[0];
-            const label = chart.data.labels[index];
-            const value = dataset.data[index];
-            const { x, y, outerRadius, innerRadius, startAngle, endAngle } = arc;
-            const midAngle = (startAngle + endAngle) / 2;
-            const textRadius = innerRadius + (outerRadius - innerRadius) / 2;
-            const textX = x + textRadius * Math.cos(midAngle);
-            const textY = y + textRadius * Math.sin(midAngle);
-            ctx.save();
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px sans-serif';
-            ctx.fillText(`$${value.toFixed(2)}`, textX, textY - 8);
-            ctx.font = '12px sans-serif';
-            ctx.fillText(label, textX, textY + 10);
-            ctx.restore();
-          });
-        }
-      };
-      if (pieChartInstance) {
-        pieChartInstance.data.labels = data.map(d => d.label);
-        pieChartInstance.data.datasets[0].data = data.map(d => d.value);
-        pieChartInstance.data.datasets[0].backgroundColor = backgroundColors;
-        pieChartInstance.data.datasets[0].offset = 10;
-        pieChartInstance.data.datasets[0].borderColor = "transparent";
-        pieChartInstance.update();
-      } else {
-        pieChartInstance = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: data.map(d => d.label),
-            datasets: [{
-              data: data.map(d => d.value),
-              backgroundColor: backgroundColors,
-              borderColor: "transparent",
-              borderWidth: 2,
-              offset: 10
-            }]
-          },
-          options: {
-            cutout: '50%',
-            responsive: false,
-            animation: {
-              animateRotate: true,
-              animateScale: true,
-            },
-            plugins: {
-              legend: { display: false },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    let label = context.label || '';
-                    let value = context.parsed;
-                    return label + ': $' + value.toFixed(2);
-                  }
-                }
-              }
-            }
-          },
-          plugins: [{
-            id: 'shadowPlugin',
-            beforeDraw: (chart) => {
-              const ctx = chart.ctx;
-              ctx.save();
-              ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-              ctx.shadowBlur = 10;
-              ctx.shadowOffsetX = 3;
-              ctx.shadowOffsetY = 3;
-            },
-            afterDraw: (chart) => {
-              chart.ctx.restore();
-            }
-          }, doughnutInfoPlugin]
-        });
-      }
+      // This function remains but the canvas is hidden via CSS.
     }
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
