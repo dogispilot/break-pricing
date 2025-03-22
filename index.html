@@ -1108,7 +1108,73 @@
       ];
       updatePieChart(pieData);
     }
-    // Updated donut chart with extra info drawn in each segment.
+    // Updated bubble chart function with improved styling.
+    function updateBubbleChart(teamData) {
+      const ctx = document.getElementById('bubbleChart').getContext('2d');
+      // Create bubble data points. Use a reduced boost scaling factor.
+      const bubbleData = teamData.map(data => {
+        const r = Math.max(5, Math.abs(data.boost) * 1 + 5); // reduced scale factor
+        return { x: data.distribution * 100, y: data.teamPrice, r: r, boost: data.boost, logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || "" };
+      });
+      // Set bubble colors: white for neutral, green for boost, red for discount.
+      const bubbleColors = bubbleData.map(data => {
+        if (data.boost === 0) return "#ffffff";
+        else if (data.boost > 0) return "#66bb6a";
+        else return "#ff6666";
+      });
+      if (bubbleChartInstance) {
+        bubbleChartInstance.data.datasets[0].data = bubbleData;
+        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleColors;
+        bubbleChartInstance.update();
+      } else {
+        bubbleChartInstance = new Chart(ctx, {
+          type: 'bubble',
+          data: {
+            datasets: [{
+              label: 'Team Data',
+              data: bubbleData,
+              pointBackgroundColor: bubbleColors,
+              pointBorderColor: "#333",
+              pointBorderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              x: {
+                title: { display: true, text: 'Distribution (%)' },
+                ticks: { beginAtZero: true }
+              },
+              y: {
+                title: { display: true, text: 'Team Price ($)' },
+                ticks: { beginAtZero: true }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          },
+          plugins: [{
+            id: 'bubbleLogoPlugin',
+            afterDatasetsDraw: (chart) => {
+              const ctx = chart.ctx;
+              chart.getDatasetMeta(0).data.forEach((element, index) => {
+                const dataPoint = bubbleData[index];
+                if (dataPoint.logo) {
+                  const img = new Image();
+                  img.src = dataPoint.logo;
+                  const x = element.x;
+                  const y = element.y;
+                  // Set image size relative to the bubble radius (50% of outerRadius)
+                  const size = element.outerRadius * 0.5;
+                  ctx.drawImage(img, x - size/2, y - size/2, size, size);
+                }
+              });
+            }
+          }]
+        });
+      }
+    }
+    // Updated donut chart with extra info drawn in each slice.
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const backgroundColors = ["#2E7D32", "#EF6C00", "#1565C0"];
@@ -1193,75 +1259,6 @@
               chart.ctx.restore();
             }
           }, doughnutInfoPlugin]
-        });
-      }
-    }
-    // Function to update the bubble chart next to breaker tiles.
-    function updateBubbleChart(teamData) {
-      const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // Create bubble data points with a reduced scale factor for boost
-      const bubbleData = teamData.map(data => {
-        const r = Math.max(5, Math.abs(data.boost) * 1 + 5);
-        const logo = config.images && config.images["team images"] && config.images["team images"][data.team] ? config.images["team images"][data.team] : "";
-        return { x: data.distribution * 100, y: data.teamPrice, r: r, logo: logo };
-      });
-      if (bubbleChartInstance) {
-        bubbleChartInstance.data.datasets[0].data = bubbleData;
-        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleData.map(data => {
-          if (data.r > 10 && data.r !== 5) return "#66bb6a";
-          else if (data.r < 10) return "#ff6666";
-          else return "#999999";
-        });
-        bubbleChartInstance.update();
-      } else {
-        bubbleChartInstance = new Chart(ctx, {
-          type: 'bubble',
-          data: {
-            datasets: [{
-              label: 'Team Data',
-              data: bubbleData,
-              pointBackgroundColor: bubbleData.map(data => {
-                if (data.r > 10 && data.r !== 5) return "#66bb6a";
-                else if (data.r < 10) return "#ff6666";
-                else return "#999999";
-              }),
-              pointBorderColor: "#fff",
-              pointBorderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              x: {
-                title: { display: true, text: 'Distribution (%)' },
-                ticks: { beginAtZero: true }
-              },
-              y: {
-                title: { display: true, text: 'Team Price ($)' },
-                ticks: { beginAtZero: true }
-              }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          },
-          plugins: [{
-            id: 'bubbleLogoPlugin',
-            afterDatasetsDraw: (chart) => {
-              const ctx = chart.ctx;
-              chart.getDatasetMeta(0).data.forEach((element, index) => {
-                const dataPoint = bubbleData[index];
-                if (dataPoint.logo) {
-                  const img = new Image();
-                  img.src = dataPoint.logo;
-                  const x = element.x;
-                  const y = element.y;
-                  // Set image size relative to bubble radius (e.g., 50% of r)
-                  const size = element.outerRadius * 0.5;
-                  ctx.drawImage(img, x - size/2, y - size/2, size, size);
-                }
-              });
-            }
-          }]
         });
       }
     }
