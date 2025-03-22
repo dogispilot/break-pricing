@@ -549,17 +549,13 @@
     <div id="details-text"></div>
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
-    <div class="tile-container" id="set-tiles">
-      <!-- Hero and support rows are inserted here -->
-    </div>
+    <div class="tile-container" id="set-tiles"></div>
   </section>
 
   <!-- Section 3: Key Rookies -->
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
-    <div class="tile-container" id="rookie-tiles">
-      <!-- Key rookie tiles appear here -->
-    </div>
+    <div class="tile-container" id="rookie-tiles"></div>
   </section>
 
   <!-- Section 4: Break Sniffer -->
@@ -676,7 +672,6 @@
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
 
   <script>
-    // Sizing for the select elements
     function updateSelectWidth(selectElement) {
       const selectedText = selectElement.options[selectElement.selectedIndex].text;
       const hiddenSpan = document.getElementById('hiddenSelectText');
@@ -695,7 +690,6 @@
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
 
-    // Toggle markup prefix vs suffix
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -714,6 +708,7 @@
     let pieChartInstance = null;
     let breakSnifferTimeout;
 
+    // Main re-render call
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(() => {
@@ -721,13 +716,21 @@
       }, 300);
     }
 
-    // The toggle background color is determined by the final logic in updateBreakSniffer(),
-    // so here we simply recalc after any user change (input or toggle).
+    // If toggle is clicked but the input is zero, show an alert and reset toggle.
     function updateToggleBackground(team) {
+      const inputElem = document.getElementById("boost-input-" + team);
+      const toggleCheckbox = document.getElementById("boost-toggle-" + team);
+      const val = parseFloat(inputElem.value) || 0;
+
+      // If user toggles it when the value is zero, show an alert and revert to unchecked
+      if (val === 0) {
+        alert("Please enter a boost percentage.");
+        toggleCheckbox.checked = false;
+      }
+
       debouncedUpdateBreakSniffer();
     }
 
-    // Load config, set up event listeners
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
@@ -737,7 +740,8 @@
         updateAllSelectWidths();
 
         // Listen for changes in the break controls
-        document.querySelectorAll('#break-controls-row input, #price-settings input')
+        document
+          .querySelectorAll('#break-controls-row input, #price-settings input')
           .forEach(input => {
             input.addEventListener('input', debouncedUpdateBreakSniffer);
           });
@@ -764,7 +768,7 @@
           pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'flex' : 'none';
         });
 
-        // Selection changes
+        // Year and set changes
         document.getElementById('setYearSelect').addEventListener('change', () => {
           updateSetNameDropdown();
           onSelectionChange();
@@ -772,11 +776,13 @@
         document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
 
         // Show/hide notes
-        document.getElementById('toggleNotes').addEventListener('click', function(e){
+        document.getElementById('toggleNotes').addEventListener('click', function(e) {
           e.preventDefault();
           const notesDiv = document.getElementById('set-notes');
-          notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') 
-            ? 'block' : 'none';
+          notesDiv.style.display = 
+            (notesDiv.style.display === 'none' || notesDiv.style.display === '') 
+              ? 'block'
+              : 'none';
         });
 
         onSelectionChange();
@@ -785,7 +791,6 @@
       }
     }
 
-    // Populate the year dropdown
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -797,14 +802,11 @@
         const opt = document.createElement('option');
         opt.value = year;
         opt.textContent = year;
-        if (year === defaultYear) {
-          opt.selected = true;
-        }
+        if (year === defaultYear) opt.selected = true;
         setYearSelect.appendChild(opt);
       });
     }
 
-    // When the year changes, update the set name dropdown
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -824,8 +826,8 @@
         const opt = document.createElement('option');
         opt.value = name;
         opt.textContent = name;
-        if(name === currentSelected) {
-          opt.selected = true; 
+        if (name === currentSelected) {
+          opt.selected = true;
           found = true;
         }
         setNameSelect.appendChild(opt);
@@ -836,7 +838,6 @@
       updateSelectWidth(setNameSelect);
     }
 
-    // Fired whenever user changes the set name or year
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -861,13 +862,12 @@
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
-        if (!isNaN(priceNum)) { 
-          document.getElementById('caseCost').value = priceNum.toFixed(2); 
+        if (!isNaN(priceNum)) {
+          document.getElementById('caseCost').value = priceNum.toFixed(2);
         }
       }
     }
 
-    // Fill in set details and notes
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -880,7 +880,7 @@
         return;
       }
 
-      detailsDiv.textContent = 
+      detailsDiv.textContent =
         `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. ` +
         `The configuration is ${currentSet.configuration}.`;
 
@@ -945,7 +945,6 @@
       `;
       supportContainer.appendChild(tileCardsBox);
 
-      // Put hero + support in the tiles container
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
@@ -957,6 +956,7 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
+
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
@@ -964,40 +964,75 @@
       return packs * cards;
     }
 
-    // Populate key rookies
+    function openPlayerEbaySearch(playerName) {
+      const setName = document.getElementById("setNameSelect").value;
+      const setYear = document.getElementById("setYearSelect").value;
+      if (!setName || !setYear) {
+        alert("Please select both a set and year.");
+        return;
+      }
+      const yearPrefix = setYear.split("-")[0];
+      const query = yearPrefix + " " + setName + " " + playerName;
+      window.open(
+        "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) 
+        + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1",
+        "_blank"
+      );
+    }
+
+    function openTeamSearch(teamName) {
+      const setName = document.getElementById("setNameSelect").value;
+      const setYear = document.getElementById("setYearSelect").value;
+      if (!setName || !setYear) {
+        alert("Please select a set and year.");
+        return;
+      }
+      const yearPrefix = setYear.split("-")[0];
+      const query = yearPrefix + " " + setName + " " + teamName;
+      window.open(
+        "https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) 
+        + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1",
+        "_blank"
+      );
+    }
+
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
       const keyPlayers = config["Key Players"] || config.keyPlayers;
-
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
-          return player.type 
+          return (
+            player.type 
             && player.type.toLowerCase() === 'rookie'
             && player.setYear === selectedYear
-            && teamKey;
+            && teamKey
+          );
         });
-
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
 
             const teamKey = player.Team || player.team;
-            const teamImage = 
-              config.images 
-              && config.images["team images"] 
-              && config.images["team images"][teamKey] 
-                ? config.images["team images"][teamKey] 
+            const teamImage =
+              config.images
+              && config.images["team images"]
+              && config.images["team images"][teamKey]
+                ? config.images["team images"][teamKey]
                 : "";
 
             tile.innerHTML = `
               <strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
-                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
+                ${
+                  teamImage 
+                    ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">`
+                    : ""
+                }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>
             `;
@@ -1032,10 +1067,10 @@
       }
     }
 
-    // Recalculate and render the table rows
+    // Main re-render: compute team prices, build table
     function updateBreakSniffer() {
       if (!currentSet) {
-        document.getElementById('break-tiles').textContent = 
+        document.getElementById('break-tiles').textContent =
           "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
@@ -1048,11 +1083,11 @@
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
 
       // Markup logic
-      let costWithMarkup = usePercent 
+      let costWithMarkup = usePercent
         ? costCase * (1 + markupVal / 100)
-        : costCase + markupVal; 
+        : costCase + markupVal;
 
-      // 8% cut from the marketplace
+      // Marketplace cut
       const whatnotsCut = costWithMarkup * 0.08;
 
       // Gather team data
@@ -1072,10 +1107,10 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
 
-        const avgCardsCase = totalCardsPerCase 
-          ? (distribution * totalCardsPerCase) 
+        const avgCardsCase = totalCardsPerCase
+          ? (distribution * totalCardsPerCase)
           : null;
-        const baseline = usePercent 
+        const baseline = usePercent
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
 
@@ -1088,7 +1123,7 @@
         });
       });
 
-      // Check the toggle & input for each team
+      // For each team, read the toggle & input
       teamData.forEach(data => {
         const toggleElem = document.getElementById("boost-toggle-" + data.team);
         const inputElem = document.getElementById("boost-input-" + data.team);
@@ -1096,9 +1131,9 @@
         data.boost = 0;
         data.discount = 0;
 
-        // If input is > 0
+        // If there's a numeric value > 0
         if (value > 0) {
-          // If toggle is checked => discount, otherwise => boost
+          // If toggle is checked => discount, else => boost
           if (toggleElem && toggleElem.checked) {
             data.discount = value;
           } else {
@@ -1107,7 +1142,7 @@
         }
       });
 
-      // Compute the adjusted and final prices
+      // Handle boosted teams => extra cost pool
       let boostExtraPool = 0;
       const boostedTeams = [];
       const nonBoostedTeams = [];
@@ -1128,6 +1163,7 @@
         });
       }
 
+      // Handle discounted teams => discount pool
       let discountPool = 0;
       const discountTeams = [];
       const nonDiscountTeams = [];
@@ -1148,23 +1184,25 @@
         });
       }
 
+      // Final price
       teamData.forEach(data => {
         data.teamPrice = data.final;
       });
 
-      // Rebuild the table
-      const tbody = document.getElementById('team-table').querySelector('tbody');
+      // Build the table
+      const tbody = document
+        .getElementById('team-table')
+        .querySelector('tbody');
       tbody.innerHTML = "";
 
       teamData.forEach(data => {
         const currentInput = document.getElementById("boost-input-" + data.team);
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
 
-        // Decide the toggle color:
-        // Grey if 0; green if boost>0; blue if discount>0
+        // Decide the toggle color
         let toggleColor = 'grey';
         if (currentValue > 0) {
-          toggleColor = (data.boost > 0) ? 'green' : 'blue';
+          toggleColor = data.boost > 0 ? 'green' : 'blue';
         }
 
         tbody.innerHTML += `
@@ -1174,22 +1212,22 @@
                  onclick="openTeamSearch('${data.team}')"
                  style="color:#333; text-decoration:none;">
                 ${
-                  config.images 
-                    && config.images["team images"] 
-                    && config.images["team images"][data.team] 
-                    ? `<img src="${config.images["team images"][data.team]}" 
-                              alt="${data.team}"
-                              style="width:30px;height:30px;
-                                     object-fit:contain;
-                                     margin-right:5px;
-                                     vertical-align:middle;">`
-                    : ""
+                  config.images
+                    && config.images["team images"]
+                    && config.images["team images"][data.team]
+                      ? `<img src="${config.images["team images"][data.team]}"
+                               alt="${data.team}"
+                               style="width:30px;height:30px;
+                                      object-fit:contain;
+                                      margin-right:5px;
+                                      vertical-align:middle;">`
+                      : ""
                 }
                 ${data.team}
               </a>
-              <a href="javascript:void(0)" 
-                 onclick="openTeamSearch('${data.team}')" 
-                 class="table-ebay-btn" 
+              <a href="javascript:void(0)"
+                 onclick="openTeamSearch('${data.team}')"
+                 class="table-ebay-btn"
                  style="margin-left:5px;">
                 <img src="resources/ebay_button.png" alt="eBay">
               </a>
@@ -1200,7 +1238,7 @@
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
               <div class="boost-toggle-container">
-                <label class="ios-toggle" 
+                <label class="ios-toggle"
                        id="ios-toggle-${data.team}"
                        style="background-color: ${toggleColor};">
                   <span class="toggle-label toggle-rocket">🚀</span>
@@ -1232,7 +1270,7 @@
         `;
       });
 
-      // Calculate break summary
+      // Compute the break summary
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
 
@@ -1266,7 +1304,6 @@
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
 
-      // Render the pie chart
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
@@ -1275,6 +1312,7 @@
       updatePieChart(pieData);
     }
 
+    let pieChartInstance = null;
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
@@ -1320,7 +1358,7 @@
       }
     }
 
-    // The external search links
+    // External search links
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1388,7 +1426,7 @@
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
 
-    // Load config once page is ready
+    // Start
     loadConfig();
   </script>
 </body>
