@@ -623,13 +623,16 @@
     <table id="team-table">
       <thead>
         <tr>
-          <th>Team</th>
-          <th>Numbered Cards</th>
-          <th>Distribution</th>
-          <th>Avg. Cards per Case</th>
-          <th>Cost + Markup</th>
-          <th>Boost <button class="empty-pill-button" onclick="resetBoosts()">Reset</button></th>
-          <th>Team Price</th>
+          <th onclick="sortTable('team')">Team</th>
+          <th onclick="sortTable('teamCards')">Numbered Cards</th>
+          <th onclick="sortTable('distribution')">Distribution</th>
+          <th onclick="sortTable('avgCardsCase')">Avg. Cards per Case</th>
+          <th onclick="sortTable('baseline')">Cost + Markup</th>
+          <th>
+            <span onclick="sortTable('boost')">Boost</span>
+            <button class="empty-pill-button" onclick="resetBoosts(event)">Reset</button>
+          </th>
+          <th onclick="sortTable('teamPrice')">Team Price</th>
         </tr>
       </thead>
       <tbody>
@@ -642,6 +645,22 @@
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
 
   <script>
+    // Global sorting variables
+    let currentSortColumn = null;
+    let currentSortDirection = 1; // 1 for ascending, -1 for descending
+
+    // Function to sort table based on column key
+    function sortTable(key) {
+      // Toggle sort direction if same column is clicked
+      if (currentSortColumn === key) {
+        currentSortDirection *= -1;
+      } else {
+        currentSortColumn = key;
+        currentSortDirection = 1;
+      }
+      updateBreakSniffer();
+    }
+
     // Updated function to adjust the select width accurately
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
@@ -1006,6 +1025,23 @@
         }
       });
       
+      // If a sort column is set, sort the teamData array.
+      if (currentSortColumn) {
+        teamData.sort((a, b) => {
+          let valA = a[currentSortColumn];
+          let valB = b[currentSortColumn];
+          // Handle null values
+          if (valA === null) valA = -Infinity;
+          if (valB === null) valB = -Infinity;
+          // Compare strings or numbers appropriately
+          if (typeof valA === "string") {
+            return valA.localeCompare(valB) * currentSortDirection;
+          } else {
+            return (valA - valB) * currentSortDirection;
+          }
+        });
+      }
+      
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -1189,8 +1225,10 @@
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
     
-    // Function to reset all boost inputs to 0 and update the table
-    function resetBoosts() {
+    // Function to reset all boost inputs to 0 and update the table.
+    // The event parameter is used to stop propagation so that it doesn't trigger a column sort.
+    function resetBoosts(event) {
+      if (event) event.stopPropagation();
       document.querySelectorAll('.boost-input').forEach(function(input) {
         input.value = 0;
       });
