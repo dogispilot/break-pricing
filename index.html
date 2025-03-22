@@ -108,7 +108,7 @@
       gap: 20px;
     }
     /* Left Column: Controls, Price Dialogs, and Breaker Tiles */
-    .controls-column {
+    .break-controls-container {
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -122,7 +122,7 @@
       gap: 20px;
     }
     /* Controls & Buttons */
-    .break-controls-container, .break-controls-row, .price-buttons-row {
+    .break-controls-row, .price-buttons-row {
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -233,26 +233,17 @@
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    .ebay-btn {
+    .ebay-btn, .nhl-btn {
       background: none !important;
       padding: 0 !important;
       border: none !important;
       display: flex !important;
-      justify-content: flex-start;
       text-decoration: none !important;
       max-width: 75%;
       height: auto;
     }
-    .nhl-btn {
-      background: none !important;
-      padding: 0 !important;
-      border: none !important;
-      display: flex !important;
-      justify-content: flex-end;
-      text-decoration: none !important;
-      max-width: 75%;
-      height: auto;
-    }
+    .ebay-btn { justify-content: flex-start; }
+    .nhl-btn { justify-content: flex-end; }
     .ebay-btn img, .nhl-btn img {
       max-width: 75%;
       height: auto;
@@ -283,7 +274,7 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Breaker Tiles: Smaller styling, placed under price lookup */
+    /* Breaker Tiles: Smaller styling, placed under Price Lookup */
     #break-tiles {
       display: block;
     }
@@ -389,7 +380,14 @@
       justify-content: center;
       gap: 0px;
     }
-    /* Table Styling – DO NOT change team image styling in table */
+    /* Table Styling – Use a new class for team images in table */
+    .table-team-img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -581,7 +579,7 @@
             </button>
           </div>
         </div>
-        <!-- Breaker Tiles: Shown below Price Lookup -->
+        <!-- Breaker Tiles: Smaller, placed under Price Lookup -->
         <div id="break-tiles"></div>
       </div>
       <!-- Right Column: Enormous Bubble Chart -->
@@ -927,7 +925,7 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        // The y-axis value is the distributed cost + markup (baseline)
+        // y-axis is the distributed cost + markup (baseline)
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -943,8 +941,6 @@
         const boostInput = document.getElementById("boost-input-" + data.team);
         let boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
         data.boost = boostVal;
-        // For display, we compute teamPrice as baseline adjusted by boost,
-        // but for the bubble chart, we use baseline for the y-axis.
         if (data.boost > 0) {
           data.teamPrice = data.baseline + (data.baseline * (data.boost / 100));
         } else if (data.boost < 0) {
@@ -978,8 +974,9 @@
         });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
+        // Use new class for table team image
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
-                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="team-img" style="margin-right:5px;vertical-align:middle;">`
+                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="table-team-img" style="width:40px; height:40px; object-fit:contain; margin-right:5px; vertical-align:middle;">`
                           : "";
         let priceStyle = "";
         let emoji = "";
@@ -1016,7 +1013,7 @@
       });
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
-      // Update breaker tiles under the price lookup button
+      // Update breaker tiles (smaller) below the price lookup button
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
       const tileProfit = document.createElement('div');
@@ -1038,17 +1035,16 @@
       tileBusiness.style.color = "#fff";
       breakTiles.appendChild(tileBusiness);
       updateBubbleChart(teamData);
-      // (Donut chart update removed)
+      updatePieChart([]); // Donut chart removed
     }
     // Updated Bubble Chart Function
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // y-axis: distributed cost + markup (baseline), x-axis: distribution (%)
-      // Bubble size is correlated to boost (using a fixed base radius with a small factor)
+      // x-axis: distribution (%), y-axis: baseline (distributed cost + markup)
+      // Bubble size correlated to boost (with a small variation)
       const baseRadius = 30; // fixed base radius
       const bubbleData = teamData.map(data => {
-        // Use baseline for y-axis regardless of boost
-        const r = baseRadius + (Math.abs(data.boost) * 0.5); 
+        const r = baseRadius + (Math.abs(data.boost) * 0.5);
         return { 
           x: data.distribution * 100, 
           y: data.baseline, 
@@ -1057,11 +1053,11 @@
           logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
         };
       });
-      // Determine bubble color based on boost
+      // Bubble color: white if neutral, green if boost, red if discount.
       const bubbleColors = teamData.map(data => {
-        if (data.boost > 0) return "#66bb6a";  // boosted: green
-        else if (data.boost < 0) return "#ff6666"; // discounted: red
-        else return "#ffffff"; // neutral: white
+        if (data.boost > 0) return "#66bb6a";
+        else if (data.boost < 0) return "#ff6666";
+        else return "#ffffff";
       });
       if (bubbleChartInstance) {
         bubbleChartInstance.data.datasets[0].data = bubbleData;
@@ -1100,18 +1096,15 @@
               const ctx = chart.ctx;
               chart.getDatasetMeta(0).data.forEach((element, index) => {
                 const dataPoint = bubbleData[index];
-                // Draw team logo inside each bubble
                 if (dataPoint.logo) {
                   const img = new Image();
                   img.src = dataPoint.logo;
-                  // When image loads, draw it in the center of the bubble.
-                  img.onload = function() {
+                  // If image is already loaded, draw immediately; otherwise, wait for onload.
+                  if (img.complete) {
                     const x = element.x;
                     const y = element.y;
-                    // Set the logo size to 50% of the bubble diameter
-                    const size = element.outerRadius * 0.5;
-                    ctx.drawImage(img, x - size / 2, y - size / 2 - 10, size, size);
-                    // Draw team name below the image
+                    const size = element.outerRadius * 0.8;
+                    ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
                     ctx.save();
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'top';
@@ -1119,9 +1112,22 @@
                     ctx.font = 'bold 14px sans-serif';
                     ctx.fillText(dataPoint.team, x, y + element.outerRadius * 0.1);
                     ctx.restore();
-                  };
+                  } else {
+                    img.onload = function() {
+                      const x = element.x;
+                      const y = element.y;
+                      const size = element.outerRadius * 0.8;
+                      ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
+                      ctx.save();
+                      ctx.textAlign = 'center';
+                      ctx.textBaseline = 'top';
+                      ctx.fillStyle = '#000';
+                      ctx.font = 'bold 14px sans-serif';
+                      ctx.fillText(dataPoint.team, x, y + element.outerRadius * 0.1);
+                      ctx.restore();
+                    };
+                  }
                 } else {
-                  // If no logo, simply draw team name
                   ctx.save();
                   ctx.textAlign = 'center';
                   ctx.textBaseline = 'middle';
