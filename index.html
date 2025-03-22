@@ -1200,10 +1200,10 @@
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
 
         // Decide the toggle color:
-        // Grey if 0; green if boost>0; blue if discount>0
+        // Grey if 0, Green if boost > 0, Red if discount > 0
         let toggleColor = 'grey';
         if (currentValue > 0) {
-          toggleColor = (data.boost > 0) ? 'green' : 'blue';
+          toggleColor = (data.boost > 0) ? 'green' : 'red';
         }
 
         // If team is associated with a key rookie, highlight row + add key emoji
