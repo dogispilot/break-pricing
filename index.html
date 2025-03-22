@@ -414,7 +414,10 @@
       display: block;
     }
 
-    /* Combined Boost/Discount iOS Toggle styling */
+    /*
+      Combined Boost/Discount iOS Toggle styling
+      REMOVED background-color here so inline JS style can change it to green/red/grey
+    */
     .ios-toggle {
       display: inline-flex;
       align-items: center;
@@ -422,7 +425,7 @@
       width: 60px;
       height: 30px;
       border-radius: 15px;
-      background-color: grey;
+      /* background-color: grey;  <-- REMOVED so JS inline style can apply! */
       cursor: pointer;
       transition: background-color 0.4s;
     }
@@ -469,6 +472,9 @@
     }
 
     /* Key Rookies section */
+    #key-rookies {
+      margin-bottom: 20px;
+    }
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -1118,17 +1124,16 @@
         data.discount = 0;
 
         if (value > 0) {
+          // If checkbox is checked => discount, else => boost
           if (toggleElem && toggleElem.checked) {
-            // discount
             data.discount = value;
           } else {
-            // boost
             data.boost = value;
           }
         }
       });
 
-      // Compute the adjusted prices after boosts
+      // Distribute the boost “extra” among non-boosted teams
       let boostExtraPool = 0;
       const boostedTeams = [];
       const nonBoostedTeams = [];
@@ -1149,11 +1154,12 @@
         });
       }
 
-      // Compute final prices after discounts
+      // Distribute the discount among non-discount teams
       let discountPool = 0;
       const discountTeams = [];
       const nonDiscountTeams = [];
       teamData.forEach(data => {
+        if (!data.adjusted) data.adjusted = data.baseline;
         if (data.discount > 0) {
           let discountAmount = data.adjusted * (data.discount / 100);
           data.final = data.adjusted - discountAmount;
@@ -1200,7 +1206,7 @@
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
 
         // Decide the toggle color:
-        // Grey if 0, Green if boost > 0, Red if discount > 0
+        // Grey if 0, Green if data.boost > 0, Red if data.discount > 0
         let toggleColor = 'grey';
         if (currentValue > 0) {
           toggleColor = (data.boost > 0) ? 'green' : 'red';
