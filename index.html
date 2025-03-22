@@ -277,6 +277,10 @@
       text-align: center;
       vertical-align: middle;
     }
+    /* Left-align the Team column */
+    #team-table td:first-child {
+      text-align: left;
+    }
     /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
@@ -437,10 +441,10 @@
       z-index: 2;
     }
     .team-img {
-      max-width: 50%;
-      height: auto;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
-      margin-right: -60px;
+      margin-right: 5px;
       vertical-align: middle;
       opacity: 0.7;
       position: relative;
@@ -998,7 +1002,7 @@
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
-                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
+                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:40px;height:40px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
                           : "";
         // Determine the style and emoji based on boost value
         let priceStyle = "";
