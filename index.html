@@ -94,7 +94,7 @@
       flex: 0 0 calc(25% - 10px);
       box-sizing: border-box;
     }
-    /* Set and Year Selection styling – extra bold and dark */
+    /* Set and Year Selection styling */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
@@ -263,18 +263,17 @@
       text-align: center;
       vertical-align: middle;
     }
-    /* Force team column to stay on one line */
-    #team-table td:first-child {
-      display: flex;
+    /* New simplified team cell styling */
+    .team-cell {
+      display: inline-flex;
       align-items: center;
+      gap: 5px;
       white-space: nowrap;
     }
-    .team-name {
-      white-space: nowrap;
-    }
-    #team-table td:first-child a {
-      color: #333 !important;
+    .team-cell a {
+      color: #333;
       text-decoration: none;
+      white-space: nowrap;
     }
     .lookup-button {
       padding: 8px 12px;
@@ -494,7 +493,7 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls wrapped in a container for positioning menus -->
+      <!-- Left Column: Controls -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
           <div class="input-group">
@@ -573,7 +572,6 @@
           <div class="tiles" id="break-tiles">
             <!-- Breaker boxes will appear here -->
           </div>
-          <!-- Pie Chart -->
           <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
@@ -592,15 +590,13 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Table rows will be generated here -->
+        <!-- Table rows generated via JS -->
       </tbody>
     </table>
   </section>
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
   <script>
-    // Global storage for boost/discount values per team
     let boostValues = {};
-
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
@@ -635,9 +631,7 @@
     let breakSnifferTimeout;
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
-      breakSnifferTimeout = setTimeout(() => {
-        updateBreakSniffer();
-      }, 300);
+      breakSnifferTimeout = setTimeout(() => { updateBreakSniffer(); }, 300);
     }
     async function loadConfig() {
       try {
@@ -646,15 +640,10 @@
         populateYearDropdown();
         updateSetNameDropdown();
         updateAllSelectWidths();
-        document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
-          input.addEventListener('input', debouncedUpdateBreakSniffer);
-        });
-        document.getElementById('setNameSelect').addEventListener('change', function() {
-          updateSelectWidth(this);
-        });
-        document.getElementById('setYearSelect').addEventListener('change', function() {
-          updateSelectWidth(this);
-        });
+        document.querySelectorAll('#break-controls-row input, #price-settings input')
+          .forEach(input => { input.addEventListener('input', debouncedUpdateBreakSniffer); });
+        document.getElementById('setNameSelect').addEventListener('change', function() { updateSelectWidth(this); });
+        document.getElementById('setYearSelect').addEventListener('change', function() { updateSelectWidth(this); });
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
@@ -806,7 +795,8 @@
       if (!setName || !setYear) { alert("Please select both a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
     function openTeamSearch(teamName) {
       const setName = document.getElementById("setNameSelect").value;
@@ -814,7 +804,8 @@
       if (!setName || !setYear) { alert("Please select a set and year."); return; }
       const yearPrefix = setYear.split("-")[0];
       const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
+      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
+                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
@@ -824,14 +815,16 @@
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
-          return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
+          return player.type && player.type.toLowerCase() === 'rookie' &&
+                 player.setYear === selectedYear && teamKey;
         });
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
             const teamKey = player.Team || player.team;
-            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
+            const teamImage = config.images && config.images["team images"] &&
+                              config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
             tile.innerHTML = `<strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
@@ -864,7 +857,6 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-    // Updated boost toggle function
     function updateBoostToggleUI(team) {
       var container = document.getElementById("boost-toggle-container-" + team);
       var inputElem = document.getElementById("boost-discount-input-" + team);
@@ -872,7 +864,6 @@
       var slider = toggleElem.parentElement.querySelector('.slider');
       var value = parseFloat(inputElem.value) || 0;
       
-      // If no boost value, disable the toggle and set background grey.
       if (value <= 0) {
         container.classList.add("disabled");
         toggleElem.disabled = true;
@@ -881,13 +872,8 @@
       } else {
         container.classList.remove("disabled");
         toggleElem.disabled = false;
-        // Do not force toggle.checked here—allow the user to click.
-        // Update slider background based on the current state:
-        if (toggleElem.checked) {
-          slider.style.backgroundColor = "green";
-        } else {
-          slider.style.backgroundColor = "purple";
-        }
+        // Leave toggleElem.checked as is so the user can switch modes.
+        slider.style.backgroundColor = toggleElem.checked ? "green" : "purple";
       }
     }
     function updateBreakSniffer() {
@@ -935,11 +921,7 @@
         var toggleElem = document.getElementById("boost-discount-toggle-" + data.team);
         let boostVal = inputElem ? parseFloat(inputElem.value) || 0 : 0;
         if (boostVal > 0) {
-          if (toggleElem && toggleElem.checked) {
-            data.final = data.baseline * (1 + boostVal/100);
-          } else {
-            data.final = data.baseline * (1 - boostVal/100);
-          }
+          data.final = toggleElem.checked ? data.baseline * (1 + boostVal/100) : data.baseline * (1 - boostVal/100);
         } else {
           data.final = data.baseline;
         }
@@ -948,26 +930,30 @@
       tbody.innerHTML = "";
       teamData.forEach(data => {
         const keyPlayers = config["Key Players"] || config.keyPlayers;
-        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
-          const teamKey = player.Team || player.team;
-          return player.type && player.type.toLowerCase() === 'rookie' &&
-                 player.setYear === document.getElementById('setYearSelect').value &&
-                 teamKey === data.team;
-        });
+        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) &&
+          keyPlayers.some(player => {
+            const teamKey = player.Team || player.team;
+            return player.type && player.type.toLowerCase() === 'rookie' &&
+                   player.setYear === document.getElementById('setYearSelect').value &&
+                   teamKey === data.team;
+          });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
-                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
-                          : "";
+          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
+          : "";
         tbody.innerHTML += `
           <tr${highlightStyle}>
             <td>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="team-name" style="color:#333; text-decoration:none;">
-                ${teamImage}${data.team}${keyEmoji}
-              </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="table-ebay-btn">
-                <img src="resources/ebay_button.png" alt="eBay">
-              </a>
+              <div class="team-cell">
+                ${teamImage}
+                <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="team-name">
+                  ${data.team}${keyEmoji}
+                </a>
+                <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="table-ebay-btn">
+                  <img src="resources/ebay_button.png" alt="eBay">
+                </a>
+              </div>
             </td>
             <td>${data.teamCards}</td>
             <td>${(data.distribution * 100).toFixed(2)}%</td>
