@@ -213,8 +213,7 @@
       -moz-appearance: textfield;
     }
     /* Existing boost/discount inputs override */
-    .boost-input,
-    .discount-input {
+    .boost-input {
       width: 60px;
     }
     /* Button group inline for Price Settings/Lookup buttons */
@@ -275,6 +274,10 @@
       padding: 8px;
       text-align: center;
       vertical-align: middle;
+    }
+    /* Updated table header to combine Boost and Discount */
+    #team-table th:nth-child(6) {
+      width: 150px;
     }
     /* Lookup buttons */
     .lookup-button {
@@ -376,7 +379,7 @@
     #pieChart {
       display: block;
     }
-    /* iOS Toggle Switch (unchanged) */
+    /* iOS Toggle Switch (legacy – not used for boost/discount now) */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -414,6 +417,51 @@
     }
     input:checked + .slider:before {
       transform: translateX(26px);
+    }
+    /* Combined Boost/Discount iOS Toggle styling */
+    .ios-toggle {
+      display: inline-flex;
+      align-items: center;
+      position: relative;
+      width: 60px;
+      height: 30px;
+      border-radius: 15px;
+      background-color: grey;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background-color 0.4s;
+    }
+    .ios-toggle input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .ios-toggle .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: white;
+      transition: transform 0.4s;
+    }
+    .ios-toggle input:checked + .toggle-slider {
+      transform: translateX(30px);
+    }
+    .ios-toggle .toggle-label {
+      font-size: 16px;
+      z-index: 1;
+      user-select: none;
+    }
+    .ios-toggle .toggle-rocket {
+      margin-left: 5px;
+      margin-right: auto;
+    }
+    .ios-toggle .toggle-scissors {
+      margin-right: 5px;
+      margin-left: auto;
     }
     /* Key Rookies section */
     #rookie-tiles {
@@ -609,7 +657,6 @@
           <th>Avg. Cards per Case</th>
           <th>Cost + Markup</th>
           <th>Boost</th>
-          <th>Discount</th>
           <th>Team Price</th>
         </tr>
       </thead>
@@ -925,28 +972,22 @@
       }
     }
 
-    function toggleBoostInput(team) {
-      const checkbox = document.getElementById("boost-checkbox-" + team);
-      const input = document.getElementById("boost-input-" + team);
-      if (checkbox.checked) {
-        input.style.display = "inline-block";
+    // New function to update the combined boost/discount toggle background
+    function updateToggleBackground(team) {
+      var inputElem = document.getElementById("boost-input-" + team);
+      var toggleLabel = document.getElementById("ios-toggle-" + team);
+      var toggleCheckbox = document.getElementById("boost-toggle-" + team);
+      var val = parseFloat(inputElem.value) || 0;
+      if (val === 0) {
+        toggleLabel.style.backgroundColor = 'grey';
       } else {
-        input.style.display = "none";
-        input.value = "";
-        debouncedUpdateBreakSniffer();
+        if (toggleCheckbox.checked) {
+          toggleLabel.style.backgroundColor = 'green';
+        } else {
+          toggleLabel.style.backgroundColor = 'blue';
+        }
       }
-    }
-
-    function toggleDiscountInput(team) {
-      const checkbox = document.getElementById("discount-checkbox-" + team);
-      const input = document.getElementById("discount-input-" + team);
-      if (checkbox.checked) {
-        input.style.display = "inline-block";
-      } else {
-        input.style.display = "none";
-        input.value = "";
-        debouncedUpdateBreakSniffer();
-      }
+      debouncedUpdateBreakSniffer();
     }
 
     function updateBreakSniffer() {
@@ -995,17 +1036,26 @@
         });
       });
       
+      // Combined boost/discount: get the value and mode from the single control
+      teamData.forEach(data => {
+        var toggleElem = document.getElementById("boost-toggle-" + data.team);
+        var inputElem = document.getElementById("boost-input-" + data.team);
+        let value = inputElem ? parseFloat(inputElem.value) || 0 : 0;
+        data.boost = 0;
+        data.discount = 0;
+        if (value > 0) {
+          if (toggleElem && toggleElem.checked) {
+            data.boost = value;
+          } else {
+            data.discount = value;
+          }
+        }
+      });
+      
       let boostExtraPool = 0;
       const boostedTeams = [];
       const nonBoostedTeams = [];
       teamData.forEach(data => {
-        const boostCheckbox = document.getElementById("boost-checkbox-" + data.team);
-        let boostVal = 0;
-        if (boostCheckbox && boostCheckbox.checked) {
-          const boostInput = document.getElementById("boost-input-" + data.team);
-          boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
-        }
-        data.boost = boostVal;
         if (data.boost > 0) {
           let boostAmount = data.baseline * (data.boost / 100);
           data.adjusted = data.baseline + boostAmount;
@@ -1026,13 +1076,6 @@
       const discountTeams = [];
       const nonDiscountTeams = [];
       teamData.forEach(data => {
-        const discountCheckbox = document.getElementById("discount-checkbox-" + data.team);
-        let discountVal = 0;
-        if (discountCheckbox && discountCheckbox.checked) {
-          const discountInput = document.getElementById("discount-input-" + data.team);
-          discountVal = discountInput ? parseFloat(discountInput.value) || 0 : 0;
-        }
-        data.discount = discountVal;
         if (data.discount > 0) {
           let discountAmount = data.adjusted * (data.discount / 100);
           data.final = data.adjusted - discountAmount;
@@ -1083,18 +1126,15 @@
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
-              <label>
-                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" ${data.boost > 0 ? 'checked' : ''}>
-                🚀
-              </label>
-              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost > 0 ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
-            </td>
-            <td>
-              <label>
-                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" ${data.discount > 0 ? 'checked' : ''}>
-                ✂️
-              </label>
-              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount > 0 ? data.discount : ''}" oninput="debouncedUpdateBreakSniffer()">
+              <div class="boost-toggle-container">
+                <label class="ios-toggle" id="ios-toggle-${data.team}">
+                  <span class="toggle-label toggle-rocket">🚀</span>
+                  <input type="checkbox" id="boost-toggle-${data.team}" onchange="updateToggleBackground('${data.team}')" />
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label toggle-scissors">✂️</span>
+                </label>
+                <input type="number" class="boost-input" id="boost-input-${data.team}" step="0.1" min="0" value="${(data.boost > 0 ? data.boost : (data.discount > 0 ? data.discount : 0)) || 0}" oninput="updateToggleBackground('${data.team}')" style="width:60px;">
+              </div>
             </td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
@@ -1232,14 +1272,6 @@
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
-    }
-    function openTeamSearch(teamName) {
-      const setName = document.getElementById("setNameSelect").value;
-      const setYear = document.getElementById("setYearSelect").value;
-      if (!setName || !setYear) { alert("Please select a set and year."); return; }
-      const yearPrefix = setYear.split("-")[0];
-      const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
 
     loadConfig();
