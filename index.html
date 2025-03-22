@@ -622,16 +622,27 @@
   </section>
 
   <!-- Hidden span used to measure text width of the selected option -->
-  <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap; font-size: inherit; font-weight: bold; text-decoration: underline; font-family: inherit;"></span>
+  <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
 
   <script>
-    // Function to update the width of a select element based on its selected text
+    // Updated function to adjust the select width accurately
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
+      
+      // Copy computed styles from the select element to the hidden span
+      var computedStyles = window.getComputedStyle(selectElement);
+      hiddenSpan.style.fontSize = computedStyles.fontSize;
+      hiddenSpan.style.fontWeight = computedStyles.fontWeight;
+      hiddenSpan.style.fontFamily = computedStyles.fontFamily;
+      hiddenSpan.style.textDecoration = computedStyles.textDecoration;
+      
       hiddenSpan.textContent = selectedText;
-      // Add a few extra pixels for padding (adjust as necessary)
-      var newWidth = hiddenSpan.offsetWidth + 10;
+      
+      // Measure the text width accurately
+      var textWidth = hiddenSpan.getBoundingClientRect().width;
+      // Add extra pixels to account for the dropdown arrow and any slight padding
+      var newWidth = textWidth + 30;
       selectElement.style.width = newWidth + "px";
     }
 
