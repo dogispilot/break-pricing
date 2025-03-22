@@ -728,6 +728,7 @@
       });
     }
 
+    // Updated function to update the set name dropdown and adjust width accordingly
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -748,6 +749,8 @@
         setNameSelect.appendChild(opt);
       });
       if (!found) { setNameSelect.value = ""; }
+      // Update the width based on the current selected option
+      updateSelectWidth(setNameSelect);
     }
 
     document.getElementById('setYearSelect').addEventListener('change', function() {
