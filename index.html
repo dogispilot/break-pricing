@@ -75,10 +75,20 @@
     .tile-desc {
       font-size: 1em;
     }
-    /* Override for break tile numbers */
-    .break-tiles-container .tile .tile-value {
+    /* Break Tiles Styling */
+    .break-tile {
+      max-width: 150px;
+      margin-bottom: 15px;
+      text-align: center;
+      padding: 10px;
+    }
+    .break-tile .tile-value {
       font-size: 3em;
       font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .break-tile .tile-label {
+      font-size: 1em;
     }
     /* Hero and Support rows */
     .hero-row {
@@ -153,7 +163,7 @@
       flex-direction: column;
       gap: 10px;
     }
-    /* Set fixed width for price buttons (same as markup input, 120px) */
+    /* Fixed width for price buttons (120px) */
     .price-buttons-row button {
       width: 120px;
     }
@@ -384,6 +394,14 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
+    /* Donut chart container: move it up a bit */
+    .donut-container {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 0;
+    }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
@@ -507,7 +525,6 @@
   </section>
   <!-- Section 3: Key Rookies -->
   <section id="key-rookies">
-    <!-- The header below will update dynamically -->
     <h2 id="keyRookiesHeader">🔑 Key Rookies</h2>
     <div class="tile-container" id="rookie-tiles">
       <!-- Key rookie tiles will be generated here -->
@@ -521,7 +538,6 @@
       <div class="break-controls-container">
         <div class="break-controls-row">
           <div class="input-group">
-            <!-- The label will update dynamically -->
             <label for="caseCost" id="caseCostLabel">Cost of a case</label>
             <div class="input-inline">
               <div class="input-wrapper" style="width:120px;">
@@ -748,10 +764,8 @@
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
       // Update dynamic labels
       if (currentSet) {
-        // Update cost label dynamically
         document.getElementById('caseCostLabel').textContent =
           `Cost of a ${currentSet.year} ${currentSet.name} case`;
-        // Update key rookies header dynamically
         document.getElementById('keyRookiesHeader').textContent =
           `🔑 ${currentSet.year} Key Rookies`;
       } else {
@@ -1023,30 +1037,29 @@
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
+      
+      // Create break tiles with value on top and label below
       const tileProfit = document.createElement('div');
-      tileProfit.className = 'tile';
-      tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
+      tileProfit.className = 'tile break-tile';
+      tileProfit.innerHTML = `<div class="tile-value">$${breakersProfit.toFixed(2)}</div><div class="tile-label">Breaker's Profit</div>`;
       tileProfit.style.background = "#2E7D32";
       tileProfit.style.color = "#fff";
-      tileProfit.style.borderRadius = "4px";
-      tileProfit.style.padding = "10px";
       breakTiles.appendChild(tileProfit);
+      
       const tileWhatnots = document.createElement('div');
-      tileWhatnots.className = 'tile';
-      tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
+      tileWhatnots.className = 'tile break-tile';
+      tileWhatnots.innerHTML = `<div class="tile-value">$${whatnotsCut.toFixed(2)}</div><div class="tile-label">Whatnots Cut</div>`;
       tileWhatnots.style.background = "#EF6C00";
       tileWhatnots.style.color = "#fff";
-      tileWhatnots.style.borderRadius = "4px";
-      tileWhatnots.style.padding = "10px";
       breakTiles.appendChild(tileWhatnots);
+      
       const tileBusiness = document.createElement('div');
-      tileBusiness.className = 'tile';
-      tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
+      tileBusiness.className = 'tile break-tile';
+      tileBusiness.innerHTML = `<div class="tile-value">$${totalCostOfBusiness.toFixed(2)}</div><div class="tile-label">Cost of Business</div>`;
       tileBusiness.style.background = "#1565C0";
       tileBusiness.style.color = "#fff";
-      tileBusiness.style.borderRadius = "4px";
-      tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
+      
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
