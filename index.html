@@ -167,12 +167,27 @@
     .price-buttons-row button {
       width: 120px;
     }
-    /* Remove absolute positioning from menus */
+    /* Floating dialog styling for price menus */
     #price-settings, #price-lookup-menu {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      z-index: 1000;
       display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
+    }
+    .dialog-close {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.2em;
+      font-weight: bold;
     }
     /* Input groups and wrappers (unchanged) */
     .input-group {
@@ -559,8 +574,9 @@
           <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
           <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
         </div>
-        <!-- Price Settings Menu -->
+        <!-- Price Settings Menu as a floating dialog -->
         <div id="price-settings">
+          <span class="dialog-close" onclick="this.parentElement.style.display='none'">×</span>
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
             <label class="toggle-switch">
@@ -583,8 +599,9 @@
             </div>
           </div>
         </div>
-        <!-- Price Lookup Menu -->
+        <!-- Price Lookup Menu as a floating dialog -->
         <div id="price-lookup-menu">
+          <span class="dialog-close" onclick="this.parentElement.style.display='none'">×</span>
           <div class="button-container">
             <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
               <img src="resources/dacardworld.png" alt="Dacardworld Logo">
@@ -701,11 +718,11 @@
         updateMarkupUnit();
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
-          ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
+          ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'block' : 'none';
         });
         document.getElementById('priceLookupToggle').addEventListener('click', function() {
           const pl = document.getElementById('price-lookup-menu');
-          pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'flex' : 'none';
+          pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'block' : 'none';
         });
         onSelectionChange();
       } catch (error) {
@@ -1037,29 +1054,24 @@
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
-      
-      // Create break tiles with value on top and label below
       const tileProfit = document.createElement('div');
       tileProfit.className = 'tile break-tile';
       tileProfit.innerHTML = `<div class="tile-value">$${breakersProfit.toFixed(2)}</div><div class="tile-label">Breaker's Profit</div>`;
       tileProfit.style.background = "#2E7D32";
       tileProfit.style.color = "#fff";
       breakTiles.appendChild(tileProfit);
-      
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile break-tile';
       tileWhatnots.innerHTML = `<div class="tile-value">$${whatnotsCut.toFixed(2)}</div><div class="tile-label">Whatnots Cut</div>`;
       tileWhatnots.style.background = "#EF6C00";
       tileWhatnots.style.color = "#fff";
       breakTiles.appendChild(tileWhatnots);
-      
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile break-tile';
       tileBusiness.innerHTML = `<div class="tile-value">$${totalCostOfBusiness.toFixed(2)}</div><div class="tile-label">Cost of Business</div>`;
       tileBusiness.style.background = "#1565C0";
       tileBusiness.style.color = "#fff";
       breakTiles.appendChild(tileBusiness);
-      
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
