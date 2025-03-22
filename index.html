@@ -265,6 +265,12 @@
       width: auto;
       vertical-align: middle;
     }
+    /* New CSS class for rookie team images */
+    .rookie-team-img {
+      max-width: 50%;
+      height: auto;
+      margin-right: 5px;
+    }
     /* Table styling */
     table {
       width: 100%;
@@ -465,6 +471,7 @@
       position: relative;
       z-index: 2;
     }
+    /* The team images in the table retain their smaller size */
     .team-img {
       width: 40px;
       height: 40px;
@@ -945,7 +952,7 @@
             tile.innerHTML = `<strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
-                ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
+                ${ teamImage ? `<img class="rookie-team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
               </div>`;
             const btnContainer = document.createElement('div');
@@ -1065,7 +1072,7 @@
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
-                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:40px;height:40px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
+                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="team-img" style="margin-right:5px;vertical-align:middle;">`
                           : "";
         // Determine the style and emoji based on boost value
         let priceStyle = "";
