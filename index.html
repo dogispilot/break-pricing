@@ -15,6 +15,7 @@
       font-family: 'BreakPricingFontBold';
       src: url('fonts/breakpricingfont_bold.ttf') format('truetype');
     }
+
     body {
       font-family: 'BreakPricingFont', sans-serif;
       margin: 20px;
@@ -24,6 +25,7 @@
     h1, h2 {
       font-family: 'BreakPricingFontBold', sans-serif;
     }
+
     header {
       display: flex;
       align-items: center;
@@ -50,6 +52,7 @@
       margin: 0 0 0 60px;
       color: #666;
     }
+
     section {
       background: #fff;
       padding: 15px;
@@ -57,10 +60,12 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
+
     /* Container for all tiles */
     .tile-container {
       margin-top: 10px;
     }
+
     /* Set Details tiles */
     .tile {
       background: #eaeaea;
@@ -76,6 +81,7 @@
     .tile-desc {
       font-size: 1em;
     }
+
     /* Hero and Support rows */
     .hero-row {
       display: flex;
@@ -94,6 +100,7 @@
       flex: 0 0 calc(25% - 10px);
       box-sizing: border-box;
     }
+
     /* Updated styling for set selection inputs and sentence */
     #set-selection p {
       font-size: 1.5em;
@@ -116,6 +123,7 @@
       appearance: none;
       font-size: inherit;
     }
+
     /* Hide set notes by default */
     #set-notes {
       display: none;
@@ -123,6 +131,7 @@
       border: 1px dashed #aaa;
       margin-top: 5px;
     }
+
     /* Break Controls Layout */
     .break-controls-container {
       position: relative;
@@ -145,6 +154,7 @@
       font-size: 0.8em;
       text-align: left;
     }
+
     /* For groups that are in a price-setting context */
     .price-setting-group {
       display: flex;
@@ -157,12 +167,14 @@
       font-weight: bold;
       font-size: 0.8em;
     }
+
     /* Input-inline container to align input fields horizontally */
     .input-inline {
       display: flex;
       align-items: center;
       gap: 15px;
     }
+
     /* Input-wrapper for fields with prefix/suffix */
     .input-wrapper {
       display: inline-flex;
@@ -192,6 +204,7 @@
       color: #333;
       white-space: nowrap;
     }
+
     /* Modern input styling for number inputs */
     input[type="number"] {
       height: 36px !important;
@@ -211,10 +224,12 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
+
     /* Existing boost/discount inputs override */
     .boost-input {
       width: 60px;
     }
+
     /* Button group inline for Price Settings/Lookup buttons */
     .button-group-inline {
       display: inline-flex;
@@ -222,7 +237,8 @@
       align-items: center;
       font-family: 'BreakPricingFont', sans-serif;
     }
-    /* New button styles for eBay and NHL */
+
+    /* eBay and NHL buttons */
     .ebay-btn {
       background: none !important;
       padding: 0 !important;
@@ -248,7 +264,8 @@
       height: auto;
       box-shadow: none !important;
     }
-    /* New style for the eBay button used in the team table */
+
+    /* eBay button used in the team table */
     .table-ebay-btn {
       background: none !important;
       padding: 0 !important;
@@ -259,10 +276,11 @@
     .table-ebay-btn img {
       max-height: 25px;
       width: auto;
-        vertical-align: middle;
-        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
-  border-radius: 90px; /* optional, for rounded corners */
+      vertical-align: middle;
+      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+      border-radius: 90px; /* optional, for rounded corners */
     }
+
     /* Table styling */
     table {
       width: 100%;
@@ -277,15 +295,17 @@
       text-align: center;
       vertical-align: middle;
     }
+
     /* Make the first column left aligned */
     #team-table th:first-child,
     #team-table td:first-child {
       text-align: left;
     }
-    /* Updated table header to combine Boost and Discount */
+    /* Table header (Boost column) */
     #team-table th:nth-child(6) {
       width: 150px;
     }
+
     /* Lookup buttons */
     .lookup-button {
       padding: 8px 12px;
@@ -308,6 +328,7 @@
       height: 24px;
       vertical-align: middle;
     }
+
     /* Glow effects on hover */
     .glow-dacardworld:hover,
     .glow-steelcity:hover,
@@ -318,7 +339,8 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
       transform: scale(1.05);
     }
-    /* Updated Price Settings and Price Lookup buttons styling for an empty pill look */
+
+    /* Price Settings and Price Lookup buttons */
     #priceSettingsToggle,
     #priceLookupToggle {
       background-color: transparent;
@@ -331,6 +353,7 @@
       height: 24px;
       font-family: 'BreakPricingFont', sans-serif;
     }
+
     /* Price Settings and Price Lookup menus – positioned absolutely below the break controls */
     #price-settings, #price-lookup-menu {
       position: absolute;
@@ -349,6 +372,7 @@
       font-family: 'BreakPricingFont', sans-serif;
       z-index: 10;
     }
+
     /* Button Container inside Price Lookup Menu remains unchanged */
     .button-container {
       display: flex;
@@ -356,11 +380,13 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+
     /* Set Details button container */
     #set-details .button-container {
       justify-content: flex-start;
       margin-bottom: 20px;
     }
+
     /* Break Sniffer Right Column */
     .break-results-container {
       display: flex;
@@ -382,10 +408,12 @@
       border-radius: 4px;
       text-align: center;
     }
+
     /* Pie Chart canvas */
     #pieChart {
       display: block;
     }
+
     /* Combined Boost/Discount iOS Toggle styling */
     .ios-toggle {
       display: inline-flex;
@@ -414,9 +442,11 @@
       background-color: white;
       transition: transform 0.4s;
     }
+    /* Move the slider if checked */
     .ios-toggle input:checked + .toggle-slider {
       transform: translateX(30px);
     }
+
     .ios-toggle .toggle-label {
       font-size: 16px;
       z-index: 1;
@@ -430,12 +460,14 @@
       margin-right: 5px;
       margin-left: auto;
     }
-    /* Ensure the boost toggle and its input are on the same line */
+
+    /* Keep toggle + input on same line */
     .boost-toggle-container {
       display: inline-flex;
       align-items: center;
       gap: 10px;
     }
+
     /* Key Rookies section */
     #rookie-tiles {
       display: flex;
@@ -498,7 +530,7 @@
       </select>
       for the years 
       <select id="setYearSelect">
-        <!-- Populated by config -->
+        <!-- Populated by config.json -->
       </select>
     </p>
   </section>
@@ -518,7 +550,7 @@
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Hero and support rows will be added here -->
+      <!-- Hero and support rows are inserted here -->
     </div>
   </section>
 
@@ -526,7 +558,7 @@
   <section id="key-rookies">
     <h2>🔑 Key Rookies</h2>
     <div class="tile-container" id="rookie-tiles">
-      <!-- Key rookie tiles will be generated here -->
+      <!-- Key rookie tiles appear here -->
     </div>
   </section>
 
@@ -534,10 +566,10 @@
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
     <div class="break-sniffer-flex">
-      <!-- Left Column: Controls wrapped in a container for positioning menus -->
+      <!-- Left Column: Controls -->
       <div class="break-controls-container">
         <div class="break-controls" id="break-controls-row">
-          <!-- Cost of a case group: wrapped in an input-inline to match markup group -->
+          <!-- Cost of a case -->
           <div class="input-group">
             <label for="caseCost">Cost of a case</label>
             <div class="input-inline">
@@ -613,13 +645,14 @@
       <div class="break-results-container">
         <div id="break-results">
           <div class="tiles" id="break-tiles">
-            <!-- Breaker boxes will appear here -->
+            <!-- Breaker boxes appear here -->
           </div>
           <!-- Pie Chart -->
           <canvas id="pieChart" width="250" height="250"></canvas>
         </div>
       </div>
     </div>
+
     <!-- Table for Break Sniffer Results -->
     <table id="team-table">
       <thead>
@@ -634,32 +667,35 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Table rows will be generated here -->
+        <!-- Table rows are dynamically generated here -->
       </tbody>
     </table>
   </section>
-  
+
   <!-- Hidden span used to measure text width of the selected option -->
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
-  
+
   <script>
-    // Adjust select width accurately.
+    // Sizing for the select elements
     function updateSelectWidth(selectElement) {
-      var selectedText = selectElement.options[selectElement.selectedIndex].text;
-      var hiddenSpan = document.getElementById('hiddenSelectText');
-      var computedStyles = window.getComputedStyle(selectElement);
+      const selectedText = selectElement.options[selectElement.selectedIndex].text;
+      const hiddenSpan = document.getElementById('hiddenSelectText');
+      const computedStyles = window.getComputedStyle(selectElement);
       hiddenSpan.style.fontSize = computedStyles.fontSize;
       hiddenSpan.style.fontWeight = computedStyles.fontWeight;
       hiddenSpan.style.fontFamily = computedStyles.fontFamily;
       hiddenSpan.style.textDecoration = computedStyles.textDecoration;
       hiddenSpan.textContent = selectedText;
-      var textWidth = hiddenSpan.getBoundingClientRect().width;
+      const textWidth = hiddenSpan.getBoundingClientRect().width;
       selectElement.style.width = (textWidth + 0) + "px";
     }
+
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
+
+    // Toggle markup prefix vs suffix
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
       const prefix = document.querySelector('.markup-prefix');
@@ -672,36 +708,26 @@
         suffix.style.display = 'none';
       }
     }
-    
+
     let config = null;
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
-    
+
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(() => {
         updateBreakSniffer();
       }, 300);
     }
-    
-    // When the toggle state or input changes, update the toggle background (swapped colors)
+
+    // The toggle background color is determined by the final logic in updateBreakSniffer(),
+    // so here we simply recalc after any user change (input or toggle).
     function updateToggleBackground(team) {
-      var inputElem = document.getElementById("boost-input-" + team);
-      var toggleLabel = document.getElementById("ios-toggle-" + team);
-      var toggleCheckbox = document.getElementById("boost-toggle-" + team);
-      var val = parseFloat(inputElem.value) || 0;
-      if (val === 0) {
-        toggleLabel.style.backgroundColor = 'grey';
-      } else {
-        // Now, when checkbox is checked (slider moves right over scissors), use blue (discount).
-        // When unchecked (slider remains over rocket), use green (boost).
-        toggleLabel.style.backgroundColor = toggleCheckbox.checked ? 'blue' : 'green';
-      }
-      // Recalculate table on toggle change.
       debouncedUpdateBreakSniffer();
     }
-    
+
+    // Load config, set up event listeners
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
@@ -709,17 +735,26 @@
         populateYearDropdown();
         updateSetNameDropdown();
         updateAllSelectWidths();
-        document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
-          input.addEventListener('input', debouncedUpdateBreakSniffer);
-        });
+
+        // Listen for changes in the break controls
+        document.querySelectorAll('#break-controls-row input, #price-settings input')
+          .forEach(input => {
+            input.addEventListener('input', debouncedUpdateBreakSniffer);
+          });
+
+        // Listen for changes in the select elements
         document.getElementById('setNameSelect').addEventListener('change', function() {
           updateSelectWidth(this);
         });
         document.getElementById('setYearSelect').addEventListener('change', function() {
           updateSelectWidth(this);
         });
+
+        // Markup toggle
         document.getElementById('markupToggle').addEventListener('change', updateMarkupUnit);
         updateMarkupUnit();
+
+        // Price settings + lookup toggles
         document.getElementById('priceSettingsToggle').addEventListener('click', function() {
           const ps = document.getElementById('price-settings');
           ps.style.display = (ps.style.display === 'none' || ps.style.display === '') ? 'flex' : 'none';
@@ -728,79 +763,101 @@
           const pl = document.getElementById('price-lookup-menu');
           pl.style.display = (pl.style.display === 'none' || pl.style.display === '') ? 'flex' : 'none';
         });
+
+        // Selection changes
+        document.getElementById('setYearSelect').addEventListener('change', () => {
+          updateSetNameDropdown();
+          onSelectionChange();
+        });
+        document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
+
+        // Show/hide notes
+        document.getElementById('toggleNotes').addEventListener('click', function(e){
+          e.preventDefault();
+          const notesDiv = document.getElementById('set-notes');
+          notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') 
+            ? 'block' : 'none';
+        });
+
         onSelectionChange();
       } catch (error) {
         console.error("Error loading config.json:", error);
       }
     }
-    
+
+    // Populate the year dropdown
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
       config.sets.forEach(s => { years.add(s.year); });
       years = Array.from(years).sort();
       const defaultYear = years[years.length - 1];
+
       years.forEach(year => {
         const opt = document.createElement('option');
         opt.value = year;
         opt.textContent = year;
-        if (year === defaultYear) opt.selected = true;
+        if (year === defaultYear) {
+          opt.selected = true;
+        }
         setYearSelect.appendChild(opt);
       });
     }
-    
+
+    // When the year changes, update the set name dropdown
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
       const currentSelected = setNameSelect.value;
       setNameSelect.innerHTML = "";
+
       const defaultOpt = document.createElement('option');
       defaultOpt.value = "";
       defaultOpt.textContent = "-- Select Set Name --";
       setNameSelect.appendChild(defaultOpt);
+
       const filteredSets = config.sets.filter(s => s.year === year);
       const uniqueNames = [...new Set(filteredSets.map(s => s.name))].sort();
+
       let found = false;
       uniqueNames.forEach(name => {
         const opt = document.createElement('option');
         opt.value = name;
         opt.textContent = name;
-        if(name === currentSelected) { opt.selected = true; found = true; }
+        if(name === currentSelected) {
+          opt.selected = true; 
+          found = true;
+        }
         setNameSelect.appendChild(opt);
       });
-      if (!found) { setNameSelect.value = ""; }
+      if (!found) {
+        setNameSelect.value = "";
+      }
       updateSelectWidth(setNameSelect);
     }
-    
-    document.getElementById('setYearSelect').addEventListener('change', function() {
-      updateSetNameDropdown();
-      onSelectionChange();
-    });
-    document.getElementById('setNameSelect').addEventListener('change', onSelectionChange);
-    document.getElementById('toggleNotes').addEventListener('click', function(e){
-      e.preventDefault();
-      const notesDiv = document.getElementById('set-notes');
-      notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
-    });
-    
+
+    // Fired whenever user changes the set name or year
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
+
       updateSetDetails();
       updateBreakCaseCost();
       updateKeyRookies();
       updateBreakSniffer();
+
+      const toggleNotesLink = document.getElementById('toggleNotes');
       if (!currentSet) {
-        document.getElementById('toggleNotes').style.display = 'none';
+        toggleNotesLink.style.display = 'none';
         document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
       } else {
-        document.getElementById('toggleNotes').style.display = 'inline';
+        toggleNotesLink.style.display = 'inline';
       }
     }
-    
+
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -809,62 +866,90 @@
         }
       }
     }
-    
+
+    // Fill in set details and notes
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
       const tilesDiv = document.getElementById('set-tiles');
+
       if (!currentSet) {
         detailsDiv.textContent = "";
         notesDiv.textContent = "";
         tilesDiv.innerHTML = "";
         return;
       }
-      detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
+
+      detailsDiv.textContent = 
+        `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. ` +
+        `The configuration is ${currentSet.configuration}.`;
+
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
-      
       tilesDiv.innerHTML = "";
+
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
-      
+
+      // Example hero tile: Rookie %
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
-      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
+      heroTile1.innerHTML = `
+        <div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div>
+        <div class="tile-desc">Rookie %</div>
+      `;
       heroContainer.appendChild(heroTile1);
-      
+
+      // Example hero tile: Total cards per case
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       const heroTile2 = document.createElement('div');
       heroTile2.className = 'tile hero';
-      heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
+      heroTile2.innerHTML = `
+        <div class="tile-value">${totalCardsPerCase || "N/A"}</div>
+        <div class="tile-desc">Total Cards per Case</div>
+      `;
       heroContainer.appendChild(heroTile2);
-      
+
+      // Support tiles
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
-      tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
+      tileBoxes.innerHTML = `
+        <div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div>
+        <div class="tile-desc">Boxes per Case</div>
+      `;
       supportContainer.appendChild(tileBoxes);
-      
+
       const tilePacks = document.createElement('div');
       tilePacks.className = 'tile';
-      tilePacks.innerHTML = `<div class="tile-value">${currentSet.packs_per_box || "N/A"}</div><div class="tile-desc">Packs per Box</div>`;
+      tilePacks.innerHTML = `
+        <div class="tile-value">${currentSet.packs_per_box || "N/A"}</div>
+        <div class="tile-desc">Packs per Box</div>
+      `;
       supportContainer.appendChild(tilePacks);
-      
+
       const tileCardsPack = document.createElement('div');
       tileCardsPack.className = 'tile';
-      tileCardsPack.innerHTML = `<div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div><div class="tile-desc">Cards per Pack</div>`;
+      tileCardsPack.innerHTML = `
+        <div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div>
+        <div class="tile-desc">Cards per Pack</div>
+      `;
       supportContainer.appendChild(tileCardsPack);
-      
+
       const cardsPerBox = computeCardsPerBox(currentSet);
       const tileCardsBox = document.createElement('div');
       tileCardsBox.className = 'tile';
-      tileCardsBox.innerHTML = `<div class="tile-value">${cardsPerBox || "N/A"}</div><div class="tile-desc">Cards per Box</div>`;
+      tileCardsBox.innerHTML = `
+        <div class="tile-value">${cardsPerBox || "N/A"}</div>
+        <div class="tile-desc">Cards per Box</div>
+      `;
       supportContainer.appendChild(tileCardsBox);
-      
+
+      // Put hero + support in the tiles container
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
-    
+
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -872,71 +957,70 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
-    
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
-    
-    function openPlayerEbaySearch(playerName) {
-      const setName = document.getElementById("setNameSelect").value;
-      const setYear = document.getElementById("setYearSelect").value;
-      if (!setName || !setYear) { alert("Please select both a set and year."); return; }
-      const yearPrefix = setYear.split("-")[0];
-      const query = yearPrefix + " " + setName + " " + playerName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
-                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-    }
-    function openTeamSearch(teamName) {
-      const setName = document.getElementById("setNameSelect").value;
-      const setYear = document.getElementById("setYearSelect").value;
-      if (!setName || !setYear) { alert("Please select a set and year."); return; }
-      const yearPrefix = setYear.split("-")[0];
-      const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) +
-                  "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-    }
-    
+
+    // Populate key rookies
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
       const selectedYear = document.getElementById('setYearSelect').value;
-      let keyPlayers = config["Key Players"] || config.keyPlayers;
+      const keyPlayers = config["Key Players"] || config.keyPlayers;
+
       if (keyPlayers && Array.isArray(keyPlayers)) {
         const keyRookies = keyPlayers.filter(player => {
           const teamKey = player.Team || player.team;
-          return player.type && player.type.toLowerCase() === 'rookie' && player.setYear === selectedYear && teamKey;
+          return player.type 
+            && player.type.toLowerCase() === 'rookie'
+            && player.setYear === selectedYear
+            && teamKey;
         });
+
         if (keyRookies.length > 0) {
           keyRookies.forEach(player => {
             const tile = document.createElement('div');
             tile.className = 'tile';
+
             const teamKey = player.Team || player.team;
-            const teamImage = config.images && config.images["team images"] && config.images["team images"][teamKey] ? config.images["team images"][teamKey] : "";
-            tile.innerHTML = `<strong>${player.player}</strong>
+            const teamImage = 
+              config.images 
+              && config.images["team images"] 
+              && config.images["team images"][teamKey] 
+                ? config.images["team images"][teamKey] 
+                : "";
+
+            tile.innerHTML = `
+              <strong>${player.player}</strong>
               <div class="rookie-notes">${player.notes || ""}</div>
               <div class="rookie-image-container">
                 ${ teamImage ? `<img class="team-img key-rookie-logo" src="${teamImage}" alt="${teamKey}">` : "" }
                 <img class="rookie-img" src="${player.image}" alt="${player.player}">
-              </div>`;
+              </div>
+            `;
+
             const btnContainer = document.createElement('div');
             btnContainer.style.display = "inline-flex";
             btnContainer.style.gap = "15px";
             btnContainer.style.marginTop = "8px";
+
             const nhlLink = document.createElement("a");
             nhlLink.href = player.profile_link;
             nhlLink.target = "_blank";
             nhlLink.className = "nhl-btn";
             nhlLink.innerHTML = '<img src="resources/nhl_button.png" alt="NHL Profile">';
             btnContainer.appendChild(nhlLink);
+
             const ebayLink = document.createElement("a");
             ebayLink.href = "javascript:void(0)";
             ebayLink.className = "ebay-btn";
-            ebayLink.onclick = function() { openPlayerEbaySearch(player.player); };
+            ebayLink.onclick = () => openPlayerEbaySearch(player.player);
             ebayLink.innerHTML = '<img src="resources/ebay_button.png" alt="eBay">';
             btnContainer.appendChild(ebayLink);
+
             tile.appendChild(btnContainer);
             rookieContainer.appendChild(tile);
           });
@@ -947,34 +1031,39 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-    
-    // Recalculate the table rows.
+
+    // Recalculate and render the table rows
     function updateBreakSniffer() {
       if (!currentSet) {
-        document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
+        document.getElementById('break-tiles').textContent = 
+          "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
-      
+
       const costCase = parseFloat(document.getElementById('caseCost').value);
       const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
       const usePercent = document.getElementById('markupToggle').checked;
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
-      
+
+      // Markup logic
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
+
+      // 8% cut from the marketplace
       const whatnotsCut = costWithMarkup * 0.08;
-      
+
+      // Gather team data
       const teams = currentSet.cards;
       const teamNames = Object.keys(teams);
       const totalCards = teamNames.reduce((sum, team) => sum + teams[team], 0);
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
-      
+
       let totalCostOfBusiness = 0;
       const teamData = [];
-      
+
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -982,10 +1071,14 @@
         const transactionCost = distributedCost * (1 + blendedTax / 100) * 0.029 + 0.30;
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
-        const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
+
+        const avgCardsCase = totalCardsPerCase 
+          ? (distribution * totalCardsPerCase) 
+          : null;
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
+
         teamData.push({
           team,
           teamCards,
@@ -994,23 +1087,27 @@
           baseline
         });
       });
-      
-      // Update boost/discount values from the combined control.
+
+      // Check the toggle & input for each team
       teamData.forEach(data => {
-        var toggleElem = document.getElementById("boost-toggle-" + data.team);
-        var inputElem = document.getElementById("boost-input-" + data.team);
+        const toggleElem = document.getElementById("boost-toggle-" + data.team);
+        const inputElem = document.getElementById("boost-input-" + data.team);
         let value = inputElem ? parseFloat(inputElem.value) || 0 : 0;
         data.boost = 0;
         data.discount = 0;
+
+        // If input is > 0
         if (value > 0) {
+          // If toggle is checked => discount, otherwise => boost
           if (toggleElem && toggleElem.checked) {
-            data.discount = value; // When toggle is checked, discount is ON.
+            data.discount = value;
           } else {
-            data.boost = value;    // When unchecked, boost is ON.
+            data.boost = value;
           }
         }
       });
-      
+
+      // Compute the adjusted and final prices
       let boostExtraPool = 0;
       const boostedTeams = [];
       const nonBoostedTeams = [];
@@ -1030,7 +1127,7 @@
           data.adjusted = data.baseline - boostShare;
         });
       }
-      
+
       let discountPool = 0;
       const discountTeams = [];
       const nonDiscountTeams = [];
@@ -1050,31 +1147,50 @@
           data.final = data.adjusted + discountShare;
         });
       }
-      
+
       teamData.forEach(data => {
         data.teamPrice = data.final;
       });
-      
+
+      // Rebuild the table
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
+
       teamData.forEach(data => {
-        var currentInput = document.getElementById("boost-input-" + data.team);
+        const currentInput = document.getElementById("boost-input-" + data.team);
         let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
-        // Determine toggle color based on current input and boost/discount values.
+
+        // Decide the toggle color:
+        // Grey if 0; green if boost>0; blue if discount>0
         let toggleColor = 'grey';
         if (currentValue > 0) {
           toggleColor = (data.boost > 0) ? 'green' : 'blue';
         }
+
         tbody.innerHTML += `
           <tr>
             <td>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" style="color:#333; text-decoration:none;">
-                ${ config.images && config.images["team images"] && config.images["team images"][data.team] 
-                   ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` 
-                   : "" }
+              <a href="javascript:void(0)" 
+                 onclick="openTeamSearch('${data.team}')"
+                 style="color:#333; text-decoration:none;">
+                ${
+                  config.images 
+                    && config.images["team images"] 
+                    && config.images["team images"][data.team] 
+                    ? `<img src="${config.images["team images"][data.team]}" 
+                              alt="${data.team}"
+                              style="width:30px;height:30px;
+                                     object-fit:contain;
+                                     margin-right:5px;
+                                     vertical-align:middle;">`
+                    : ""
+                }
                 ${data.team}
               </a>
-              <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="table-ebay-btn" style="margin-left:5px;">
+              <a href="javascript:void(0)" 
+                 onclick="openTeamSearch('${data.team}')" 
+                 class="table-ebay-btn" 
+                 style="margin-left:5px;">
                 <img src="resources/ebay_button.png" alt="eBay">
               </a>
             </td>
@@ -1084,24 +1200,45 @@
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
               <div class="boost-toggle-container">
-                <label class="ios-toggle" id="ios-toggle-${data.team}" style="background-color: ${toggleColor};">
+                <label class="ios-toggle" 
+                       id="ios-toggle-${data.team}"
+                       style="background-color: ${toggleColor};">
                   <span class="toggle-label toggle-rocket">🚀</span>
-                  <input type="checkbox" id="boost-toggle-${data.team}" onchange="updateToggleBackground('${data.team}')" ${data.discount > 0 ? 'checked' : ''} />
+                  <input type="checkbox"
+                         id="boost-toggle-${data.team}"
+                         onchange="updateToggleBackground('${data.team}')"
+                         ${data.discount > 0 ? 'checked' : ''} />
                   <span class="toggle-slider"></span>
                   <span class="toggle-label toggle-scissors">✂️</span>
                 </label>
-                <input type="number" class="boost-input" id="boost-input-${data.team}" step="0.1" min="0" value="${(data.boost > 0 ? data.boost : (data.discount > 0 ? data.discount : 0)) || 0}" oninput="updateToggleBackground('${data.team}')" style="width:60px;">
+                <input type="number"
+                       class="boost-input"
+                       id="boost-input-${data.team}"
+                       step="0.1"
+                       min="0"
+                       value="${
+                         data.boost > 0 
+                           ? data.boost 
+                           : (data.discount > 0 
+                                 ? data.discount 
+                                 : 0)
+                       }"
+                       oninput="updateToggleBackground('${data.team}')"
+                       style="width:60px;">
               </div>
             </td>
             <td>$${data.teamPrice.toFixed(2)}</td>
           </tr>
         `;
       });
-      
+
+      // Calculate break summary
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
+
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
+
       const tileProfit = document.createElement('div');
       tileProfit.className = 'tile';
       tileProfit.textContent = "Breaker's Profit: $" + breakersProfit.toFixed(2);
@@ -1110,7 +1247,7 @@
       tileProfit.style.borderRadius = "4px";
       tileProfit.style.padding = "10px";
       breakTiles.appendChild(tileProfit);
-      
+
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile';
       tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
@@ -1119,7 +1256,7 @@
       tileWhatnots.style.borderRadius = "4px";
       tileWhatnots.style.padding = "10px";
       breakTiles.appendChild(tileWhatnots);
-      
+
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile';
       tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
@@ -1128,7 +1265,8 @@
       tileBusiness.style.borderRadius = "4px";
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
-      
+
+      // Render the pie chart
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
@@ -1136,12 +1274,13 @@
       ];
       updatePieChart(pieData);
     }
-    
+
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
       const values = data.map(d => d.value);
       const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
+
       if (pieChartInstance) {
         pieChartInstance.data.labels = labels;
         pieChartInstance.data.datasets[0].data = values;
@@ -1180,11 +1319,15 @@
         });
       }
     }
-    
+
+    // The external search links
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
+      if (!selectedSet || !selectedYear) {
+        alert("Please select a set and year first.");
+        return;
+      }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.dacardworld.com/search/?Search=" + encodeURIComponent(query), "_blank");
@@ -1192,7 +1335,10 @@
     function openSteelCitySearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
+      if (!selectedSet || !selectedYear) {
+        alert("Please select a set and year first.");
+        return;
+      }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.steelcitycollectibles.com/search?q=" + encodeURIComponent(query), "_blank");
@@ -1200,7 +1346,10 @@
     function openOotbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
+      if (!selectedSet || !selectedYear) {
+        alert("Please select a set and year first.");
+        return;
+      }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.outoftheboxcards.com/?s=" + encodeURIComponent(query), "_blank");
@@ -1208,7 +1357,10 @@
     function openMidwestCardsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
+      if (!selectedSet || !selectedYear) {
+        alert("Please select a set and year first.");
+        return;
+      }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet + " hockey hobby case";
       window.open("https://www.midwestcards.com/search/?search_query=" + encodeURIComponent(query), "_blank");
@@ -1216,7 +1368,10 @@
     function openTcdbSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
+      if (!selectedSet || !selectedYear) {
+        alert("Please select a set and year first.");
+        return;
+      }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://www.tcdb.com/Search.cfm?SearchCategory=Hockey&q=" + encodeURIComponent(query), "_blank");
@@ -1224,12 +1379,16 @@
     function openHockeyChecklistsSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
-      if (!selectedSet || !selectedYear) { alert("Please select a set and year first."); return; }
+      if (!selectedSet || !selectedYear) {
+        alert("Please select a set and year first.");
+        return;
+      }
       const yearPrefix = selectedYear.split("-")[0];
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-    
+
+    // Load config once page is ready
     loadConfig();
   </script>
 </body>
