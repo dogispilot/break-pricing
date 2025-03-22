@@ -212,11 +212,7 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Existing boost/discount inputs override */
-    .boost-input,
-    .discount-input {
-      width: 60px;
-    }
+    /* Existing boost/discount inputs override removed */
     /* Button group inline for Price Settings/Lookup buttons */
     .button-group-inline {
       display: inline-flex;
@@ -256,10 +252,9 @@
       padding: 0 !important;
       border: none !important;
       display: inline-block;
-      width: auto; 
     }
     .table-ebay-btn img {
-      max-width: 25%;  /* 25% of the size compared to the key rookie ebay button */
+      max-width: 25%;  /* scaled down to about 25% of its original size */
       height: auto;
     }
     /* Table styling */
@@ -424,11 +419,25 @@
       transition: .4s;
       border-radius: 50%;
     }
-    input:checked + .slider {
-      background-color: #66bb6a;
+    /* For boost toggle: green background when in rocket mode, purple when in scissors mode */
+    .boost-switch input:checked + .slider {
+      background-color: green;
     }
-    input:checked + .slider:before {
-      transform: translateX(26px);
+    .boost-switch input:not(:checked) + .slider {
+      background-color: purple;
+    }
+    /* Boost toggle container styling */
+    .boost-toggle-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .boost-toggle-container.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .boost-toggle-container .toggle-icon {
+      font-size: 1.2em;
     }
     /* Key Rookies section */
     #rookie-tiles {
@@ -624,7 +633,6 @@
           <th>Avg. Cards per Case</th>
           <th>Cost + Markup</th>
           <th>Boost</th>
-          <th>Discount</th>
           <th>Team Price</th>
         </tr>
       </thead>
@@ -642,29 +650,19 @@
     function updateSelectWidth(selectElement) {
       var selectedText = selectElement.options[selectElement.selectedIndex].text;
       var hiddenSpan = document.getElementById('hiddenSelectText');
-      
-      // Copy computed styles from the select element to the hidden span
       var computedStyles = window.getComputedStyle(selectElement);
       hiddenSpan.style.fontSize = computedStyles.fontSize;
       hiddenSpan.style.fontWeight = computedStyles.fontWeight;
       hiddenSpan.style.fontFamily = computedStyles.fontFamily;
       hiddenSpan.style.textDecoration = computedStyles.textDecoration;
-      
       hiddenSpan.textContent = selectedText;
-      
-      // Measure the text width accurately
       var textWidth = hiddenSpan.getBoundingClientRect().width;
-      // Add extra pixels to account for the dropdown arrow and any slight padding
-      var newWidth = textWidth + 0;
-      selectElement.style.width = newWidth + "px";
+      selectElement.style.width = textWidth + "px";
     }
-
-    // Update widths for both select elements
     function updateAllSelectWidths() {
       updateSelectWidth(document.getElementById('setNameSelect'));
       updateSelectWidth(document.getElementById('setYearSelect'));
     }
-
     // Toggle markup prefix/suffix based on markup toggle state.
     function updateMarkupUnit() {
       const isPercent = document.getElementById('markupToggle').checked;
@@ -678,31 +676,26 @@
         suffix.style.display = 'none';
       }
     }
-    
     let config = null;
     let currentSet = null;
     let pieChartInstance = null;
     let breakSnifferTimeout;
-
     function debouncedUpdateBreakSniffer() {
       clearTimeout(breakSnifferTimeout);
       breakSnifferTimeout = setTimeout(() => {
         updateBreakSniffer();
       }, 300);
     }
-
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
         config = await response.json();
         populateYearDropdown();
         updateSetNameDropdown();
-        // Update select widths after options are populated
         updateAllSelectWidths();
         document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', debouncedUpdateBreakSniffer);
         });
-        // Update width on change events
         document.getElementById('setNameSelect').addEventListener('change', function() {
           updateSelectWidth(this);
         });
@@ -724,7 +717,6 @@
         console.error("Error loading config.json:", error);
       }
     }
-
     function populateYearDropdown() {
       const setYearSelect = document.getElementById('setYearSelect');
       let years = new Set();
@@ -739,7 +731,6 @@
         setYearSelect.appendChild(opt);
       });
     }
-
     // Updated function to update the set name dropdown and adjust width accordingly
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
@@ -761,10 +752,8 @@
         setNameSelect.appendChild(opt);
       });
       if (!found) { setNameSelect.value = ""; }
-      // Update the width based on the current selected option
       updateSelectWidth(setNameSelect);
     }
-
     document.getElementById('setYearSelect').addEventListener('change', function() {
       updateSetNameDropdown();
       onSelectionChange();
@@ -775,7 +764,6 @@
       const notesDiv = document.getElementById('set-notes');
       notesDiv.style.display = (notesDiv.style.display === 'none' || notesDiv.style.display === '') ? 'block' : 'none';
     });
-
     function onSelectionChange() {
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
@@ -786,7 +774,6 @@
       updateBreakSniffer();
       if (!currentSet) {
         document.getElementById('toggleNotes').style.display = 'none';
-        // Remove empty state text for details section.
         document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
@@ -794,7 +781,6 @@
         document.getElementById('toggleNotes').style.display = 'inline';
       }
     }
-
     function updateBreakCaseCost() {
       if (currentSet && currentSet.price) {
         const priceNum = parseFloat(currentSet.price.replace(/[^0-9.]/g, ''));
@@ -803,7 +789,6 @@
         }
       }
     }
-
     function updateSetDetails() {
       const detailsDiv = document.getElementById('details-text');
       const notesDiv = document.getElementById('set-notes');
@@ -816,49 +801,40 @@
       }
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
-      
       tilesDiv.innerHTML = "";
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
-      
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
       heroContainer.appendChild(heroTile1);
-      
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       const heroTile2 = document.createElement('div');
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
-      
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
       supportContainer.appendChild(tileBoxes);
-      
       const tilePacks = document.createElement('div');
       tilePacks.className = 'tile';
       tilePacks.innerHTML = `<div class="tile-value">${currentSet.packs_per_box || "N/A"}</div><div class="tile-desc">Packs per Box</div>`;
       supportContainer.appendChild(tilePacks);
-      
       const tileCardsPack = document.createElement('div');
       tileCardsPack.className = 'tile';
       tileCardsPack.innerHTML = `<div class="tile-value">${currentSet.cards_per_pack || "N/A"}</div><div class="tile-desc">Cards per Pack</div>`;
       supportContainer.appendChild(tileCardsPack);
-      
       const cardsPerBox = computeCardsPerBox(currentSet);
       const tileCardsBox = document.createElement('div');
       tileCardsBox.className = 'tile';
       tileCardsBox.innerHTML = `<div class="tile-value">${cardsPerBox || "N/A"}</div><div class="tile-desc">Cards per Box</div>`;
       supportContainer.appendChild(tileCardsBox);
-      
       tilesDiv.appendChild(heroContainer);
       tilesDiv.appendChild(supportContainer);
     }
-
     function computeTotalCardsPerCase(setObj) {
       const boxes = parseFloat(setObj.boxes_per_case);
       const packs = parseFloat(setObj.packs_per_box);
@@ -866,14 +842,12 @@
       if (isNaN(boxes) || isNaN(packs) || isNaN(cards)) return null;
       return boxes * packs * cards;
     }
-
     function computeCardsPerBox(setObj) {
       const packs = parseFloat(setObj.packs_per_box);
       const cards = parseFloat(setObj.cards_per_pack);
       if (isNaN(packs) || isNaN(cards)) return null;
       return packs * cards;
     }
-
     function openPlayerEbaySearch(playerName) {
       const setName = document.getElementById("setNameSelect").value;
       const setYear = document.getElementById("setYearSelect").value;
@@ -890,7 +864,6 @@
       const query = yearPrefix + " " + setName + " " + teamName;
       window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
     }
-
     function updateKeyRookies() {
       const rookieContainer = document.getElementById('rookie-tiles');
       rookieContainer.innerHTML = "";
@@ -939,57 +912,45 @@
         rookieContainer.textContent = "No key players data available.";
       }
     }
-
-    function toggleBoostInput(team) {
-      const checkbox = document.getElementById("boost-checkbox-" + team);
-      const input = document.getElementById("boost-input-" + team);
-      if (checkbox.checked) {
-        input.style.display = "inline-block";
+    // Update the boost toggle UI for a given team based on the input value
+    function updateBoostToggleUI(team) {
+      var container = document.getElementById("boost-toggle-container-" + team);
+      var inputElem = document.getElementById("boost-discount-input-" + team);
+      var toggleElem = document.getElementById("boost-discount-toggle-" + team);
+      var value = parseFloat(inputElem.value) || 0;
+      if (value <= 0) {
+        container.classList.add("disabled");
+        toggleElem.checked = false;
       } else {
-        input.style.display = "none";
-        input.value = "";
-        debouncedUpdateBreakSniffer();
+        container.classList.remove("disabled");
+        // Default to rocket (boost) if active
+        if (!toggleElem.checked) {
+          toggleElem.checked = true;
+        }
       }
     }
-
-    function toggleDiscountInput(team) {
-      const checkbox = document.getElementById("discount-checkbox-" + team);
-      const input = document.getElementById("discount-input-" + team);
-      if (checkbox.checked) {
-        input.style.display = "inline-block";
-      } else {
-        input.style.display = "none";
-        input.value = "";
-        debouncedUpdateBreakSniffer();
-      }
-    }
-
+    // Combined boost/discount is applied in updateBreakSniffer:
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
         return;
       }
-      
       const costCase = parseFloat(document.getElementById('caseCost').value);
       const markupVal = parseFloat(document.getElementById('markupValue').value) || 0;
       const usePercent = document.getElementById('markupToggle').checked;
       const suppliesCost = parseFloat(document.getElementById('suppliesCost').value);
       const blendedTax = parseFloat(document.getElementById('blendedTax').value);
-      
       let costWithMarkup = usePercent 
         ? costCase * (1 + markupVal / 100)
         : costCase + markupVal; 
       const whatnotsCut = costWithMarkup * 0.08;
-      
       const teams = currentSet.cards;
       const teamNames = Object.keys(teams);
       const totalCards = teamNames.reduce((sum, team) => sum + teams[team], 0);
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
-      
       let totalCostOfBusiness = 0;
       const teamData = [];
-      
       teamNames.forEach(team => {
         const teamCards = teams[team];
         const distribution = teamCards / totalCards;
@@ -1009,65 +970,21 @@
           baseline
         });
       });
-      
-      let boostExtraPool = 0;
-      const boostedTeams = [];
-      const nonBoostedTeams = [];
+      // For each team, read the combined boost/discount value.
       teamData.forEach(data => {
-        const boostCheckbox = document.getElementById("boost-checkbox-" + data.team);
-        let boostVal = 0;
-        if (boostCheckbox && boostCheckbox.checked) {
-          const boostInput = document.getElementById("boost-input-" + data.team);
-          boostVal = boostInput ? parseFloat(boostInput.value) || 0 : 0;
-        }
-        data.boost = boostVal;
-        if (data.boost > 0) {
-          let boostAmount = data.baseline * (data.boost / 100);
-          data.adjusted = data.baseline + boostAmount;
-          boostExtraPool += boostAmount;
-          boostedTeams.push(data);
+        var inputElem = document.getElementById("boost-discount-input-" + data.team);
+        var toggleElem = document.getElementById("boost-discount-toggle-" + data.team);
+        let boostVal = inputElem ? parseFloat(inputElem.value) || 0 : 0;
+        if (boostVal > 0) {
+          if (toggleElem && toggleElem.checked) {
+            data.final = data.baseline * (1 + boostVal/100);
+          } else {
+            data.final = data.baseline * (1 - boostVal/100);
+          }
         } else {
-          nonBoostedTeams.push(data);
+          data.final = data.baseline;
         }
       });
-      if (nonBoostedTeams.length > 0) {
-        let boostShare = boostExtraPool / nonBoostedTeams.length;
-        nonBoostedTeams.forEach(data => {
-          data.adjusted = data.baseline - boostShare;
-        });
-      }
-      
-      let discountPool = 0;
-      const discountTeams = [];
-      const nonDiscountTeams = [];
-      teamData.forEach(data => {
-        const discountCheckbox = document.getElementById("discount-checkbox-" + data.team);
-        let discountVal = 0;
-        if (discountCheckbox && discountCheckbox.checked) {
-          const discountInput = document.getElementById("discount-input-" + data.team);
-          discountVal = discountInput ? parseFloat(discountInput.value) || 0 : 0;
-        }
-        data.discount = discountVal;
-        if (data.discount > 0) {
-          let discountAmount = data.adjusted * (data.discount / 100);
-          data.final = data.adjusted - discountAmount;
-          discountPool += discountAmount;
-          discountTeams.push(data);
-        } else {
-          nonDiscountTeams.push(data);
-        }
-      });
-      if (nonDiscountTeams.length > 0) {
-        let discountShare = discountPool / nonDiscountTeams.length;
-        nonDiscountTeams.forEach(data => {
-          data.final = data.adjusted + discountShare;
-        });
-      }
-      
-      teamData.forEach(data => {
-        data.teamPrice = data.final;
-      });
-      
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
@@ -1098,24 +1015,20 @@
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
-              <label>
-                <input type="checkbox" class="boost-checkbox" id="boost-checkbox-${data.team}" onchange="toggleBoostInput('${data.team}')" ${data.boost > 0 ? 'checked' : ''}>
-                🚀
-              </label>
-              <input type="number" class="boost-input" id="boost-input-${data.team}" style="width:60px; ${data.boost > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.boost > 0 ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
+              <div class="boost-toggle-container" id="boost-toggle-container-${data.team}">
+                <span class="toggle-icon toggle-rocket">🚀</span>
+                <label class="toggle-switch boost-switch">
+                  <input type="checkbox" id="boost-discount-toggle-${data.team}" onchange="updateBoostToggleUI('${data.team}'); updateBreakSniffer();">
+                  <span class="slider"></span>
+                </label>
+                <span class="toggle-icon toggle-scissors">✂️</span>
+                <input type="number" id="boost-discount-input-${data.team}" class="boost-discount-input" min="0" value="0" oninput="updateBoostToggleUI('${data.team}'); updateBreakSniffer();" style="width:60px;">
+              </div>
             </td>
-            <td>
-              <label>
-                <input type="checkbox" class="discount-checkbox" id="discount-checkbox-${data.team}" onchange="toggleDiscountInput('${data.team}')" ${data.discount > 0 ? 'checked' : ''}>
-                ✂️
-              </label>
-              <input type="number" class="discount-input" id="discount-input-${data.team}" style="width:60px; ${data.discount > 0 ? 'display:inline-block;' : 'display:none;'}" step="0.1" value="${data.discount > 0 ? data.discount : ''}" oninput="debouncedUpdateBreakSniffer()">
-            </td>
-            <td>$${data.teamPrice.toFixed(2)}</td>
+            <td>$${data.final.toFixed(2)}</td>
           </tr>
         `;
       });
-      
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
       const breakTiles = document.getElementById('break-tiles');
@@ -1128,7 +1041,6 @@
       tileProfit.style.borderRadius = "4px";
       tileProfit.style.padding = "10px";
       breakTiles.appendChild(tileProfit);
-      
       const tileWhatnots = document.createElement('div');
       tileWhatnots.className = 'tile';
       tileWhatnots.textContent = "Whatnots Cut: $" + whatnotsCut.toFixed(2);
@@ -1137,7 +1049,6 @@
       tileWhatnots.style.borderRadius = "4px";
       tileWhatnots.style.padding = "10px";
       breakTiles.appendChild(tileWhatnots);
-      
       const tileBusiness = document.createElement('div');
       tileBusiness.className = 'tile';
       tileBusiness.textContent = "Cost of Business: $" + totalCostOfBusiness.toFixed(2);
@@ -1146,7 +1057,6 @@
       tileBusiness.style.borderRadius = "4px";
       tileBusiness.style.padding = "10px";
       breakTiles.appendChild(tileBusiness);
-      
       const pieData = [
         { label: "Profit", value: breakersProfit },
         { label: "Whatnots", value: whatnotsCut },
@@ -1154,13 +1064,11 @@
       ];
       updatePieChart(pieData);
     }
-
     function updatePieChart(data) {
       const ctx = document.getElementById('pieChart').getContext('2d');
       const labels = data.map(d => d.label);
       const values = data.map(d => d.value);
       const backgroundColors = ["#66bb6a", "#ffa726", "#42a5f5"];
-      
       if (pieChartInstance) {
         pieChartInstance.data.labels = labels;
         pieChartInstance.data.datasets[0].data = values;
@@ -1199,7 +1107,6 @@
         });
       }
     }
-
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
       const selectedYear = document.getElementById("setYearSelect").value;
@@ -1248,15 +1155,6 @@
       const query = yearPrefix + " " + selectedSet;
       window.open("https://hockeychecklists.com/checklist?search=" + encodeURIComponent(query), "_blank");
     }
-    function openTeamSearch(teamName) {
-      const setName = document.getElementById("setNameSelect").value;
-      const setYear = document.getElementById("setYearSelect").value;
-      if (!setName || !setYear) { alert("Please select a set and year."); return; }
-      const yearPrefix = setYear.split("-")[0];
-      const query = yearPrefix + " " + setName + " " + teamName;
-      window.open("https://www.ebay.com/sch/i.html?_nkw=" + encodeURIComponent(query) + "&_sop=16&rt=nc&LH_Sold=1&LH_Complete=1", "_blank");
-    }
-
     loadConfig();
   </script>
 </body>
