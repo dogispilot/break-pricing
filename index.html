@@ -394,7 +394,6 @@
       border-radius: 15px;
       background-color: grey;
       cursor: pointer;
-      margin-right: 10px;
       transition: background-color 0.4s;
     }
     .ios-toggle input {
@@ -428,6 +427,12 @@
     .ios-toggle .toggle-scissors {
       margin-right: 5px;
       margin-left: auto;
+    }
+    /* New rule: ensure the boost toggle and its input are on the same line */
+    .boost-toggle-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
     }
     /* Key Rookies section */
     #rookie-tiles {
@@ -689,6 +694,24 @@
       }, 300);
     }
 
+    // The updateToggleBackground function now only updates the toggle’s background color.
+    function updateToggleBackground(team) {
+      var inputElem = document.getElementById("boost-input-" + team);
+      var toggleLabel = document.getElementById("ios-toggle-" + team);
+      var toggleCheckbox = document.getElementById("boost-toggle-" + team);
+      var val = parseFloat(inputElem.value) || 0;
+      if (val === 0) {
+        toggleLabel.style.backgroundColor = 'grey';
+      } else {
+        if (toggleCheckbox.checked) {
+          toggleLabel.style.backgroundColor = 'green';
+        } else {
+          toggleLabel.style.backgroundColor = 'blue';
+        }
+      }
+      // Do not re-render the table here to avoid snapping.
+    }
+
     async function loadConfig() {
       try {
         const response = await fetch('config.json');
@@ -738,7 +761,7 @@
       });
     }
 
-    // Updated function to update the set name dropdown and adjust width accordingly
+    // Update the set name dropdown and adjust width accordingly.
     function updateSetNameDropdown() {
       const year = document.getElementById('setYearSelect').value;
       const setNameSelect = document.getElementById('setNameSelect');
@@ -759,7 +782,6 @@
         setNameSelect.appendChild(opt);
       });
       if (!found) { setNameSelect.value = ""; }
-      // Update the width based on the current selected option
       updateSelectWidth(setNameSelect);
     }
 
@@ -784,7 +806,6 @@
       updateBreakSniffer();
       if (!currentSet) {
         document.getElementById('toggleNotes').style.display = 'none';
-        // Remove empty state text for details section.
         document.getElementById('details-text').textContent = "";
         document.getElementById('set-tiles').innerHTML = "";
         document.getElementById('team-table').querySelector('tbody').innerHTML = "";
@@ -938,24 +959,8 @@
       }
     }
 
-    // New function to update the combined boost/discount toggle background
-    function updateToggleBackground(team) {
-      var inputElem = document.getElementById("boost-input-" + team);
-      var toggleLabel = document.getElementById("ios-toggle-" + team);
-      var toggleCheckbox = document.getElementById("boost-toggle-" + team);
-      var val = parseFloat(inputElem.value) || 0;
-      if (val === 0) {
-        toggleLabel.style.backgroundColor = 'grey';
-      } else {
-        if (toggleCheckbox.checked) {
-          toggleLabel.style.backgroundColor = 'green';
-        } else {
-          toggleLabel.style.backgroundColor = 'blue';
-        }
-      }
-      debouncedUpdateBreakSniffer();
-    }
-
+    // The updateBreakSniffer function now re-renders the table rows.
+    // For each team, it computes the boost/discount values and the proper toggle background.
     function updateBreakSniffer() {
       if (!currentSet) {
         document.getElementById('break-tiles').textContent = "Please select a set and year to get started.";
@@ -1002,7 +1007,7 @@
         });
       });
       
-      // Combined boost/discount: get the value and mode from the single control
+      // For each team, update boost/discount based on the combined control.
       teamData.forEach(data => {
         var toggleElem = document.getElementById("boost-toggle-" + data.team);
         var inputElem = document.getElementById("boost-input-" + data.team);
@@ -1065,23 +1070,20 @@
       const tbody = document.getElementById('team-table').querySelector('tbody');
       tbody.innerHTML = "";
       teamData.forEach(data => {
-        const keyPlayers = config["Key Players"] || config.keyPlayers;
-        const hasKeyRookie = keyPlayers && Array.isArray(keyPlayers) && keyPlayers.some(player => {
-          const teamKey = player.Team || player.team;
-          return player.type && player.type.toLowerCase() === 'rookie' &&
-                 player.setYear === document.getElementById('setYearSelect').value &&
-                 teamKey === data.team;
-        });
-        const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
-        const keyEmoji = hasKeyRookie ? ' 🔑' : '';
-        const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
-                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">`
-                          : "";
+        // Get the current boost value from the input, if available.
+        var currentInput = document.getElementById("boost-input-" + data.team);
+        let currentValue = currentInput ? parseFloat(currentInput.value) || 0 : 0;
+        // Determine the toggle background color:
+        let toggleColor = 'grey';
+        if (currentValue > 0) {
+          toggleColor = (data.boost > 0) ? 'green' : 'blue';
+        }
         tbody.innerHTML += `
-          <tr${highlightStyle}>
+          <tr>
             <td>
               <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" style="color:#333; text-decoration:none;">
-                ${teamImage}${data.team}${keyEmoji}
+                ${ config.images && config.images["team images"] && config.images["team images"][data.team] ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" style="width:30px;height:30px;object-fit:contain;margin-right:5px;vertical-align:middle;">` : "" }
+                ${data.team}
               </a>
               <a href="javascript:void(0)" onclick="openTeamSearch('${data.team}')" class="table-ebay-btn" style="margin-left:5px;">
                 <img src="resources/ebay_button.png" alt="eBay">
@@ -1093,9 +1095,9 @@
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
               <div class="boost-toggle-container">
-                <label class="ios-toggle" id="ios-toggle-${data.team}">
+                <label class="ios-toggle" id="ios-toggle-${data.team}" style="background-color: ${toggleColor};">
                   <span class="toggle-label toggle-rocket">🚀</span>
-                  <input type="checkbox" id="boost-toggle-${data.team}" onchange="updateToggleBackground('${data.team}')" />
+                  <input type="checkbox" id="boost-toggle-${data.team}" onchange="updateToggleBackground('${data.team}')" ${data.boost > 0 ? 'checked' : ''} />
                   <span class="toggle-slider"></span>
                   <span class="toggle-label toggle-scissors">✂️</span>
                 </label>
