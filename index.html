@@ -110,24 +110,21 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
-      /* Keep hero tiles on one row */
       flex-wrap: nowrap;
     }
     .support-row {
       display: flex;
       gap: 10px;
-      /* NEW: Use calc to reduce width to account for gaps */
       flex-wrap: wrap;
     }
     /* Ensure hero tiles take 50% width */
     .hero-row .tile.hero {
       flex: 0 0 50%;
     }
-    /* Ensure support tiles take slightly less than 25% to fit all 4 in one row */
+    /* Adjust support tiles width to account for gaps */
     .support-row .tile {
       flex: 0 0 calc(25% - 10px);
     }
-    /* Add 10px space below the TCDB and HockeyChecklists.com buttons */
     .button-container {
       margin-bottom: 10px;
     }
@@ -149,19 +146,21 @@
       gap: 10px;
       align-items: stretch;
     }
-    .input-group {
-      margin-bottom: 10px;
+    /* Remove extra margin from input groups in left column */
+    .break-controls-row .input-group {
+      margin-bottom: 0;
     }
-    /* Limit width of "Cost of a case" label */
+    /* Force labels to be block so they always appear on top */
+    .break-controls-row .input-group label {
+      display: block;
+    }
+    /* Limit width of the "Cost of a case" label */
     #caseCostLabel {
-      display: inline-block;
       width: 110px;
     }
-    /* Wrapper for price lookup/settings buttons */
     .price-button-wrapper {
       margin: 10px 0;
     }
-    /* For the markup input wrapper, add 10px space below */
     .markup-wrapper {
       margin-bottom: 10px;
     }
@@ -268,12 +267,10 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Label above break tiles */
     .profit-distribution-label {
       font-weight: bold;
       margin: 10px 0;
     }
-    /* Breaker Tiles: Smaller, placed under Price Lookup */
     #break-tiles {
       display: block;
       margin-top: 15px;
@@ -294,7 +291,6 @@
     .break-tile .tile-label {
       font-size: 0.8em;
     }
-    /* Bubble Chart Styling – placed in the right column */
     #bubbleChartContainer {
       width: 100%;
       max-width: 100%;
@@ -305,7 +301,6 @@
       width: 100%;
       height: auto;
     }
-    /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
       display: inline-block;
       position: relative;
@@ -344,7 +339,6 @@
     input:checked + .slider:before {
       transform: translateX(26px);
     }
-    /* Rookie Tiles */
     #rookie-tiles {
       display: flex;
       flex-wrap: wrap;
@@ -383,7 +377,6 @@
       justify-content: center;
       gap: 0px;
     }
-    /* Table Styling – team images in table use dedicated class */
     .table-team-img {
       width: 40px;
       height: 40px;
@@ -458,7 +451,6 @@
       font-family: 'BreakPricingFont', sans-serif;
       width: 120px;
     }
-    /* Floating dialogs for price menus */
     #price-settings, #price-lookup-menu {
       position: absolute;
       background: #fff;
@@ -533,7 +525,7 @@
               </div>
             </div>
           </div>
-          <!-- Price Lookup button below cost input -->
+          <!-- Price Lookup button directly below cost input with 10px gap -->
           <div class="price-button-wrapper">
             <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
           </div>
@@ -545,7 +537,7 @@
               <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
-          <!-- Price Settings button below markup input -->
+          <!-- Price Settings button directly below markup input with 10px gap -->
           <div class="price-button-wrapper">
             <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
           </div>
@@ -807,7 +799,7 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       tilesDiv.innerHTML = "";
-      // Create hero row (2 tiles) on one row
+      // Create hero row (2 tiles) on a single row
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const heroTile1 = document.createElement('div');
@@ -819,7 +811,7 @@
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
-      // Create support row (4 tiles) on next row
+      // Create support row (4 tiles) on the next row
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
       const tileBoxes = document.createElement('div');
@@ -1199,7 +1191,6 @@
         });
       }
     }
-    // Dummy updatePieChart function (donut chart removed)
     function updatePieChart(data) {}
     function openDacardworldSearch() {
       const selectedSet = document.getElementById("setNameSelect").value;
