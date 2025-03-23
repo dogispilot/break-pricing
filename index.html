@@ -131,6 +131,10 @@
     .price-buttons-row button {
       width: 120px;
     }
+    /* Add 15px space below the Price Lookup button */
+    #priceLookupToggle {
+      margin-bottom: 15px;
+    }
     /* Floating dialogs for price menus */
     #price-settings, #price-lookup-menu {
       position: absolute;
@@ -222,6 +226,10 @@
     }
     input[type="number"] {
       -moz-appearance: textfield;
+    }
+    /* Add 10px space below the markup input field */
+    #markupValue {
+      margin-bottom: 10px;
     }
     .boost-input {
       width: 100%;
@@ -1044,13 +1052,13 @@
       updatePieChart([]); // Donut chart removed
     }
     // Updated Bubble Chart Function – draws only team images.
-    // The image size is now based on a reduced boost multiplier (2 instead of 5).
+    // The base image size is now increased by 15% (from 40 to 46) and images are drawn with 0.6 opacity.
     // The x-axis and y-axis scales are computed from the data.
     // Tapping on an image shows an alert with the team's details.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
-      const baseSize = 40; // base image size in pixels
+      const baseSize = 46; // base image size increased by 15% from 40
       const boostFactor = 2; // reduced multiplier: additional pixels per 1% boost/discount
       // Build data points and preload images using cache.
       const imageData = teamData.map(data => {
@@ -1104,13 +1112,19 @@
                 title: { display: true, text: 'Distribution (%)' },
                 min: xMin,
                 max: xMax,
-                ticks: { beginAtZero: false }
+                ticks: {
+                  beginAtZero: false,
+                  callback: function(value) { return value + '%'; }
+                }
               },
               y: {
                 title: { display: true, text: 'Team Price ($)' },
                 min: yMin,
                 max: yMax,
-                ticks: { beginAtZero: true }
+                ticks: {
+                  beginAtZero: true,
+                  callback: function(value) { return '$' + value; }
+                }
               }
             },
             plugins: {
@@ -1163,7 +1177,9 @@
                     drawWidth = size * aspect;
                     drawHeight = size;
                   }
+                  ctx.globalAlpha = 0.6;
                   ctx.drawImage(img, x - drawWidth/2, y - drawHeight/2, drawWidth, drawHeight);
+                  ctx.globalAlpha = 1;
                 }
                 ctx.shadowColor = "transparent";
                 ctx.shadowBlur = 0;
