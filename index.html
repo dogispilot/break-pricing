@@ -106,24 +106,17 @@
     .tile-desc {
       font-size: 1em;
     }
+    /* Use grid layout for tile rows */
     .hero-row {
-      display: flex;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 10px;
       margin-bottom: 10px;
-      flex-wrap: nowrap;
     }
     .support-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    /* Ensure hero tiles take 50% width */
-    .hero-row .tile.hero {
-      flex: 0 0 50%;
-    }
-    /* Adjust support tiles width to account for gaps */
-    .support-row .tile {
-      flex: 0 0 calc(25% - 10px);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 10px;
     }
     .button-container {
       margin-bottom: 10px;
@@ -146,11 +139,11 @@
       gap: 10px;
       align-items: stretch;
     }
-    /* Remove extra margin from input groups in left column */
+    /* Remove extra margin from input groups */
     .break-controls-row .input-group {
       margin-bottom: 0;
     }
-    /* Force labels to be block so they always appear on top */
+    /* Force labels to appear above inputs */
     .break-controls-row .input-group label {
       display: block;
     }
@@ -499,7 +492,7 @@
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Hero row (2 tiles) and support row (4 tiles) will be added here -->
+      <!-- Hero row and support row will be added here by JavaScript -->
     </div>
   </section>
   <!-- Section 3: Key Rookies -->
@@ -799,7 +792,7 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       tilesDiv.innerHTML = "";
-      // Create hero row (2 tiles) on a single row
+      // Create hero row (2 tiles) as grid row
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const heroTile1 = document.createElement('div');
@@ -811,7 +804,7 @@
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
-      // Create support row (4 tiles) on the next row
+      // Create support row (4 tiles) as grid row
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
       const tileBoxes = document.createElement('div');
@@ -1052,9 +1045,6 @@
       updateBubbleChart(teamData);
       updatePieChart([]); // Donut chart removed
     }
-    // Updated Bubble Chart Function – draws only team images.
-    // The base image size is increased by 15% (from 40 to 46) and images are drawn with 0.6 opacity.
-    // The x-axis tick callback now formats values to 1 decimal place and the y-axis shows no decimals.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
