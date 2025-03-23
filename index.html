@@ -934,6 +934,7 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
+        // The y-axis is now the team price (baseline)
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -1043,28 +1044,31 @@
       updateBubbleChart(teamData);
       updatePieChart([]); // Donut chart removed
     }
-    // Updated Bubble Chart Function – Now draws only team images,
-    // with image size changing based on boost/discount and a colored shadow.
+    // Updated Bubble Chart Function – now draws only team images.
+    // The image size changes based on boost/discount, and a prominent green/red shadow is applied.
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // Set up chart to fill width: use responsive settings.
-      const baseSize = 40; // base image size
-      const boostFactor = 5; // additional size per 1% boost/discount
-      // Create data points for each team.
+      // Define base image size and boost multiplier.
+      const baseSize = 40; // base image size in pixels
+      const boostFactor = 5; // additional pixels per 1% boost/discount
+      // Build data points.
       const imageData = teamData.map(data => {
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
         return {
-          x: data.distribution * 100,  // x-axis: distribution (%)
-          y: data.baseline,            // y-axis: distributed cost + markup
+          x: data.distribution * 100,  // distribution in %
+          y: data.baseline,            // team price (baseline)
           size: size,
           team: data.team,
           boost: data.boost,
           logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
         };
       });
-      // We no longer draw bubbles. Instead, we draw images.
+      // Compute max x value from distribution data.
+      const maxDistribution = Math.max(...imageData.map(d => d.x));
+      const xMax = maxDistribution * 1.05;
       if (bubbleChartInstance) {
         bubbleChartInstance.data.datasets[0].data = imageData;
+        bubbleChartInstance.options.scales.x.max = xMax;
         bubbleChartInstance.update();
       } else {
         bubbleChartInstance = new Chart(ctx, {
@@ -1073,7 +1077,7 @@
             datasets: [{
               label: 'Team Data',
               data: imageData,
-              // Set pointRadius to 0 so default bubbles are not drawn.
+              // Disable default bubble drawing.
               pointRadius: 0
             }]
           },
@@ -1084,11 +1088,11 @@
               x: {
                 title: { display: true, text: 'Distribution (%)' },
                 min: 0,
-                max: 100,
+                max: xMax,
                 ticks: { beginAtZero: true }
               },
               y: {
-                title: { display: true, text: 'Distributed Cost + Markup ($)' },
+                title: { display: true, text: 'Team Price ($)' },
                 ticks: { beginAtZero: true }
               }
             },
@@ -1108,18 +1112,24 @@
                 const size = dataPoint.size;
                 const img = new Image();
                 img.src = dataPoint.logo;
-                // Set shadow based on boost value:
+                // Set prominent shadow based on boost value.
                 if (dataPoint.boost > 0) {
-                  ctx.shadowColor = "rgba(102, 187, 106, 0.8)"; // green shadow
-                  ctx.shadowBlur = 10;
+                  ctx.shadowColor = "rgba(102, 187, 106, 1)"; // green
+                  ctx.shadowBlur = 20;
+                  ctx.shadowOffsetX = 4;
+                  ctx.shadowOffsetY = 4;
                 } else if (dataPoint.boost < 0) {
-                  ctx.shadowColor = "rgba(255, 102, 102, 0.8)"; // red shadow
-                  ctx.shadowBlur = 10;
+                  ctx.shadowColor = "rgba(255, 102, 102, 1)"; // red
+                  ctx.shadowBlur = 20;
+                  ctx.shadowOffsetX = 4;
+                  ctx.shadowOffsetY = 4;
                 } else {
                   ctx.shadowColor = "transparent";
                   ctx.shadowBlur = 0;
+                  ctx.shadowOffsetX = 0;
+                  ctx.shadowOffsetY = 0;
                 }
-                // When the image loads, draw it at the computed position.
+                // Draw image once loaded.
                 if (img.complete) {
                   ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
                 } else {
@@ -1127,9 +1137,11 @@
                     ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
                   };
                 }
-                // Reset shadow settings after each image.
+                // Reset shadow for next draw.
                 ctx.shadowColor = "transparent";
                 ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
               });
             }
           }]
