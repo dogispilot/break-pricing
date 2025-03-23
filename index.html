@@ -111,7 +111,7 @@
       display: flex;
       gap: 10px;
     }
-    /* Break Sniffer Layout – now vertical */
+    /* Break Sniffer Layout – vertical stacking */
     #break-sniffer .break-controls-container {
       margin-bottom: 20px;
     }
@@ -290,7 +290,7 @@
     .donut-container {
       display: none;
     }
-    /* Bubble Chart Styling – now full width */
+    /* Bubble Chart Styling – fills full width */
     #bubbleChart {
       display: block;
       width: 100%;
@@ -374,7 +374,7 @@
       justify-content: center;
       gap: 0px;
     }
-    /* Table Styling – Use new class for team images in table */
+    /* Table Styling – team images in table use dedicated class */
     .table-team-img {
       width: 40px;
       height: 40px;
@@ -575,7 +575,7 @@
       <!-- Breaker Tiles (smaller) placed under Price Lookup -->
       <div id="break-tiles"></div>
     </div>
-    <!-- Bubble Chart: now spans full width -->
+    <!-- Bubble Chart: fills full width -->
     <canvas id="bubbleChart" style="width:100%; height:600px;"></canvas>
     <table id="team-table">
       <thead>
@@ -915,7 +915,7 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        // y-axis: team price (baseline)
+        // For y-axis, we now use the computed team price (baseline adjusted by boost).
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -1026,12 +1026,11 @@
       updatePieChart([]); // Donut chart removed
     }
     // Updated Bubble Chart Function – draws only team images.
-    // Image size is based on boost/discount and a prominent shadow is applied.
-    // Clicking on an image will show an alert with the team's details.
+    // The image size is based on boost/discount and the y-axis is based on the team price.
+    // The x-axis min and max are computed from distribution values, and the y-axis min and max from team price.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
-      // Define base image size and boost multiplier.
       const baseSize = 40; // base image size in pixels
       const boostFactor = 5; // additional pixels per 1% boost/discount
       // Build data points.
@@ -1039,22 +1038,27 @@
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
         return {
           x: data.distribution * 100,  // distribution in %
-          y: data.teamPrice,           // team price (baseline)
+          y: data.teamPrice,           // team price from the price column
           size: size,
           team: data.team,
           boost: data.boost,
           logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
         };
       });
-      // Compute x-axis min and max from imageData.
+      // Compute x-axis min and max.
       const xValues = imageData.map(d => d.x);
       const xMin = Math.min(...xValues) * 0.95;
       const xMax = Math.max(...xValues) * 1.05;
-      // Update chart if it exists.
+      // Compute y-axis min and max from team price.
+      const yValues = imageData.map(d => d.y);
+      const yMin = Math.min(...yValues) * 0.95;
+      const yMax = Math.max(...yValues) * 1.05;
       if (bubbleChartInstance) {
         bubbleChartInstance.data.datasets[0].data = imageData;
         bubbleChartInstance.options.scales.x.min = xMin;
         bubbleChartInstance.options.scales.x.max = xMax;
+        bubbleChartInstance.options.scales.y.min = yMin;
+        bubbleChartInstance.options.scales.y.max = yMax;
         bubbleChartInstance.update();
       } else {
         bubbleChartInstance = new Chart(ctx, {
@@ -1063,8 +1067,7 @@
             datasets: [{
               label: 'Team Data',
               data: imageData,
-              // Disable default bubble drawing.
-              pointRadius: 0
+              pointRadius: 0 // disable default bubble drawing
             }]
           },
           options: {
@@ -1079,6 +1082,8 @@
               },
               y: {
                 title: { display: true, text: 'Team Price ($)' },
+                min: yMin,
+                max: yMax,
                 ticks: { beginAtZero: true }
               }
             },
@@ -1124,7 +1129,6 @@
                   ctx.shadowOffsetX = 0;
                   ctx.shadowOffsetY = 0;
                 }
-                // Draw image while preserving aspect ratio.
                 img.onload = function() {
                   const aspect = img.width / img.height;
                   let drawWidth, drawHeight;
@@ -1135,8 +1139,7 @@
                     drawWidth = size * aspect;
                     drawHeight = size;
                   }
-                  ctx.drawImage(img, x - drawWidth/2, y - drawHeight/2, drawWidth, drawHeight);
-                  // Reset shadow.
+                  ctx.drawImage(img, x - drawWidth / 2, y - drawHeight / 2, drawWidth, drawHeight);
                   ctx.shadowColor = "transparent";
                   ctx.shadowBlur = 0;
                   ctx.shadowOffsetX = 0;
