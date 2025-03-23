@@ -290,7 +290,7 @@
     .donut-container {
       display: none;
     }
-    /* Bubble Chart Styling – fills full width */
+    /* Bubble Chart Styling – full width */
     #bubbleChart {
       display: block;
       width: 100%;
@@ -599,6 +599,8 @@
   </section>
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
   <script>
+    // Global image cache for bubble chart images
+    let imageCache = {};
     let currentSortColumn = null;
     let currentSortDirection = 1;
     let bubbleChartInstance = null;
@@ -915,7 +917,7 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        // For y-axis, we now use the computed team price (baseline adjusted by boost).
+        // For y-axis, we use the team price (baseline adjusted by boost)
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -1027,29 +1029,37 @@
     }
     // Updated Bubble Chart Function – draws only team images.
     // The image size is based on boost/discount and the y-axis is based on the team price.
-    // The x-axis min and max are computed from distribution values, and the y-axis min and max from team price.
+    // The x-axis and y-axis scales are computed from the data.
+    // Clicking on an image shows an alert with the team's details.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
       const baseSize = 40; // base image size in pixels
       const boostFactor = 5; // additional pixels per 1% boost/discount
-      // Build data points.
+      // Build data points and preload images using a cache.
       const imageData = teamData.map(data => {
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
+        // Use cache to avoid reloading images.
+        if (!imageCache[data.team]) {
+          const img = new Image();
+          img.src = (config.images && config.images["team images"] && config.images["team images"][data.team]) || "";
+          img.onload = () => { if (bubbleChartInstance) bubbleChartInstance.update(); };
+          imageCache[data.team] = img;
+        }
         return {
           x: data.distribution * 100,  // distribution in %
-          y: data.teamPrice,           // team price from the price column
+          y: data.teamPrice,           // team price
           size: size,
           team: data.team,
           boost: data.boost,
-          logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
+          cachedImage: imageCache[data.team]
         };
       });
       // Compute x-axis min and max.
       const xValues = imageData.map(d => d.x);
       const xMin = Math.min(...xValues) * 0.95;
       const xMax = Math.max(...xValues) * 1.05;
-      // Compute y-axis min and max from team price.
+      // Compute y-axis min and max.
       const yValues = imageData.map(d => d.y);
       const yMin = Math.min(...yValues) * 0.95;
       const yMax = Math.max(...yValues) * 1.05;
@@ -1110,8 +1120,7 @@
                 const x = xScale.getPixelForValue(dataPoint.x);
                 const y = yScale.getPixelForValue(dataPoint.y);
                 const size = dataPoint.size;
-                const img = new Image();
-                img.src = dataPoint.logo;
+                const img = dataPoint.cachedImage;
                 // Set prominent shadow based on boost value.
                 if (dataPoint.boost > 0) {
                   ctx.shadowColor = "rgba(0,255,0,1)"; // green
@@ -1129,7 +1138,8 @@
                   ctx.shadowOffsetX = 0;
                   ctx.shadowOffsetY = 0;
                 }
-                img.onload = function() {
+                // Draw the image preserving its aspect ratio.
+                if (img && img.complete) {
                   const aspect = img.width / img.height;
                   let drawWidth, drawHeight;
                   if (aspect >= 1) {
@@ -1139,12 +1149,12 @@
                     drawWidth = size * aspect;
                     drawHeight = size;
                   }
-                  ctx.drawImage(img, x - drawWidth / 2, y - drawHeight / 2, drawWidth, drawHeight);
-                  ctx.shadowColor = "transparent";
-                  ctx.shadowBlur = 0;
-                  ctx.shadowOffsetX = 0;
-                  ctx.shadowOffsetY = 0;
-                };
+                  ctx.drawImage(img, x - drawWidth/2, y - drawHeight/2, drawWidth, drawHeight);
+                }
+                ctx.shadowColor = "transparent";
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
               });
             }
           }]
