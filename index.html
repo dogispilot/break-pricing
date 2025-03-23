@@ -685,7 +685,8 @@
         populateYearDropdown();
         updateSetNameDropdown();
         updateAllSelectWidths();
-        document.querySelectorAll('#break-controls-row input, #price-settings input').forEach(input => {
+        // Updated selector: use .break-controls-row instead of #break-controls-row
+        document.querySelectorAll('.break-controls-row input, #price-settings input').forEach(input => {
           input.addEventListener('input', debouncedUpdateBreakSniffer);
         });
         document.getElementById('setNameSelect').addEventListener('change', function() {
