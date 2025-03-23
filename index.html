@@ -60,15 +60,15 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Set and Year Selection - extra bold text */
+    /* Set and Year Selection - extra bold and underlined text */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
       color: #1a1a1a;
     }
-    /* Wrap static text in strong tags for extra bold appearance */
     #set-selection p strong {
-      font-weight: bolder;
+      font-weight: 900;
+      text-decoration: underline;
     }
     #set-selection select {
       width: auto;
@@ -106,6 +106,7 @@
     .tile-value {
       font-family: 'BreakPricingFontBold', sans-serif;
       margin-bottom: 5px;
+      font-size: 2.5em;
     }
     .tile-desc {
       font-size: 1em;
@@ -809,7 +810,8 @@
       heroContainer.className = 'hero-row';
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
-      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
+      // Changed "Rookie %" to "Rookie Cards"
+      heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie Cards</div>`;
       heroContainer.appendChild(heroTile1);
       const totalCardsPerCase = computeTotalCardsPerCase(currentSet);
       const heroTile2 = document.createElement('div');
