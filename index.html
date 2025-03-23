@@ -110,12 +110,14 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
-      flex-wrap: wrap; /* Prevent overflow */
+      /* NEW: Prevent hero tiles from wrapping */
+      flex-wrap: nowrap;
     }
     .support-row {
       display: flex;
       gap: 10px;
-      flex-wrap: wrap; /* Prevent overflow */
+      /* Allow support tiles to wrap if needed */
+      flex-wrap: wrap;
     }
     /* Ensure hero tiles take 50% width */
     .hero-row .tile.hero {
@@ -150,7 +152,7 @@
     .input-group {
       margin-bottom: 10px;
     }
-    /* Limit width of cost-of-a-case label */
+    /* Limit width of the "Cost of a case" label */
     #caseCostLabel {
       display: inline-block;
       width: 110px;
@@ -266,7 +268,7 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Profit Distribution label above break tiles */
+    /* Label above break tiles */
     .profit-distribution-label {
       font-weight: bold;
       margin: 10px 0;
@@ -299,9 +301,10 @@
       height: 600px;
     }
     #bubbleChart {
-      width: 100%;
-      height: 100%;
       display: block;
+      width: 100%;
+      /* Remove fixed height to allow responsiveness */
+      height: auto;
     }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
@@ -494,7 +497,7 @@
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Hero and support rows will be added here -->
+      <!-- Hero row (2 tiles) and support row (4 tiles) will be added here -->
     </div>
   </section>
   <!-- Section 3: Key Rookies -->
@@ -520,6 +523,7 @@
               </div>
             </div>
           </div>
+          <!-- Moved Price Lookup button immediately below cost input -->
           <div class="price-button-wrapper">
             <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
           </div>
@@ -531,6 +535,7 @@
               <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
+          <!-- Price Settings button now follows markup input -->
           <div class="price-button-wrapper">
             <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
           </div>
@@ -590,7 +595,7 @@
       <!-- Right Column: Bubble Chart -->
       <div class="results-column">
         <div id="bubbleChartContainer">
-          <canvas id="bubbleChart" style="width:100%; height:100%;"></canvas>
+          <canvas id="bubbleChart"></canvas>
         </div>
       </div>
     </div>
@@ -792,10 +797,9 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       tilesDiv.innerHTML = "";
+      // Create hero row (2 tiles)
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
-      const supportContainer = document.createElement('div');
-      supportContainer.className = 'support-row';
       const heroTile1 = document.createElement('div');
       heroTile1.className = 'tile hero';
       heroTile1.innerHTML = `<div class="tile-value">${currentSet.rookie_percentage || "N/A"}</div><div class="tile-desc">Rookie %</div>`;
@@ -805,6 +809,9 @@
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
+      // Create support row (4 tiles)
+      const supportContainer = document.createElement('div');
+      supportContainer.className = 'support-row';
       const tileBoxes = document.createElement('div');
       tileBoxes.className = 'tile';
       tileBoxes.innerHTML = `<div class="tile-value">${currentSet.boxes_per_case || "N/A"}</div><div class="tile-desc">Boxes per Case</div>`;
