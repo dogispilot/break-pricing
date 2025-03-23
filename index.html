@@ -757,7 +757,7 @@
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
       // Update header dynamically
       if (currentSet) {
-        document.getElementById('setDetailsHeader').textContent = `${currentSet.year} ${currentSet.name} Details`;
+        document.getElementById('setDetailsHeader').textContent = `📝 ${currentSet.year} ${currentSet.name} Details`;
         document.getElementById('caseCostLabel').textContent = `Cost of a ${currentSet.year} ${currentSet.name} case`;
         document.getElementById('keyRookiesHeader').textContent = `🔑 ${currentSet.year} Key Rookies`;
       } else {
