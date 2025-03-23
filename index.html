@@ -110,7 +110,7 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
-      /* Keep hero tiles on a single row */
+      /* Keep hero tiles on one row */
       flex-wrap: nowrap;
     }
     .support-row {
@@ -141,12 +141,12 @@
     .results-column {
       flex: 1;
     }
-    /* Controls & Buttons */
+    /* Stack all left column items vertically */
     .break-controls-row {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
-      align-items: center;
+      align-items: stretch;
     }
     .input-group {
       margin-bottom: 10px;
@@ -522,6 +522,7 @@
     <div class="break-sniffer-flex">
       <!-- Left Column: Inputs, Buttons, and Breaker Tiles -->
       <div class="break-controls-container">
+        <!-- Changed break-controls-row to stack vertically -->
         <div class="break-controls-row">
           <div class="input-group">
             <label for="caseCost" id="caseCostLabel">Cost of a case</label>
@@ -532,7 +533,7 @@
               </div>
             </div>
           </div>
-          <!-- Moved Price Lookup button immediately below cost input -->
+          <!-- Price Lookup button below cost input -->
           <div class="price-button-wrapper">
             <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
           </div>
@@ -544,7 +545,7 @@
               <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
-          <!-- Price Settings button now follows markup input -->
+          <!-- Price Settings button below markup input -->
           <div class="price-button-wrapper">
             <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
           </div>
@@ -806,7 +807,7 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       tilesDiv.innerHTML = "";
-      // Create hero row (2 tiles)
+      // Create hero row (2 tiles) on a single row
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const heroTile1 = document.createElement('div');
@@ -818,7 +819,7 @@
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
-      // Create support row (4 tiles)
+      // Create support row (4 tiles) on the next row
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
       const tileBoxes = document.createElement('div');
@@ -1065,9 +1066,8 @@
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
-      const baseSize = 46; // base image size increased by 15% from 40
-      const boostFactor = 2; // additional pixels per 1% boost/discount
-      // Build data points and preload images using cache.
+      const baseSize = 46;
+      const boostFactor = 2;
       const imageData = teamData.map(data => {
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
         if (!imageCache[data.team]) {
@@ -1077,19 +1077,17 @@
           imageCache[data.team] = img;
         }
         return {
-          x: data.distribution * 100,  // distribution in %
-          y: data.teamPrice,           // team price
+          x: data.distribution * 100,
+          y: data.teamPrice,
           size: size,
           team: data.team,
           boost: data.boost,
           cachedImage: imageCache[data.team]
         };
       });
-      // Compute x-axis min and max.
       const xValues = imageData.map(d => d.x);
       const xMin = Math.min(...xValues) * 0.95;
       const xMax = Math.max(...xValues) * 1.05;
-      // Compute y-axis min and max.
       const yValues = imageData.map(d => d.y);
       const yMin = Math.min(...yValues) * 0.95;
       const yMax = Math.max(...yValues) * 1.05;
