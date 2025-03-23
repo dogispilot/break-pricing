@@ -110,13 +110,12 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
-      /* NEW: Prevent hero tiles from wrapping */
+      /* Keep hero tiles on a single row */
       flex-wrap: nowrap;
     }
     .support-row {
       display: flex;
       gap: 10px;
-      /* Allow support tiles to wrap if needed */
       flex-wrap: wrap;
     }
     /* Ensure hero tiles take 50% width */
@@ -303,7 +302,6 @@
     #bubbleChart {
       display: block;
       width: 100%;
-      /* Remove fixed height to allow responsiveness */
       height: auto;
     }
     /* iOS Toggle Switch (unchanged) */
@@ -459,6 +457,17 @@
       font-family: 'BreakPricingFont', sans-serif;
       width: 120px;
     }
+    /* Floating dialogs for price menus */
+    #price-settings, #price-lookup-menu {
+      position: absolute;
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      z-index: 1000;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -540,8 +549,8 @@
             <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
           </div>
         </div>
-        <!-- Price Settings Dialog -->
-        <div id="price-settings">
+        <!-- Price Settings Dialog (hidden by default) -->
+        <div id="price-settings" style="display: none;">
           <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
           <div class="price-setting-group">
             <label for="markupToggle">Use % markup</label>
@@ -565,8 +574,8 @@
             </div>
           </div>
         </div>
-        <!-- Price Lookup Dialog -->
-        <div id="price-lookup-menu">
+        <!-- Price Lookup Dialog (hidden by default) -->
+        <div id="price-lookup-menu" style="display: none;">
           <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
           <div class="button-container">
             <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
