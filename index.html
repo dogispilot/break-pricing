@@ -111,15 +111,15 @@
       display: flex;
       gap: 10px;
     }
-    /* New: Ensure hero tiles take 50% width */
+    /* Ensure hero tiles take 50% width */
     .hero-row .tile.hero {
       flex: 0 0 50%;
     }
-    /* New: Ensure support tiles take 25% width */
+    /* Ensure support tiles take 25% width */
     .support-row .tile {
       flex: 0 0 25%;
     }
-    /* New: Add 10px space below the TCDB and HockeyChecklists.com buttons */
+    /* Add 10px space below the TCDB and HockeyChecklists.com buttons */
     .button-container {
       margin-bottom: 10px;
     }
@@ -202,7 +202,7 @@
       overflow: hidden;
       background: #fff;
     }
-    /* New: Only for the markup input wrapper, add 10px space below */
+    /* For the markup input wrapper, add 10px space below */
     .markup-wrapper {
       margin-bottom: 10px;
     }
@@ -545,7 +545,7 @@
           </div>
           <div class="input-group">
             <label for="markupValue">Markup</label>
-            <!-- Added markup-wrapper class here instead of margin on the input -->
+            <!-- Use markup-wrapper for proper spacing -->
             <div class="input-wrapper markup-wrapper" style="width:120px;">
               <span class="input-prefix markup-prefix" style="display: none;">$</span>
               <input type="number" id="markupValue" step="0.01" value="500">
@@ -1065,13 +1065,13 @@
       updatePieChart([]); // Donut chart removed
     }
     // Updated Bubble Chart Function – draws only team images.
-    // The base image size is now increased by 15% (from 40 to 46) and images are drawn with 0.6 opacity.
+    // The base image size is increased by 15% (from 40 to 46) and images are drawn with 0.6 opacity.
     // The x-axis tick callback now formats values to 1 decimal place and the y-axis shows no decimals.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
       const baseSize = 46; // base image size increased by 15% from 40
-      const boostFactor = 2; // reduced multiplier: additional pixels per 1% boost/discount
+      const boostFactor = 2; // additional pixels per 1% boost/discount
       // Build data points and preload images using cache.
       const imageData = teamData.map(data => {
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
@@ -1113,7 +1113,7 @@
               label: 'Team Data',
               data: imageData,
               pointRadius: 1, // minimal radius to allow hit detection
-              hitRadius: (context) => context.raw.size / 2 // use half the image size for hit detection
+              hitRadius: (context) => context.raw.size / 2
             }]
           },
           options: {
@@ -1147,8 +1147,12 @@
               const activePoints = bubbleChartInstance.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, false);
               if (activePoints.length > 0) {
                 const index = activePoints[0].index;
-                const dp = imageData[index];
-                alert("Team: " + dp.team + "\nDistribution: " + dp.x.toFixed(2) + "%\nTeam Price: $" + dp.y.toFixed(2) + "\nBoost: " + dp.boost + "%");
+                // Pull the current data from the chart dataset
+                const dp = bubbleChartInstance.data.datasets[0].data[index];
+                alert("Team: " + dp.team +
+                      "\nDistribution: " + dp.x.toFixed(2) + "%" +
+                      "\nTeam Price: $" + dp.y.toFixed(2) +
+                      "\nBoost: " + dp.boost + "%");
               }
             }
           },
@@ -1164,12 +1168,12 @@
                 const size = dataPoint.size;
                 const img = dataPoint.cachedImage;
                 if (dataPoint.boost > 0) {
-                  ctx.shadowColor = "rgba(0,255,0,1)"; // green shadow
+                  ctx.shadowColor = "rgba(0,255,0,1)";
                   ctx.shadowBlur = 20;
                   ctx.shadowOffsetX = 4;
                   ctx.shadowOffsetY = 4;
                 } else if (dataPoint.boost < 0) {
-                  ctx.shadowColor = "rgba(255,0,0,1)"; // red shadow
+                  ctx.shadowColor = "rgba(255,0,0,1)";
                   ctx.shadowBlur = 20;
                   ctx.shadowOffsetX = 4;
                   ctx.shadowOffsetY = 4;
