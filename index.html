@@ -156,7 +156,11 @@
       width: 110px;
     }
     .price-button-wrapper {
-      margin: 0px 10px 10px 10px;
+      margin: 0px 10px 10px 0px;
+    }
+    /* Add extra space above the Price Lookup button */
+    #price-lookup-wrapper {
+      margin-top: 10px;
     }
     .markup-wrapper {
       margin-bottom: 10px;
@@ -266,7 +270,7 @@
     }
     .profit-distribution-label {
       font-weight: bold;
-      margin: 0px 0px 10px 0px;
+      margin: 0;
     }
     #break-tiles {
       display: block;
@@ -525,7 +529,7 @@
             </div>
           </div>
           <!-- Price Lookup button directly below cost input with 10px gap -->
-          <div class="price-button-wrapper">
+          <div class="price-button-wrapper" id="price-lookup-wrapper">
             <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
           </div>
           <div class="input-group">
@@ -536,7 +540,7 @@
               <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
-          <!-- Price Settings button directly below markup input with 10px gap -->
+          <!-- Price Settings button directly below markup input -->
           <div class="price-button-wrapper">
             <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
           </div>
