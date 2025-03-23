@@ -166,6 +166,10 @@
     .markup-wrapper {
       margin-bottom: 10px;
     }
+    /* Add 5px above the markup label */
+    label[for="markupValue"] {
+      margin-top: 5px;
+    }
     .input-inline {
       display: flex;
       align-items: center;
@@ -269,13 +273,15 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
+    /* Profit Distribution label: 5px above, no gap below */
     .profit-distribution-label {
       font-weight: bold;
-      margin: 0;
+      margin: 5px 0 0 0;
     }
+    /* Remove extra space between profit distribution label and break tiles */
     #break-tiles {
       display: block;
-      margin-top: 15px;
+      margin-top: 0;
       width: 100%;
     }
     .break-tile {
@@ -593,7 +599,7 @@
             </button>
           </div>
         </div>
-        <!-- Label above break tiles -->
+        <!-- Profit Distribution Label -->
         <div class="profit-distribution-label">Profit Distribution</div>
         <!-- Breaker Tiles -->
         <div id="break-tiles"></div>
@@ -760,10 +766,11 @@
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
-      // Update header dynamically
+      // Update header and labels dynamically
       if (currentSet) {
         document.getElementById('setDetailsHeader').textContent = `📝 ${currentSet.year} ${currentSet.name} Details`;
-        document.getElementById('caseCostLabel').textContent = `Cost of a ${currentSet.year} ${currentSet.name} case`;
+        // Updated cost label to "[set year] [set name] case price"
+        document.getElementById('caseCostLabel').textContent = `${currentSet.year} ${currentSet.name} case price`;
         document.getElementById('keyRookiesHeader').textContent = `🔑 ${currentSet.year} Key Rookies`;
       } else {
         document.getElementById('setDetailsHeader').textContent = "📝 Set Details";
