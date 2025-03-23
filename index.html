@@ -110,14 +110,12 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
-      /* NEW: Wrap items to prevent overflow */
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* Prevent overflow */
     }
     .support-row {
       display: flex;
       gap: 10px;
-      /* NEW: Wrap items to prevent overflow */
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* Prevent overflow */
     }
     /* Ensure hero tiles take 50% width */
     .hero-row .tile.hero {
@@ -143,58 +141,27 @@
       flex: 1;
     }
     /* Controls & Buttons */
-    .break-controls-row, .price-buttons-row {
+    .break-controls-row {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 10px;
-    }
-    .price-buttons-row button {
-      width: 120px;
-    }
-    /* Add 15px space below the Price Lookup button */
-    #priceLookupToggle {
-      margin-bottom: 15px;
-    }
-    /* Floating dialogs for price menus */
-    #price-settings, #price-lookup-menu {
-      position: absolute;
-      background: #fff;
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-      z-index: 1000;
-      display: none;
-    }
-    .dialog-close {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      cursor: pointer;
-      font-size: 1.2em;
-      font-weight: bold;
+      align-items: center;
     }
     .input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      margin-bottom: 10px;
     }
-    .input-group label {
-      margin-bottom: 3px;
-      font-weight: bold;
-      font-size: 0.8em;
-      text-align: left;
+    /* Limit width of cost-of-a-case label */
+    #caseCostLabel {
+      display: inline-block;
+      width: 110px;
     }
-    .price-setting-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 0;
+    /* Wrapper for price lookup/settings buttons */
+    .price-button-wrapper {
+      margin: 10px 0;
     }
-    .price-setting-group label {
-      margin-bottom: 3px;
-      font-weight: bold;
-      font-size: 0.8em;
+    /* For the markup input wrapper, add 10px space below */
+    .markup-wrapper {
+      margin-bottom: 10px;
     }
     .input-inline {
       display: flex;
@@ -209,10 +176,6 @@
       border-radius: 6px;
       overflow: hidden;
       background: #fff;
-    }
-    /* For the markup input wrapper, add 10px space below */
-    .markup-wrapper {
-      margin-bottom: 10px;
     }
     .input-wrapper input[type="number"] {
       border: none;
@@ -303,6 +266,11 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
+    /* Profit Distribution label above break tiles */
+    .profit-distribution-label {
+      font-weight: bold;
+      margin: 10px 0;
+    }
     /* Breaker Tiles: Smaller, placed under Price Lookup */
     #break-tiles {
       display: block;
@@ -327,7 +295,7 @@
     /* Bubble Chart Styling – placed in the right column */
     #bubbleChartContainer {
       width: 100%;
-      max-width: 100%; /* NEW: Ensure bubble chart container does not exceed parent */
+      max-width: 100%;
       height: 600px;
     }
     #bubbleChart {
@@ -552,19 +520,20 @@
               </div>
             </div>
           </div>
+          <div class="price-button-wrapper">
+            <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
+          </div>
           <div class="input-group">
             <label for="markupValue">Markup</label>
-            <!-- Use markup-wrapper for proper spacing -->
             <div class="input-wrapper markup-wrapper" style="width:120px;">
               <span class="input-prefix markup-prefix" style="display: none;">$</span>
               <input type="number" id="markupValue" step="0.01" value="500">
               <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
-        </div>
-        <div class="price-buttons-row">
-          <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
-          <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
+          <div class="price-button-wrapper">
+            <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
+          </div>
         </div>
         <!-- Price Settings Dialog -->
         <div id="price-settings">
@@ -613,6 +582,8 @@
             </button>
           </div>
         </div>
+        <!-- Label above break tiles -->
+        <div class="profit-distribution-label">Profit Distribution</div>
         <!-- Breaker Tiles -->
         <div id="break-tiles"></div>
       </div>
@@ -1155,7 +1126,6 @@
               const activePoints = bubbleChartInstance.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, false);
               if (activePoints.length > 0) {
                 const index = activePoints[0].index;
-                // Pull current data from the chart dataset
                 const dp = bubbleChartInstance.data.datasets[0].data[index];
                 alert("Team: " + dp.team +
                       "\nDistribution: " + dp.x.toFixed(2) + "%" +
