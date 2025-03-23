@@ -290,7 +290,7 @@
     .donut-container {
       display: none;
     }
-    /* Bubble Chart Styling – full width */
+    /* Bubble Chart Styling – fill remaining width, 600px tall */
     #bubbleChart {
       display: block;
       width: 100%;
@@ -575,7 +575,7 @@
       <!-- Breaker Tiles (smaller) placed under Price Lookup -->
       <div id="break-tiles"></div>
     </div>
-    <!-- Bubble Chart: fills full width -->
+    <!-- Bubble Chart: fills remaining width and is 600px tall -->
     <canvas id="bubbleChart" style="width:100%; height:600px;"></canvas>
     <table id="team-table">
       <thead>
@@ -917,7 +917,7 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        // For y-axis, we use the team price (baseline adjusted by boost)
+        // For y-axis, use the computed team price (baseline adjusted by boost)
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -1036,10 +1036,9 @@
       const ctx = canvas.getContext('2d');
       const baseSize = 40; // base image size in pixels
       const boostFactor = 5; // additional pixels per 1% boost/discount
-      // Build data points and preload images using a cache.
+      // Build data points and preload images using cache.
       const imageData = teamData.map(data => {
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
-        // Use cache to avoid reloading images.
         if (!imageCache[data.team]) {
           const img = new Image();
           img.src = (config.images && config.images["team images"] && config.images["team images"][data.team]) || "";
@@ -1121,14 +1120,13 @@
                 const y = yScale.getPixelForValue(dataPoint.y);
                 const size = dataPoint.size;
                 const img = dataPoint.cachedImage;
-                // Set prominent shadow based on boost value.
                 if (dataPoint.boost > 0) {
-                  ctx.shadowColor = "rgba(0,255,0,1)"; // green
+                  ctx.shadowColor = "rgba(0,255,0,1)"; // green shadow
                   ctx.shadowBlur = 20;
                   ctx.shadowOffsetX = 4;
                   ctx.shadowOffsetY = 4;
                 } else if (dataPoint.boost < 0) {
-                  ctx.shadowColor = "rgba(255,0,0,1)"; // red
+                  ctx.shadowColor = "rgba(255,0,0,1)"; // red shadow
                   ctx.shadowBlur = 20;
                   ctx.shadowOffsetX = 4;
                   ctx.shadowOffsetY = 4;
@@ -1138,7 +1136,6 @@
                   ctx.shadowOffsetX = 0;
                   ctx.shadowOffsetY = 0;
                 }
-                // Draw the image preserving its aspect ratio.
                 if (img && img.complete) {
                   const aspect = img.width / img.height;
                   let drawWidth, drawHeight;
