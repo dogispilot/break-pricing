@@ -111,9 +111,16 @@
       display: flex;
       gap: 10px;
     }
-    /* Break Sniffer Layout – vertical stacking */
-    #break-sniffer .break-controls-container {
-      margin-bottom: 20px;
+    /* Break Sniffer Layout – two columns */
+    .break-sniffer-flex {
+      display: flex;
+      gap: 20px;
+    }
+    .break-controls-container {
+      flex: 0 0 40%;
+    }
+    .results-column {
+      flex: 1;
     }
     /* Controls & Buttons */
     .break-controls-row, .price-buttons-row {
@@ -286,11 +293,7 @@
     .break-tile .tile-label {
       font-size: 0.8em;
     }
-    /* Remove donut chart entirely */
-    .donut-container {
-      display: none;
-    }
-    /* Bubble Chart Styling – fixed 600px height, fill remaining width */
+    /* Bubble Chart Styling – placed in the right column */
     #bubbleChartContainer {
       width: 100%;
       height: 600px;
@@ -504,84 +507,88 @@
   <!-- Section 4: Break Sniffer -->
   <section id="break-sniffer">
     <h2>👃 Break Sniffer</h2>
-    <!-- Controls and Breaker Tiles (stacked vertically) -->
-    <div class="break-controls-container">
-      <div class="break-controls-row">
-        <div class="input-group">
-          <label for="caseCost" id="caseCostLabel">Cost of a case</label>
-          <div class="input-inline">
+    <div class="break-sniffer-flex">
+      <!-- Left Column: Inputs, Buttons, and Breaker Tiles -->
+      <div class="break-controls-container">
+        <div class="break-controls-row">
+          <div class="input-group">
+            <label for="caseCost" id="caseCostLabel">Cost of a case</label>
+            <div class="input-inline">
+              <div class="input-wrapper" style="width:120px;">
+                <span class="input-prefix">$</span>
+                <input type="number" id="caseCost" step="0.01" value="1999.95">
+              </div>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="markupValue">Markup</label>
             <div class="input-wrapper" style="width:120px;">
-              <span class="input-prefix">$</span>
-              <input type="number" id="caseCost" step="0.01" value="1999.95">
+              <span class="input-prefix markup-prefix" style="display: none;">$</span>
+              <input type="number" id="markupValue" step="0.01" value="500">
+              <span class="input-suffix markup-suffix" style="display: none;">%</span>
             </div>
           </div>
         </div>
-        <div class="input-group">
-          <label for="markupValue">Markup</label>
-          <div class="input-wrapper" style="width:120px;">
-            <span class="input-prefix markup-prefix" style="display: none;">$</span>
-            <input type="number" id="markupValue" step="0.01" value="500">
-            <span class="input-suffix markup-suffix" style="display: none;">%</span>
+        <div class="price-buttons-row">
+          <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
+          <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
+        </div>
+        <!-- Price Settings Dialog -->
+        <div id="price-settings">
+          <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
+          <div class="price-setting-group">
+            <label for="markupToggle">Use % markup</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="markupToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="price-setting-group">
+            <label for="suppliesCost">Supplies per team</label>
+            <div class="input-wrapper" style="width:80px;">
+              <span class="input-prefix">$</span>
+              <input type="number" id="suppliesCost" step="0.01" value="1.00">
+            </div>
+          </div>
+          <div class="price-setting-group">
+            <label for="blendedTax">Blended tax</label>
+            <div class="input-wrapper" style="width:80px;">
+              <input type="number" id="blendedTax" step="0.1" value="5.1">
+              <span class="input-suffix">%</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="price-buttons-row">
-        <button id="priceSettingsToggle" type="button">🎛️ Price Settings</button>
-        <button id="priceLookupToggle" type="button">🔎 Price Lookup</button>
-      </div>
-      <!-- Price Settings Dialog -->
-      <div id="price-settings">
-        <span class="dialog-close" onclick="document.getElementById('price-settings').style.display='none'">×</span>
-        <div class="price-setting-group">
-          <label for="markupToggle">Use % markup</label>
-          <label class="toggle-switch">
-            <input type="checkbox" id="markupToggle">
-            <span class="slider"></span>
-          </label>
-        </div>
-        <div class="price-setting-group">
-          <label for="suppliesCost">Supplies per team</label>
-          <div class="input-wrapper" style="width:80px;">
-            <span class="input-prefix">$</span>
-            <input type="number" id="suppliesCost" step="0.01" value="1.00">
+        <!-- Price Lookup Dialog -->
+        <div id="price-lookup-menu">
+          <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
+          <div class="button-container">
+            <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
+              <img src="resources/dacardworld.png" alt="Dacardworld Logo">
+              Dacardworld.com
+            </button>
+            <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
+              <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
+              SteelCityCollectibles.com
+            </button>
+            <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
+              <img src="resources/ootb.png" alt="Out of the Box Logo">
+              Out of the Box
+            </button>
+            <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
+              <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
+              Midwest Cards
+            </button>
           </div>
         </div>
-        <div class="price-setting-group">
-          <label for="blendedTax">Blended tax</label>
-          <div class="input-wrapper" style="width:80px;">
-            <input type="number" id="blendedTax" step="0.1" value="5.1">
-            <span class="input-suffix">%</span>
-          </div>
+        <!-- Breaker Tiles -->
+        <div id="break-tiles"></div>
+      </div>
+      <!-- Right Column: Bubble Chart -->
+      <div class="results-column">
+        <div id="bubbleChartContainer">
+          <canvas id="bubbleChart" style="width:100%; height:100%;"></canvas>
         </div>
       </div>
-      <!-- Price Lookup Dialog -->
-      <div id="price-lookup-menu">
-        <span class="dialog-close" onclick="document.getElementById('price-lookup-menu').style.display='none'">×</span>
-        <div class="button-container">
-          <button type="button" class="lookup-button glow-dacardworld" onclick="openDacardworldSearch()">
-            <img src="resources/dacardworld.png" alt="Dacardworld Logo">
-            Dacardworld.com
-          </button>
-          <button type="button" class="lookup-button glow-steelcity" onclick="openSteelCitySearch()">
-            <img src="https://www.steelcitycollectibles.com/storage/img/logo-scc.svg" alt="Steel City Logo">
-            SteelCityCollectibles.com
-          </button>
-          <button type="button" class="lookup-button glow-outofthebox" onclick="openOotbSearch()">
-            <img src="resources/ootb.png" alt="Out of the Box Logo">
-            Out of the Box
-          </button>
-          <button type="button" class="lookup-button glow-midwestcards" onclick="openMidwestCardsSearch()">
-            <img src="resources/midwestcards.png" alt="Midwest Cards Logo">
-            Midwest Cards
-          </button>
-        </div>
-      </div>
-      <!-- Breaker Tiles (smaller) placed under Price Lookup -->
-      <div id="break-tiles"></div>
-    </div>
-    <!-- Bubble Chart Container with fixed height of 600px -->
-    <div id="bubbleChartContainer" style="width:100%; height:600px;">
-      <canvas id="bubbleChart" style="width:100%; height:100%;"></canvas>
     </div>
     <table id="team-table">
       <thead>
@@ -1034,14 +1041,14 @@
       updatePieChart([]); // Donut chart removed
     }
     // Updated Bubble Chart Function – draws only team images.
-    // The image size is based on boost/discount and the y-axis is based on the team price.
+    // The image size is now based on a reduced boost multiplier (2 instead of 5).
     // The x-axis and y-axis scales are computed from the data.
     // Clicking on an image shows an alert with the team's details.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
       const baseSize = 40; // base image size in pixels
-      const boostFactor = 5; // additional pixels per 1% boost/discount
+      const boostFactor = 2; // reduced multiplier: additional pixels per 1% boost/discount
       // Build data points and preload images using cache.
       const imageData = teamData.map(data => {
         const size = baseSize + (Math.abs(data.boost) * boostFactor);
