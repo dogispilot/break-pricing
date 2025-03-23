@@ -243,7 +243,6 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Removed margin-bottom from #markupValue */
     .boost-input {
       width: 100%;
       border: none;
@@ -1067,8 +1066,7 @@
     }
     // Updated Bubble Chart Function – draws only team images.
     // The base image size is now increased by 15% (from 40 to 46) and images are drawn with 0.6 opacity.
-    // The x-axis and y-axis scales are computed from the data.
-    // Tapping on an image shows an alert with the team's details.
+    // The x-axis tick callback now formats values to 1 decimal place and the y-axis shows no decimals.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
@@ -1128,7 +1126,7 @@
                 max: xMax,
                 ticks: {
                   beginAtZero: false,
-                  callback: function(value) { return value + '%'; }
+                  callback: function(value) { return value.toFixed(1) + '%'; }
                 }
               },
               y: {
@@ -1137,7 +1135,7 @@
                 max: yMax,
                 ticks: {
                   beginAtZero: true,
-                  callback: function(value) { return '$' + value; }
+                  callback: function(value) { return '$' + value.toFixed(0); }
                 }
               }
             },
@@ -1266,4 +1264,3 @@
   </script>
 </body>
 </html>
-
