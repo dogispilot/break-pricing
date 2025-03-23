@@ -1043,7 +1043,7 @@
     // Updated Bubble Chart Function – draws only team images.
     // The image size is now based on a reduced boost multiplier (2 instead of 5).
     // The x-axis and y-axis scales are computed from the data.
-    // Clicking on an image shows an alert with the team's details.
+    // Tapping on an image shows an alert with the team's details.
     function updateBubbleChart(teamData) {
       const canvas = document.getElementById('bubbleChart');
       const ctx = canvas.getContext('2d');
@@ -1089,7 +1089,8 @@
             datasets: [{
               label: 'Team Data',
               data: imageData,
-              pointRadius: 0 // disable default bubble drawing
+              pointRadius: 1, // minimal radius to allow hit detection
+              hitRadius: (context) => context.raw.size / 2 // use half the image size for hit detection
             }]
           },
           options: {
