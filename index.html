@@ -60,11 +60,15 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Set and Year Selection */
+    /* Set and Year Selection - extra bold text */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
       color: #1a1a1a;
+    }
+    /* Wrap static text in strong tags for extra bold appearance */
+    #set-selection p strong {
+      font-weight: bolder;
     }
     #set-selection select {
       width: auto;
@@ -106,7 +110,7 @@
     .tile-desc {
       font-size: 1em;
     }
-    /* Use grid layout for tile rows */
+    /* Grid layout for set details tiles */
     .hero-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -467,11 +471,11 @@
   <!-- Section 1: Set and Year Selection -->
   <section id="set-selection">
     <p>
-      I want to explore 
+      <strong>I want to explore</strong>
       <select id="setNameSelect">
         <option value="">-- Select Set Name --</option>
       </select>
-      for the years 
+      <strong>for the years</strong>
       <select id="setYearSelect">
         <!-- Populated by config -->
       </select>
@@ -479,7 +483,8 @@
   </section>
   <!-- Section 2: Set Details -->
   <section id="set-details">
-    <h2>📝 Set Details</h2>
+    <!-- Header will update dynamically -->
+    <h2 id="setDetailsHeader">📝 Set Details</h2>
     <div class="button-container">
       <button type="button" class="lookup-button glow-tcdb" onclick="openTcdbSearch()">
         <img src="resources/tcdb.jpg" alt="TCDB Logo"> TCDB
@@ -488,11 +493,12 @@
         <img src="resources/hockeychecklists.png" alt="HockeyChecklists Logo"> HockeyChecklists.com
       </button>
     </div>
+    <!-- Updated details: release date wrapped in strong and configuration text removed -->
     <div id="details-text"></div>
     <a href="#" id="toggleNotes" style="text-decoration:underline;">Read Set Notes</a>
     <div id="set-notes"></div>
     <div class="tile-container" id="set-tiles">
-      <!-- Hero row and support row will be added here by JavaScript -->
+      <!-- Hero row (2 tiles) and support row (4 tiles) will be added here -->
     </div>
   </section>
   <!-- Section 3: Key Rookies -->
@@ -749,12 +755,13 @@
       const setName = document.getElementById('setNameSelect').value;
       const setYear = document.getElementById('setYearSelect').value;
       currentSet = config.sets.find(s => s.name === setName && s.year === setYear);
+      // Update header dynamically
       if (currentSet) {
-        document.getElementById('caseCostLabel').textContent =
-          `Cost of a ${currentSet.year} ${currentSet.name} case`;
-        document.getElementById('keyRookiesHeader').textContent =
-          `🔑 ${currentSet.year} Key Rookies`;
+        document.getElementById('setDetailsHeader').textContent = `${currentSet.year} ${currentSet.name} Details`;
+        document.getElementById('caseCostLabel').textContent = `Cost of a ${currentSet.year} ${currentSet.name} case`;
+        document.getElementById('keyRookiesHeader').textContent = `🔑 ${currentSet.year} Key Rookies`;
       } else {
+        document.getElementById('setDetailsHeader').textContent = "📝 Set Details";
         document.getElementById('caseCostLabel').textContent = "Cost of a case";
         document.getElementById('keyRookiesHeader').textContent = "🔑 Key Rookies";
       }
@@ -789,7 +796,8 @@
         tilesDiv.innerHTML = "";
         return;
       }
-      detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
+      // Remove configuration text; make release date extra bold
+      detailsDiv.innerHTML = `${currentSet.year} ${currentSet.name} was released on <strong>${currentSet.release_date}</strong>.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       tilesDiv.innerHTML = "";
       // Create hero row (2 tiles) as grid row
