@@ -15,6 +15,9 @@
       font-family: 'BreakPricingFontBold';
       src: url('fonts/breakpricingfont_bold.ttf') format('truetype');
     }
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'BreakPricingFont', sans-serif;
       margin: 20px;
@@ -88,6 +91,7 @@
     }
     .tile-container {
       margin-top: 10px;
+      width: 100%;
     }
     .tile {
       background: #eaeaea;
@@ -106,10 +110,14 @@
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
+      /* NEW: Wrap items to prevent overflow */
+      flex-wrap: wrap;
     }
     .support-row {
       display: flex;
       gap: 10px;
+      /* NEW: Wrap items to prevent overflow */
+      flex-wrap: wrap;
     }
     /* Ensure hero tiles take 50% width */
     .hero-row .tile.hero {
@@ -299,7 +307,7 @@
     #break-tiles {
       display: block;
       margin-top: 15px;
-      width: auto;
+      width: 100%;
     }
     .break-tile {
       max-width: 110px;
@@ -319,6 +327,7 @@
     /* Bubble Chart Styling – placed in the right column */
     #bubbleChartContainer {
       width: 100%;
+      max-width: 100%; /* NEW: Ensure bubble chart container does not exceed parent */
       height: 600px;
     }
     #bubbleChart {
@@ -954,7 +963,6 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        // For y-axis, use the computed team price (baseline adjusted by boost)
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -1112,7 +1120,7 @@
             datasets: [{
               label: 'Team Data',
               data: imageData,
-              pointRadius: 1, // minimal radius to allow hit detection
+              pointRadius: 1,
               hitRadius: (context) => context.raw.size / 2
             }]
           },
@@ -1147,7 +1155,7 @@
               const activePoints = bubbleChartInstance.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, false);
               if (activePoints.length > 0) {
                 const index = activePoints[0].index;
-                // Pull the current data from the chart dataset
+                // Pull current data from the chart dataset
                 const dp = bubbleChartInstance.data.datasets[0].data[index];
                 alert("Team: " + dp.team +
                       "\nDistribution: " + dp.x.toFixed(2) + "%" +
