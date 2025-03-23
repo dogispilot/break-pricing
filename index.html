@@ -60,7 +60,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Set and Year Selection - extra bold and underlined text */
+    /* Set and Year Selection - only the static text is underlined */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
@@ -70,13 +70,13 @@
       font-weight: 900;
       text-decoration: underline;
     }
+    /* Removed underline from select elements */
     #set-selection select {
       width: auto;
       display: inline-block;
       font-family: 'BreakPricingFont', sans-serif;
       font-weight: 900;
       color: #1a1a1a;
-      text-decoration: underline;
       background: transparent;
       border: none;
       padding: 0;
@@ -273,7 +273,7 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Profit Distribution label: 5px above, no gap below */
+    /* Profit Distribution label: 5px top margin, no gap below */
     .profit-distribution-label {
       font-weight: bold;
       margin: 5px 0 0 0;
@@ -633,8 +633,10 @@
   </section>
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
   <script>
-    // Global image cache for bubble chart images
+    // Global image cache for bubble chart images and load rocket emoji image
     let imageCache = {};
+    let rocketEmojiImage = new Image();
+    rocketEmojiImage.src = 'resources/rocket_emoji.png';
     let currentSortColumn = null;
     let currentSortDirection = 1;
     let bubbleChartInstance = null;
@@ -1009,13 +1011,12 @@
                           ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="table-team-img">`
                           : "";
         let priceStyle = "";
-        let emoji = "";
+        // For boosted teams, we'll no longer use the text rocket emoji.
+        // Instead, we show the rocket image in the bubble chart.
         if(data.boost > 0) {
           priceStyle = 'background-color:#2E7D32; color:#fff;';
-          emoji = ' 🚀';
         } else if(data.boost < 0) {
           priceStyle = 'background-color:#EF6C00; color:#fff;';
-          emoji = ' ✂️';
         }
         tbody.innerHTML += `
           <tr${highlightStyle}>
@@ -1037,7 +1038,7 @@
                 <span class="input-suffix">%</span>
               </div>
             </td>
-            <td style="${priceStyle}">$${data.teamPrice.toFixed(2)}${emoji}</td>
+            <td style="${priceStyle}">$${data.teamPrice.toFixed(2)}</td>
           </tr>
         `;
       });
@@ -1115,6 +1116,9 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            font: {
+              family: "'BreakPricingFont', sans-serif"
+            },
             scales: {
               x: {
                 title: { display: true, text: 'Distribution (%)' },
@@ -1191,6 +1195,13 @@
                   ctx.globalAlpha = 0.6;
                   ctx.drawImage(img, x - drawWidth/2, y - drawHeight/2, drawWidth, drawHeight);
                   ctx.globalAlpha = 1;
+                  // If boosted, draw the rocket emoji image at top-right of the team logo
+                  if (dataPoint.boost > 0 && rocketEmojiImage && rocketEmojiImage.complete) {
+                    const rocketSize = drawWidth / 2;
+                    const rocketX = x + drawWidth/2 - rocketSize/2;
+                    const rocketY = y - drawHeight/2 - rocketSize/2;
+                    ctx.drawImage(rocketEmojiImage, rocketX, rocketY, rocketSize, rocketSize);
+                  }
                 }
                 ctx.shadowColor = "transparent";
                 ctx.shadowBlur = 0;
