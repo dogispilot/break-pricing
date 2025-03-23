@@ -79,7 +79,7 @@
       appearance: none;
       font-size: inherit;
     }
-    /* Set Details */
+    /* Set Details – restored tiles */
     #set-notes {
       display: none;
       padding: 10px;
@@ -101,6 +101,15 @@
     }
     .tile-desc {
       font-size: 1em;
+    }
+    .hero-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .support-row {
+      display: flex;
+      gap: 10px;
     }
     /* Break Sniffer Layout */
     .break-sniffer-flex {
@@ -274,7 +283,7 @@
       font-family: 'BreakPricingFont', sans-serif;
       margin-left: 5px;
     }
-    /* Breaker Tiles: Smaller styling, placed under Price Lookup */
+    /* Breaker Tiles: Smaller, placed under Price Lookup */
     #break-tiles {
       display: block;
     }
@@ -380,7 +389,7 @@
       justify-content: center;
       gap: 0px;
     }
-    /* Table Styling – Use a new class for team images in table */
+    /* Table Styling – New class for team images in table */
     .table-team-img {
       width: 40px;
       height: 40px;
@@ -579,7 +588,7 @@
             </button>
           </div>
         </div>
-        <!-- Breaker Tiles: Smaller, placed under Price Lookup -->
+        <!-- Breaker Tiles (smaller) placed under Price Lookup -->
         <div id="break-tiles"></div>
       </div>
       <!-- Right Column: Enormous Bubble Chart -->
@@ -925,7 +934,6 @@
         const costBusinessTeam = suppliesCost + transactionCost;
         totalCostOfBusiness += costBusinessTeam;
         const avgCardsCase = totalCardsPerCase ? (distribution * totalCardsPerCase) : null;
-        // y-axis is the distributed cost + markup (baseline)
         const baseline = usePercent 
           ? distributedCost * (1 + markupVal / 100)
           : distributedCost + (markupVal * distribution);
@@ -974,9 +982,8 @@
         });
         const highlightStyle = hasKeyRookie ? ' style="background-color:#ffffcc;"' : '';
         const keyEmoji = hasKeyRookie ? ' 🔑' : '';
-        // Use new class for table team image
         const teamImage = config.images && config.images["team images"] && config.images["team images"][data.team] 
-                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="table-team-img" style="width:40px; height:40px; object-fit:contain; margin-right:5px; vertical-align:middle;">`
+                          ? `<img src="${config.images["team images"][data.team]}" alt="${data.team}" class="table-team-img">`
                           : "";
         let priceStyle = "";
         let emoji = "";
@@ -1013,7 +1020,6 @@
       });
       const markupAmount = costWithMarkup - costCase;
       const breakersProfit = markupAmount - whatnotsCut - totalCostOfBusiness;
-      // Update breaker tiles (smaller) below the price lookup button
       const breakTiles = document.getElementById('break-tiles');
       breakTiles.innerHTML = "";
       const tileProfit = document.createElement('div');
@@ -1041,7 +1047,6 @@
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
       // x-axis: distribution (%), y-axis: baseline (distributed cost + markup)
-      // Bubble size correlated to boost (with a small variation)
       const baseRadius = 30; // fixed base radius
       const bubbleData = teamData.map(data => {
         const r = baseRadius + (Math.abs(data.boost) * 0.5);
@@ -1099,7 +1104,7 @@
                 if (dataPoint.logo) {
                   const img = new Image();
                   img.src = dataPoint.logo;
-                  // If image is already loaded, draw immediately; otherwise, wait for onload.
+                  // Draw image when loaded
                   if (img.complete) {
                     const x = element.x;
                     const y = element.y;
