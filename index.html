@@ -79,7 +79,7 @@
       appearance: none;
       font-size: inherit;
     }
-    /* Set Details – restored tiles */
+    /* Set Details – tiles restored */
     #set-notes {
       display: none;
       padding: 10px;
@@ -389,7 +389,7 @@
       justify-content: center;
       gap: 0px;
     }
-    /* Table Styling – New class for team images in table */
+    /* Table Styling – Use new class for team images in table */
     .table-team-img {
       width: 40px;
       height: 40px;
@@ -1043,30 +1043,28 @@
       updateBubbleChart(teamData);
       updatePieChart([]); // Donut chart removed
     }
-    // Updated Bubble Chart Function
+    // Updated Bubble Chart Function – Now draws only team images,
+    // with image size changing based on boost/discount and a colored shadow.
     function updateBubbleChart(teamData) {
       const ctx = document.getElementById('bubbleChart').getContext('2d');
-      // x-axis: distribution (%), y-axis: baseline (distributed cost + markup)
-      const baseRadius = 30; // fixed base radius
-      const bubbleData = teamData.map(data => {
-        const r = baseRadius + (Math.abs(data.boost) * 0.5);
-        return { 
-          x: data.distribution * 100, 
-          y: data.baseline, 
-          r: r,
+      // Set up chart to fill width: use responsive settings.
+      const baseSize = 40; // base image size
+      const boostFactor = 5; // additional size per 1% boost/discount
+      // Create data points for each team.
+      const imageData = teamData.map(data => {
+        const size = baseSize + (Math.abs(data.boost) * boostFactor);
+        return {
+          x: data.distribution * 100,  // x-axis: distribution (%)
+          y: data.baseline,            // y-axis: distributed cost + markup
+          size: size,
           team: data.team,
+          boost: data.boost,
           logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
         };
       });
-      // Bubble color: white if neutral, green if boost, red if discount.
-      const bubbleColors = teamData.map(data => {
-        if (data.boost > 0) return "#66bb6a";
-        else if (data.boost < 0) return "#ff6666";
-        else return "#ffffff";
-      });
+      // We no longer draw bubbles. Instead, we draw images.
       if (bubbleChartInstance) {
-        bubbleChartInstance.data.datasets[0].data = bubbleData;
-        bubbleChartInstance.data.datasets[0].pointBackgroundColor = bubbleColors;
+        bubbleChartInstance.data.datasets[0].data = imageData;
         bubbleChartInstance.update();
       } else {
         bubbleChartInstance = new Chart(ctx, {
@@ -1074,16 +1072,19 @@
           data: {
             datasets: [{
               label: 'Team Data',
-              data: bubbleData,
-              pointBackgroundColor: bubbleColors,
-              pointBorderColor: "#333",
-              pointBorderWidth: 1
+              data: imageData,
+              // Set pointRadius to 0 so default bubbles are not drawn.
+              pointRadius: 0
             }]
           },
           options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
               x: {
                 title: { display: true, text: 'Distribution (%)' },
+                min: 0,
+                max: 100,
                 ticks: { beginAtZero: true }
               },
               y: {
@@ -1096,51 +1097,39 @@
             }
           },
           plugins: [{
-            id: 'bubbleLogoPlugin',
+            id: 'customImagePlugin',
             afterDatasetsDraw: (chart) => {
               const ctx = chart.ctx;
-              chart.getDatasetMeta(0).data.forEach((element, index) => {
-                const dataPoint = bubbleData[index];
-                if (dataPoint.logo) {
-                  const img = new Image();
-                  img.src = dataPoint.logo;
-                  // Draw image when loaded
-                  if (img.complete) {
-                    const x = element.x;
-                    const y = element.y;
-                    const size = element.outerRadius * 0.8;
-                    ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'top';
-                    ctx.fillStyle = '#000';
-                    ctx.font = 'bold 14px sans-serif';
-                    ctx.fillText(dataPoint.team, x, y + element.outerRadius * 0.1);
-                    ctx.restore();
-                  } else {
-                    img.onload = function() {
-                      const x = element.x;
-                      const y = element.y;
-                      const size = element.outerRadius * 0.8;
-                      ctx.drawImage(img, x - size/2, y - size/2 - 10, size, size);
-                      ctx.save();
-                      ctx.textAlign = 'center';
-                      ctx.textBaseline = 'top';
-                      ctx.fillStyle = '#000';
-                      ctx.font = 'bold 14px sans-serif';
-                      ctx.fillText(dataPoint.team, x, y + element.outerRadius * 0.1);
-                      ctx.restore();
-                    };
-                  }
+              const xScale = chart.scales.x;
+              const yScale = chart.scales.y;
+              chart.data.datasets[0].data.forEach((dataPoint) => {
+                const x = xScale.getPixelForValue(dataPoint.x);
+                const y = yScale.getPixelForValue(dataPoint.y);
+                const size = dataPoint.size;
+                const img = new Image();
+                img.src = dataPoint.logo;
+                // Set shadow based on boost value:
+                if (dataPoint.boost > 0) {
+                  ctx.shadowColor = "rgba(102, 187, 106, 0.8)"; // green shadow
+                  ctx.shadowBlur = 10;
+                } else if (dataPoint.boost < 0) {
+                  ctx.shadowColor = "rgba(255, 102, 102, 0.8)"; // red shadow
+                  ctx.shadowBlur = 10;
                 } else {
-                  ctx.save();
-                  ctx.textAlign = 'center';
-                  ctx.textBaseline = 'middle';
-                  ctx.fillStyle = '#000';
-                  ctx.font = 'bold 14px sans-serif';
-                  ctx.fillText(dataPoint.team, element.x, element.y);
-                  ctx.restore();
+                  ctx.shadowColor = "transparent";
+                  ctx.shadowBlur = 0;
                 }
+                // When the image loads, draw it at the computed position.
+                if (img.complete) {
+                  ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+                } else {
+                  img.onload = function() {
+                    ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+                  };
+                }
+                // Reset shadow settings after each image.
+                ctx.shadowColor = "transparent";
+                ctx.shadowBlur = 0;
               });
             }
           }]
