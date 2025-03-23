@@ -290,11 +290,15 @@
     .donut-container {
       display: none;
     }
-    /* Bubble Chart Styling – fill remaining width, 600px tall */
-    #bubbleChart {
-      display: block;
+    /* Bubble Chart Styling – fixed 600px height, fill remaining width */
+    #bubbleChartContainer {
       width: 100%;
       height: 600px;
+    }
+    #bubbleChart {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
@@ -575,8 +579,10 @@
       <!-- Breaker Tiles (smaller) placed under Price Lookup -->
       <div id="break-tiles"></div>
     </div>
-    <!-- Bubble Chart: fills remaining width and is 600px tall -->
-    <canvas id="bubbleChart" style="width:100%; height:600px;"></canvas>
+    <!-- Bubble Chart Container with fixed height of 600px -->
+    <div id="bubbleChartContainer" style="width:100%; height:600px;">
+      <canvas id="bubbleChart" style="width:100%; height:100%;"></canvas>
+    </div>
     <table id="team-table">
       <thead>
         <tr>
