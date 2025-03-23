@@ -202,6 +202,10 @@
       overflow: hidden;
       background: #fff;
     }
+    /* New: Only for the markup input wrapper, add 10px space below */
+    .markup-wrapper {
+      margin-bottom: 10px;
+    }
     .input-wrapper input[type="number"] {
       border: none;
       outline: none;
@@ -239,10 +243,7 @@
     input[type="number"] {
       -moz-appearance: textfield;
     }
-    /* Add 10px space below the markup input field */
-    #markupValue {
-      margin-bottom: 10px;
-    }
+    /* Removed margin-bottom from #markupValue */
     .boost-input {
       width: 100%;
       border: none;
@@ -298,8 +299,8 @@
     /* Breaker Tiles: Smaller, placed under Price Lookup */
     #break-tiles {
       display: block;
-      margin-top: 15px
-      width: auto
+      margin-top: 15px;
+      width: auto;
     }
     .break-tile {
       max-width: 110px;
@@ -545,7 +546,8 @@
           </div>
           <div class="input-group">
             <label for="markupValue">Markup</label>
-            <div class="input-wrapper" style="width:120px;">
+            <!-- Added markup-wrapper class here instead of margin on the input -->
+            <div class="input-wrapper markup-wrapper" style="width:120px;">
               <span class="input-prefix markup-prefix" style="display: none;">$</span>
               <input type="number" id="markupValue" step="0.01" value="500">
               <span class="input-suffix markup-suffix" style="display: none;">%</span>
@@ -1264,3 +1266,4 @@
   </script>
 </body>
 </html>
+
