@@ -60,17 +60,16 @@
       border: 1px solid #ddd;
       border-radius: 4px;
     }
-    /* Set and Year Selection - only the static text is underlined */
+    /* Set and Year Selection */
     #set-selection p {
       font-size: 1.5em;
       font-weight: 900;
       color: #1a1a1a;
     }
-    #set-selection p strong {
-      font-weight: 900;
+    /* Underline the select elements (dynamic parts) only */
+    #set-selection select.underline-select {
       text-decoration: underline;
     }
-    /* Removed underline from select elements */
     #set-selection select {
       width: auto;
       display: inline-block;
@@ -481,12 +480,12 @@
   <!-- Section 1: Set and Year Selection -->
   <section id="set-selection">
     <p>
-      <strong>I want to explore</strong>
-      <select id="setNameSelect">
+      I want to explore 
+      <select id="setNameSelect" class="underline-select">
         <option value="">-- Select Set Name --</option>
       </select>
-      <strong>for the years</strong>
-      <select id="setYearSelect">
+      for the years 
+      <select id="setYearSelect" class="underline-select">
         <!-- Populated by config -->
       </select>
     </p>
