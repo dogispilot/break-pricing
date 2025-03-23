@@ -116,15 +116,16 @@
     .support-row {
       display: flex;
       gap: 10px;
+      /* NEW: Use calc to reduce width to account for gaps */
       flex-wrap: wrap;
     }
     /* Ensure hero tiles take 50% width */
     .hero-row .tile.hero {
       flex: 0 0 50%;
     }
-    /* Ensure support tiles take 25% width */
+    /* Ensure support tiles take slightly less than 25% to fit all 4 in one row */
     .support-row .tile {
-      flex: 0 0 25%;
+      flex: 0 0 calc(25% - 10px);
     }
     /* Add 10px space below the TCDB and HockeyChecklists.com buttons */
     .button-container {
@@ -141,7 +142,7 @@
     .results-column {
       flex: 1;
     }
-    /* Stack all left column items vertically */
+    /* Stack left column items vertically */
     .break-controls-row {
       display: flex;
       flex-direction: column;
@@ -151,7 +152,7 @@
     .input-group {
       margin-bottom: 10px;
     }
-    /* Limit width of the "Cost of a case" label */
+    /* Limit width of "Cost of a case" label */
     #caseCostLabel {
       display: inline-block;
       width: 110px;
@@ -522,7 +523,6 @@
     <div class="break-sniffer-flex">
       <!-- Left Column: Inputs, Buttons, and Breaker Tiles -->
       <div class="break-controls-container">
-        <!-- Changed break-controls-row to stack vertically -->
         <div class="break-controls-row">
           <div class="input-group">
             <label for="caseCost" id="caseCostLabel">Cost of a case</label>
@@ -807,7 +807,7 @@
       detailsDiv.textContent = `${currentSet.year} ${currentSet.name} was released on ${currentSet.release_date}. The configuration is ${currentSet.configuration}.`;
       notesDiv.textContent = currentSet.notes || "No additional notes available.";
       tilesDiv.innerHTML = "";
-      // Create hero row (2 tiles) on a single row
+      // Create hero row (2 tiles) on one row
       const heroContainer = document.createElement('div');
       heroContainer.className = 'hero-row';
       const heroTile1 = document.createElement('div');
@@ -819,7 +819,7 @@
       heroTile2.className = 'tile hero';
       heroTile2.innerHTML = `<div class="tile-value">${totalCardsPerCase || "N/A"}</div><div class="tile-desc">Total Cards per Case</div>`;
       heroContainer.appendChild(heroTile2);
-      // Create support row (4 tiles) on the next row
+      // Create support row (4 tiles) on next row
       const supportContainer = document.createElement('div');
       supportContainer.className = 'support-row';
       const tileBoxes = document.createElement('div');
