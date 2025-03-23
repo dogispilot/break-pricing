@@ -309,7 +309,7 @@
     #bubbleChart {
       display: block;
       width: 100%;
-      max-height: 900px;
+      height: 600px;
     }
     /* iOS Toggle Switch (unchanged) */
     .toggle-switch {
@@ -1044,10 +1044,10 @@
       updateBubbleChart(teamData);
       updatePieChart([]); // Donut chart removed
     }
-    // Updated Bubble Chart Function – now draws only team images.
-    // The image size changes based on boost/discount, and a prominent green/red shadow is applied.
+    // Updated Bubble Chart Function – now draws only team images with variable size and prominent shadows.
     function updateBubbleChart(teamData) {
-      const ctx = document.getElementById('bubbleChart').getContext('2d');
+      const canvas = document.getElementById('bubbleChart');
+      const ctx = canvas.getContext('2d');
       // Define base image size and boost multiplier.
       const baseSize = 40; // base image size in pixels
       const boostFactor = 5; // additional pixels per 1% boost/discount
@@ -1063,11 +1063,13 @@
           logo: (config.images && config.images["team images"] && config.images["team images"][data.team]) || ""
         };
       });
-      // Compute max x value from distribution data.
-      const maxDistribution = Math.max(...imageData.map(d => d.x));
-      const xMax = maxDistribution * 1.05;
+      // Compute x-axis min and max based on data.
+      const xValues = imageData.map(d => d.x);
+      const xMin = Math.min(...xValues) * 0.95;
+      const xMax = Math.max(...xValues) * 1.05;
       if (bubbleChartInstance) {
         bubbleChartInstance.data.datasets[0].data = imageData;
+        bubbleChartInstance.options.scales.x.min = xMin;
         bubbleChartInstance.options.scales.x.max = xMax;
         bubbleChartInstance.update();
       } else {
@@ -1087,9 +1089,9 @@
             scales: {
               x: {
                 title: { display: true, text: 'Distribution (%)' },
-                min: 0,
+                min: xMin,
                 max: xMax,
-                ticks: { beginAtZero: true }
+                ticks: { beginAtZero: false }
               },
               y: {
                 title: { display: true, text: 'Team Price ($)' },
@@ -1097,7 +1099,16 @@
               }
             },
             plugins: {
-              legend: { display: false }
+              legend: { display: false },
+              tooltip: { enabled: false }
+            },
+            onClick: (evt) => {
+              const activePoints = bubbleChartInstance.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, false);
+              if (activePoints.length > 0) {
+                const index = activePoints[0].index;
+                const dp = imageData[index];
+                alert("Team: " + dp.team + "\nDistribution: " + dp.x.toFixed(2) + "%\nTeam Price: $" + dp.y.toFixed(2) + "\nBoost: " + dp.boost + "%");
+              }
             }
           },
           plugins: [{
@@ -1114,12 +1125,12 @@
                 img.src = dataPoint.logo;
                 // Set prominent shadow based on boost value.
                 if (dataPoint.boost > 0) {
-                  ctx.shadowColor = "rgba(102, 187, 106, 1)"; // green
+                  ctx.shadowColor = "rgba(0, 255, 0, 1)"; // green
                   ctx.shadowBlur = 20;
                   ctx.shadowOffsetX = 4;
                   ctx.shadowOffsetY = 4;
                 } else if (dataPoint.boost < 0) {
-                  ctx.shadowColor = "rgba(255, 102, 102, 1)"; // red
+                  ctx.shadowColor = "rgba(255, 0, 0, 1)"; // red
                   ctx.shadowBlur = 20;
                   ctx.shadowOffsetX = 4;
                   ctx.shadowOffsetY = 4;
@@ -1129,19 +1140,24 @@
                   ctx.shadowOffsetX = 0;
                   ctx.shadowOffsetY = 0;
                 }
-                // Draw image once loaded.
-                if (img.complete) {
-                  ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
-                } else {
-                  img.onload = function() {
-                    ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
-                  };
-                }
-                // Reset shadow for next draw.
-                ctx.shadowColor = "transparent";
-                ctx.shadowBlur = 0;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
+                // Draw image with maintained aspect ratio.
+                img.onload = function() {
+                  const aspect = img.width / img.height;
+                  let drawWidth, drawHeight;
+                  if (aspect >= 1) {
+                    drawWidth = size;
+                    drawHeight = size / aspect;
+                  } else {
+                    drawWidth = size * aspect;
+                    drawHeight = size;
+                  }
+                  ctx.drawImage(img, x - drawWidth/2, y - drawHeight/2, drawWidth, drawHeight);
+                  // Reset shadow settings.
+                  ctx.shadowColor = "transparent";
+                  ctx.shadowBlur = 0;
+                  ctx.shadowOffsetX = 0;
+                  ctx.shadowOffsetY = 0;
+                };
               });
             }
           }]
