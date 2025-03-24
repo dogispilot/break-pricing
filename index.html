@@ -635,10 +635,14 @@
   </section>
   <span id="hiddenSelectText" style="visibility: hidden; position: absolute; white-space: nowrap;"></span>
   <script>
-    // Global image cache for bubble chart images and load rocket emoji image
+    // Global image cache for bubble chart images and load emoji images
     let imageCache = {};
     let rocketEmojiImage = new Image();
     rocketEmojiImage.src = 'resources/rocket_emoji.png';
+    // Load scissors emoji for discounted teams
+    let scissorsEmojiImage = new Image();
+    scissorsEmojiImage.src = 'resources/scissors_emoji.png';
+    
     let currentSortColumn = null;
     let currentSortDirection = 1;
     let bubbleChartInstance = null;
@@ -1204,6 +1208,13 @@
                     const rocketX = x + drawWidth/2 - rocketSize/2;
                     const rocketY = y - drawHeight/2 - rocketSize/2;
                     ctx.drawImage(rocketEmojiImage, rocketX, rocketY, rocketSize, rocketSize);
+                  }
+                  // If discounted, draw the scissors emoji image at top-right of the team logo
+                  if (dataPoint.boost < 0 && scissorsEmojiImage && scissorsEmojiImage.complete) {
+                    const scissorsSize = drawWidth / 2;
+                    const scissorsX = x + drawWidth/2 - scissorsSize/2;
+                    const scissorsY = y - drawHeight/2 - scissorsSize/2;
+                    ctx.drawImage(scissorsEmojiImage, scissorsX, scissorsY, scissorsSize, scissorsSize);
                   }
                 }
                 ctx.shadowColor = "transparent";
