@@ -1034,7 +1034,7 @@
             <td>${data.avgCardsCase !== null ? data.avgCardsCase.toFixed(2) : "N/A"}</td>
             <td>$${data.baseline.toFixed(2)}</td>
             <td>
-              <div class="input-wrapper" style="width:60px;">
+              <div class="input-wrapper" style="width:80px;">
                 <input type="number" class="boost-input" id="boost-input-${data.team}" step="0.1" value="${data.boost ? data.boost : ''}" oninput="debouncedUpdateBreakSniffer()">
                 <span class="input-suffix">%</span>
               </div>
