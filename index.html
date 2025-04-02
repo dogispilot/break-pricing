@@ -1285,5 +1285,28 @@
     }
     loadConfig();
   </script>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDDmktpz3qO9IQ_abeWV2XbJF4QjTDy4UI",
+    authDomain: "skunk-sniper-c3152.firebaseapp.com",
+    projectId: "skunk-sniper-c3152",
+    storageBucket: "skunk-sniper-c3152.firebasestorage.app",
+    messagingSenderId: "114847354088",
+    appId: "1:114847354088:web:8f545fcb5923bdcdb28d5d",
+    measurementId: "G-JYG55X55XP"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </body>
 </html>
